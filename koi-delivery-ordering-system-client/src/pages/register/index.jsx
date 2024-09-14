@@ -1,28 +1,33 @@
 import { useState } from "react";
 import "./index.scss"; // Ensure to add the CSS for styling
+import { userRegister } from "../../utils/user";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
     email: "",
+    username: "",
     password: "",
   });
 
-  const handleChange = (event) => {
-    const { name, value, type, checked } = event.target;
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
     setFormData((data) => ({
       ...data,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(formData);
+  async function handleSubmit() {
+    const email = formData.email;
+    const username = formData.username;
+    const password = formData.password;
+    const data = await userRegister(email, username, password);
+    console.log(data);
   };
 
   return (
     <div className="signup-container">
-      <form onSubmit={handleSubmit} className="signup-form">
+      <div className="signup-form">
         <h2>Create Account</h2>
 
         <div className="input-group">
@@ -30,8 +35,17 @@ const SignUp = () => {
             type="email"
             name="email"
             placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
+            onChange={(e) => handleChange(e)}
+            required
+          />
+        </div>
+
+        <div className="input-group">
+          <input
+            type="username"
+            name="username"
+            placeholder="Username"
+            onChange={(e) => handleChange(e)}
             required
           />
         </div>
@@ -41,20 +55,19 @@ const SignUp = () => {
             type="password"
             name="password"
             placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
+            onChange={(e) => handleChange(e)}
             required
           />
         </div>
 
-        <button type="submit" className="signup-btn">
+        <button onClick={handleSubmit} className="signup-btn">
           Sign Up
         </button>
 
         <p className="login-link">
           Already have an account? <a href="/login">Login here</a>
         </p>
-      </form>
+      </div>
     </div>
   );
 };

@@ -13,3 +13,18 @@ export async function userLogin(email, password) {
         console.log(error);
     }
 }
+
+export async function userRegister(email, username, password) {
+    try {
+        const response = await axiosClient.post("users/register",
+            {
+                email,
+                username,
+                password
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
