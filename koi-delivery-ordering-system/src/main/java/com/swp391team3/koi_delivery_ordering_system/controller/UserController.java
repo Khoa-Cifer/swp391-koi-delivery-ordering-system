@@ -20,6 +20,6 @@ public class UserController {
 
     @PostMapping("/register")
     public String register(@RequestBody UserRegisterDTO request) {
-        return userService.userRegister(request.getEmail(), request.getPassword(), request.getFirstName(), request.getMiddleName(), request.getLastName());
+        return userService.userRegister(request.getEmail(), request.getPassword(), request.getUsername());
     }
 }

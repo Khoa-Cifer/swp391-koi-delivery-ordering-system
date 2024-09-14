@@ -19,7 +19,7 @@ public class UserServiceImpl implements IUserService {
     private final RoleRepository roleRepository;
 
     @Override
-    public String userRegister(String email, String password, String firstName, String middleName, String lastName) {
+    public String userRegister(String email, String password, String username) {
         User newUser = new User();
         newUser.setEmail(email);
 
@@ -31,9 +31,7 @@ public class UserServiceImpl implements IUserService {
         String encodedPassword = passwordEncoder.encode(password);
         newUser.setPassword(encodedPassword);
 
-        newUser.setFirstName(firstName);
-        newUser.setMiddleName(middleName);
-        newUser.setLastName(lastName);
+        newUser.setUsername(username);
 
         Optional<Role> defaultRole = Optional.ofNullable(roleRepository.findById(2L)
                 .orElseThrow(() -> new RuntimeException("Role customer does not exist"))); //Id of customer role
