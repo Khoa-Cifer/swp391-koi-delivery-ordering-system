@@ -45,10 +45,10 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User userLogin(String email, String password) {
-        Optional<User> matchedUser = userRepository.findUserByEmail(email);
-        if (matchedUser.isPresent()) {
-            if (passwordEncoder.matches(password, matchedUser.get().getPassword())) {
-                return matchedUser.get();
+        User matchedUser = userRepository.findUserByEmail(email);
+        if (matchedUser != null) {
+            if (passwordEncoder.matches(password, matchedUser.getPassword())) {
+                return matchedUser;
             } else {
                 return null;
             }
