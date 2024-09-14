@@ -1,6 +1,24 @@
+import { useState } from "react";
 import "./login.scss";
+import { userLogin } from "../../utils/user";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  function handleEmailChange(e) {
+    setEmail(e.target.value);
+  }
+
+  function handlePasswordChange(e) {
+    setPassword(e.target.value);
+  }
+
+  async function handleLogin() {
+    const data = await userLogin(email, password);
+    console.log(data);
+  }
+
   return (
     <div className="login">
       <div className="login__image">
@@ -12,10 +30,10 @@ function Login() {
 
       <div className="wraper">
         <div className="login__form">
-          <input type="text" placeholder="Username" />
-          <input type="password" placeholder="Password" />
+          <input type="text" placeholder="Email" onChange={(e) => handleEmailChange(e)} />
+          <input type="password" placeholder="Password" onChange={(e) => handlePasswordChange(e)} />
           <div className="button__login">
-            <button>Login</button>
+            <button onClick={handleLogin}>Login</button>
           </div>
           <div className="one__line">
             <div className="line"></div>
