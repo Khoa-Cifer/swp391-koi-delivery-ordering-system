@@ -16,9 +16,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String firstName;
-    private String middleName;
-    private String lastName;
+    private String username;
     @Column(unique = true, nullable = false)
     private String email;
     private String password;
@@ -27,10 +25,8 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    public User(String firstName, String middleName, String lastName, String email, String password, Role role) {
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
+    public User(String username, String middleName, String lastName, String email, String password, Role role) {
+        this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
