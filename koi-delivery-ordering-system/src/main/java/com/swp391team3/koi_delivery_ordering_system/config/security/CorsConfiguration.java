@@ -1,4 +1,4 @@
-package com.swp391team3.koi_delivery_ordering_system.security;
+package com.swp391team3.koi_delivery_ordering_system.config.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
