@@ -1,9 +1,17 @@
+import Header from "../../components/header/header";
+
+import Content from "../../components/content/content";
+import Footer from "../../components/footer/footer";
+
 function Home() {
-    return (
-        <div>
-            Home place holder
-        </div>
-    )
+  return (
+    <>
+      <Header />
+      <Content />
+
+      <Footer />
+    </>
+  );
 }
 
 export default Home;
