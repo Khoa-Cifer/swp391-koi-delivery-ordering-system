@@ -9,19 +9,27 @@ import lombok.Setter;
 
 import java.util.Set;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "role")
-public class Role {
+@Entity
+@Table(name = "manager")
+public class Manager {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String roleName;
+    private String username;
+    @Column(unique = true, nullable = false)
+    private String email;
+    private String password;
+    private String phoneNumber;
 
-    @OneToMany(mappedBy = "role")
+    @OneToOne
+    @JoinColumn(name = "avatar_id", referencedColumnName = "id")
+    private File file;
+
+    @OneToMany(mappedBy = "sender")
     @JsonIgnore
-    private Set<User> users;
+    private Set<Notification> senders;
 }

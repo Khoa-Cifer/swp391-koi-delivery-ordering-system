@@ -1,26 +1,27 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
-import com.swp391team3.koi_delivery_ordering_system.model.User;
+import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestLoginDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestRegisterDTO;
 import com.swp391team3.koi_delivery_ordering_system.responseDto.UserResponseLoginDTO;
-import com.swp391team3.koi_delivery_ordering_system.service.IUserService;
+import com.swp391team3.koi_delivery_ordering_system.service.ICustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/users")
+@RequestMapping("api/customer")
 @RequiredArgsConstructor
-public class UserController {
-    private final IUserService userService;
+public class CustomerController {
+    private final ICustomerService customerService;
 
-    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+    @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody UserRequestLoginDTO request) {
-        User foundUser = userService.userLogin(request.getEmail(), request.getPassword());
+        Customer foundUser = customerService.customerLogin(request.getEmail(), request.getPassword());
         if (foundUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
@@ -35,6 +36,6 @@ public class UserController {
 
     @PostMapping("/register")
     public String register(@RequestBody UserRequestRegisterDTO request) {
-        return userService.userRegister(request.getEmail(), request.getPassword(), request.getUsername());
+        return customerService.customerRegister(request.getEmail(), request.getPassword(), request.getUsername(), request.getPhoneNumber());
     }
 }

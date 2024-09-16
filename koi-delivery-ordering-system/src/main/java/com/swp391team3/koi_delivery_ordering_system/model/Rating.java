@@ -24,7 +24,7 @@ public class Rating {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    private User createdBy;
+    private Customer createdBy;
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)

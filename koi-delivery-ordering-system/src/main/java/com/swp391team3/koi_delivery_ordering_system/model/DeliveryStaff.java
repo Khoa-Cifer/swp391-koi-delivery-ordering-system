@@ -14,8 +14,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "delivery_staff")
+public class DeliveryStaff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,39 +23,20 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
     private String password;
-
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
+    private String address;
+    private String latitude;
+    private String longitude;
+    private String phoneNumber;
 
     @OneToOne
     @JoinColumn(name = "avatar_id", referencedColumnName = "id")
     private File file;
 
-    @OneToMany(mappedBy = "sender")
-    @JsonIgnore
-    private Set<Notification> senders;
-
-    @OneToMany(mappedBy = "receiver")
-    @JsonIgnore
-    private Set<Notification> receivers;
-
-    @OneToMany(mappedBy = "customer")
-    @JsonIgnore
-    private Set<Order> customers;
-
     @OneToMany(mappedBy = "driver")
     @JsonIgnore
     private Set<Order> drivers;
 
-    @OneToMany(mappedBy = "createdBy")
+    @OneToMany(mappedBy = "driverNoti")
     @JsonIgnore
-    private Set<Rating> ratingSet;
-
-    public User(String username, String email, String password, Role role) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
+    private Set<Notification> receivers;
 }

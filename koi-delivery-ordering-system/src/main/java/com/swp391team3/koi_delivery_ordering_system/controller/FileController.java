@@ -13,7 +13,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("api/images")
 @RequiredArgsConstructor
-public class ImageController {
+public class FileController {
     private final IImageService imageService;
 
     @PostMapping("/fileSystem")

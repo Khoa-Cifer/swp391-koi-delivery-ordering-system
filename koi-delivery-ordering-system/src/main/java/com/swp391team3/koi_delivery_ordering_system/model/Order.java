@@ -34,11 +34,11 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    private User customer;
+    private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "driver_id", nullable = false)
-    private User driver;
+    private DeliveryStaff driver;
 
     @OneToMany(mappedBy = "ratedFor")
     @JsonIgnore

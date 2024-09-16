@@ -24,9 +24,17 @@ public class Notification {
 
     @ManyToOne
     @JoinColumn(name = "sender_id", nullable = false)
-    private User sender;
+    private Manager sender;
 
     @ManyToOne
-    @JoinColumn(name = "receiver_id", nullable = false)
-    private User receiver;
+    @JoinColumn(name = "sales_receiver_id", nullable = false)
+    private SalesStaff salesNoti;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_receiver_id", nullable = false)
+    private Customer customerNoti;
+
+    @ManyToOne
+    @JoinColumn(name = "deliverer_receiver_id", nullable = false)
+    private DeliveryStaff driverNoti;
 }
