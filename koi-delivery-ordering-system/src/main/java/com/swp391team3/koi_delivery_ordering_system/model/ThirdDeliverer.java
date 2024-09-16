@@ -6,20 +6,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "payment")
-public class Payment {
+@Entity
+@Table(name = "third_deliverer")
+public class ThirdDeliverer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String amount;
-    private String bankType;
-
-    @OneToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    private User user;
+    private String name;
+    private String deliveredType;
+    private double priceRate;
 }

@@ -8,19 +8,26 @@ import lombok.Setter;
 
 import java.util.Date;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "image")
-public class Image {
+@Entity
+@Table(name = "license")
+public class License {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private Date createdTime;
     private String type;
-    private String filePath;
-    private int versionCopy = 0;
+    private String description;
+    private Date dateOfIssue;
+
+    @OneToOne
+    @JoinColumn(name = "file_id", referencedColumnName = "id")
+    private File file;
+
+    @ManyToOne
+    @JoinColumn(name = "fish_id", nullable = false)
+    private Fish fish;
 }

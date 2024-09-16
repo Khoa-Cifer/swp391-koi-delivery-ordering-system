@@ -11,15 +11,16 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "payment")
-public class Payment {
+@Table(name = "driver_location")
+public class DriverLocation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String amount;
-    private String bankType;
+    private String address;
+    private String latitude;
+    private String longitude;
 
     @OneToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    private User user;
+    @JoinColumn(name = "driver_id", referencedColumnName = "id")
+    private User deliveryStaff;
 }
