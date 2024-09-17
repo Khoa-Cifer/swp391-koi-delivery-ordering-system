@@ -4,6 +4,7 @@ import lombok.*;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class UserResponseLoginDTO {
     private String email;
     private String username;
