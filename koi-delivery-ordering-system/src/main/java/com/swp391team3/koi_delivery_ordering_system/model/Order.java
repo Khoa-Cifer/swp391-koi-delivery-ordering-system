@@ -40,6 +40,10 @@ public class Order {
     @JoinColumn(name = "driver_id", nullable = false)
     private DeliveryStaff driver;
 
+    @ManyToOne
+    @JoinColumn(name = "sales_id", nullable = false)
+    private SalesStaff sales;
+
     @OneToMany(mappedBy = "ratedFor")
     @JsonIgnore
     private Set<Rating> ratingSet;

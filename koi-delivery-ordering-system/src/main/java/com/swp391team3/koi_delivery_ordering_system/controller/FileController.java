@@ -16,14 +16,14 @@ import java.io.IOException;
 public class FileController {
     private final IImageService imageService;
 
-    @PostMapping("/fileSystem")
+    @PostMapping("/uploadFileSystem")
     public ResponseEntity<String> uploadImageToFIleSystem(@RequestParam("image") MultipartFile file) throws IOException {
         String uploadImage = imageService.uploadImageToFileSystem(file);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
     }
 
-    @GetMapping("/fileSystem")
+    @GetMapping("/getFileSystem")
     public ResponseEntity<byte[]> downloadImageFromFileSystem(@RequestParam("id") Long id) throws IOException {
         byte[] imageData = imageService.getImageFromFileSystem(id);
         return ResponseEntity.status(HttpStatus.OK)

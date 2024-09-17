@@ -31,10 +31,6 @@ public class Customer {
     @JoinColumn(name = "avatar_id", referencedColumnName = "id")
     private File file;
 
-    @OneToMany(mappedBy = "customerNoti")
-    @JsonIgnore
-    private Set<Notification> receivers;
-
     @OneToMany(mappedBy = "customer")
     @JsonIgnore
     private Set<Order> orders;

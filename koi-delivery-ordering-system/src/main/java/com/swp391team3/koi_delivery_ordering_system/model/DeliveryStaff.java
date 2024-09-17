@@ -35,8 +35,4 @@ public class DeliveryStaff {
     @OneToMany(mappedBy = "driver")
     @JsonIgnore
     private Set<Order> drivers;
-
-    @OneToMany(mappedBy = "driverNoti")
-    @JsonIgnore
-    private Set<Notification> receivers;
 }

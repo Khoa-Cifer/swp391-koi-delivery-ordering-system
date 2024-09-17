@@ -29,10 +29,6 @@ public class SalesStaff {
     @JoinColumn(name = "avatar_id", referencedColumnName = "id")
     private File file;
 
-    @OneToMany(mappedBy = "salesNoti")
-    @JsonIgnore
-    private Set<Notification> notifications;
-
     @OneToMany(mappedBy = "createdBy")
     @JsonIgnore
     private Set<News> news;
