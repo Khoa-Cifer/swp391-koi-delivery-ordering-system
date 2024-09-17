@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
-public class PaymentService implements IPaymentService {
+public class PaymentServiceImpl implements IPaymentService {
     private final VNPayConfiguration vnPayConfiguration;
 
     @Override

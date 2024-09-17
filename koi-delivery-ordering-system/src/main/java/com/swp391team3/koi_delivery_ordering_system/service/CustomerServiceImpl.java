@@ -33,15 +33,20 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public Customer customerLogin(String email, String password) {
-        Customer matchedCustomer = customerRepository.findCustomerByEmail(email);
+    public boolean customerLogin(String email, String password) {
+        Customer matchedCustomer = getCustomerByEmail(email);
         if (matchedCustomer != null) {
             if (passwordEncoder.matches(password, matchedCustomer.getPassword())) {
-                return matchedCustomer;
+                return true;
             } else {
-                return null;
+                return false;
             }
         }
-        return null;
+        return false;
+    }
+
+    @Override
+    public Customer getCustomerByEmail(String email) {
+        return customerRepository.findCustomerByEmail(email);
     }
 }
