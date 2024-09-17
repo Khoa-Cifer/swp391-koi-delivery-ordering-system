@@ -14,14 +14,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/customer")
+@RequestMapping("api/auth")
 @RequiredArgsConstructor
-public class CustomerController {
+public class AuthController {
     private final ICustomerService customerService;
 
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody UserRequestLoginDTO request) {
-        Customer foundUser = customerService.customerLogin(request.getEmail(), request.getPassword());
+        int userType = request.getUserType();
+        Customer foundUser = null;
+        if (userType == 1) {
+            foundUser = customerService.customerLogin(request.getEmail(), request.getPassword());
+        } else if (userType == 2) {
+
+        }
         if (foundUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }

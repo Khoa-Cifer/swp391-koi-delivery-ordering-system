@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface ImageRepository extends JpaRepository<File, Long> {
+public interface FileRepository extends JpaRepository<File, Long> {
     Optional<File> findByName(String fileName);
 
     @Query("SELECT i.name FROM File i")

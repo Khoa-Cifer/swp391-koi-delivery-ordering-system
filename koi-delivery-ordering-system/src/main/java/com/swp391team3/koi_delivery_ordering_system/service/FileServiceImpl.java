@@ -1,6 +1,6 @@
 package com.swp391team3.koi_delivery_ordering_system.service;
 
-import com.swp391team3.koi_delivery_ordering_system.repository.ImageRepository;
+import com.swp391team3.koi_delivery_ordering_system.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,8 +10,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ImageServiceImpl implements IImageService {
-    private final ImageRepository imageRepository;
+public class FileServiceImpl implements IFileService {
+    private final FileRepository imageRepository;
     private final String FOLDER_PATH = "data/";
 
     @Override

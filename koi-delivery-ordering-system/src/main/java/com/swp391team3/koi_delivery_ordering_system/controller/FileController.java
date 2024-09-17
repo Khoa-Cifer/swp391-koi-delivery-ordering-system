@@ -1,6 +1,6 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
-import com.swp391team3.koi_delivery_ordering_system.service.IImageService;
+import com.swp391team3.koi_delivery_ordering_system.service.IFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,7 +14,7 @@ import java.io.IOException;
 @RequestMapping("api/images")
 @RequiredArgsConstructor
 public class FileController {
-    private final IImageService imageService;
+    private final IFileService imageService;
 
     @PostMapping("/uploadFileSystem")
     public ResponseEntity<String> uploadImageToFIleSystem(@RequestParam("image") MultipartFile file) throws IOException {
