@@ -25,7 +25,6 @@ public class Order {
     private String orderStatus;
     private String description;
     private String type;
-    private String deliveredType;
     private Date createdDate;
     private Date lastUpdatedDate;
     private Date finishDate;
@@ -51,4 +50,8 @@ public class Order {
     @OneToMany(mappedBy = "order")
     @JsonIgnore
     private Set<Fish> fishes;
+
+    @ManyToOne
+    @JoinColumn(name = "delivering_type_id", nullable = false)
+    private DeliveringType deliveringType;
 }
