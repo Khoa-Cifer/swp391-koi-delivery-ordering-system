@@ -7,26 +7,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 import java.util.Set;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "file")
-public class File {
+@Entity
+@Table(name = "delivering_type")
+public class DeliveringType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private Date createdTime;
-    private String type;
-    private String filePath;
-    private int versionCopy = 0;
+    private String description;
 
-    @OneToMany(mappedBy = "file")
+    @OneToMany(mappedBy = "deliveringType")
     @JsonIgnore
-    private Set<License> licenses;
+    private Set<Order> orders;
 }

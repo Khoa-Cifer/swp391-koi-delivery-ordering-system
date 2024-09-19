@@ -23,7 +23,7 @@ public class License {
     private String description;
     private Date dateOfIssue;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "file_id", referencedColumnName = "id")
     private File file;
 
