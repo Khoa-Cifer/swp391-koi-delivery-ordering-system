@@ -1,0 +1,87 @@
+.header-container {
+  position: fixed;
+
+  width: 97.5%;
+  z-index: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #8cbdf6;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-right: 20px;
+}
+
+.dashboard {
+  font-size: 1em;
+  font-weight: bold;
+  display: flex;
+  gap: 100px;
+  color: white;
+}
+
+.dashboard button {
+  background-color: transparent;
+  color: black;
+  border: 1px solid white;
+  padding: 10px 20px;
+  margin-left: 10px;
+  border-radius: 5px;
+  width: 100px;
+}
+
+.dashboard button:hover {
+  background-color: #70b1fc;
+  color: black;
+}
+
+.search-bar {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  width: 400px;
+}
+.search button {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  width: 100px;
+  margin-left: 5px;
+  padding: 10px 20px;
+}
+
+.search button:hover {
+  background-color: white;
+  color: black;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.header-right button {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 10px 20px;
+  margin-left: 10px;
+  border-radius: 5px;
+}
+
+.header-right button:hover {
+  background-color: white;
+  color: black;
+}
