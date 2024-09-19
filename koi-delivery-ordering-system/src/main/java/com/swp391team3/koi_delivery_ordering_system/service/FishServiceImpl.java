@@ -27,7 +27,7 @@ public class FishServiceImpl implements IFishService {
     public void deleteFishById(Long id) {
         fishRepository.deleteById(id);
     }
-//
+
 //    @Override
 //    public Fish updateFishById(Long id) {
 //        return fishRepository.updateById(id);
