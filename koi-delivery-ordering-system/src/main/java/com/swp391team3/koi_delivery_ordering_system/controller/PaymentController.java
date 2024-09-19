@@ -1,6 +1,5 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
-import com.swp391team3.koi_delivery_ordering_system.responseDto.PaymentResponseDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IPaymentService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

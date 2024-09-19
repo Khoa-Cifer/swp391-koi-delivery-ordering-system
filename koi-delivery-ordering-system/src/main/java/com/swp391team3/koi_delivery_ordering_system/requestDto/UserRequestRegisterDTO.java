@@ -7,4 +7,5 @@ public class UserRequestRegisterDTO {
     private String email;
     private String password;
     private String username;
+    private String phoneNumber;
 }

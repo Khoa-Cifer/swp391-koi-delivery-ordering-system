@@ -1,11 +1,12 @@
 import axiosClient from "./axios";
 
-export async function userLogin(email, password) {
+export async function userLogin(email, password, userType) {
     try {
-        const response = await axiosClient.post("users/login",
+        const response = await axiosClient.post("auth/login",
             {
                 email,
-                password
+                password,
+                userType
             }
         );
         return response.data;
@@ -16,7 +17,7 @@ export async function userLogin(email, password) {
 
 export async function userRegister(email, username, password) {
     try {
-        const response = await axiosClient.post("users/register",
+        const response = await axiosClient.post("auth/register",
             {
                 email,
                 username,

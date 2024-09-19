@@ -6,4 +6,5 @@ import lombok.Getter;
 public class UserRequestLoginDTO {
     private String email;
     private String password;
+    private int userType;
 }

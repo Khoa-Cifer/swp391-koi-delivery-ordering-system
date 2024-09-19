@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./login.scss";
 import { userLogin } from "../../utils/user";
+import { Button } from "@mui/material";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -14,8 +15,28 @@ function Login() {
     setPassword(e.target.value);
   }
 
-  async function handleLogin() {
-    const data = await userLogin(email, password);
+  // async function handleLogin() {
+  //   console.log(userType);
+  //   // const data = await userLogin(email, password);
+  // }
+
+  async function handleCustomerLogin() {
+    const data = await userLogin(email, password, 1);
+    console.log(data);
+  }
+
+  async function handleDeliveryStaffLogin() {
+    const data = await userLogin(email, password, 2);
+    console.log(data);
+  }
+
+  async function handleSalesStaffLogin() {
+    const data = await userLogin(email, password, 3);
+    console.log(data);
+  }
+
+  async function handleManagerLogin() {
+    const data = await userLogin(email, password, 4);
     console.log(data);
   }
 
@@ -32,9 +53,45 @@ function Login() {
         <div className="login__form">
           <input type="text" placeholder="Email" onChange={(e) => handleEmailChange(e)} />
           <input type="password" placeholder="Password" onChange={(e) => handlePasswordChange(e)} />
-          <div className="button__login">
-            <button onClick={handleLogin}>Login</button>
+
+          <div className="one__line">
+            <div className="line"></div>
+            <span>Login as</span>
+            <div className="line"></div>
           </div>
+
+          <div className="role__form">
+            <Button
+              onClick={() => handleCustomerLogin()}
+              variant="contained"
+            >
+              Customer
+            </Button>
+
+            <Button
+              onClick={() => handleDeliveryStaffLogin()}
+              variant="contained"
+            >
+              Sales Staff
+            </Button>
+          </div>
+
+          <div className="role__form">
+            <Button
+              onClick={() => handleSalesStaffLogin()}
+              variant="contained"
+            >
+              Delivery Staff
+            </Button>
+
+            <Button
+              onClick={() => handleManagerLogin()}
+              variant="contained"
+            >
+              Manager
+            </Button>
+          </div>
+
           <div className="one__line">
             <div className="line"></div>
             <span>Or</span>
@@ -51,7 +108,7 @@ function Login() {
           </button>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 
