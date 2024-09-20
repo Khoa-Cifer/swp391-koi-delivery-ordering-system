@@ -34,5 +34,5 @@ public class Fish {
 
     @ManyToOne
     @JoinColumn(name = "sender_id", nullable = false)
-    private Manager sender;
+    private Customer sender;
 }

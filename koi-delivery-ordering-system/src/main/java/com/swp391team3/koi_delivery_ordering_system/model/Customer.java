@@ -38,4 +38,8 @@ public class Customer {
     @OneToMany(mappedBy = "createdBy")
     @JsonIgnore
     private Set<Rating> ratingSet;
+
+    @OneToMany(mappedBy = "sender")
+    @JsonIgnore
+    private Set<Fish> fishes;
 }
