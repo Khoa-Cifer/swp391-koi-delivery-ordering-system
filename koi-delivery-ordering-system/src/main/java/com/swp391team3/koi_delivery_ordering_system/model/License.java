@@ -30,4 +30,8 @@ public class License {
     @ManyToOne
     @JoinColumn(name = "fish_id", nullable = false)
     private Fish fish;
+
+    @ManyToOne
+    @JoinColumn(name = "license_type_id", referencedColumnName = "id")
+    private LicenseType licenseType;
 }

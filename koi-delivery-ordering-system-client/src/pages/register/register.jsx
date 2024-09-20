@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { userRegister } from "../../utils/user";
+import { userRegister } from "../../utils/users/user";
 import "./register.scss";
 
 const SignUp = () => {

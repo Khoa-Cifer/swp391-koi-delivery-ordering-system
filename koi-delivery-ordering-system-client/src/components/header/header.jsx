@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import "./header.scss";
 function Header() {
   return (
@@ -18,9 +19,9 @@ function Header() {
       </div>
 
       <div className="header-right">
-        <button className="register-btn">Register</button>
-        <button className="login-btn">Log In</button>
-        <button className="contact-btn">Contact</button>
+        <button className="register-btn"><NavLink to={"/register"} style={{ textDecoration: 'none', color: 'inherit' }}>Register</NavLink></button>
+        <button className="login-btn"><NavLink to={"/login"} style={{ textDecoration: 'none', color: 'inherit' }}>Log In</NavLink></button>
+        <button className="contact-btn"><NavLink style={{ textDecoration: 'none', color: 'inherit' }}>Contact</NavLink></button>
       </div>
     </div>
   );
