@@ -24,7 +24,6 @@ public class Customer {
     private String email;
     private String password;
     private double amount;
-    private String bankType;
     private String phoneNumber;
 
     @OneToOne

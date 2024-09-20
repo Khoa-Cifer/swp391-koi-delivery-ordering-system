@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./login.scss";
-import { userLogin } from "../../utils/user";
 import { Button } from "@mui/material";
+import { userLogin } from "../../utils/users/user";
 
 function Login() {
   const [email, setEmail] = useState("");

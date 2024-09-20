@@ -1,7 +1,49 @@
-import { Button } from "@mui/material";
+import { useState } from "react";
 import "./Admin.scss";
+import Header from "./layout/Header";
+import Sidebar from "./layout/Sidebar";
+import Customer from "./components/Customer/Customer";
 
 function Admin() {
+  const [selectedDataType, setSelectedDataType] = useState('');
+
+  const handleDataTypeChange = (dataType) => {
+    setSelectedDataType(dataType);
+  };
+
+  const renderContent = () => {
+    switch (selectedDataType) {
+      case 'Customer':
+        return <Customer />;
+      case 'Delivery Staff':
+        return <p>Delivery Staff Body Loaded</p>;
+      case 'File':
+        return <p>File Body Loaded</p>;
+      case 'Fish':
+        return <p>Fish Body Loaded</p>;
+      case 'License':
+        return <p>License Body Loaded</p>;
+      case 'Manager':
+        return <p>Manager Body Loaded</p>;
+      case 'News':
+        return <p>News Body Loaded</p>;
+      case 'Notification':
+        return <p>Notification Body Loaded</p>;
+      case 'Order':
+        return <p>Order Body Loaded</p>;
+      case 'Rating':
+        return <p>Rating Body Loaded</p>;
+      case 'Sale Staff':
+        return <p>Sale Staff Body Loaded</p>;
+      case 'Payment History':
+        return <p>Payment History Body Loaded</p>;
+      case 'License Type':
+        return <p>License Type Body Loaded</p>;
+      case 'Delivery Type':
+        return <p>Delivery Type Body Loaded</p>;
+    }
+  }
+
   return (
     <div className="admin-container">
       <div className="admin-container-left">
@@ -24,82 +66,19 @@ function Admin() {
           <h4>MODULES</h4>
 
           <div className="modules-information">
-            <Button variant="outlined">Customer</Button>
-            <Button variant="outlined">Delivery Staff</Button>
-            <Button variant="outlined">File</Button>
-            <Button variant="outlined">Fish</Button>
-            <Button variant="outlined">License</Button>
-            <Button variant="outlined">Manager</Button>
-            <Button variant="outlined">News</Button>
-            <Button variant="outlined">Notification</Button>
-            <Button variant="outlined">Order</Button>
-            <Button variant="outlined">Rating</Button>
-            <Button variant="outlined">Sale Staff</Button>
-            <Button variant="outlined">Third Deliverer</Button>
-
-            {/* <div className="modules-information">
-              <button>Delivery Staff</button>
-            </div>
-
-            <div className="modules-information">
-              <button>File</button>
-            </div>
-
-            <div className="modules-information">
-              <button>Fish</button>
-            </div>
-
-            <div className="modules-information">
-              <button>License</button>
-            </div>
-
-            <div className="modules-information">
-              <button>Manager</button>
-            </div>
-
-            <div className="modules-information">
-              <button>News</button>
-            </div>
-
-            <div className="modules-information">
-              <button>Notification</button>
-            </div>
-
-            <div className="modules-information">
-              <button>Order</button>
-            </div>
-
-            <div className="modules-information">
-              <button>Rating</button>
-            </div>
-
-            <div className="modules-information">
-              <button>Sale Staff</button>
-            </div>
-
-            <div className="modules-information">
-              <button>Third Deliverer</button>
-            </div> */}
+            <Sidebar onDataTypeChange={handleDataTypeChange} />
           </div>
         </div>
       </div>
 
       <div className="admin-container-right">
-        <div className="header">
-          <div className="header-left">
-            <h3>Dashboard</h3>
-            <h3>Koi Fish Deliveries</h3>
-          </div>
-
-          <div className="header-right">
-            <div>avatar</div>
-          </div>
-        </div>
+        <Header />
 
         <div className="dashboard-info">
           <h2>DASHBOARD</h2>
-
         </div>
+        <p>Selected Data Type: {selectedDataType}</p>
+        {renderContent()}
       </div>
     </div>
   );
