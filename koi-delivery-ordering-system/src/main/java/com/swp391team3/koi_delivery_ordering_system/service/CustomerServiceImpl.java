@@ -60,17 +60,25 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public Optional<Customer> getCustomerById(long id) {
+    public Optional<Customer> getCustomerById(Long id) {
         return customerRepository.findById(id);    
     }
 
     @Override
-    public Customer updateCustomerById(long id, Customer updatedCustomer) {
-        return customerRepository.updateCustomerById(id, updatedCustomer.getEmail(), updatedCustomer.getPassword());    
+    public Customer updateCustomerById(Long id, String email, String phoneNumber) {
+        Optional<Customer> optionalCustomer = customerRepository.findById(id);
+        if (optionalCustomer.isPresent()) {
+            Customer customer = optionalCustomer.get();
+            customer.setEmail(email);
+            customer.setPhoneNumber(phoneNumber);
+            return customerRepository.save(customer);
+        } else {
+            return null;
+        }
     }
 
     @Override
-    public void deleteCustomerById(long id) {
+    public void deleteCustomerById(Long id) {
         customerRepository.deleteById(id);    
     }
 }

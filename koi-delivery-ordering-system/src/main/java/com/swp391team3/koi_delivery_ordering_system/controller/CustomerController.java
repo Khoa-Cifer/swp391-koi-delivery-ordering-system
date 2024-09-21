@@ -12,79 +12,61 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping("/api/admin/customer")
 public class CustomerController {
-
     private final ICustomerService customerService;
 
-    // Customer Registration
-    @PostMapping("/register")
-    public ResponseEntity<String> registerCustomer(@RequestParam String email, @RequestParam String password, @RequestParam String username, @RequestParam String phoneNumber) {
-        String response = customerService.customerRegister(email, password, username, phoneNumber);
-        if ("Register successfully".equals(response)) {
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
-        }
-    }
-
-    // Customer Login
-    @PostMapping("/login")
-    public ResponseEntity<String> loginCustomer(@RequestParam String email, @RequestParam String password) {
-        boolean loginSuccess = customerService.customerLogin(email, password);
-        if (loginSuccess) {
-            return new ResponseEntity<>("Login successful", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Invalid email or password", HttpStatus.UNAUTHORIZED);
-        }
-    }
 
     // Get all customers
-    @GetMapping
-    public ResponseEntity<List<Customer>> getAllCustomers() {
+    //PASSED
+    @GetMapping("/getAllCustomers")
+    public ResponseEntity<?> getAllCustomer() {
         List<Customer> customers = customerService.getAllCustomer();
-        return new ResponseEntity<>(customers, HttpStatus.OK);
+        return ResponseEntity.ok(customers);
     }
 
     // Get customer by ID
+    //PASSED
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable("id") long id) {
+    public ResponseEntity<?> getCustomerById(@PathVariable Long id) {
         Optional<Customer> customer = customerService.getCustomerById(id);
-        return customer.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return ResponseEntity.ok(customer);
     }
 
     // Get customer by email
+    //PASSED
     @GetMapping("/email")
     public ResponseEntity<Customer> getCustomerByEmail(@RequestParam String email) {
         Customer customer = customerService.getCustomerByEmail(email);
         if (customer != null) {
-            return new ResponseEntity<>(customer, HttpStatus.OK);
+            return ResponseEntity.ok(customer);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     // Update customer by ID
+    //PASSED
     @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomerById(@PathVariable("id") long id, @RequestBody Customer updatedCustomer) {
-        Customer updated = customerService.updateCustomerById(id, updatedCustomer);
+    public ResponseEntity<Customer> updateCustomerById(@PathVariable Long id, @RequestBody Customer customer) {
+        Customer updated = customerService.updateCustomerById(id, customer.getEmail(), customer.getPhoneNumber());
         if (updated != null) {
-            return new ResponseEntity<>(updated, HttpStatus.OK);
+            return ResponseEntity.ok(updated);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     // Delete customer by ID
+    //PASSED
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCustomerById(@PathVariable("id") long id) {
+    public ResponseEntity<?> deleteCustomerById(@PathVariable Long id) {
         Optional<Customer> customer = customerService.getCustomerById(id);
         if (customer.isPresent()) {
             customerService.deleteCustomerById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return ResponseEntity.status(HttpStatus.OK).body("Deleted customer with id: " + id + " successfully");
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }

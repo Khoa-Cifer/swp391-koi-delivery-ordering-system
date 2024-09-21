@@ -11,8 +11,8 @@ public interface ICustomerService {
     public Customer getCustomerByEmail(String email);
     
     public List<Customer> getAllCustomer();
-    public Optional<Customer> getCustomerById(long id);
-    public Customer updateCustomerById(long id, Customer updatedCustomer);
-    public void deleteCustomerById(long id);
+    public Optional<Customer> getCustomerById(Long id);
+    public Customer updateCustomerById(Long id, String email, String phoneNumber);
+    public void deleteCustomerById(Long id);
 }
 

@@ -5,6 +5,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface DeliveringTypeRepository extends JpaRepository<DeliveringType, Long> {
-    @Query("UPDATE DeliveringType dt SET dt.name = :name, dt.description = :description WHERE dt.id = :id")
-    DeliveringType updateDeliveringType(Long id, String name, String description);
 }

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class DeliveringTypeServiceImpl implements IDeliveringTypeService{
+public class DeliveringTypeServiceImpl implements IDeliveringTypeService {
     private final DeliveringTypeRepository deliveringTypeRepository;
     
 
@@ -40,7 +40,15 @@ public class DeliveringTypeServiceImpl implements IDeliveringTypeService{
 
     @Override
     public DeliveringType updateDeliveringType(Long id, String name, String description) {
-        return deliveringTypeRepository.updateDeliveringType(id, name, description);
+        Optional<DeliveringType> optionalDeliveringType = deliveringTypeRepository.findById(id);
+        if (optionalDeliveringType.isPresent()) {
+            DeliveringType deliveringType = optionalDeliveringType.get();
+            deliveringType.setName(name);
+            deliveringType.setDescription(description);
+            return deliveringTypeRepository.save(deliveringType);
+        } else {
+            return null;
+        }
     }
 
     @Override

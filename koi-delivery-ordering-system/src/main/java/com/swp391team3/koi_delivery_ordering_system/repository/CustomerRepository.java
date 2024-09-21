@@ -10,6 +10,4 @@ public interface CustomerRepository extends JpaRepository<Customer, Long>, CrudR
 
     @Query("SELECT c FROM Customer c WHERE c.email like :email")
     Customer findCustomerByEmail(String email);
-    @Query("UPDATE Customer SET email = :email, password = :password WHERE id = :id")
-    Customer updateCustomerById(long id, String email, String password);
 }

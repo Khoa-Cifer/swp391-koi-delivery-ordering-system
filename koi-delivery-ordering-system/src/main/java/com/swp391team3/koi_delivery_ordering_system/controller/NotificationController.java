@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,28 +16,39 @@ import java.util.Optional;
 public class NotificationController {
     private final INotificationService notificationService;
 
+    //Create Notification
+    //PASSED
     @PostMapping
-    public ResponseEntity<Notification> createNotification(@RequestBody Notification notification) {
-        Notification createdNotification = notificationService.createNotification(notification);
-        return ResponseEntity.ok(createdNotification);
+    public ResponseEntity<?> createNotification(@RequestBody Notification notification) {
+       boolean result = notificationService.createNotification(notification.getName(), notification.getDescription(), notification.getSendDate(), notification.getSender(), notification.getReceiver());
+       if(result) {
+           return ResponseEntity.ok("Notification created successfully!");
+       } else {
+           return ResponseEntity.badRequest().body("Notification creation failed!");
+       }
     }
 
+    //Get All Notifications
+    //PASSED
     @GetMapping
-    public ResponseEntity<List<Notification>> getAllNotifications() {
+    public ResponseEntity<?> getAllNotifications() {
         List<Notification> notifications = notificationService.getAllNotifications();
         return ResponseEntity.ok(notifications);
     }
 
+    //Get Notification By Id
+    //PASSED
     @GetMapping("/{id}")
-    public ResponseEntity<Notification> getNotificationById(@PathVariable Long id) {
+    public ResponseEntity<?> getNotificationById(@PathVariable Long id) {
         Optional<Notification> notification = notificationService.getNotificationById(id);
-        return notification.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(notification);
     }
-    
 
+    //Delete Notification
+    //PASSED
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteNotificationById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteNotificationById(@PathVariable Long id) {
         notificationService.deleteNotificationById(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Notification deleted successfully!");
     }
 }
