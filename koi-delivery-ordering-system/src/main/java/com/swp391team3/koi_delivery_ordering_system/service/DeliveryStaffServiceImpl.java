@@ -3,12 +3,11 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
 import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
@@ -55,22 +54,24 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
     }
 
     @Override
-    public List<DeliveryStaff> getAllDeliveryStaff() {
-        return deliveryStaffRepository.findAll(); 
+    public List<DeliveryStaff> getAllDeliveryStaffs() {
+        return deliveryStaffRepository.findAll();
     }
 
     @Override
-    public Optional<DeliveryStaff> getDeliveryStaffById(long id) {
+    public Optional<DeliveryStaff> getDeliveryStaffById(Long id) {
         return deliveryStaffRepository.findById(id);
     }
 
     @Override
-    public void deleteDeliveryStaffById(long id) {
+    public void deleteDeliveryStaffById(Long id) {
         deliveryStaffRepository.deleteById(id);
     }
 
     @Override
-    public DeliveryStaff updateDeliveryStaffById(long id, DeliveryStaff updatedDeliveryStaff) {
-        return deliveryStaffRepository.updateDeliveryStaffById(id, updatedDeliveryStaff.getEmail(), updatedDeliveryStaff.getPassword());
+    public DeliveryStaff updateDeliveryStaffById(Long id, String email, String phoneNumber) {
+        return deliveryStaffRepository.updateDeliveryStaff(id, email, phoneNumber);
     }
+
+
 }
