@@ -1,11 +1,13 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./header.scss";
 import { useEffect, useState } from "react";
 import { Button, Popover } from "@mui/material";
+import logo from '../../../../assets/logo.svg';
 
 function Header() {
   const [customerUsername, setCustomerUsername] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -18,6 +20,12 @@ function Header() {
   const handleLogout = () => {
     localStorage.removeItem('customerData');
     window.location.reload();
+  }
+
+  const handleService = () => {
+    if (localStorage.getItem('customerData')) {
+      navigate("/customer-home");
+    }
   }
 
   useEffect(() => {
@@ -34,13 +42,13 @@ function Header() {
   return (
     <div className="header-container">
       <div className="header-left">
-        <div className="logo">Logo</div>
+        <div className="logo"><img src={logo} alt="Logo" style={{ width: "40px" }} /></div>
       </div>
 
       <div className="dashboard">
-        <div className="service">SERVICE</div>
-        <div className="order-tracking">ORDER TRACKING</div>
-        <div className="support">SUPPORT</div>
+        <div className="service navigator" onClick={handleService}>SERVICE</div>
+        <div className="order-tracking navigator">ORDER TRACKING</div>
+        <div className="support navigator">SUPPORT</div>
       </div>
 
       <div className="search">
