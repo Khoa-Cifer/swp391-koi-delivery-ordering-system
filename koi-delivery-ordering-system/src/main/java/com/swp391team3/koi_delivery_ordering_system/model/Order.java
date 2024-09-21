@@ -24,7 +24,6 @@ public class Order {
     private String name;
     private String orderStatus;
     private String description;
-    private String type;
     private Date createdDate;
     private Date lastUpdatedDate;
     private Date finishDate;
