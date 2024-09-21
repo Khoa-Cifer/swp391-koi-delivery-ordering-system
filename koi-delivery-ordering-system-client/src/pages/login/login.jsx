@@ -2,10 +2,12 @@ import { useState } from "react";
 import "./login.scss";
 import { Button } from "@mui/material";
 import { userLogin } from "../../utils/users/user";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   function handleEmailChange(e) {
     setEmail(e.target.value);
@@ -22,7 +24,12 @@ function Login() {
 
   async function handleCustomerLogin() {
     const data = await userLogin(email, password, 1);
-    console.log(data);
+    console.log(data.email);
+    if (data.email) {
+      localStorage.setItem('customerEmail', data.email);
+      localStorage.setItem('customerUsername', data.username);
+      navigate("/");
+    }
   }
 
   async function handleDeliveryStaffLogin() {
