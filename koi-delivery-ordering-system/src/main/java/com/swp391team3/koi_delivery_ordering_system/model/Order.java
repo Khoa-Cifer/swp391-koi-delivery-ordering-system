@@ -29,7 +29,6 @@ public class Order {
     private Date lastUpdatedDate;
     private Date finishDate;
     private double price;
-    private double externalPrice;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)

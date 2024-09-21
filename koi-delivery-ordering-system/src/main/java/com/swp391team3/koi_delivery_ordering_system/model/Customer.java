@@ -23,8 +23,7 @@ public class Customer {
     @Column(unique = true, nullable = false)
     private String email;
     private String password;
-    private String amount;
-    private String bankType;
+    private double amount;
     private String phoneNumber;
 
     @OneToOne
@@ -38,4 +37,8 @@ public class Customer {
     @OneToMany(mappedBy = "createdBy")
     @JsonIgnore
     private Set<Rating> ratingSet;
+
+    @OneToMany(mappedBy = "sender")
+    @JsonIgnore
+    private Set<Fish> fishes;
 }
