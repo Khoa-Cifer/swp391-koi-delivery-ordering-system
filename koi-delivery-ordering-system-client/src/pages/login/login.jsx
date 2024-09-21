@@ -24,10 +24,8 @@ function Login() {
 
   async function handleCustomerLogin() {
     const data = await userLogin(email, password, 1);
-    console.log(data.email);
     if (data.email) {
-      localStorage.setItem('customerEmail', data.email);
-      localStorage.setItem('customerUsername', data.username);
+      localStorage.setItem('customerData', JSON.stringify(data));
       navigate("/");
     }
   }
@@ -58,7 +56,7 @@ function Login() {
 
       <div className="wraper">
         <div className="login__form">
-          <input type="text" placeholder="Email" onChange={(e) => handleEmailChange(e)} />
+          <input type="email" placeholder="Email" onChange={(e) => handleEmailChange(e)} />
           <input type="password" placeholder="Password" onChange={(e) => handlePasswordChange(e)} />
 
           <div className="one__line">

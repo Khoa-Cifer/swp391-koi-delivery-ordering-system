@@ -1,15 +1,35 @@
 import { NavLink } from "react-router-dom";
 import "./header.scss";
 import { useEffect, useState } from "react";
+import { Button, Popover } from "@mui/material";
+
 function Header() {
   const [customerUsername, setCustomerUsername] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('customerData');
+    window.location.reload();
+  }
 
   useEffect(() => {
-    const usernameFromLocalStorage = localStorage.getItem('customerEmail');
-    if (usernameFromLocalStorage) {
-      setCustomerUsername(usernameFromLocalStorage);
+    const customerDataFromLocalStorage = localStorage.getItem('customerData');
+    if (customerDataFromLocalStorage) {
+      const parsedData = JSON.parse(customerDataFromLocalStorage);
+      setCustomerUsername(parsedData.username);
     };
   }, []);
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
   return (
     <div className="header-container">
@@ -31,7 +51,9 @@ function Header() {
       <div className="header-right">
         <button className="contact-btn"><NavLink style={{ textDecoration: 'none', color: 'inherit' }}>Contact</NavLink></button>
         {customerUsername ? (
-          <span>Welcome, {customerUsername}!</span>
+          <span aria-describedby={id} onClick={handleClick}>
+            Welcome, {customerUsername}
+          </span>
         ) : (
           <>
             <button className="register-btn">
@@ -47,6 +69,19 @@ function Header() {
           </>
         )}
 
+        <Popover
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+        >
+          <Button onClick={handleLogout} sx={{ p: 2 }}>View Profile</Button>
+          <Button onClick={handleLogout} sx={{ p: 2 }}>Logout</Button>
+        </Popover>
       </div>
     </div>
   );
