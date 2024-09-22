@@ -3,9 +3,9 @@ import Login from "./pages/login/login";
 import Home from "./pages/home/home";
 import SignUp from "./pages/register/register";
 import Admin from "./pages/Manager/Admin";
-import DeliveryStaff from "./pages/DeliveryStaff/DeliveryStaff";
 import Customer from "./pages/Customer/Customer";
 import CustomerHomePage from "./pages/Customer/CustomerHomePage/CustomerHomePage";
+import DeliveryStaff from "./pages/DeliveryStaff/delivery_staff";
 
 function App() {
   return (

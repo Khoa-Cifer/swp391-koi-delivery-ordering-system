@@ -14,7 +14,7 @@
     margin: 10px;
 }
 
-admin-info {
+.admin-info {
     display: flexss;
     justify-content: center;
 }
@@ -45,7 +45,7 @@ admin-info {
 }
 
 .modules-information button:hover {
-    background-color: yellow;
+    background-color: #C3F4FD;
     color: #01428E;
 }
 
@@ -54,7 +54,7 @@ admin-info {
 }
 
 .admin-container-right {
-    background-color: #FFFFFF;
+    background-color: #C3F4FD;
     margin: 30px;
     width: 80%;
     border-radius: 20px;
@@ -77,7 +77,7 @@ admin-info {
 }
 
 .dashboard-info {
-    background-color: #E6F9FD;
+    background-color: white;
     color: #01428E;
 }
 
