@@ -32,4 +32,8 @@ public class SalesStaff {
     @OneToMany(mappedBy = "createdBy")
     @JsonIgnore
     private Set<News> news;
+
+    @OneToMany(mappedBy = "salesStaff")
+    @JsonIgnore
+    private Set<Order> orders;
 }

@@ -2,10 +2,12 @@ import { useState } from "react";
 import "./login.scss";
 import { Button } from "@mui/material";
 import { userLogin } from "../../utils/users/user";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   function handleEmailChange(e) {
     setEmail(e.target.value);
@@ -22,7 +24,10 @@ function Login() {
 
   async function handleCustomerLogin() {
     const data = await userLogin(email, password, 1);
-    console.log(data);
+    if (data.email) {
+      localStorage.setItem('customerData', JSON.stringify(data));
+      navigate("/");
+    }
   }
 
   async function handleDeliveryStaffLogin() {
@@ -51,7 +56,7 @@ function Login() {
 
       <div className="wraper">
         <div className="login__form">
-          <input type="text" placeholder="Email" onChange={(e) => handleEmailChange(e)} />
+          <input type="email" placeholder="Email" onChange={(e) => handleEmailChange(e)} />
           <input type="password" placeholder="Password" onChange={(e) => handlePasswordChange(e)} />
 
           <div className="one__line">
