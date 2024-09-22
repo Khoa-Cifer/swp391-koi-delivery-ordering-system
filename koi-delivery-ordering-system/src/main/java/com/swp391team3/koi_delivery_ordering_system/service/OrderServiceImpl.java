@@ -25,7 +25,7 @@ public class OrderServiceImpl implements IOrderService {
         order.setLastUpdatedDate(last);
         order.setCustomer(customer);
         order.setDriver(driver);
-        order.setSales(sales);
+        order.setSalesStaff(sales);
         order.setDeliveringType(deliveringType);
         order.setPrice(price);
 
