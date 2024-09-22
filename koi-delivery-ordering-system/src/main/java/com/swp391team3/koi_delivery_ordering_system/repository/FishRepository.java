@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface FishRepository extends JpaRepository<Fish, Long> {
 
-//    Fish updateById(Long id);
+
 }
