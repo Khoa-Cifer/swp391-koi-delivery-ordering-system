@@ -48,7 +48,19 @@ function DeliveryStaff() {
 
     return (
         <div>
-            <ToastContainer />
+            <ToastContainer
+                position="top-left"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                closeButton={false}
+            />
+
             <div className={open ? 'blur' : ''}>
                 <Button variant="contained" style={{ maxWidth: "30%" }} onClick={handleOpen}>
                     Create New Delivery Staff
@@ -60,9 +72,24 @@ function DeliveryStaff() {
                     aria-describedby="modal-description"
                 >
                     <Box sx={modalStyle}>
-                        <TextField label="Username" fullWidth margin="normal" onChange={(e) => setUsername(e.target.value)} />
-                        <TextField label="Email" fullWidth margin="normal" onChange={(e) => setEmail(e.target.value)} />
-                        <Button variant="contained" color="primary" onClick={handleCreateDeliveryStaff}>
+                        <TextField
+                            label="Username"
+                            fullWidth
+                            margin="normal"
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
+                        <TextField
+                            label="Email"
+                            fullWidth
+                            margin="normal"
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleCreateDeliveryStaff}
+                            disabled={!username || !email} // Disable if either is empty
+                        >
                             Submit
                         </Button>
                     </Box>
