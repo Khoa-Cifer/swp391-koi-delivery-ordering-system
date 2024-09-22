@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IDeliveryStaffService {
-    public String createDeliveryStaff(String email, String password, String username, String phoneNumber);
+    public String createDeliveryStaff(String email, String username);
     public boolean deliveryStaffLogin(String email, String password);
     public DeliveryStaff getDeliveryStaffByEmail(String email);
 

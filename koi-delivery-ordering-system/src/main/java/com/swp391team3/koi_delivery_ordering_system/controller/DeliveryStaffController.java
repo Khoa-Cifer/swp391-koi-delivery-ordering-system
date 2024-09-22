@@ -2,6 +2,7 @@ package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
 import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.DeliveryStaffRequestCreationDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IDeliveryStaffService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class DeliveryStaffController {
     private final IDeliveryStaffService deliveryStaffService;
+
+    @PostMapping("/createDeliveryStaff")
+    public ResponseEntity<?> createDeliveryStaff(@RequestBody DeliveryStaffRequestCreationDTO request) {
+        String result = deliveryStaffService.createDeliveryStaff(request.getEmail(), request.getUsername());
+        return ResponseEntity.ok(result);
+    }
 
     //Get All Delivery Staff
     //PASSED

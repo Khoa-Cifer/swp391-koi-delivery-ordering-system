@@ -3,6 +3,7 @@ import "./Admin.scss";
 import Header from "./layout/Header";
 import Sidebar from "./layout/Sidebar";
 import Customer from "./components/Customer/Customer";
+import DeliveryStaff from "./components/DeliveryStaff/DeliveryStaff";
 
 function Admin() {
   const [selectedDataType, setSelectedDataType] = useState('');
@@ -16,7 +17,7 @@ function Admin() {
       case 'Customer':
         return <Customer />;
       case 'Delivery Staff':
-        return <p>Delivery Staff Body Loaded</p>;
+        return <DeliveryStaff />;
       case 'File':
         return <p>File Body Loaded</p>;
       case 'Fish':

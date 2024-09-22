@@ -17,20 +17,21 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public String createDeliveryStaff(String email, String password, String username, String phoneNumber) {
+    public String createDeliveryStaff(String email, String username) {
         DeliveryStaff newDeliveryStaff = new DeliveryStaff();
-        newDeliveryStaff.setEmail(email);
 
         boolean emailDuplicatedCheck = deliveryStaffRepository.existsByEmail(email);
         if (emailDuplicatedCheck) {
             return "This email already exists";
         }
+        newDeliveryStaff.setEmail(email);
 
-        String encodedPassword = passwordEncoder.encode(password);
+        //Default password when create staffs
+        String defaultPassword = "123";
+        String encodedPassword = passwordEncoder.encode(defaultPassword);
         newDeliveryStaff.setPassword(encodedPassword);
 
         newDeliveryStaff.setUsername(username);
-        newDeliveryStaff.setPhoneNumber(phoneNumber);
 
         deliveryStaffRepository.save(newDeliveryStaff);
         return "Account create successfully";
