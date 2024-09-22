@@ -15,6 +15,8 @@ import java.util.Date;
 public class LicenseController {
     private final ILicenseService licenseService;
 
+    //Get All Licenses
+    //
     @GetMapping("/getAllLicenses")
     public ResponseEntity<?> getAllLicenses() {
         return ResponseEntity.ok(licenseService.getAllLicenses());
@@ -27,10 +29,5 @@ public class LicenseController {
     public ResponseEntity<?> deleteLicenseById(@PathVariable Long id) {
         licenseService.deleteLicenseById(id);
         return ResponseEntity.ok("License deleted successfully");
-    }
-    @PostMapping("/{id}")
-    public ResponseEntity<?> updateLicenseById(@PathVariable Long id, @RequestBody String name, String type, String description, Date dateOfIsDate) {
-        License updatedLicense = licenseService.updateLicense(id, name, type, description,dateOfIsDate);
-        return ResponseEntity.ok(updatedLicense);
     }
 }

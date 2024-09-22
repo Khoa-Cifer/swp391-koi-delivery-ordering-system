@@ -10,6 +10,4 @@ public interface SalesStaffRepository  extends JpaRepository<SalesStaff, Long>, 
 
     @Query("SELECT ss FROM SalesStaff ss WHERE ss.email like :email")
     SalesStaff findSalesStaffByEmail(String email);
-    @Query("UPDATE DeliveryStaff SET email = :email, password = :password WHERE id = :id")
-    SalesStaff updateSalesStaffById(long id, String email, String password);
 }

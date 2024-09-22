@@ -9,6 +9,4 @@ public interface DeliveryStaffRepository extends JpaRepository<DeliveryStaff, Lo
 
     @Query("SELECT ds FROM DeliveryStaff ds WHERE ds.email like :email")
     DeliveryStaff findDeliveryStaffByEmail(String email);
-    @Query("UPDATE DeliveryStaff SET email = :email, phoneNumber = :phoneNumber WHERE id = :id")
-    DeliveryStaff updateDeliveryStaff(Long id, String email, String phoneNumber);
 }

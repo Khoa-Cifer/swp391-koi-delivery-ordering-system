@@ -15,12 +15,16 @@ import java.util.Optional;
 public class OrderController {
     private final IOrderService orderService;
 
+    //Create Order
+    //
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-        Order createdOrder = orderService.createOrder(order);
+        Order createdOrder = orderService.createOrder(order.getTrackingId(), order.getName(), order.getOrderStatus(), order.getDescription(), order.getCreatedDate(), order.getLastUpdatedDate(), order.getCustomer(), order.getDriver(), order.getSales(), order.getDeliveringType(), order.getPrice());
         return ResponseEntity.ok(createdOrder);
     }
 
+    //Get All Orders
+    //PASSED
     @GetMapping
     public ResponseEntity<List<Order>> getAllOrders() {
         List<Order> orders = orderService.getAllOrders();

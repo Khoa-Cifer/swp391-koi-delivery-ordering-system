@@ -1,5 +1,6 @@
 package com.swp391team3.koi_delivery_ordering_system.service;
 
+import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
 import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
 import lombok.RequiredArgsConstructor;
@@ -70,7 +71,16 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
 
     @Override
     public DeliveryStaff updateDeliveryStaffById(Long id, String email, String phoneNumber) {
-        return deliveryStaffRepository.updateDeliveryStaff(id, email, phoneNumber);
+        Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(id);
+        if (optionalDeliveryStaff.isPresent()) {
+            DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
+            deliveryStaff.setEmail(email);
+            deliveryStaff.setPhoneNumber(phoneNumber);
+
+            return deliveryStaffRepository.save(deliveryStaff);
+        } else {
+            return null;
+        }
     }
 
 

@@ -11,7 +11,7 @@ public interface ISalesStaffService {
     public boolean salesStaffLogin(String email, String password);
 
     public List<SalesStaff> getAllSalesStaff();
-    public Optional<SalesStaff> getSalesStaffById(long id);
-    public void updateSalesStaffById(long id, SalesStaff updatedSalesStaff);
-    public void deleteSalesStaffById(long id);
+    public Optional<SalesStaff> getSalesStaffById(Long id);
+    public SalesStaff updateSalesStaff(Long id, String email, String phoneNumber);
+    public void deleteSalesStaffById(Long id);
 }

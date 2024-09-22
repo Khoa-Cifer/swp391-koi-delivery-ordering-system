@@ -7,6 +7,4 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Date;
 
 public interface LicenseRepository extends JpaRepository<License, Long> {
-    @Query("UPDATE License l SET l.name = :name, l.type = :type, l.description = :description, l.dateOfIssue = :dateOfIsDate WHERE l.id = :id")
-    License updateLicense(long id, String name, String type, String description, Date dateOfIsDate);
 }

@@ -10,5 +10,4 @@ public interface ILicenseService {
     public List<License> getAllLicenses();
     public Optional<License> getLicenseById(Long id);
     public void deleteLicenseById(Long id);
-    public License updateLicense(Long id, String name, String type, String description, Date dateOfIsDate);
 }

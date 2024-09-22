@@ -7,8 +7,7 @@ import com.swp391team3.koi_delivery_ordering_system.model.Manager;
 
 public interface IManagerService {
     public List<Manager> getAllManager();
-    public Optional<Manager> getManagerById(long id);
-    public Manager createManager(Manager manager);
-    public Manager updateManagerById(long id, Manager manager);
-    public void deleteManagerById(long id);
+    public Optional<Manager> getManagerById(Long id);
+    public Manager updateManager(Long id, String email, String phoneNumber);
+    public void deleteManagerById(Long id);
 }

@@ -14,11 +14,6 @@ public class NewsServiceImpl implements INewsService {
     private final NewsRepository newsRepository;
 
     @Override
-    public News createNews(News news) {
-        return newsRepository.save(news);
-    }
-
-    @Override
     public List<News> getAllNews() {
         return newsRepository.findAll();
     }
@@ -26,11 +21,6 @@ public class NewsServiceImpl implements INewsService {
     @Override
     public Optional<News> getNewsById(Long id) {
         return newsRepository.findById(id);
-    }
-
-    @Override
-    public News updateNewsById(Long id, News updatedNews) {
-        return newsRepository.updateNewsById(id, updatedNews.getTitle(), updatedNews.getDescription());
     }
 
     @Override

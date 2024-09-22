@@ -60,17 +60,25 @@ public class SalesStaffServiceImpl implements ISalesStaffService {
     }
 
     @Override
-    public Optional<SalesStaff> getSalesStaffById(long id) {
+    public Optional<SalesStaff> getSalesStaffById(Long id) {
         return salesStaffRepository.findById(id);    
     }
 
     @Override
-    public void updateSalesStaffById(long id, SalesStaff updatedSalesStaff) {
-        salesStaffRepository.updateSalesStaffById(id, updatedSalesStaff.getEmail(), updatedSalesStaff.getPassword());    
+    public SalesStaff updateSalesStaff(Long id, String email, String phoneNumber) {
+        SalesStaff salesStaff = salesStaffRepository.findById(id).get();
+        if(salesStaff != null) {
+            salesStaff.setEmail(email);
+            salesStaff.setPhoneNumber(phoneNumber);
+
+            salesStaffRepository.save(salesStaff);
+            return salesStaffRepository.save(salesStaff);
+        }
+        return null;
     }
 
     @Override
-    public void deleteSalesStaffById(long id) {
+    public void deleteSalesStaffById(Long id) {
         salesStaffRepository.deleteById(id);
     }
 }

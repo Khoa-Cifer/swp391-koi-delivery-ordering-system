@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface INewsService {
-    News createNews(News news);
-    List<News> getAllNews();
-    Optional<News> getNewsById(Long id);
-    News updateNewsById(Long id, News news);
-    void deleteNewsById(Long id);
+    public List<News> getAllNews();
+    public Optional<News> getNewsById(Long id);
+    public void deleteNewsById(Long id);
 }

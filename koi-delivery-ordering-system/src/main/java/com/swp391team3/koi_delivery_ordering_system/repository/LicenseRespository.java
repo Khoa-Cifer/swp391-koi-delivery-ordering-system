@@ -6,8 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.swp391team3.koi_delivery_ordering_system.model.License;
 
-public interface LicenseRespository extends JpaRepository<License, Long>, CrudRepository<License, Long> {
+public interface LicenseRespository extends JpaRepository<License, Long>{
 
-    @Query("UPDATE License SET name = :name, description = :description WHERE id = :id")
-    License updateById(long id, String name, String description);
 }

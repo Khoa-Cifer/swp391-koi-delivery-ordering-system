@@ -13,10 +13,13 @@ import java.util.List;
 public class FishController {
     private final IFishService fishService;
 
+    //Get All Fish
+    //
     @GetMapping("/getAllFishes")
     public List<Fish> getAllFishes() {
         return fishService.getAllFishs();
     }
+
 
     @GetMapping("/getFishById")
     public Fish getFishById(@RequestParam("id") Long id) {

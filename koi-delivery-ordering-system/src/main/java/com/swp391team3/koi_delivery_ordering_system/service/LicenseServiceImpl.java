@@ -29,9 +29,4 @@ public class LicenseServiceImpl implements ILicenseService{
     public void deleteLicenseById(Long id) {
         licenseRepository.deleteById(id);
     }
-
-    @Override
-    public License updateLicense(Long id, String name, String type, String description, Date dateOfIsDate) {
-        return licenseRepository.updateLicense(id, name, type, description, dateOfIsDate);
-    }
 }

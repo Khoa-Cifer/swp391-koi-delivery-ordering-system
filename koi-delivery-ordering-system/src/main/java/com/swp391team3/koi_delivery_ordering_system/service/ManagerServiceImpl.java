@@ -3,6 +3,7 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.swp391team3.koi_delivery_ordering_system.model.Manager;
@@ -21,23 +22,25 @@ public class ManagerServiceImpl implements IManagerService{
     }
 
     @Override
-    public Optional<Manager> getManagerById(long id) {
+    public Optional<Manager> getManagerById(Long id) {
         return managerRepository.findById(id);
     }
 
     @Override
-    public Manager createManager(Manager manager) {
-        return managerRepository.save(manager);
+    public Manager updateManager(Long id, String email, String phoneNumber) {
+        Optional<Manager> existingManager = managerRepository.findById(id);
+        if (existingManager.isPresent()) {
+            Manager updatedManager = existingManager.get();
+            updatedManager.setEmail(email);
+            updatedManager.setPhoneNumber(phoneNumber);
+            return managerRepository.save(updatedManager);
+        } else {
+            throw new RuntimeException("Manager not found");
+        }
     }
 
     @Override
-    public Manager updateManagerById(long id, Manager manager) {
-       return managerRepository.updateManagerById(id, manager.getEmail(), manager.getPassword());
-    }
-
-    @Override
-    public void deleteManagerById(long id) {
+    public void deleteManagerById(Long id) {
         managerRepository.deleteById(id);
     }
-    
 }
