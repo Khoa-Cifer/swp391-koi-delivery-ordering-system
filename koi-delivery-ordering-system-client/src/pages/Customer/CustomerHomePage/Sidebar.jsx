@@ -1,4 +1,6 @@
 import { Drawer, List, ListItem, ListItemText } from "@mui/material";
+import default_image from "../../../assets/default-avatar.jpg"
+import "./sidebar.scss"
 
 function Sidebar() {
     const drawerWidth = 240;
@@ -12,6 +14,9 @@ function Sidebar() {
                 [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box', mt: '64px' }, // Sidebar starts below header
             }}
         >
+            <div className="image-container">
+                <img src={default_image} alt="Avatar" className="avatar" />
+            </div>
             <List>
                 <ListItem button>
                     <ListItemText primary="Home" />

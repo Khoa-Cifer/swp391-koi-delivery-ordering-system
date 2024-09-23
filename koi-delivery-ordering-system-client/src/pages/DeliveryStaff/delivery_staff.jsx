@@ -21,15 +21,6 @@ function DeliveryStaff() {
           </div>
 
           <div className="header-right">
-            <div className="search">
-              <input
-                type="text"
-                className="search-bar"
-                placeholder="Search..."
-              />
-              <button>Search</button>
-            </div>
-
             <div className="logout">
               <button>Log out</button>
             </div>
