@@ -24,10 +24,11 @@
   justify-content: space-between;
   max-width: 1200px;
   margin: 0 auto;
+  gap: 30px;
 }
 
 .service-image img {
-  width: 800px;
+  width: 100%;
   height: 350px;
   border-radius: 10px;
   margin: 7px;
@@ -57,13 +58,13 @@
   margin-bottom: 15px;
 }
 
-.learn-more {
-  text-decoration: none;
-  color: #002b5c;
-  font-weight: bold;
-  margin-top: 10px;
-  display: inline-block;
-}
+// .learn-more {
+//   text-decoration: none;
+//   color: #002b5c;
+//   font-weight: bold;
+//   margin-top: 10px;
+//   display: inline-block;
+// }
 
 //--------------------news---------------------------------
 .news-container {

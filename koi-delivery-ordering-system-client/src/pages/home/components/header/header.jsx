@@ -51,11 +51,6 @@ function Header() {
         <div className="support navigator">SUPPORT</div>
       </div>
 
-      <div className="search">
-        <input type="text" className="search-bar" placeholder="Search..." />
-        <button>Search</button>
-      </div>
-
       <div className="header-right">
         <button className="contact-btn"><NavLink style={{ textDecoration: 'none', color: 'inherit' }}>Contact</NavLink></button>
         {customerUsername ? (

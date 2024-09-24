@@ -128,17 +128,14 @@ function Content() {
           <div className="service-item">
             <div className="service-content">
               <div className="service-number">01</div>
-              <h3 className="service-title">Cross-border eCommerce</h3>
+              <h3 className="service-title">We are</h3>
               <p className="service-description">
-                Say goodbye to the need for Japanese language skills, multiple
-                buying accounts or complex payment methods when shopping from
-                various Japanese eCommerce websites. Break free from
-                geographical barriers and unlock a world of potential markets
-                through our comprehensive international delivery solution.
+                Welcome to KoiShip, the trusted name in koi fish shipping.
+                Whether you're a seasoned collector or a first-time buyer, we ensure your prized koi fish are transported with the utmost care.
+                Our specially designed shipping methods guarantee safe and timely delivery across the country, with proper temperature control
+                and water quality checks throughout the journey. At KoiShip, we understand the value of your koi, and we are committed to delivering
+                them healthy, happy, and stress-free, right to your doorstep.
               </p>
-              <a href="#" className="learn-more">
-                Learn more →
-              </a>
             </div>
             <div className="service-image">
               <img
@@ -160,14 +157,11 @@ function Content() {
               <div className="service-number">02</div>
               <h3 className="service-title">Cross-border Shipping</h3>
               <p className="service-description">
-                Ezbuy Japan offers international delivery by air and sea from
+                KoiShip Japan offers international delivery by air and sea from
                 Japan to over 220 countries. We provide various shipping methods
                 and optional services to ensure your packages arrive safely and
                 efficiently.
               </p>
-              <a href="#" className="learn-more">
-                Learn more →
-              </a>
             </div>
           </div>
 
@@ -184,9 +178,6 @@ function Content() {
                 geographical barriers and unlock a world of potential markets
                 through our comprehensive international delivery solution.
               </p>
-              <a href="#" className="learn-more">
-                Learn more →
-              </a>
             </div>
             <div className="service-image">
               <img

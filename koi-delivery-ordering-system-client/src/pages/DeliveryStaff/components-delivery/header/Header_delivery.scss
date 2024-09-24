@@ -1,4 +1,4 @@
-.header-delivery{
+.header-delivery {
     display: flex;
     background-color: transparent;
     justify-content: space-between;
@@ -10,9 +10,9 @@
 .header-delivery-left {
     display: flex;
     margin-top: 20px;
-    
 
-} 
+
+}
 
 .function button {
     background-color: transparent;
@@ -21,7 +21,7 @@
     margin-left: 5px;
     margin-top: 10px;
     width: 220px;
-    
+
 }
 
 .function button:hover {
@@ -30,31 +30,33 @@
     border-radius: 20px;
 }
 
-.header-delivery-right{
+.header-delivery-right {
     display: flex;
     justify-content: space-between;
-    margin: 12px 250px 0 0;
+    margin: 12px 30px 0 0;
 }
 
-.search-bar{
+.search-bar {
     background-color: white;
     border-radius: 20px;
 }
 
-.search button, .logout button {
+.search button,
+.logout button {
     background-color: #215085;
     border: 1px solid white;
     border-radius: 20px;
     width: 100px;
     margin-left: 20px;
-  }
-  
-  .search button:hover, .logout button:hover {
+}
+
+.search button:hover,
+.logout button:hover {
     background-color: #d5e6fa;
     color: black;
-  }
+}
 
-.logout button{
+.logout button {
     border-radius: 20px;
     width: 140px;
     margin-left: 20px;
