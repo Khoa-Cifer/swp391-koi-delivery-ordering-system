@@ -25,9 +25,6 @@ public class Customer {
     private String password;
     private double amount;
     private String phoneNumber;
-    private String address;
-    private String latitude;
-    private String longitude;
 
     @OneToOne
     @JoinColumn(name = "avatar_id", referencedColumnName = "id")

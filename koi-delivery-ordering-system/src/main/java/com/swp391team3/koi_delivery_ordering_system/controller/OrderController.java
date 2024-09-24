@@ -19,7 +19,18 @@ public class OrderController {
     //
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-        Order createdOrder = orderService.createOrder(order.getTrackingId(), order.getName(), order.getOrderStatus(), order.getDescription(), order.getCreatedDate(), order.getLastUpdatedDate(), order.getCustomer(), order.getDriver(), order.getSalesStaff(), order.getDeliveringType(), order.getPrice());
+        Order createdOrder = orderService.createOrder(
+                order.getTrackingId(),
+                order.getName(),
+                order.getOrderStatus(),
+                order.getDescription(),
+                order.getCreatedDate(),
+                order.getLastUpdatedDate(),
+                order.getCustomer(),
+                order.getDriver(),
+                order.getSalesStaff(),
+                order.getDeliveringType(),
+                order.getPrice());
         return ResponseEntity.ok(createdOrder);
     }
 
