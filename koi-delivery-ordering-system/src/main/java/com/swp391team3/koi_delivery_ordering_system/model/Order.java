@@ -27,6 +27,7 @@ public class Order {
     private Date createdDate;
     private Date lastUpdatedDate;
     private Date finishDate;
+    private String destinationAddress;
     private double price;
 
     @ManyToOne
