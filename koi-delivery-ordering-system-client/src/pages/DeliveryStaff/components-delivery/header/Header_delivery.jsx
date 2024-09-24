@@ -25,14 +25,14 @@ function Header_delivery() {
           </div>
 
           <div className="header-delivery-right">
-            <div className="search">
+            {/* <div className="search">
               <input
                 type="text"
                 className="search-bar"
                 placeholder="Search..."
               />
               <button>Search</button>
-            </div>
+            </div> */}
 
             <div className="logout">
               <button>Log out</button>
