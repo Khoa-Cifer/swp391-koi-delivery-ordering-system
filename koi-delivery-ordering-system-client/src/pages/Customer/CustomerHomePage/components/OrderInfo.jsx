@@ -1,10 +1,11 @@
 import { Box } from "@mui/material";
 
-function OrderInfo() {
+// eslint-disable-next-line react/prop-types
+function OrderInfo({ formStep }) {
     return (
         <Box>
             <div className="form-container">
-                <form className="form">
+                <div className="form">
                     <div className="form-group">
                         <label className="form-label">Name: </label>
                         <input
@@ -29,10 +30,10 @@ function OrderInfo() {
                             className="form-input"
                         />
                     </div>
-                    <button type="submit" className="form-button">
+                    <button onClick={() => formStep(3)} className="form-button">
                         Submit
                     </button>
-                </form>
+                </div>
             </div>
         </Box>
     )
