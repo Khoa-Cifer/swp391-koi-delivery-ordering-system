@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
@@ -14,20 +17,21 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public String createDeliveryStaff(String email, String password, String username, String phoneNumber) {
+    public String createDeliveryStaff(String email, String username) {
         DeliveryStaff newDeliveryStaff = new DeliveryStaff();
-        newDeliveryStaff.setEmail(email);
 
         boolean emailDuplicatedCheck = deliveryStaffRepository.existsByEmail(email);
         if (emailDuplicatedCheck) {
             return "This email already exists";
         }
+        newDeliveryStaff.setEmail(email);
 
-        String encodedPassword = passwordEncoder.encode(password);
+        //Default password when create staffs
+        String defaultPassword = "123";
+        String encodedPassword = passwordEncoder.encode(defaultPassword);
         newDeliveryStaff.setPassword(encodedPassword);
 
         newDeliveryStaff.setUsername(username);
-        newDeliveryStaff.setPhoneNumber(phoneNumber);
 
         deliveryStaffRepository.save(newDeliveryStaff);
         return "Account create successfully";
@@ -50,4 +54,35 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
     public DeliveryStaff getDeliveryStaffByEmail(String email) {
         return  deliveryStaffRepository.findDeliveryStaffByEmail(email);
     }
+
+    @Override
+    public List<DeliveryStaff> getAllDeliveryStaffs() {
+        return deliveryStaffRepository.findAll();
+    }
+
+    @Override
+    public Optional<DeliveryStaff> getDeliveryStaffById(Long id) {
+        return deliveryStaffRepository.findById(id);
+    }
+
+    @Override
+    public void deleteDeliveryStaffById(Long id) {
+        deliveryStaffRepository.deleteById(id);
+    }
+
+    @Override
+    public DeliveryStaff updateDeliveryStaffById(Long id, String email, String phoneNumber) {
+        Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(id);
+        if (optionalDeliveryStaff.isPresent()) {
+            DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
+            deliveryStaff.setEmail(email);
+            deliveryStaff.setPhoneNumber(phoneNumber);
+
+            return deliveryStaffRepository.save(deliveryStaff);
+        } else {
+            return null;
+        }
+    }
+
+
 }
