@@ -221,6 +221,11 @@ function Content() {
         </div>
       </div>
 
+
+
+
+
+
       <div className="news-container">
         <h2>LATEST NEWS</h2>
         <p className="description">

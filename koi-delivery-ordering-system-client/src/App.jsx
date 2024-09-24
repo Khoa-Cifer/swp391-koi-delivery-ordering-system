@@ -5,7 +5,8 @@ import SignUp from "./pages/register/register";
 import Admin from "./pages/Manager/Admin";
 import Customer from "./pages/Customer/Customer";
 import CustomerHomePage from "./pages/Customer/CustomerHomePage/CustomerHomePage";
-import DeliveryStaff from "./pages/DeliveryStaff/delivery_staff";
+import DeliveryStaff from "./pages/DeliveryStaff/Delivery_staff/Delivery_staff";
+
 
 function App() {
   return (

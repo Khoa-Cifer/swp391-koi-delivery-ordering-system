@@ -74,7 +74,7 @@ function Header() {
                 Log In
               </NavLink>
             </button>
-          </>
+          </>           
         )}
 
         <Popover
