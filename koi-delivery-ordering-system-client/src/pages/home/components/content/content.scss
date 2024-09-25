@@ -173,7 +173,7 @@ h2 {
   padding: 40px;
   color: white;
   position: relative;
-  height: 666px;
+  height: 70vh;
 }
 
 .banner-content {
@@ -233,9 +233,9 @@ h2 {
 .banner-image {
   position: relative;
   flex: 1;
-  max-width: 50%;
+  max-width: 40%;
   text-align: right;
-  margin: 20px;
+  align-items: center;
 }
 
 .banner-image img {

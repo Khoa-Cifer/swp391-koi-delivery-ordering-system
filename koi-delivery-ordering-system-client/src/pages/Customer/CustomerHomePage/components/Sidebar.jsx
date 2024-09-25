@@ -1,19 +1,10 @@
-import { Drawer, List, ListItem, ListItemText } from "@mui/material";
-import default_image from "../../../assets/default-avatar.jpg"
+import { List, ListItem, ListItemText } from "@mui/material";
+import default_image from "../../../../assets/default-avatar.jpg"
 import "./sidebar.scss"
 
 function Sidebar() {
-    const drawerWidth = 240;
-
     return (
-        <Drawer
-            variant="permanent"
-            sx={{
-                width: drawerWidth,
-                flexShrink: 0,
-                [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box', mt: '64px' }, // Sidebar starts below header
-            }}
-        >
+        <div style={{ maxWidth: "20%" }}>
             <div className="image-container">
                 <img src={default_image} alt="Avatar" className="avatar" />
             </div>
@@ -34,7 +25,7 @@ function Sidebar() {
                     <ListItemText primary="Contact Support" />
                 </ListItem>
             </List>
-        </Drawer>
+        </div>
     );
 }
 

@@ -2,8 +2,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "./header.scss";
 import { useEffect, useState } from "react";
 import { Button, Popover } from "@mui/material";
-import logo from '../../../../assets/logo.svg';
-
+import logo from '../../../../assets/logo.png';
+// import {  Grid} from "antd";
 function Header() {
   const [customerUsername, setCustomerUsername] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
@@ -42,7 +42,7 @@ function Header() {
   return (
     <div className="header-container">
       <div className="header-left">
-        <div className="logo"><img src={logo} alt="Logo" style={{ width: "40px" }} /></div>
+        <div className="logo"><img src={logo} alt="Logo" style={{ width: "180px", height:"180px"}}  /></div>
       </div>
 
       <div className="dashboard">
