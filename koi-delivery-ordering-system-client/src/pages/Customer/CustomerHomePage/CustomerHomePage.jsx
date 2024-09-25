@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
-import Header from "./Header";
-import Body from "./Body";
-import Footer from "./Footer";
-import Sidebar from "./Sidebar";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Sidebar from "./components/Sidebar";
+import Body from "./components/Body";
 
 function CustomerHomePage() {
     return (
@@ -12,7 +12,7 @@ function CustomerHomePage() {
 
             <Box sx={{ display: 'flex', flex: 1 }}>
                 {/* Main Content */}
-                <Box component="main" sx={{ flexGrow: 1, p: 2, mt: '64px' }}>
+                <Box component="main" sx={{ flexGrow: 1, p: 2, mt: '64px', display: "flex" }}>
                     <Sidebar />
                     <Body />
                 </Box>

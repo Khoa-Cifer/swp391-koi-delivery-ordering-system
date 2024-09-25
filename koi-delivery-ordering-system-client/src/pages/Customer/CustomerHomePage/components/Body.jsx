@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import './body.scss'; // Import the CSS file
-import OrderInfo from './components/OrderInfo';
-import ProgressBar from './utils/ProgressBar';
-import FishInfo from './components/FishInfo';
+import ProgressBar from '../utils/ProgressBar';
+import OrderInfo from '../pages/OrderInfo';
+import FishInfo from '../pages/FishInfo';
 
 function Body() {
     const [formStep, setFormStep] = useState(0);

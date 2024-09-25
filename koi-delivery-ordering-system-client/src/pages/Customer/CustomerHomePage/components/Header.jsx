@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import logo from '../../../assets/logo.svg'
+import logo from '../../../../assets/logo.svg'
 import { AppBar, Toolbar, Button, Avatar, IconButton, Menu, MenuItem, Box, styled } from '@mui/material';
 
 const HeaderWrapper = styled(AppBar)`
