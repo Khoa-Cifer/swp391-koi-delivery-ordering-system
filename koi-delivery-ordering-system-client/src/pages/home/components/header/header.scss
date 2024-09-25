@@ -1,12 +1,10 @@
 .header-container {
   position: fixed;
-
-  width: 97.5%;
-  z-index: 500;
+  width: 100vw;
+  z-index: 500;height: 10vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
   background-color: #8cbdf6;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   color: white;
@@ -19,12 +17,6 @@
 
 .navigator:hover {
   cursor: pointer;
-}
-
-.logo {
-  font-size: 1.5em;
-  font-weight: bold;
-  margin-right: 20px;
 }
 
 .dashboard {
