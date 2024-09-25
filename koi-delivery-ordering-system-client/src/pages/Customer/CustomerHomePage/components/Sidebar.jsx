@@ -4,7 +4,7 @@ import "./sidebar.scss"
 
 function Sidebar() {
     return (
-        <div style={{ maxWidth: "20%" }}>
+        <div className="sidebar-body">
             <div className="image-container">
                 <img src={default_image} alt="Avatar" className="avatar" />
             </div>

@@ -5,7 +5,7 @@ import OrderInfo from '../pages/OrderInfo';
 import FishInfo from '../pages/FishInfo';
 
 function Body() {
-    const [formStep, setFormStep] = useState(0);
+    const [formStep, setFormStep] = useState(1);
 
     function handleData(e) {
         setFormStep(e);
@@ -13,10 +13,14 @@ function Body() {
     }
 
     return (
-        <div>
-            <ProgressBar />
-            <OrderInfo formStep={e => handleData(e)} />
-            <FishInfo formStep={e => handleData(e)} />
+        <div style={{ margin: "auto" }}>
+            <ProgressBar currentStep={formStep}/>
+            {formStep === 1 && (
+                <OrderInfo formStep={e => handleData(e)} />
+            )}
+            {formStep === 2 && (
+                <FishInfo formStep={e => handleData(e)} />
+            )}
         </div>
     );
 }

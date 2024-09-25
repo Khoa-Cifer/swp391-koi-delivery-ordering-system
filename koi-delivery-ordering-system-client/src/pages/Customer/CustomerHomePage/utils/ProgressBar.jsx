@@ -27,17 +27,13 @@ LinearProgressWithLabel.propTypes = {
     value: PropTypes.number.isRequired,
 };
 
-function ProgressBar() {
+// eslint-disable-next-line react/prop-types
+function ProgressBar({ currentStep }) {
     const [progress, setProgress] = React.useState(10);
 
     React.useEffect(() => {
-        const timer = setInterval(() => {
-            setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 10));
-        }, 800);
-        return () => {
-            clearInterval(timer);
-        };
-    }, []);
+        setProgress(parseInt(currentStep) * 10);
+    }, [currentStep]);
 
     return (
         <Box sx={{ width: '100%' }}>
