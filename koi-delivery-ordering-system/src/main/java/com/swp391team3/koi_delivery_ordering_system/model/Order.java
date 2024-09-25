@@ -31,6 +31,10 @@ public class Order {
     private double price;
 
     @ManyToOne
+    @JoinColumn(name = "storage_id")
+    private Storage storage;
+
+    @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 

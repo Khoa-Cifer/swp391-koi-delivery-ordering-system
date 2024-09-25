@@ -131,7 +131,7 @@ function Content() {
               <h3 className="service-title">We are</h3>
               <p className="service-description">
                 Welcome to KoiShip, the trusted name in koi fish shipping.
-                Whether you're a seasoned collector or a first-time buyer, we ensure your prized koi fish are transported with the utmost care.
+                Whether you are a seasoned collector or a first-time buyer, we ensure your prized koi fish are transported with the utmost care.
                 Our specially designed shipping methods guarantee safe and timely delivery across the country, with proper temperature control
                 and water quality checks throughout the journey. At KoiShip, we understand the value of your koi, and we are committed to delivering
                 them healthy, happy, and stress-free, right to your doorstep.

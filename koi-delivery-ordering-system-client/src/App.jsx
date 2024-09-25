@@ -4,7 +4,7 @@ import Home from "./pages/home/home";
 import SignUp from "./pages/register/register";
 import Admin from "./pages/Manager/Admin";
 import Customer from "./pages/Customer/Customer";
-import CustomerHomePage from "./pages/Customer/CustomerHomePage/CustomerHomePage";
+import EditCustomerProfile from "./pages/Customer/pages/EditCustomerProfile";
 import DeliveryStaff from "./pages/DeliveryStaff/Delivery_staff/Delivery_staff";
 
 
@@ -16,9 +16,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<SignUp />} />
         <Route path="/admin" element={<Admin />} />
-        <Route path="/customer" element={<Customer />} />
         <Route path="/delivery-staff" element={<DeliveryStaff />} />
-        <Route path="/customer-home" element={<CustomerHomePage />} />
+        <Route path="/customer-home" element={<Customer />} />
+        <Route path="/customer-edit-profile" element={<EditCustomerProfile />} />
       </Routes>
     </Router>
   );

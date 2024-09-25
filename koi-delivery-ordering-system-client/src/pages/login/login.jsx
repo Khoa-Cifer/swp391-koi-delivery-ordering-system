@@ -32,7 +32,10 @@ function Login() {
 
   async function handleDeliveryStaffLogin() {
     const data = await userLogin(email, password, 2);
-    console.log(data);
+    if (data.email) {
+      localStorage.setItem('deliveryStaffData', JSON.stringify(data));
+      navigate("/delivery-staff");
+    }
   }
 
   async function handleSalesStaffLogin() {
@@ -61,7 +64,7 @@ function Login() {
 
           <div className="one__line">
             <div className="line"></div>
-            <span>Login as</span>
+            <span style={{ color: "#ffbd3f" }}>Login as</span>
             <div className="line"></div>
           </div>
 
@@ -99,7 +102,7 @@ function Login() {
 
           <div className="one__line">
             <div className="line"></div>
-            <span>Or</span>
+            <span style={{ color: "#ffbd3f" }}>Or</span>
             <div className="line"></div>
           </div>
 

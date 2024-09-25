@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import logo from '../../../../assets/logo.svg'
+import logo from '../../../assets/logo.svg'
 import { AppBar, Toolbar, Button, Avatar, IconButton, Menu, MenuItem, Box, styled } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const HeaderWrapper = styled(AppBar)`
   background-color: #1976d2;
@@ -9,6 +10,7 @@ const HeaderWrapper = styled(AppBar)`
 function Header() {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+    const navigate = useNavigate();
 
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -18,8 +20,18 @@ function Header() {
         setAnchorEl(null);
     };
 
+    const handleOpenEditProfile = () => {
+        navigate("/customer-edit-profile")
+    }
+
+    const handleLogout = () => {
+        setAnchorEl(null);
+        localStorage.removeItem('customerData');
+        navigate("/");
+    }
+
     return (
-        <HeaderWrapper position="fixed" sx={{width: "100vw"}}>
+        <HeaderWrapper position="fixed" sx={{ width: "100vw" }}>
             <Toolbar>
                 <div className="logo"><img src={logo} alt="Logo" style={{ width: "40px" }} /></div>
                 <Button color="inherit">Home</Button>
@@ -30,6 +42,7 @@ function Header() {
                         <Avatar alt="User Avatar" src="/path-to-avatar.jpg" />
                     </IconButton>
                     <Menu
+                        style={{ marginTop: "40px" }}
                         anchorEl={anchorEl}
                         open={open}
                         onClose={handleMenuClose}
@@ -42,8 +55,8 @@ function Header() {
                             horizontal: 'right',
                         }}
                     >
-                        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-                        <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+                        <MenuItem onClick={handleOpenEditProfile}>Profile</MenuItem>
+                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
                     </Menu>
                 </Box>
             </Toolbar>

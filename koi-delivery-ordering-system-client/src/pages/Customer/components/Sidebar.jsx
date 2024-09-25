@@ -1,5 +1,5 @@
 import { List, ListItem, ListItemText } from "@mui/material";
-import default_image from "../../../../assets/default-avatar.jpg"
+import default_image from "../../../assets/default-avatar.jpg"
 import "./sidebar.scss"
 
 function Sidebar() {
