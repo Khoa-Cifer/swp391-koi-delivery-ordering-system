@@ -21,14 +21,14 @@ public class DeliveringTypeController {
 
     //Get Delivering Type By Id
     //PASSED
-    @GetMapping("/{id}")
+    @GetMapping("/getDeliveringTypeById/{id}")
     public ResponseEntity<?> getDeliveringTypeById(@PathVariable long id) {
         return ResponseEntity.ok(deliveringTypeService.getDeliveringTypeById(id));
     }
 
     //Add Delivering Type
     //PASSED
-    @PostMapping("/add")
+    @PostMapping("/createDeliveringType")
     public ResponseEntity<?> addDeliveringType(@RequestBody DeliveringType deliveringType) {
         boolean result = deliveringTypeService.addDeliveringType(deliveringType.getName(), deliveringType.getDescription());
         if (result) {
@@ -40,7 +40,7 @@ public class DeliveringTypeController {
 
     //Update Delivering Type
     //PASSED
-    @PutMapping("/{id}")
+    @PutMapping("/updateDeliveringTypeById/{id}")
     public ResponseEntity<?> updateDeliveringType(@PathVariable Long id, @RequestBody DeliveringType deliveringType) {
         DeliveringType updatedType = deliveringTypeService.updateDeliveringType(id, deliveringType.getName(), deliveringType.getDescription());
         return ResponseEntity.ok(updatedType);
@@ -48,7 +48,7 @@ public class DeliveringTypeController {
 
     //Delete Delivering Type
     //PASSED
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteDeliveringTypeById/{id}")
     public ResponseEntity<?> deleteDeliveringType(@PathVariable long id) {
         deliveringTypeService.deleteDeliveringType(id);
         return ResponseEntity.ok("Delivering type deleted successfully");

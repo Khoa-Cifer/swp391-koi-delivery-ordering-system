@@ -5,10 +5,10 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserResponseLoginDTO {
     private String email;
     private String username;
     private String userRoleName;
     private int roleId;
-    private String token;
 }

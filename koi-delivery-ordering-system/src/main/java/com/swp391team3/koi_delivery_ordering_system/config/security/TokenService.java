@@ -1,4 +1,4 @@
-package com.swp391team3.koi_delivery_ordering_system.service;
+package com.swp391team3.koi_delivery_ordering_system.config.security;
 
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
@@ -8,16 +8,17 @@ import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepositor
 import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.ManagerRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.SalesStaffRepository;
+import com.swp391team3.koi_delivery_ordering_system.responseDto.UserResponseLoginDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 public class TokenService {
@@ -33,7 +34,8 @@ public class TokenService {
     @Autowired
     private SalesStaffRepository salesStaffRepository;
 
-    private final String SECRET_KEY = "4bb6d1dfbafb64a681139d1586b6f1160d18159afd57c8c79136d7490630407c";
+    @Value("${jwt.secret.key}")
+    private String SECRET_KEY;
 
     private SecretKey getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
@@ -42,9 +44,24 @@ public class TokenService {
 
     public String generateToken(Object user) {
         String userId = null;
+        String username = null;
+        String email = null;
+        String roleName = null;
+        UserResponseLoginDTO responseLoginUser = new UserResponseLoginDTO();
 
         if (user instanceof Customer) {
-            userId = "C_" + ((Customer) user).getId();
+            Customer customer = (Customer) user;
+
+            userId = "C_" + customer.getId();
+            username = customer.getUsername();
+            email = customer.getEmail();
+            roleName = customer.getAuthorities().toString();
+            int roleId = 1;
+
+            responseLoginUser.setUsername(username);
+            responseLoginUser.setEmail(email);
+            responseLoginUser.setUserRoleName(roleName);
+            responseLoginUser.setRoleId(roleId);
         } else if (user instanceof DeliveryStaff) {
             userId = "D_" + ((DeliveryStaff) user).getId();
         } else if (user instanceof Manager) {
@@ -62,6 +79,7 @@ public class TokenService {
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24 hours expiry
                 .signWith(getSigningKey())
+                .claim("userData", responseLoginUser)
                 .compact();
     }
 
