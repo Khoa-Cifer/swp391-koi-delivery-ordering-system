@@ -8,6 +8,7 @@ import EditCustomerProfile from "./pages/Customer/pages/EditCustomerProfile";
 import DeliveryStaff from "./pages/DeliveryStaff/Delivery_staff/Delivery_staff";
 import AuthProvider from "./authentication/AuthProvider";
 import PrivateRoute from "./authentication/PrivateRoute";
+import Login_delivery from "./pages/login/login-delivery/Login_delivery";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/login-delivery" element={<Login_delivery />} />
             <Route path="/register" element={<SignUp />} />
 
             <Route path="/admin" element={
