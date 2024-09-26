@@ -29,21 +29,21 @@ public class DeliveryStaffController {
 
     //Get Delivery Staff By Id
     //PASSED
-    @GetMapping("/{id}")
+    @GetMapping("/getDeliveryStaffById/{id}")
     public ResponseEntity<?> getDeliveryStaffById(@PathVariable Long id) {
         return ResponseEntity.ok(deliveryStaffService.getDeliveryStaffById(id));
     }
 
     //Delete Delivery Staff
     //PASSED
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/updateDeliveryStaffById/{id}")
     public void deleteDeliveryStaff(@PathVariable Long id) {
         deliveryStaffService.deleteDeliveryStaffById(id);
     }
 
     //Update Delivery Staff
     //PASSED
-    @PutMapping("/{id}")
+    @PutMapping("/deleteDeliveryStaffById/{id}")
     public ResponseEntity<?> updateDeliveryStaff(@PathVariable Long id, @RequestBody DeliveryStaff deliveryStaff) {
         return ResponseEntity.ok(deliveryStaffService.updateDeliveryStaffById(id, deliveryStaff.getEmail(), deliveryStaff.getPhoneNumber()));
     }

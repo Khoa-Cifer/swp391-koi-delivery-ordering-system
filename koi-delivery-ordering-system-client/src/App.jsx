@@ -5,11 +5,11 @@ import SignUp from "./pages/register/register";
 import Admin from "./pages/Manager/Admin";
 import Customer from "./pages/Customer/Customer";
 import EditCustomerProfile from "./pages/Customer/pages/EditCustomerProfile";
-import DeliveryStaff from "./pages/DeliveryStaff/Delivery_staff/Delivery_staff";
+import DeliveryStaff from "./pages/DeliveryStaff/home_delivery/Delivery_staff/Delivery_staff";
 import AuthProvider from "./authentication/AuthProvider";
 import PrivateRoute from "./authentication/PrivateRoute";
-import Login_delivery from "./pages/login/login-delivery/Login_delivery";
-
+import OrderAvailable from "./pages/DeliveryStaff/delivery_available_order/OrderAvailable"
+import DeliveryOrderHome from "./pages/DeliveryStaff/delivery_order_home/DeliveryOrderHome"
 
 function App() {
   return (
@@ -19,7 +19,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/login-delivery" element={<Login_delivery />} />
             <Route path="/register" element={<SignUp />} />
 
             <Route path="/admin" element={
@@ -39,7 +38,8 @@ function App() {
                 <EditCustomerProfile />
               </PrivateRoute>
             } />
-
+            <Route path="/deliveryOrderHome" element={<DeliveryOrderHome />} />
+            <Route path="/orderAvailable" element={<OrderAvailable />} />
             <Route path="/customer-home" element={
               <PrivateRoute allowedRoles={1}>
                 <Customer />
