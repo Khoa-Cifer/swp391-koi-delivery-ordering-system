@@ -18,18 +18,18 @@ function Header() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('customerData');
+    localStorage.removeItem('userData');
     window.location.reload();
   }
 
   const handleService = () => {
-    if (localStorage.getItem('customerData')) {
+    if (localStorage.getItem('userData')) {
       navigate("/customer-home");
     }
   }
 
   useEffect(() => {
-    const customerDataFromLocalStorage = localStorage.getItem('customerData');
+    const customerDataFromLocalStorage = localStorage.getItem('userData');
     if (customerDataFromLocalStorage) {
       const parsedData = JSON.parse(customerDataFromLocalStorage);
       setCustomerUsername(parsedData.username);

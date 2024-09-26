@@ -8,7 +8,7 @@ function EditCustomerProfile() {
     const [customerData, setCustomerData] = useState({});
 
     useEffect(() => {
-        const customerDataFromLocalStorage = localStorage.getItem('customerData');
+        const customerDataFromLocalStorage = localStorage.getItem('userData');
         if (customerDataFromLocalStorage) {
             const parsedData = JSON.parse(customerDataFromLocalStorage);
             setCustomerData(parsedData);
