@@ -1,27 +1,22 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext } from "react";
 
 export const AuthContext = createContext({
-    user: null,
-    handleLogin: (userData) => { },
+    handleLogin: (token) => { },
     handleLogout: () => { }
 })
 
 // eslint-disable-next-line react/prop-types
-function AuthProvider({ children }) {
-    const [user, setUser] = useState(null);
-
-    const handleLogin = (userData) => {
-        setUser(userData);
-        localStorage.setItem("userData", JSON.stringify(userData));
+function AuthProvider({ children }) { 
+    const handleLogin = (token) => {
+        localStorage.setItem("token", token);
     }
 
     const handleLogout = () => {
-        localStorage.removeItem("userData");
-        setUser(null);
+        localStorage.removeItem("token");
     }
 
     return (
-        <AuthContext.Provider value={{ user, handleLogin, handleLogout }}>
+        <AuthContext.Provider value={{ handleLogin, handleLogout }}>
             {children}
         </AuthContext.Provider>
     )

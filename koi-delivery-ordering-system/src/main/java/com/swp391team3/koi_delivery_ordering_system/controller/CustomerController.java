@@ -27,7 +27,7 @@ public class CustomerController {
 
     // Get customer by ID
     //PASSED
-    @GetMapping("/{id}")
+    @GetMapping("/getCustomerById/{id}")
     public ResponseEntity<?> getCustomerById(@PathVariable Long id) {
         Optional<Customer> customer = customerService.getCustomerById(id);
         return ResponseEntity.ok(customer);
@@ -47,7 +47,7 @@ public class CustomerController {
 
     // Update customer by ID
     //PASSED
-    @PutMapping("/{id}")
+    @PutMapping("/updateCustomerById/{id}")
     public ResponseEntity<Customer> updateCustomerById(@PathVariable Long id, @RequestBody Customer customer) {
         Customer updated = customerService.updateCustomerById(id, customer.getEmail(), customer.getPhoneNumber());
         if (updated != null) {
@@ -59,7 +59,7 @@ public class CustomerController {
 
     // Delete customer by ID
     //PASSED
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteCustomerById/{id}")
     public ResponseEntity<?> deleteCustomerById(@PathVariable Long id) {
         Optional<Customer> customer = customerService.getCustomerById(id);
         if (customer.isPresent()) {
