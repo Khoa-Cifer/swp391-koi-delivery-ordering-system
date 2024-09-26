@@ -36,21 +36,21 @@ public class AuthController {
             if (status) {
                 foundUserStatus = userType;
                 Customer foundCustomer = customerService.getCustomerByEmail(request.getEmail());
-                response = new UserResponseLoginDTO(foundCustomer.getEmail(), foundCustomer.getUsername());
+                response = new UserResponseLoginDTO(foundCustomer.getEmail(), foundCustomer.getUsername(), "Customer");
             }
         } else if (userType == 2) {
             boolean status = salesStaffService.salesStaffLogin(request.getEmail(), request.getPassword());
             if (status) {
                 foundUserStatus = userType;
                 SalesStaff foundSalesStaff = salesStaffService.getSalesStaffByEmail(request.getEmail());
-                response = new UserResponseLoginDTO(foundSalesStaff.getEmail(), foundSalesStaff.getUsername());
+                response = new UserResponseLoginDTO(foundSalesStaff.getEmail(), foundSalesStaff.getUsername(), "Delivery Staff");
             }
         } else if (userType == 3) {
             boolean status = deliveryStaffService.deliveryStaffLogin(request.getEmail(), request.getPassword());
             if (status) {
                 foundUserStatus = userType;
                 DeliveryStaff foundDeliveryStaff = deliveryStaffService.getDeliveryStaffByEmail(request.getEmail());
-                response = new UserResponseLoginDTO(foundDeliveryStaff.getEmail(), foundDeliveryStaff.getUsername());
+                response = new UserResponseLoginDTO(foundDeliveryStaff.getEmail(), foundDeliveryStaff.getUsername(), "Sales Staff");
             }
         }
         if (foundUserStatus == 0) {

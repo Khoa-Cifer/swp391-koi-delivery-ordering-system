@@ -1,9 +1,10 @@
 import { Avatar, Box, Button, Container, Grid, Paper, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import default_avatar from "../assets/default-avatar.jpg"
+import { useNavigate } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
-function EditProfile({ role, username, email, amount, phoneNumber }) {
+function EditProfile({ role, username, email, amount, phoneNumber, destination }) {
     const [user, setUser] = useState({
         name: username,
         role: role,
@@ -11,8 +12,9 @@ function EditProfile({ role, username, email, amount, phoneNumber }) {
         password: '',
         confirmPassword: '',
         phoneNumber: phoneNumber,
-        amount: amount ? amount : 0,
+        amount: amount ,
     });
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setUser({
@@ -23,9 +25,12 @@ function EditProfile({ role, username, email, amount, phoneNumber }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission
-        console.log('User profile updated', user);
+        navigate(destination);
     };
+
+    const handleCancel = () => {
+        navigate(destination);
+    }
 
     return (
         <Container maxWidth="md" style={{ marginTop: "30px" }}>
@@ -51,7 +56,7 @@ function EditProfile({ role, username, email, amount, phoneNumber }) {
                         <Typography variant="h5" component="h1" gutterBottom>
                             Edit Profile
                         </Typography>
-                        <Box component="form" onSubmit={handleSubmit} noValidate>
+                        <Box>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
                                     <TextField
@@ -106,10 +111,10 @@ function EditProfile({ role, username, email, amount, phoneNumber }) {
                                 </Grid>
                             </Grid>
                             <Box sx={{ mt: 3, display: "flex", gap: "16px" }}>
-                                <Button variant="outlined" fullWidth>
+                                <Button variant="outlined" onClick={handleSubmit} fullWidth>
                                     Cancel
                                 </Button>
-                                <Button variant="contained" fullWidth>
+                                <Button variant="contained" onClick={handleCancel} fullWidth>
                                     Save Changes
                                 </Button>
                             </Box>

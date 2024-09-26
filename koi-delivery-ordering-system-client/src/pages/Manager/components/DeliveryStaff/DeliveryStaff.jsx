@@ -1,8 +1,9 @@
 import { Box, Button, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { createDeliveryStaff, getAllDeliveryStaff } from "../../../../utils/admin/deliveryStaff";
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ToastUtil from "../../../../components/toastContainer";
+import { toast } from "react-toastify";
 
 function DeliveryStaff() {
     const [deliveryStaffData, setDeliveryStaffData] = useState();
@@ -48,19 +49,7 @@ function DeliveryStaff() {
 
     return (
         <div>
-            <ToastContainer
-                position="top-left"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                closeButton={false}
-            />
-
+            <ToastUtil />
             <div className={open ? 'blur' : ''}>
                 <Button variant="contained" style={{ maxWidth: "30%" }} onClick={handleOpen}>
                     Create New Delivery Staff
