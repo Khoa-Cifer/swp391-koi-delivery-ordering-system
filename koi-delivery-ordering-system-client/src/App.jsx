@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./pages/login/login";
 import Home from "./pages/home/home";
 import SignUp from "./pages/register/register";
 import Admin from "./pages/Manager/Admin";
@@ -10,6 +9,8 @@ import AuthProvider from "./authentication/AuthProvider";
 import PrivateRoute from "./authentication/PrivateRoute";
 import OrderAvailable from "./pages/DeliveryStaff/delivery_available_order/OrderAvailable"
 import DeliveryOrderHome from "./pages/DeliveryStaff/delivery_order_home/DeliveryOrderHome"
+import Login from "./pages/login/Login_home/login";
+import Login_delivery from "./pages/login/login-delivery/Login_delivery";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/login-delivery" element={<Login_delivery />} />
             <Route path="/register" element={<SignUp />} />
 
             <Route path="/admin" element={
