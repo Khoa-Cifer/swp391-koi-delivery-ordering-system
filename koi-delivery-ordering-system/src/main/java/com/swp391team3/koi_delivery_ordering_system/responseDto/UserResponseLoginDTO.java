@@ -9,4 +9,5 @@ public class UserResponseLoginDTO {
     private String email;
     private String username;
     private String userRoleName;
+    private int roleId;
 }

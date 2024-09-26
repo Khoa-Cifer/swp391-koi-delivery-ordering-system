@@ -3,12 +3,13 @@ import "./login.scss";
 import { Button } from "@mui/material";
 import { userLogin } from "../../utils/users/user";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../authentication/AuthProvider";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
+  const auth = useAuth();
   function handleEmailChange(e) {
     setEmail(e.target.value);
   }
@@ -22,30 +23,11 @@ function Login() {
   //   // const data = await userLogin(email, password);
   // }
 
-  async function handleCustomerLogin() {
-    const data = await userLogin(email, password, 1);
+  async function handleLogin(roleId) {
+    const data = await userLogin(email, password, roleId);
     if (data.email) {
-      localStorage.setItem('customerData', JSON.stringify(data));
-      navigate("/");
+      auth.handleLogin(data);
     }
-  }
-
-  async function handleDeliveryStaffLogin() {
-    const data = await userLogin(email, password, 2);
-    if (data.email) {
-      localStorage.setItem('deliveryStaffData', JSON.stringify(data));
-      navigate("/delivery-staff");
-    }
-  }
-
-  async function handleSalesStaffLogin() {
-    const data = await userLogin(email, password, 3);
-    console.log(data);
-  }
-
-  async function handleManagerLogin() {
-    const data = await userLogin(email, password, 4);
-    console.log(data);
   }
 
   return (
@@ -70,14 +52,14 @@ function Login() {
 
           <div className="role__form">
             <Button
-              onClick={() => handleCustomerLogin()}
+              onClick={() => handleLogin(1)}
               variant="contained"
             >
               Customer
             </Button>
 
             <Button
-              onClick={() => handleDeliveryStaffLogin()}
+              onClick={() => handleLogin(2)}
               variant="contained"
             >
               Sales Staff
@@ -86,14 +68,14 @@ function Login() {
 
           <div className="role__form">
             <Button
-              onClick={() => handleSalesStaffLogin()}
+              onClick={() => handleLogin(3)}
               variant="contained"
             >
               Delivery Staff
             </Button>
 
             <Button
-              onClick={() => handleManagerLogin()}
+              onClick={() => handleLogin(4)}
               variant="contained"
             >
               Manager

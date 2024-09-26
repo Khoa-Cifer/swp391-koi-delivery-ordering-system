@@ -26,7 +26,7 @@ function Header() {
 
     const handleLogout = () => {
         setAnchorEl(null);
-        localStorage.removeItem('customerData');
+        localStorage.removeItem('userData');
         navigate("/");
     }
 

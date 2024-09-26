@@ -50,9 +50,9 @@ public class Order {
     @JoinColumn(name = "sales_id")
     private SalesStaff salesStaff;
 
-    @OneToMany(mappedBy = "ratedFor")
+    @OneToOne(mappedBy = "ratedFor")
     @JsonIgnore
-    private Set<Rating> ratingSet;
+    private Rating rating;
 
     @OneToMany(mappedBy = "order")
     @JsonIgnore
