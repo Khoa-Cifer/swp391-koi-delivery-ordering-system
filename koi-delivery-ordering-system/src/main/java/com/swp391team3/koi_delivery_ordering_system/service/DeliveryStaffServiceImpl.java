@@ -39,9 +39,9 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
 
     @Override
     public boolean deliveryStaffLogin(String email, String password) {
-        DeliveryStaff matchedCustomer = getDeliveryStaffByEmail(email);
-        if (matchedCustomer != null) {
-            if (passwordEncoder.matches(password, matchedCustomer.getPassword())) {
+        DeliveryStaff matchedDeliveryStaff = getDeliveryStaffByEmail(email);
+        if (matchedDeliveryStaff != null) {
+            if (passwordEncoder.matches(password, matchedDeliveryStaff.getPassword())) {
                 return true;
             } else {
                 return false;

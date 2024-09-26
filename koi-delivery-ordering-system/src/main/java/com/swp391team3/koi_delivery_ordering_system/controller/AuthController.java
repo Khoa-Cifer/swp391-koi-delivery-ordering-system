@@ -30,7 +30,6 @@ public class AuthController {
         int userType = request.getUserType();
         int foundUserStatus = 0;
         UserResponseLoginDTO response = null;
-
         if (userType == 1) {
             boolean status = customerService.customerLogin(request.getEmail(), request.getPassword());
             if (status) {

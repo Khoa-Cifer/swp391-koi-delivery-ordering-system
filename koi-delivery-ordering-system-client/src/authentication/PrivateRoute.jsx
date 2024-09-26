@@ -10,7 +10,7 @@ const PrivateRoute = ({ children, allowedRoles }) => {
         return children;
     } else {
         // Redirect to login or another appropriate page
-        return <Navigate to="" />;
+        return <Navigate to="/" />;
     }
 };
 

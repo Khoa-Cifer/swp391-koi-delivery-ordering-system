@@ -24,6 +24,7 @@ function Login() {
   // }
 
   async function handleLogin(roleId) {
+    console.log(roleId);
     const data = await userLogin(email, password, roleId);
     if (data.email) {
       auth.handleLogin(data);
