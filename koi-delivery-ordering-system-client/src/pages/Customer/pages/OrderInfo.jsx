@@ -72,6 +72,7 @@ function OrderInfo({ formStep, orderId }) {
                 coordinates.lng,
                 coordinates.lat
             )
+            orderId(response);
             if (response) {
                 toast("Create successfully");
             }

@@ -1,7 +1,8 @@
 import { Box } from "@mui/material";
 
 // eslint-disable-next-line react/prop-types
-function FishInfo({ formStep }) {
+function FishInfo({ formStep, orderId }) {
+    
     return (
         <Box>
             <div className="form-container">
