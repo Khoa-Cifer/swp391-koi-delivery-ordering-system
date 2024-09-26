@@ -1,9 +1,9 @@
 import { useState } from "react";
 import "./login.scss";
 import { Button } from "@mui/material";
-import { userLogin } from "../../../utils/users/user";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../authentication/AuthProvider";
+import { userLogin } from "../../../utils/customers/user";
 
 function LoginCustomer() {
   const [email, setEmail] = useState("");

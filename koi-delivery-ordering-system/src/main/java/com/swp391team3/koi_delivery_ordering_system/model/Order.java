@@ -22,12 +22,14 @@ public class Order {
     private Long id;
     private String trackingId;
     private String name;
-    private String orderStatus;
+    private int orderStatus;
     private String description;
     private Date createdDate;
     private Date lastUpdatedDate;
     private Date finishDate;
     private String destinationAddress;
+    private String longitude;
+    private String latitude;
     private double price;
 
     @ManyToOne
@@ -43,10 +45,6 @@ public class Order {
     private DeliveryStaff driver;
 
     @ManyToOne
-    @JoinColumn(name = "manager_id")
-    private Manager manager;
-
-    @ManyToOne
     @JoinColumn(name = "sales_id")
     private SalesStaff salesStaff;
 
@@ -59,6 +57,6 @@ public class Order {
     private Set<Fish> fishes;
 
     @ManyToOne
-    @JoinColumn(name = "delivering_type_id", nullable = false)
+    @JoinColumn(name = "delivering_type_id")
     private DeliveringType deliveringType;
 }

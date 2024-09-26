@@ -32,8 +32,4 @@ public class Manager {
     @OneToMany(mappedBy = "sender")
     @JsonIgnore
     private Set<Notification> senders;
-
-    @OneToMany(mappedBy = "manager")
-    @JsonIgnore
-    private Set<Order> orders;
 }

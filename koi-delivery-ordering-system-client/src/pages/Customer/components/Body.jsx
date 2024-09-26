@@ -22,7 +22,7 @@ function Body() {
         <div style={{ margin: "auto" }}>
             <ProgressBar currentStep={formStep}/>
             {formStep === 1 && (
-                <OrderInfo formStep={e => handleData(e)} orderGeneralData={e => handleGeneralData(e)} />
+                <OrderInfo formStep={e => handleData(e)} />
             )}
             {formStep === 2 && (
                 <FishInfo formStep={e => handleData(e)} />

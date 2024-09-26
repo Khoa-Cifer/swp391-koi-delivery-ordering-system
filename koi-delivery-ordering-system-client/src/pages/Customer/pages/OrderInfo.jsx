@@ -1,15 +1,48 @@
 import { Box } from "@mui/material";
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePlacesWidget } from "react-google-autocomplete";
-import { GOOGLE_MAP_API_KEY } from "../../../utils/constants";
 import ToastUtil from "../../../components/toastContainer";
 import { toast } from "react-toastify";
+import { CONSTANT_GOOGLE_MAP_API_KEY } from "../../../utils/constants"
+import { jwtDecode } from "jwt-decode";
+import { createGeneralOrderInfo } from "../../../utils/customers/createGeneralInfoOrder";
 
 // eslint-disable-next-line react/prop-types
-function OrderInfo({ formStep, orderGeneralData }) {
+function OrderInfo({ formStep, orderId }) {
     const [orderName, setOrderName] = useState("");
     const [orderDescription, setOrderDescription] = useState("");
     const [receiverAddress, setreceiverAddress] = useState("");
+    const [coordinates, setCoordinates] = useState({ lat: null, lng: null });
+
+    useEffect(() => {
+        const geocodeAddress = () => {
+            if (receiverAddress.trim() === '') {
+                return;
+            }
+
+            const geocoder = new window.google.maps.Geocoder();
+
+            geocoder.geocode({ address: receiverAddress }, (results, status) => {
+                if (status === 'OK' && results[0]) {
+                    const location = results[0].geometry.location;
+                    setCoordinates({
+                        lat: location.lat(),
+                        lng: location.lng(),
+                    });
+                } else {
+                    setCoordinates({
+                        lat: null,
+                        lng: null,
+                    });
+                }
+            });
+        };
+
+        if (receiverAddress.length >= 5) { // Minimal validation for address length
+            geocodeAddress();
+        }
+
+    }, [receiverAddress]);
 
     function handleNameChange(e) {
         setOrderName(e.target.value);
@@ -19,28 +52,33 @@ function OrderInfo({ formStep, orderGeneralData }) {
         setOrderDescription(e.target.value);
     }
 
-    function handleAddressChange(e) {
-        setreceiverAddress(e.target.value);
-    }
-
-    const { ref,  } = usePlacesWidget({
-        apiKey: GOOGLE_MAP_API_KEY,
+    const { ref } = usePlacesWidget({
+        apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
         onPlaceSelected: (place) => {
             setreceiverAddress(place.formatted_address || "");
         },
     });
 
-    function handleSubmit() {
+    async function handleSubmit() {
         if (!orderName || !orderDescription || !receiverAddress) {
             toast("All fields are required");
             return;
         }
-        formStep(2);
-        orderGeneralData({
-            name: orderName,
-            description: orderDescription,
-            receiver: receiverAddress,
-        });
+        try {
+            const response = await createGeneralOrderInfo(
+                orderName,
+                orderDescription,
+                receiverAddress,
+                coordinates.lng,
+                coordinates.lat
+            )
+            if (response) {
+                toast("Create successfully");
+            }
+            formStep(2);
+        } catch (e) {
+            toast("unexpected error has been occurred")
+        }
     }
 
     return (
@@ -73,9 +111,9 @@ function OrderInfo({ formStep, orderGeneralData }) {
                             name="text"
                             className="form-input"
                             ref={ref}
-                            onChange={e => handleAddressChange(e)}
                         />
                     </div>
+
                     <button onClick={() => handleSubmit()} className="form-button">
                         Submit
                     </button>
