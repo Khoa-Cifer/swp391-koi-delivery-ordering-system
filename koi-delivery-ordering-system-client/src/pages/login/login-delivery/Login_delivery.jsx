@@ -1,6 +1,6 @@
 import "./Login_delivery.scss";
 
-function Login_delivery() {
+function LoginDelivery() {
   return (
     <div className="container">
       <div className="card">
@@ -41,4 +41,4 @@ function Login_delivery() {
   );
 }
 
-export default Login_delivery;
+export default LoginDelivery;
