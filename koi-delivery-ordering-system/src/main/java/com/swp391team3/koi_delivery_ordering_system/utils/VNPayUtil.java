@@ -1,4 +1,4 @@
-package com.swp391team3.koi_delivery_ordering_system.util;
+package com.swp391team3.koi_delivery_ordering_system.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
 

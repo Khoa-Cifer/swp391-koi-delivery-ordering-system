@@ -77,7 +77,7 @@ public class TokenService {
         return Jwts.builder()
                 .setSubject(userId)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24 hours expiry
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hours expiry
                 .signWith(getSigningKey())
                 .claim("userData", responseLoginUser)
                 .compact();

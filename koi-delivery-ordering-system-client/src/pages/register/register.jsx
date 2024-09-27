@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { userRegister } from "../../utils/users/user";
 import "./register.scss";
+import { userRegister } from "../../utils/customers/user";
 
 const SignUp = () => {
   // return (
@@ -94,7 +94,7 @@ const SignUp = () => {
         </button>
 
         <p className="login-link">
-          Already have an account? <a href="/login">Login here</a>
+          Already have an account? <a href="/login-customer">Login here</a>
         </p>
       </div>
     </div>

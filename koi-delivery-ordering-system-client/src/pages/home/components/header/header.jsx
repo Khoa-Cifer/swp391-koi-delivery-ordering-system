@@ -65,7 +65,7 @@ function Header() {
               </NavLink>
             </button>
             <button className="login-btn">
-              <NavLink to={"/login"} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <NavLink to={"/login-customer"} style={{ textDecoration: 'none', color: 'inherit' }}>
                 Log In
               </NavLink>
             </button>
