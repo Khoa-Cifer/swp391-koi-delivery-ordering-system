@@ -1,17 +1,15 @@
-.container {
+.order-container {
   display: flex;
   flex-direction: column;
   max-width: 100%;
-  margin: 2% auto;
+  margin: -2% auto;
   padding: 40px;
-  border-radius: 12px;
-  background-color: #f7f7f7;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  align-items: end;
+
+  align-items: center;
 }
 
 .map-container {
-  width: 50vw;
+  width: 45vw;
   height: 50vh;
   background-color: #f1f1f1;
   display: flex;
@@ -24,16 +22,17 @@
 .card-container {
   display: flex;
   justify-content: space-around;
-  width: 100%;
+  width: -2%;
 }
 
 .card {
   background-color: white;
   border-radius: 20px;
   padding: 20px;
-  width: 200px;
+  width: 13vw;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin: 10px;
+  font-size: 12px;
 }
 
 .button-container {
@@ -60,18 +59,19 @@
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   margin-left: 10px;
   cursor: pointer;
-}
-
-.view-more-container {
-  margin-top: 20px;
-  display: flex;
+  font-size: 10px;
 }
 
 .view-more-button {
-  padding: 15px 30px;
+  padding: 10px 20px;
   border: none;
   background-color: rgb(58, 181, 166);
   color: white;
   border-radius: 20px;
   cursor: pointer;
+  display: flex;
+  justify-content: end;
+}
+.view-more-container {
+  align-self: flex-end;
 }

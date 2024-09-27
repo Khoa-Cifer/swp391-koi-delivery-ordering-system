@@ -9,7 +9,11 @@ import AuthProvider from "./authentication/AuthProvider";
 import PrivateRoute from "./authentication/PrivateRoute";
 import DeliveryStaff from "./pages/Manager/components/DeliveryStaff/DeliveryStaff";
 import DeliveryOrderHome from "./pages/DeliveryStaff/delivery_order_home/DeliveryOrderHome";
-import OrderAvailable from "./pages/DeliveryStaff/delivery_available_order/OrderAvailable";
+import DeliveryOrderAvailable from "./pages/DeliveryStaff/delivery_available_order/DeliveryOrderAvailable";
+import DeliveryOrderList from "./pages/DeliveryStaff/delivery_order_list/DeliveryOrderList";
+import DeliveryOrderDetail from "./pages/DeliveryStaff/delivery_order_detail/DeliveryOrderDetail";
+import DeliveryFishDetail from "./pages/DeliveryStaff/delivery_fish_detail/DeliveryFishDetail";
+
 function App() {
   return (
     <AuthProvider>
@@ -21,7 +25,20 @@ function App() {
             <Route path="/register" element={<SignUp />} />
 
             <Route path="/deliveryOrderHome" element={<DeliveryOrderHome />} />
-            <Route path="/orderAvailable" element={<OrderAvailable />} />
+            <Route
+              path="/deliveryOrderAvailable"
+              element={<DeliveryOrderAvailable />}
+            />
+
+            <Route path="/deliveryOrderList" element={<DeliveryOrderList />} />
+            <Route
+              path="/deliveryOrderDetail"
+              element={<DeliveryOrderDetail />}
+            />
+            <Route
+              path="/deliveryFishDetail"
+              element={<DeliveryFishDetail />}
+            />
 
             <Route
               path="/admin"

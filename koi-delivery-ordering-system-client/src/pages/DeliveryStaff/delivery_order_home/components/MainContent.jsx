@@ -2,7 +2,7 @@ import "./MainContent.scss";
 import cards from "./Cards.jsx";
 const MainContent = () => {
   return (
-    <div className="container">
+    <div className="order-container">
       <div className="map-container">
         <p>Google Map</p>
       </div>
@@ -20,7 +20,7 @@ const MainContent = () => {
         ))}
       </div>
       <div className="view-more-container">
-        <button className="view-more-button">View More</button>
+        <button className="view-more-button">View More >>></button>
       </div>
     </div>
   );
