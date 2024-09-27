@@ -4,11 +4,11 @@ function Login_delivery() {
   return (
     <div className="login-delivery-container">
       <div className="card">
-        <h3 className="text-center">Login</h3>
+        <h3 className="text-center">Dellivery Staff Login</h3>
         <form>
           <div className="form-group">
-            <label htmlFor="username">Username</label>
-            <input type="text" id="username" placeholder="Type your username" />
+            <label htmlFor="username">Email</label>
+            <input type="text" id="email" placeholder="Type your email" />
           </div>
 
           <div className="form-group">
