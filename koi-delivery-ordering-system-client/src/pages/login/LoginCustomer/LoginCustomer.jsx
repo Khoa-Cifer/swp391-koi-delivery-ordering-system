@@ -58,41 +58,10 @@ function LoginCustomer() {
           </div>
 
           <div className="role__form">
-            <Button onClick={() => handleLogin(1)} variant="contained">
+            <Button onClick={() => handleLogin(1)} variant="contained" style={{ maxWidth: "70%", margin: "auto" }}>
               Customer
             </Button>
-
-            <Button onClick={() => handleLogin(2)} variant="contained">
-              Sales Staff
-            </Button>
           </div>
-
-          <div className="role__form">
-            <Button onClick={() => handleLogin(3)} variant="contained">
-              Delivery Staff
-            </Button>
-
-            <Button onClick={() => handleLogin(4)} variant="contained">
-              Manager
-            </Button>
-          </div>
-
-          <div className="one__line">
-            <div className="line"></div>
-            <span style={{ color: "black" }}>
-              <strong>Or</strong>
-            </span>
-            <div className="line"></div>
-          </div>
-
-          <button className="login__google">
-            <img
-              src="https://tse4.mm.bing.net/th?id=OIP.3J_yQxG-eAHaTXfZVcWcrwHaHa&pid=Api&P=0&h=180"
-              alt=""
-              width={30}
-            />
-            <span>Login with google</span>
-          </button>
         </div>
       </div>
     </div>
