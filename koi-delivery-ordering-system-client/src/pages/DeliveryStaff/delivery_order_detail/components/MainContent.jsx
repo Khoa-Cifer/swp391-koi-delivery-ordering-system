@@ -29,6 +29,8 @@ const MainContent = () => {
           </div>
         </div>
 
+        <div className="map-placeholder">Google Map</div>
+
         <div className="order-description">
           <h4>Description</h4>
           <p>
@@ -45,11 +47,6 @@ const MainContent = () => {
       </div>
 
       {/* Google Map Section */}
-      <div className="google-map">
-        <h4>Google Map</h4>
-        {/* Placeholder for Google Map */}
-        <div className="map-placeholder">Google Map</div>
-      </div>
     </div>
   );
 };

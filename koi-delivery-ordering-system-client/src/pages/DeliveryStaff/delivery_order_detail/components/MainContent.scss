@@ -1,9 +1,9 @@
 .order-details-container {
   padding: 20px;
-  max-width: 1200px; /* Giới hạn chiều rộng */
+  max-width: 80vw;
   margin: 0 auto;
-  word-wrap: break-word; /* Đảm bảo từ sẽ xuống hàng khi quá dài */
-  overflow-wrap: break-word; /* Tương tự nhưng hỗ trợ thêm nhiều trình duyệt */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .order-details {
@@ -12,30 +12,29 @@
   border: 1px solid #ccc;
   border-radius: 10px;
   padding: 20px;
-  margin-bottom: 20px;
-  width: 100%; /* Chiều rộng cố định cho order details */
-  box-sizing: border-box; /* Đảm bảo padding không làm vượt quá chiều rộng */
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .order-name-detail {
   display: flex;
   justify-content: center;
-  margin-bottom: 5%;
+  margin-top: -3%;
 }
 .order-status-detail {
   display: flex;
   justify-content: center;
   margin: 2% auto;
-  max-width: 10%;
+  max-width: 7%;
   padding: 10px;
   border: 1px solid #ccc;
   background-color: rgb(15, 175, 15);
+  font-size: 12px;
 }
 
 .details-row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
   width: 100%;
   font-size: 12px;
 }
@@ -47,7 +46,7 @@
 }
 
 .details-column p {
-  margin: 5px 0 30px 7px;
+  margin: 0 0 20px 7px;
 }
 
 .view-fish {
@@ -65,24 +64,18 @@
 }
 
 .order-description {
-  border-top: 1px solid #ccc;
   padding-top: 20px;
   max-width: 55vw;
-}
-
-.google-map {
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 20px;
-  margin-top: 20px;
+  font-size: 12px;
 }
 
 .map-placeholder {
-  width: 100%;
-  height: 50vh;
+  width: 80%;
+  height: 40vh;
   background-color: #f0f0f0;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 20px;
+  margin: auto;
 }

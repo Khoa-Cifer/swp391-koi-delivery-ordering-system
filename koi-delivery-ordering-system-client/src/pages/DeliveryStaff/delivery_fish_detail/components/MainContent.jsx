@@ -1,90 +1,116 @@
 import "./MainContent.scss";
+import { Button, Card, Flex, Typography } from "antd";
+
 const MainContent = () => {
+  const cardStyle = {
+    width: 300,
+  };
   return (
-    <div className="Order-list-container">
-      {/* Tiêu đề cho hàng đầu tiên */}
-      <h3 className="order-row-title">Delivering Order</h3>
-
-      <div className="order-list-row">
-        {/* Order Card */}
-        <div className="order-list-card ">
-          <h5 className="card-list-title">Order Name</h5>
-          <p className="card-list-text">Last Updated Date: 2024-09-26</p>
-          <p className="card-list-text">Destination Address: ABC Street</p>
-          <div className="button-list-container">
-            <button className="status-btn">Order Status</button>
-            <button className="detail-btn">Detail</button>
-          </div>
-        </div>
-        {/* Order Card */}
-        <div className="order-list-card ">
-          <h5 className="card-list-title">Order Name</h5>
-          <p className="card-list-text">Last Updated Date: 2024-09-26</p>
-          <p className="card-list-text">Destination Address: ABC Street</p>
-          <div className="button-list-container">
-            <button className="status-btn">Order Status</button>
-            <button className="detail-btn">Detail</button>
-          </div>
-        </div>
-        <div className="view-more-list-container">
-          <button className="view-more-list-button">View More >>></button>
+    <div className="main-content">
+      {/* Slider Section */}
+      <div className="slider-container">
+        <div className="slider-fish-img">
+          <h4>Slider Fish Img</h4>
         </div>
       </div>
-      {/* Tiêu đề cho hàng thứ 2 */}
-      <h3 className="order-row-title">Assigned Order</h3>
 
-      <div className="order-list-row">
-        {/* Order Card */}
-        <div className="order-list-card ">
-          <h5 className="card-list-title">Order Name</h5>
-          <p className="card-list-text">Last Updated Date: 2024-09-26</p>
-          <p className="card-list-text">Destination Address: ABC Street</p>
-          <div className="button-list-container">
-            <button className="status-btn">Order Status</button>
-            <button className="detail-btn">Detail</button>
-          </div>
-        </div>
-        {/* Order Card */}
-        <div className="order-list-card ">
-          <h5 className="card-list-title">Order Name</h5>
-          <p className="card-list-text">Last Updated Date: 2024-09-26</p>
-          <p className="card-list-text">Destination Address: ABC Street</p>
-          <div className="button-list-container">
-            <button className="status-btn">Order Status</button>
-            <button className="detail-btn">Detail</button>
-          </div>
-        </div>
-        <div className="view-more-list-container">
-          <button className="view-more-list-button">View More >>></button>
-        </div>
-      </div>
-      {/* Tiêu đề cho hàng thứ 3 */}
-      <h3 className="order-row-title">Delivered Order</h3>
-
-      <div className="order-list-row">
-        {/* Order Card */}
-        <div className="order-list-card ">
-          <h5 className="card-list-title">Order Name</h5>
-          <p className="card-list-text">Last Updated Date: 2024-09-26</p>
-          <p className="card-list-text">Destination Address: ABC Street</p>
-          <div className="button-list-container">
-            <button className="status-btn">Order Status</button>
-            <button className="detail-btn">Detail</button>
-          </div>
-        </div>
-        {/* Order Card */}
-        <div className="order-list-card ">
-          <h5 className="card-list-title">Order Name</h5>
-          <p className="card-list-text">Last Updated Date: 2024-09-26</p>
-          <p className="card-list-text">Destination Address: ABC Street</p>
-          <div className="button-list-container">
-            <button className="status-btn">Order Status</button>
-            <button className="detail-btn">Detail</button>
-          </div>
-        </div>
-        <div className="view-more-list-container">
-          <button className="view-more-list-button">View More >>></button>
-        </div>
+      <div className="card-container">
+        <Card
+          hoverable
+          style={cardStyle}
+          styles={{
+            body: {
+              padding: 0,
+              overflow: "hidden",
+            },
+          }}
+        >
+          <Flex
+            vertical
+            align="flex-end"
+            justify="space-around"
+            style={{
+              padding: 32,
+            }}
+          >
+            <Typography.Title
+              level={5}
+              style={{ width: "100%" }}
+              ellipsis={{ rows: 4 }}
+            >
+              antd is an enterprise-class UI design language and React UI
+              library. antd is an enterprise-class UI design language and React
+              UI library.
+            </Typography.Title>
+            <Button type="primary" href="https://ant.design" target="_blank">
+              View Detail
+            </Button>
+          </Flex>
+        </Card>
+        <Card
+          hoverable
+          style={cardStyle}
+          styles={{
+            body: {
+              padding: 0,
+              overflow: "hidden",
+            },
+          }}
+        >
+          <Flex
+            vertical
+            align="flex-end"
+            justify="space-around"
+            style={{
+              padding: 32,
+            }}
+          >
+            <Typography.Title
+              level={5}
+              style={{ width: "100%" }}
+              ellipsis={{ rows: 4 }}
+            >
+              antd is an enterprise-class UI design language and React UI
+              library. antd is an enterprise-class UI design language and React
+              UI library.
+            </Typography.Title>
+            <Button type="primary" href="https://ant.design" target="_blank">
+              View Detail
+            </Button>
+          </Flex>
+        </Card>
+        <Card
+          hoverable
+          style={cardStyle}
+          styles={{
+            body: {
+              padding: 0,
+              overflow: "hidden",
+            },
+          }}
+        >
+          <Flex
+            vertical
+            align="flex-end"
+            justify="space-around"
+            style={{
+              padding: 32,
+            }}
+          >
+            <Typography.Title
+              level={5}
+              style={{ width: "100%" }}
+              ellipsis={{ rows: 4 }}
+            >
+              antd is an enterprise-class UI design language and React UI
+              library. antd is an enterprise-class UI design language and React
+              UI library.
+            </Typography.Title>
+            <Button type="primary" href="https://ant.design" target="_blank">
+              View Detail
+            </Button>
+          </Flex>
+        </Card>
       </div>
     </div>
   );
