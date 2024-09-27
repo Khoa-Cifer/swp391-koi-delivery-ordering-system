@@ -1,6 +1,6 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
-import com.swp391team3.koi_delivery_ordering_system.model.PaymentHistory;
+import com.swp391team3.koi_delivery_ordering_system.model.OrderPaymentHistory;
 import com.swp391team3.koi_delivery_ordering_system.service.IPaymentHistoryService;
 import com.swp391team3.koi_delivery_ordering_system.service.IPaymentService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,7 +40,7 @@ public class PaymentController {
     //update Payment History
     //PASSED
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePaymentHistory(@PathVariable Long id, @RequestBody PaymentHistory paymentHistory) {
-        return ResponseEntity.ok(paymentHistoryService.updatePaymentHistory(id, paymentHistory.getDescription()));
+    public ResponseEntity<?> updatePaymentHistory(@PathVariable Long id, @RequestBody OrderPaymentHistory orderPaymentHistory) {
+        return ResponseEntity.ok(paymentHistoryService.updatePaymentHistory(id, orderPaymentHistory.getDescription()));
     }
 }
