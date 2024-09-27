@@ -9,6 +9,9 @@ import AuthProvider from "./authentication/AuthProvider";
 import PrivateRoute from "./authentication/PrivateRoute";
 import OrderAvailable from "./pages/DeliveryStaff/delivery_available_order/OrderAvailable"
 import DeliveryOrderHome from "./pages/DeliveryStaff/delivery_order_home/DeliveryOrderHome"
+import LoginCustomer from "./pages/login/LoginCustomer/LoginCustomer";
+import LoginSaleStaff from "./pages/login/LoginSaleStaff/LoginSaleStaff";
+import LoginDeliveryStaff from "./pages/login/LoginDeliveryStaff/LoginDeliveryStaff";
 
 function App() {
   return (
@@ -18,6 +21,9 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<SignUp />} />
+            <Route path="/LoginCustomer" element={<LoginCustomer />} />
+            <Route path="/LoginSaleStaff" element={<LoginSaleStaff />} />
+            <Route path="/LoginDeliveryStaff" element={<LoginDeliveryStaff />} />
 
             <Route path="/admin" element={
               <PrivateRoute allowedRoles={4}>

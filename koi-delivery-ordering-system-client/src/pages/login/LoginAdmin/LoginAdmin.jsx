@@ -1,10 +1,12 @@
-import "./LoginDeliveryStaff.scss";
+import "./LoginAdmin.scss";
 
-function LoginDelivery() {
+function Login_admin() {
   return (
-    <div className="login-delivery-container">
+    <div className="login-admin-container">
       <div className="card">
-        <h3 className="text-center">Dellivery Staff Login</h3>
+        <h3 className="text-center">
+          <strong>Admin Login</strong>
+        </h3>
         <form>
           <div className="form-group">
             <label htmlFor="username">Email</label>
@@ -20,28 +22,12 @@ function LoginDelivery() {
             />
           </div>
 
-          <div className="text-end">
-            <a href="#!" className="small-link">
-              Forgot password?
-            </a>
-          </div>
-
           <div className="btn">
-          <button type="submit" >
-            Login
-          </button>
+            <button type="submit">Login</button>
           </div>
-          
         </form>
-
-        <div className="text-center">
-          <p>
-            Have not an account yet? <a href="#!">Sign Up</a>
-          </p>
-        </div>
       </div>
     </div>
   );
 }
-
-export default LoginDelivery;
+export default Login_admin;
