@@ -62,6 +62,7 @@ function LoginCustomer() {
               Customer
             </Button>
           </div>
+          <a href="/register">Sign Up here</a>
         </div>
       </div>
     </div>
