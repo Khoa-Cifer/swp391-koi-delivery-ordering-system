@@ -1,12 +1,11 @@
 import { useState } from "react";
-import "./login.scss";
+import "./LoginCustomer.scss";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
-import { userLogin } from "../../../utils/users/user";
 import { useAuth } from "../../../authentication/AuthProvider";
+import { userLogin } from "../../../utils/customers/user";
 
-function Login() {
+function LoginCustomer() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -104,4 +103,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginCustomer;
