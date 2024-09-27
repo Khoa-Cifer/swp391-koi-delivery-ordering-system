@@ -9,8 +9,8 @@ import AuthProvider from "./authentication/AuthProvider";
 import PrivateRoute from "./authentication/PrivateRoute";
 import OrderAvailable from "./pages/DeliveryStaff/delivery_available_order/OrderAvailable"
 import DeliveryOrderHome from "./pages/DeliveryStaff/delivery_order_home/DeliveryOrderHome"
-import LoginCustomer from "./pages/login/login-customer/login";
-import LoginDelivery from "./pages/login/login-delivery/Login_delivery";
+import Login from "./pages/login/Login_home/login";
+import Login_delivery from "./pages/login/login-delivery/Login_delivery";
 
 function App() {
   return (
@@ -19,8 +19,8 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login-customer" element={<LoginCustomer />} />
-            <Route path="/login-delivery" element={<LoginDelivery />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/login-delivery" element={<Login_delivery />} />
             <Route path="/register" element={<SignUp />} />
 
             <Route path="/admin" element={
