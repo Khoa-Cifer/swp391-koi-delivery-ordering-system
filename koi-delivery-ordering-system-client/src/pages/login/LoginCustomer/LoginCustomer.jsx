@@ -1,11 +1,11 @@
 import { useState } from "react";
-import "./login.scss";
+import "./LoginCustomer.scss";
 import { Button } from "@mui/material";
-import { userLogin } from "../../utils/users/user";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../authentication/AuthProvider";
+import { useAuth } from "../../../authentication/AuthProvider";
+import { userLogin } from "../../../utils/customers/user";
 
-function Login() {
+function LoginCustomer() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -25,66 +25,63 @@ function Login() {
 
   async function handleLogin(roleId) {
     const data = await userLogin(email, password, roleId);
-    if (data.email) {
+    if (data) {
       auth.handleLogin(data);
+      navigate("/customer-home");
     }
   }
 
   return (
     <div className="login">
-      <div className="login__image">
-        <img
-          src="https://img2.thuthuatphanmem.vn/uploads/2019/03/07/hinh-anh-ho-ca-koi-dep_111108115.jpg"
-          alt=""
-        />
-      </div>
-
       <div className="wraper">
         <div className="login__form">
-          <input type="email" placeholder="Email" onChange={(e) => handleEmailChange(e)} />
-          <input type="password" placeholder="Password" onChange={(e) => handlePasswordChange(e)} />
+          <h3 className="text-center">
+            <strong>Login</strong>
+          </h3>
+          <input
+            type="email"
+            placeholder="Email"
+            onChange={(e) => handleEmailChange(e)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            onChange={(e) => handlePasswordChange(e)}
+          />
 
           <div className="one__line">
             <div className="line"></div>
-            <span style={{ color: "#ffbd3f" }}>Login as</span>
+            <span style={{ color: "black" }}>
+              <strong>Login as</strong>
+            </span>
             <div className="line"></div>
           </div>
 
           <div className="role__form">
-            <Button
-              onClick={() => handleLogin(1)}
-              variant="contained"
-            >
+            <Button onClick={() => handleLogin(1)} variant="contained">
               Customer
             </Button>
 
-            <Button
-              onClick={() => handleLogin(2)}
-              variant="contained"
-            >
+            <Button onClick={() => handleLogin(2)} variant="contained">
               Sales Staff
             </Button>
           </div>
 
           <div className="role__form">
-            <Button
-              onClick={() => handleLogin(3)}
-              variant="contained"
-            >
+            <Button onClick={() => handleLogin(3)} variant="contained">
               Delivery Staff
             </Button>
 
-            <Button
-              onClick={() => handleLogin(4)}
-              variant="contained"
-            >
+            <Button onClick={() => handleLogin(4)} variant="contained">
               Manager
             </Button>
           </div>
 
           <div className="one__line">
             <div className="line"></div>
-            <span style={{ color: "#ffbd3f" }}>Or</span>
+            <span style={{ color: "black" }}>
+              <strong>Or</strong>
+            </span>
             <div className="line"></div>
           </div>
 
@@ -98,8 +95,8 @@ function Login() {
           </button>
         </div>
       </div>
-    </div >
+    </div>
   );
 }
 
-export default Login;
+export default LoginCustomer;

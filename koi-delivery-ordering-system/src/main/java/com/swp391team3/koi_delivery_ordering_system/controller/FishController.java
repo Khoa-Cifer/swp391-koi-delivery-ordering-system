@@ -20,6 +20,9 @@ public class FishController {
         return fishService.getAllFishs();
     }
 
+    public Fish createFishOrder(@RequestBody Fish fish) {
+        return null;
+    }
 
     @GetMapping("/getFishById")
     public Fish getFishById(@RequestParam("id") Long id) {
