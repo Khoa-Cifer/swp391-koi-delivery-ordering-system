@@ -1,10 +1,10 @@
-import "./LoginDeliveryStaff.scss";
+import "./LoginSaleStaff.scss"
 
-function LoginDelivery() {
+function LoginSaleStaff() {
   return (
-    <div className="login-delivery-container">
+    <div className="login-sale-container">
       <div className="card">
-        <h3 className="text-center">Dellivery Staff Login</h3>
+        <h3 className="text-center"><strong>Sale Staff Login</strong></h3>
         <form>
           <div className="form-group">
             <label htmlFor="username">Email</label>
@@ -44,4 +44,4 @@ function LoginDelivery() {
   );
 }
 
-export default LoginDelivery;
+export default LoginSaleStaff

@@ -9,10 +9,9 @@ import AuthProvider from "./authentication/AuthProvider";
 import PrivateRoute from "./authentication/PrivateRoute";
 import OrderAvailable from "./pages/DeliveryStaff/delivery_available_order/OrderAvailable"
 import DeliveryOrderHome from "./pages/DeliveryStaff/delivery_order_home/DeliveryOrderHome"
-import Login from "./pages/login/Login_home/login";
-import Login_delivery from "./pages/login/login-delivery/Login_delivery";
-import Login_sale_staff from "./pages/login/login_sale_staff/Login_sale_staff";
-import Login_admin from "./pages/login/login_admin/Login_admin";
+import LoginCustomer from "./pages/login/LoginCustomer/LoginCustomer";
+import LoginSaleStaff from "./pages/login/LoginSaleStaff/LoginSaleStaff";
+import LoginDeliveryStaff from "./pages/login/LoginDeliveryStaff/LoginDeliveryStaff";
 
 function App() {
   return (
@@ -21,18 +20,17 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/login-delivery" element={<Login_delivery />} />
-            <Route path="/login-sale-staff" element={<Login_sale_staff />} />
-            <Route path="/login-admin" element={<Login_admin />} />
             <Route path="/register" element={<SignUp />} />
+            <Route path="/LoginCustomer" element={<LoginCustomer />} />
+            <Route path="/LoginSaleStaff" element={<LoginSaleStaff />} />
+            <Route path="/LoginDeliveryStaff" element={<LoginDeliveryStaff />} />
 
-            {/* <Route path="/admin" element={
+            <Route path="/admin" element={
               <PrivateRoute allowedRoles={4}>
                 <Admin />
               </PrivateRoute>
-            } /> */}
-            <Route path="/admin" element={<Admin />} />
+            } />
+            {/* <Route path="/admin" element={<Admin />} /> */}
             <Route path="/delivery-staff" element={
               <PrivateRoute allowedRoles={3}>
                 <DeliveryStaff />
