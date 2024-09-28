@@ -3,6 +3,7 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 import com.swp391team3.koi_delivery_ordering_system.model.*;
 import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderFishInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import lombok.RequiredArgsConstructor;
@@ -20,24 +21,6 @@ public class OrderServiceImpl implements IOrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
     private final OrderStatus orderStatus;
-
-    @Override
-    public Order createOrder(String trackingId, String name, int orderStatus, String description, Date createdDate, Date last, Customer customer, DeliveryStaff driver, SalesStaff sales, DeliveringType deliveringType, double price) {
-        Order order = new Order();
-        order.setTrackingId(trackingId);
-        order.setName(name);
-//        order.setOrderStatus(orderStatus);
-//        order.setDescription(description);
-//        order.setCreatedDate(createdDate);
-//        order.setLastUpdatedDate(last);
-//        order.setCustomer(customer);
-//        order.setDriver(driver);
-        order.setSalesStaff(sales);
-        order.setDeliveringType(deliveringType);
-        order.setPrice(price);
-
-        return orderRepository.save(order);
-    }
 
     @Override
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
