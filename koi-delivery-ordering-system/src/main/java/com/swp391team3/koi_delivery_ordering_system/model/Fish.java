@@ -38,8 +38,4 @@ public class Fish {
     @OneToMany(mappedBy = "fish")
     @JsonIgnore
     private Set<License> licenses;
-
-    @ManyToOne
-    @JoinColumn(name = "sender_id", nullable = false)
-    private Customer sender;
 }

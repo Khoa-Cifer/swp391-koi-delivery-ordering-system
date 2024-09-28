@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar";
 import HeaderBar from "../components/HeaderBar";
 import Footer from "../components/Footer";
 import MainContent from "./components/MainContent";
+
 function DeliveryOrderAvailable() {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>

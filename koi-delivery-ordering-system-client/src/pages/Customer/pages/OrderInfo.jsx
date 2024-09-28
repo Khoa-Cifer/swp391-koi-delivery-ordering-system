@@ -5,7 +5,7 @@ import ToastUtil from "../../../components/toastContainer";
 import { toast } from "react-toastify";
 import { CONSTANT_GOOGLE_MAP_API_KEY } from "../../../utils/constants"
 import { jwtDecode } from "jwt-decode";
-import { createGeneralOrderInfo } from "../../../utils/customers/createGeneralInfoOrder";
+import { createGeneralOrderInfo } from "../../../utils/customers/createOrder";
 
 // eslint-disable-next-line react/prop-types
 function OrderInfo({ formStep, orderId }) {

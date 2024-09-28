@@ -12,6 +12,9 @@ import DeliveryOrderHome from "./pages/DeliveryStaff/delivery_order_home/Deliver
 import LoginCustomer from "./pages/login/LoginCustomer/LoginCustomer";
 import LoginSaleStaff from "./pages/login/LoginSaleStaff/LoginSaleStaff";
 import LoginDeliveryStaff from "./pages/login/LoginDeliveryStaff/LoginDeliveryStaff";
+import DeliveryOrderList from "./pages/DeliveryStaff/delivery_order_list/DeliveryOrderList";
+import DeliveryOrderDetail from "./pages/DeliveryStaff/delivery_order_detail/DeliveryOrderDetail";
+import DeliveryFishDetail from "./pages/DeliveryStaff/delivery_fish_detail/DeliveryFishDetail";
 
 function App() {
   return (
@@ -49,7 +52,9 @@ function App() {
                 <Customer />
               </PrivateRoute>
             } />
-
+            <Route path="/delivery-order-list" element={<DeliveryOrderList />} />
+            <Route path="/delivery-order-detail" element={<DeliveryOrderDetail />} />
+            <Route path="/delivery-fish-detail" element={<DeliveryFishDetail />} />
           </Routes>
         </Router>
       </main>
