@@ -15,6 +15,7 @@ import java.util.Date;
 public class LicenseController {
     private final ILicenseService licenseService;
 
+    @PostMapping("/insertLicenseByFishId")
     //Get All Licenses
     //
     @GetMapping("/getAllLicenses")
