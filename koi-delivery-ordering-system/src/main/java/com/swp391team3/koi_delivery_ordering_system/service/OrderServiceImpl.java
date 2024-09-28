@@ -26,12 +26,12 @@ public class OrderServiceImpl implements IOrderService {
         Order order = new Order();
         order.setTrackingId(trackingId);
         order.setName(name);
-        order.setOrderStatus(orderStatus);
-        order.setDescription(description);
-        order.setCreatedDate(createdDate);
-        order.setLastUpdatedDate(last);
-        order.setCustomer(customer);
-        order.setDriver(driver);
+//        order.setOrderStatus(orderStatus);
+//        order.setDescription(description);
+//        order.setCreatedDate(createdDate);
+//        order.setLastUpdatedDate(last);
+//        order.setCustomer(customer);
+//        order.setDriver(driver);
         order.setSalesStaff(sales);
         order.setDeliveringType(deliveringType);
         order.setPrice(price);
@@ -44,7 +44,7 @@ public class OrderServiceImpl implements IOrderService {
         Order newOrder = new Order();
         Optional<Customer> orderCreator = customerRepository.findById(dto.getCustomerId());
         newOrder.setCustomer(orderCreator.get());
-        newOrder.setOrderStatus(orderStatus.PREPARING);
+//        newOrder.setOrderStatus(orderStatus.PREPARING);
         newOrder.setName(dto.getName());
         newOrder.setDescription(dto.getDescription());
         newOrder.setDestinationAddress(dto.getDestinationAddress());

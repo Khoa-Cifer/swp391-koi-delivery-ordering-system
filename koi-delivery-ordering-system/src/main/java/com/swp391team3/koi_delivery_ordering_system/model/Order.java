@@ -22,11 +22,9 @@ public class Order {
     private Long id;
     private String trackingId;
     private String name;
-    private int orderStatus;
     private String description;
     private Date createdDate;
-    private Date lastUpdatedDate;
-    private Date finishDate;
+    private Date expectedFinishDate;
     private String destinationAddress;
     private String longitude;
     private String latitude;
@@ -40,9 +38,9 @@ public class Order {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @ManyToOne
-    @JoinColumn(name = "driver_id")
-    private DeliveryStaff driver;
+    @OneToMany(mappedBy = "order")
+    @JsonIgnore
+    private Set<OrderDelivering> orderDeliverings;
 
     @ManyToOne
     @JoinColumn(name = "sales_id")

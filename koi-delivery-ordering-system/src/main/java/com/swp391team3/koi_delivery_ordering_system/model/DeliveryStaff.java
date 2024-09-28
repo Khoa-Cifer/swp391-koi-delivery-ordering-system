@@ -32,7 +32,11 @@ public class DeliveryStaff {
     @JoinColumn(name = "avatar_id", referencedColumnName = "id")
     private File file;
 
+//    @OneToMany(mappedBy = "driver")
+//    @JsonIgnore
+//    private Set<Order> drivers;
+
     @OneToMany(mappedBy = "driver")
     @JsonIgnore
-    private Set<Order> drivers;
+    private Set<OrderDelivering> orderDeliverings;
 }

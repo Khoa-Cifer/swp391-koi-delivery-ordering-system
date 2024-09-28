@@ -24,6 +24,10 @@ public class Fish {
     private int status;
     private double price;
 
+    @OneToOne
+    @JoinColumn(name = "fish_image_id", referencedColumnName = "id")
+    private File file;
+
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
