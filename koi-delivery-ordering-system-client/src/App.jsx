@@ -15,6 +15,7 @@ import LoginDeliveryStaff from "./pages/login/LoginDeliveryStaff/LoginDeliverySt
 import DeliveryOrderList from "./pages/DeliveryStaff/delivery_order_list/DeliveryOrderList";
 import DeliveryOrderDetail from "./pages/DeliveryStaff/delivery_order_detail/DeliveryOrderDetail";
 import DeliveryFishDetail from "./pages/DeliveryStaff/delivery_fish_detail/DeliveryFishDetail";
+import LoginAdmin from "./pages/login/LoginAdmin/LoginAdmin";
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
             <Route path="/delivery-order-list" element={<DeliveryOrderList />} />
             <Route path="/delivery-order-detail" element={<DeliveryOrderDetail />} />
             <Route path="/delivery-fish-detail" element={<DeliveryFishDetail />} />
+            <Route path="/login-admin" element={<LoginAdmin />} />
           </Routes>
         </Router>
       </main>
