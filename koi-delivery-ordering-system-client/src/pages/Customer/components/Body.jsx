@@ -24,7 +24,7 @@ function Body() {
                 <OrderInfo formStep={e => handleData(e)} orderId={e => handleOrderId(e)}/>
             )}
             {formStep === 2 && (
-                <FishInfo formStep={e => handleData(e)} />
+                <FishInfo formStep={e => handleData(e)} orderId={generalData} />
             )}
         </div>
     );

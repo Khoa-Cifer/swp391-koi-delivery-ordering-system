@@ -1,6 +1,6 @@
 import "./Header_delivery.scss"
 
-function Header_delivery() {
+function HeaderDelivery() {
   return (
     <div className="header-delivery">
           <div className="heaader-delivery-left">
@@ -42,4 +42,4 @@ function Header_delivery() {
   )
 }
 
-export default Header_delivery
+export default HeaderDelivery;

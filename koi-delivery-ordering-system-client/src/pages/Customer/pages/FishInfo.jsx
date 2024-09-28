@@ -1,8 +1,36 @@
 import { Box } from "@mui/material";
+import { useEffect, useState } from "react";
 
 // eslint-disable-next-line react/prop-types
 function FishInfo({ formStep, orderId }) {
-    
+    const [orderName, setOrderName] = useState("");
+    const [file, setFile] = useState();
+    const [previewUrl, setPreviewUrl] = useState(null);
+
+    const handleFileChange = (e) => {
+        if (e.target.files) {
+            setFile(e.target.files[0]);
+        }
+    };
+
+    useEffect(() => {
+        if (!file) {
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            setPreviewUrl(reader.result);
+        }
+
+        reader.readAsDataURL(file);
+    }, [file]);
+
+    function handleNameChange(e) {
+        setOrderName(e.target.value);
+    }
+
     return (
         <Box>
             <div className="form-container">
@@ -14,24 +42,20 @@ function FishInfo({ formStep, orderId }) {
                             type="text"
                             name="name"
                             className="form-input"
+                            onChange={e => handleNameChange(e)}
                         />
                     </div>
                     <div className="form-group">
-                        <label className="form-label">Description: </label>
+                        <label className="form-label">Name: </label>
                         <input
-                            type="email"
-                            name="email"
+                            type="file"
+                            name="file"
                             className="form-input"
+                            onChange={e => handleFileChange(e)}
                         />
                     </div>
-                    <div className="form-group">
-                        <label className="form-label">Receiver Address: </label>
-                        <input
-                            type="text"
-                            name="text"
-                            className="form-input"
-                        />
-                    </div>
+
+                    {previewUrl && <img src={previewUrl} alt="Preview" />}
                     <button className="form-button" onClick={() => formStep(3)}>
                         Submit
                     </button>

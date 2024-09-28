@@ -1,6 +1,6 @@
 import "./Banner_delivery.scss"
 
-function Banner_delivery() {
+function BannerDelivery() {
   return (
     <div className="banner-delivery">
           <div className="content-delivery">
@@ -19,4 +19,4 @@ function Banner_delivery() {
   )
 }
 
-export default Banner_delivery
+export default BannerDelivery;
