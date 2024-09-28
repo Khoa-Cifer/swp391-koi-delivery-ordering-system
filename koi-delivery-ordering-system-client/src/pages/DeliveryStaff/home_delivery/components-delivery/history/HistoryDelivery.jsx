@@ -1,6 +1,6 @@
 import "./History_delivery.scss"
 
-function History_delivery() {
+function HistoryDelivery() {
   return (
     <div className="history-delivery">
             <div><h2>History</h2></div>
@@ -8,4 +8,4 @@ function History_delivery() {
   )
 }
 
-export default History_delivery
+export default HistoryDelivery

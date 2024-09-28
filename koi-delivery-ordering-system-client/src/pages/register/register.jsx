@@ -1,6 +1,8 @@
 import { useState } from "react";
 import "./register.scss";
 import { userRegister } from "../../utils/customers/user";
+import { toast } from "react-toastify";
+import ToastUtil from "../../components/toastContainer";
 
 const SignUp = () => {
   // return (
@@ -36,6 +38,7 @@ const SignUp = () => {
     email: "",
     username: "",
     password: "",
+    phoneNumber: "",
   });
 
   const handleChange = (e) => {
@@ -50,12 +53,14 @@ const SignUp = () => {
     const email = formData.email;
     const username = formData.username;
     const password = formData.password;
-    const data = await userRegister(email, username, password);
-    console.log(data);
+    const phoneNumber = formData.phoneNumber;
+    const data = await userRegister(email, username, password, phoneNumber);
+    toast(data);
   };
 
   return (
     <div className="signup-container">
+      <ToastUtil />
       <div className="signup-form">
         <h2>Create Account</h2>
 
@@ -71,9 +76,19 @@ const SignUp = () => {
 
         <div className="input-group">
           <input
-            type="username"
+            type="text"
             name="username"
             placeholder="Username"
+            onChange={(e) => handleChange(e)}
+            required
+          />
+        </div>
+
+        <div className="input-group">
+          <input
+            type="text"
+            name="phoneNumber"
+            placeholder="Phone Number"
             onChange={(e) => handleChange(e)}
             required
           />

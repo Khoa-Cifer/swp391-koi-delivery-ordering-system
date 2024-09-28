@@ -20,6 +20,9 @@ public class Fish {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private int age;
+    private double size;
+    private double weight;
 //    private String description;
     private int status;
     private double price;
