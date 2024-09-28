@@ -1,6 +1,7 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.Order;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderFishInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
 import lombok.RequiredArgsConstructor;
@@ -17,28 +18,12 @@ public class OrderController {
     private final IOrderService orderService;
 
     //Create Order
-    //
+    //PASS
     @PostMapping("/createOrderGeneralData")
     public ResponseEntity<?> createOrderGeneralInfo(@RequestBody OrderGeneralInfoRequestDTO request) {
         Long createdOrder = orderService.createGeneralInfoOrder(request);
         return ResponseEntity.ok(createdOrder);
     }
-
-//    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-//        Order createdOrder = orderService.createOrder(
-//                order.getTrackingId(),
-//                order.getName(),
-//                order.getOrderStatus(),
-//                order.getDescription(),
-//                order.getCreatedDate(),
-//                order.getLastUpdatedDate(),
-//                order.getCustomer(),
-//                order.getDriver(),
-//                order.getSalesStaff(),
-//                order.getDeliveringType(),
-//                order.getPrice());
-//        return ResponseEntity.ok(createdOrder);
-//    }
 
     //Get All Orders
     //PASSED
