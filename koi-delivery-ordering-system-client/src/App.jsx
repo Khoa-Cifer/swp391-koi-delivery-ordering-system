@@ -4,7 +4,7 @@ import SignUp from "./pages/register/register";
 import Admin from "./pages/Manager/Admin";
 import Customer from "./pages/Customer/Customer";
 import EditCustomerProfile from "./pages/Customer/pages/EditCustomerProfile";
-import DeliveryStaff from "./pages/DeliveryStaff/home_delivery/Delivery_staff/Delivery_staff";
+import DeliveryStaff from "./pages/DeliveryStaff/home_delivery/delivery_staff/DeliveryStaff";
 import AuthProvider from "./authentication/AuthProvider";
 import PrivateRoute from "./authentication/PrivateRoute";
 import OrderAvailable from "./pages/DeliveryStaff/delivery_available_order/OrderAvailable"
@@ -12,7 +12,6 @@ import DeliveryOrderHome from "./pages/DeliveryStaff/delivery_order_home/Deliver
 import LoginCustomer from "./pages/login/LoginCustomer/LoginCustomer";
 import LoginSaleStaff from "./pages/login/LoginSaleStaff/LoginSaleStaff";
 import LoginDeliveryStaff from "./pages/login/LoginDeliveryStaff/LoginDeliveryStaff";
-import LoginAdmin from "./pages/login/Loginadmin/LoginAdmin";
 
 function App() {
   return (
@@ -22,10 +21,10 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<SignUp />} />
-            <Route path="/LoginCustomer" element={<LoginCustomer />} />
-            <Route path="/LoginSaleStaff" element={<LoginSaleStaff />} />
-            <Route path="/LoginDeliveryStaff" element={<LoginDeliveryStaff />} />
-            <Route path="/LoginAdmin" element={<LoginAdmin />} />
+            <Route path="/login-customer" element={<LoginCustomer />} />
+            <Route path="/login-sales-staff" element={<LoginSaleStaff />} />
+            <Route path="/login-delivery-staff" element={<LoginDeliveryStaff />} />
+
             <Route path="/admin" element={
               <PrivateRoute allowedRoles={4}>
                 <Admin />
@@ -43,8 +42,8 @@ function App() {
                 <EditCustomerProfile />
               </PrivateRoute>
             } />
-            <Route path="/deliveryOrderHome" element={<DeliveryOrderHome />} />
-            <Route path="/orderAvailable" element={<OrderAvailable />} />
+            <Route path="/delivery-order-home" element={<DeliveryOrderHome />} />
+            <Route path="/order-available" element={<OrderAvailable />} />
             <Route path="/customer-home" element={
               <PrivateRoute allowedRoles={1}>
                 <Customer />

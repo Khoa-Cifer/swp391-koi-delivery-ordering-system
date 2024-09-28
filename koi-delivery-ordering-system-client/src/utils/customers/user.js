@@ -15,13 +15,14 @@ export async function userLogin(email, password, userType) {
     }
 }
 
-export async function userRegister(email, username, password) {
+export async function userRegister(email, username, password, phoneNumber) {
     try {
         const response = await axiosClient.post("auth/register",
             {
                 email,
                 username,
-                password
+                password,
+                phoneNumber
             }
         );
         return response.data;
