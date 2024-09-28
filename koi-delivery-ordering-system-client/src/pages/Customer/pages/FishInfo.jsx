@@ -1,6 +1,6 @@
 import { Box, styled } from "@mui/material";
 import { useEffect, useState } from "react";
-import { createFishOrderInfo } from "../../../utils/customers/createOrder";
+import { createFishOrderInfo, createLicenseOrderInfo } from "../../../utils/customers/createOrder";
 import License from "../utils/License";
 
 const CustomBoxContainer = styled(Box)(() => ({
@@ -15,25 +15,37 @@ function FishInfo({ orderId, formStepData }) {
     const [fishSize, setFishSize] = useState(0);
     const [fishWeight, setFishWeight] = useState(0);
     const [fishPrice, setFishPrice] = useState(0);
-    const [forms, setForms] = useState([]); // Manage multiple forms
+    const [licenseForms, setLicenseForms] = useState([]); // Manage multiple forms
 
     const [file, setFile] = useState();
     const [previewUrl, setPreviewUrl] = useState(null);
 
-    const [formData, setFormData] = useState({}); // Manage data for each form
+    const [licenseFormData, setLicenseFormData] = useState({}); // Manage data for each form
+
+    const [submittedLicense, setSubmittedLicense] = useState();
 
     const handleAddLicenseForm = (e, index) => {
-        const { name, value } = e.target;
-        const newFormData = { ...formData, [index]: { ...formData[index], [name]: value } };
-        setFormData(newFormData); // Update the state for each form's data
+        const { name, value, files } = e.target;
+
+        let newFormData;
+        
+        if (files) {
+            // If there are files (indicating it's a file input), store the file(s) instead of the value
+            newFormData = { ...licenseFormData, [index]: { ...licenseFormData[index], [name]: files[0] } }; // store first file only
+        } else {
+            // Handle regular input fields
+            newFormData = { ...licenseFormData, [index]: { ...licenseFormData[index], [name]: value } };
+        }
+    
+        setLicenseFormData(newFormData);
     };
 
-    const handleSubmitCheck = (index) => {
-        console.log(`Form ${index + 1} Data:`, formData[index]);
+    const handleLicenseSubmit = () => {
+        setSubmittedLicense(licenseFormData);
     };
 
     const addNewForm = () => {
-        setForms([...forms, forms.length]); // Add a new form based on its index
+        setLicenseForms([...licenseForms, licenseForms.length]); // Add a new form based on its index
     };
 
     const handleFileChange = (e) => {
@@ -65,7 +77,7 @@ function FishInfo({ orderId, formStepData }) {
     }
 
     async function handleSubmit() {
-        const data = await createFishOrderInfo(
+        const fishData = await createFishOrderInfo(
             fishName,
             fishAge,
             fishSize,
@@ -74,6 +86,22 @@ function FishInfo({ orderId, formStepData }) {
             file,
             orderId
         );
+        console.log(fishData);
+        const submittedLicenseArray = Object.values(submittedLicense);
+
+        if (fishData !== 0) {
+            for (var i = 0; i < submittedLicenseArray.length; i++) {
+                console.log('check')
+                const licenseData = await createLicenseOrderInfo(
+                    submittedLicenseArray[i].name,
+                    submittedLicenseArray[i].description,
+                    submittedLicenseArray[i].file,
+                    fishData
+                );
+                console.log(licenseData);
+            }
+
+        }
     }
 
     function handleAgeChange(e) {
@@ -169,11 +197,11 @@ function FishInfo({ orderId, formStepData }) {
                 </div>
             </CustomBoxContainer>
 
-            {forms.map((form, index) => (
+            {licenseForms.map((form, index) => (
                 <License
                     key={index}
-                    handleChange={(e) => handleAddLicenseForm(e, index)} // Pass the index to track the form
-                    handleSubmit={() => handleSubmitCheck(index)} // Handle submit for the respective form
+                    handleLicenseChange={(e) => handleAddLicenseForm(e, index)} // Pass the index to track the form
+                    handleLicenseSubmit={() => handleLicenseSubmit(index)} // Handle submit for the respective form
                 />
             ))}
         </div>

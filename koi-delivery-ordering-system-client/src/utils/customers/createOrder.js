@@ -50,7 +50,30 @@ export async function createFishOrderInfo(
                 'Content-Type': 'multipart/form-data' // Set Content-Type if uploading a file
             }
         });
-        console.log(fishPrice);
+        return response.data
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function createLicenseOrderInfo(
+    licenseName,
+    licenseDescription,
+    licenseImage,
+    fishId
+) {
+    try {
+        const response = await axiosClient.post("licenses/insertLicenseByFishId", {
+            licenseName,
+            licenseDescription,
+            licenseImage,
+            fishId
+        }, {
+            headers: {
+                'Accept': '*/*', // Accept all types for this request
+                'Content-Type': 'multipart/form-data' // Set Content-Type if uploading a file
+            }
+        });
         return response.data
     } catch (error) {
         console.log(error);

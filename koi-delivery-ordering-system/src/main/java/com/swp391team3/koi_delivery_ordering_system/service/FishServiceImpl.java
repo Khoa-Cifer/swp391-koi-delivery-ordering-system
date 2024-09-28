@@ -38,7 +38,7 @@ public class FishServiceImpl implements IFishService {
     }
 
     @Override
-    public boolean createFishByOrderId(OrderFishInfoRequestDTO request) throws IOException {
+    public Long createFishByOrderId(OrderFishInfoRequestDTO request) throws IOException {
         try {
             Fish newFish = new Fish();
             File uploadedFile = fileService.uploadFileToFileSystem(request.getFishImage());
@@ -52,10 +52,10 @@ public class FishServiceImpl implements IFishService {
             newFish.setWeight(request.getFishWeight());
             newFish.setLicenses(null);
             fishRepository.save(newFish);
-            return true;
+            return newFish.getId();
         } catch (Exception e) {
             System.out.println(e);
-            return false;
+            return 0L;
         }
     }
 }

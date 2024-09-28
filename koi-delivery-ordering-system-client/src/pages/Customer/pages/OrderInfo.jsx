@@ -76,6 +76,7 @@ function OrderInfo({ orderId, formStepData }) {
                 formStepData(1);
                 toast("Create successfully");
             }
+        // eslint-disable-next-line no-unused-vars
         } catch (e) {
             toast("unexpected error has been occurred")
         }
