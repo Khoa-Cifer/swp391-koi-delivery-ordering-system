@@ -12,6 +12,7 @@ import DeliveryOrderHome from "./pages/DeliveryStaff/delivery_order_home/Deliver
 import LoginCustomer from "./pages/login/LoginCustomer/LoginCustomer";
 import LoginSaleStaff from "./pages/login/LoginSaleStaff/LoginSaleStaff";
 import LoginDeliveryStaff from "./pages/login/LoginDeliveryStaff/LoginDeliveryStaff";
+import LoginAdmin from "./pages/login/Loginadmin/LoginAdmin";
 
 function App() {
   return (
@@ -24,7 +25,7 @@ function App() {
             <Route path="/LoginCustomer" element={<LoginCustomer />} />
             <Route path="/LoginSaleStaff" element={<LoginSaleStaff />} />
             <Route path="/LoginDeliveryStaff" element={<LoginDeliveryStaff />} />
-
+            <Route path="/LoginAdmin" element={<LoginAdmin />} />
             <Route path="/admin" element={
               <PrivateRoute allowedRoles={4}>
                 <Admin />
