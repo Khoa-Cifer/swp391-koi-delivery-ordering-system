@@ -7,6 +7,7 @@ import OrderInfo from "./pages/OrderInfo";
 import FishInfo from "./pages/FishInfo";
 import { useState } from "react";
 import "./components/body_customer.scss"
+import OrderFinalInfo from "./pages/OrderFinalInfo";
 
 const CustomTab = styled(Tab)(() => ({
     maxWidth: "20%"
@@ -89,6 +90,11 @@ function Customer() {
                         <CustomTabPanel value={value} index={1}>
                             <div className="body-container">
                                 <FishInfo orderId={generalData} formStepData={e => handleFormStep(e)} />
+                            </div>
+                        </CustomTabPanel>
+                        <CustomTabPanel value={value} index={2}>
+                            <div className="body-container">
+                                <OrderFinalInfo orderId={generalData} formStepData={e => handleFormStep(e)} />
                             </div>
                         </CustomTabPanel>
                     </div>

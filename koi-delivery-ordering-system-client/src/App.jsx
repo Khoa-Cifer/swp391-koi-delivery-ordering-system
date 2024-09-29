@@ -3,7 +3,7 @@ import Home from "./pages/home/Home";
 import SignUp from "./pages/register/register";
 import Admin from "./pages/Manager/Admin";
 import Customer from "./pages/Customer/Customer";
-import EditCustomerProfile from "./pages/Customer/pages/EditCustomerProfile";
+import EditCustomerProfile from "./pages/Customer/components/EditCustomerProfile";
 import DeliveryStaff from "./pages/DeliveryStaff/home_delivery/delivery_staff/DeliveryStaff";
 import AuthProvider from "./authentication/AuthProvider";
 import PrivateRoute from "./authentication/PrivateRoute";
