@@ -2,11 +2,15 @@ import { jwtDecode } from "jwt-decode";
 import axiosClient from "../axios";
 
 export async function createGeneralOrderInfo(
-    orderName,
+    name,
     description,
     destinationAddress,
-    longitude,
-    latitude
+    destinationLongitude,
+    destinationLatitude,
+    senderAddress,
+    senderLongitude,
+    senderLatitude,
+    expectedFinishDate
 ) {
     try {
         const token = localStorage.getItem("token");
@@ -14,11 +18,15 @@ export async function createGeneralOrderInfo(
         const customerId = customerInfo.sub.substring(2);
         const response = await axiosClient.post("orders/createOrderGeneralData", {
             customerId,
-            orderName,
+            name,
             description,
             destinationAddress,
-            longitude,
-            latitude
+            destinationLongitude,
+            destinationLatitude,
+            senderAddress,
+            senderLongitude,
+            senderLatitude,
+            expectedFinishDate
         });
         return response.data;
     } catch (error) {
@@ -50,7 +58,32 @@ export async function createFishOrderInfo(
                 'Content-Type': 'multipart/form-data' // Set Content-Type if uploading a file
             }
         });
-        console.log(fishPrice);
+        return response.data
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function createLicenseOrderInfo(
+    licenseName,
+    licenseDescription,
+    licenseImage,
+    licenseDate,
+    fishId
+) {
+    try {
+        const response = await axiosClient.post("licenses/insertLicenseByFishId", {
+            licenseName,
+            licenseDescription,
+            licenseImage,
+            licenseDate,
+            fishId
+        }, {
+            headers: {
+                'Accept': '*/*', // Accept all types for this request
+                'Content-Type': 'multipart/form-data' // Set Content-Type if uploading a file
+            }
+        });
         return response.data
     } catch (error) {
         console.log(error);

@@ -24,7 +24,7 @@ public class FishController {
     }
 
     @PostMapping(value = "/createFishByOrderId", consumes = "multipart/form-data")
-    public boolean createFishOrder(
+    public Long createFishOrder(
             @RequestParam("fishName") String fishName,
             @RequestParam("fishAge") int fishAge,
             @RequestParam("fishSize") double fishSize,

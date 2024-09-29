@@ -11,5 +11,5 @@ public interface IFishService {
     List<Fish> getAllFishs();
     Optional<Fish> getFishById(Long id);
     void deleteFishById(Long id);
-    boolean createFishByOrderId(OrderFishInfoRequestDTO request) throws IOException;
+    Long createFishByOrderId(OrderFishInfoRequestDTO request) throws IOException;
 }

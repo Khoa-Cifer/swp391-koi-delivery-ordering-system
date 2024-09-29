@@ -26,9 +26,13 @@ public class Order {
     private Date createdDate;
     private Date expectedFinishDate;
     private String destinationAddress;
-    private String longitude;
-    private String latitude;
+    private String destinationLongitude;
+    private String destinationLatitude;
+    private String senderAddress;
+    private String senderLongitude;
+    private String senderLatitude;
     private double price;
+    private int usedStatus;
 
     @ManyToOne
     @JoinColumn(name = "storage_id")

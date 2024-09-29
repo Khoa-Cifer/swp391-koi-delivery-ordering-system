@@ -22,7 +22,6 @@ public class FileServiceImpl implements IFileService {
 
     @Override
     public File uploadFileToFileSystem(MultipartFile file) throws IOException {
-        System.out.println(folderPath);
         String filePath = folderPath + file.getOriginalFilename();
         File fileData = getFile(file, filePath);
 
