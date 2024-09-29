@@ -22,7 +22,6 @@ public class OrderServiceImpl implements IOrderService {
     private final CustomerRepository customerRepository;
     private final OrderStatus orderStatus;
 
-    @Override
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
         Order newOrder = new Order();
         Optional<Customer> orderCreator = customerRepository.findById(dto.getCustomerId());
@@ -41,7 +40,7 @@ public class OrderServiceImpl implements IOrderService {
 
         newOrder.setExpectedFinishDate(dto.getExpectedFinishDate());
 
-        newOrder.setUsedStatus(0); //0 is not used, 1 is completed
+        newOrder.setOrderStatus(orderStatus.DRAFT); //0 is not used, 1 is completed
         //Created date
         newOrder.setCreatedDate(new Date());
         Order savedOrder = orderRepository.save(newOrder);

@@ -32,7 +32,7 @@ public class Order {
     private String senderLongitude;
     private String senderLatitude;
     private double price;
-    private int usedStatus;
+    private int orderStatus;
 
     @ManyToOne
     @JoinColumn(name = "storage_id")

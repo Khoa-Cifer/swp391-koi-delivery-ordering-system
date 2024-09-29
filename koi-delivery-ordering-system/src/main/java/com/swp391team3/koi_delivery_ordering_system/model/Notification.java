@@ -21,7 +21,7 @@ public class Notification {
     private String name;
     private String description;
     private Date sendDate;
-    private String receiverRole;
+    private int receiverRole;
 
     @ManyToOne
     @JoinColumn(name = "sender_id", nullable = false)
@@ -29,5 +29,5 @@ public class Notification {
 
     @Column(name = "receiver_id")
     private Long receiver;
-
+    //Id primary key của user
 }

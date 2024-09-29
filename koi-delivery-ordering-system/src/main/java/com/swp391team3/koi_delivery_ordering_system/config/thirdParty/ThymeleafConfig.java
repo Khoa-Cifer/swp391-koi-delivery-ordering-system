@@ -1,10 +1,8 @@
-package com.swp391team3.koi_delivery_ordering_system.config.service;
+package com.swp391team3.koi_delivery_ordering_system.config.thirdParty;
 
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 

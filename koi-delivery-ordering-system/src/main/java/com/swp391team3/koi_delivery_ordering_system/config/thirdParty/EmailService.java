@@ -1,6 +1,7 @@
-package com.swp391team3.koi_delivery_ordering_system.config.service;
+package com.swp391team3.koi_delivery_ordering_system.config.thirdParty;
 
 import com.swp391team3.koi_delivery_ordering_system.model.*;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.EmailDetailDTO;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class EmailService {
     @Autowired
     JavaMailSender javaMailSender;
 
-    public void sendEmail(EmailDetail emailDetail) {
+    public void sendEmail(EmailDetailDTO emailDetail) {
         try {
             Context context = new Context();
             if(emailDetail.getReceiver() instanceof Customer){
