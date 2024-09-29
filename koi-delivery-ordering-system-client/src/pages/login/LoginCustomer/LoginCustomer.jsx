@@ -58,7 +58,7 @@ function LoginCustomer() {
           </div>
 
           <div className="role__form">
-            <Button onClick={() => handleLogin(1)} variant="contained" style={{ maxWidth: "70%", margin: "auto" }}>
+            <Button className="customer-login-btn" onClick={() => handleLogin(1)} variant="contained" style={{ maxWidth: "70%", margin: "auto" }}>
               Customer
             </Button>
           </div>

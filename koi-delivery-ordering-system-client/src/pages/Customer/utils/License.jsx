@@ -1,6 +1,7 @@
 import { Box, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Calendar } from "react-date-range";
+import CloseIcon from '@mui/icons-material/Close';
 
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -14,7 +15,7 @@ const LicenseCustomBoxContainer = styled(Box)(() => ({
 }));
 
 // eslint-disable-next-line react/prop-types
-const License = ({ handleLicenseChange, handleLicenseSubmit, dateChange }) => {
+const License = ({ handleLicenseChange, dateChange, handleLicenseFormClose }) => {
     const [previewUrl, setPreviewUrl] = useState(null);
     const [file, setFile] = useState();
     const [date, setDate] = useState(null);
@@ -48,7 +49,11 @@ const License = ({ handleLicenseChange, handleLicenseSubmit, dateChange }) => {
     return (
         <LicenseCustomBoxContainer>
             <div className="form-container">
-                <h3>License Information</h3>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <h3>License Information</h3>
+                    <div className="license-close-btn" onClick={handleLicenseFormClose}> <CloseIcon /></div>
+
+                </div>
                 <div className="form">
                     <div className="form-group">
                         <input
@@ -79,7 +84,6 @@ const License = ({ handleLicenseChange, handleLicenseSubmit, dateChange }) => {
                         />
                     </div>
                 </div>
-                <button className="form-button" onClick={handleLicenseSubmit}>Submit</button>
             </div>
             <div>
                 {previewUrl && <img src={previewUrl} alt="Preview" style={{ maxWidth: "40vw" }} />}

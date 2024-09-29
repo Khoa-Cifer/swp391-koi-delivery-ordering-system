@@ -22,32 +22,26 @@ function FishInfo({ orderId, formStepData }) {
     const [file, setFile] = useState();
     const [previewUrl, setPreviewUrl] = useState(null);
 
-    const [licenseFormData, setLicenseFormData] = useState({}); // Manage data for each form
-
-    const [submittedLicense, setSubmittedLicense] = useState();
+    const [submittedLicense, setSubmittedLicense] = useState({});
 
     const handleAddLicenseForm = (e, index) => {
         const { name, value, files } = e.target;
         let newFormData;
-        
+
         if (files) {
             // If there are files (indicating it's a file input), store the file(s) instead of the value
-            newFormData = { ...licenseFormData, [index]: { ...licenseFormData[index], [name]: files[0] } }; // store first file only
+            newFormData = { ...submittedLicense, [index]: { ...submittedLicense[index], [name]: files[0] } }; // store first file only
         } else {
             // Handle regular input fields
-            newFormData = { ...licenseFormData, [index]: { ...licenseFormData[index], [name]: value } };
+            newFormData = { ...submittedLicense, [index]: { ...submittedLicense[index], [name]: value } };
         }
-    
-        setLicenseFormData(newFormData);
-    };
 
-    const handleLicenseSubmit = () => {
-        setSubmittedLicense(licenseFormData);
+        setSubmittedLicense(newFormData);
     };
 
     const handleLicenseDateChange = (e, index) => {
-        const newFormData = { ...licenseFormData, [index]: { ...licenseFormData[index], 'date': e } };
-        setLicenseFormData(newFormData);
+        const newFormData = { ...submittedLicense, [index]: { ...submittedLicense[index], 'date': e } };
+        setSubmittedLicense(newFormData);
     }
 
     const addNewForm = () => {
@@ -82,6 +76,16 @@ function FishInfo({ orderId, formStepData }) {
         formStepData(2);
     }
 
+    const handleLicenseClose = (e, index) => {
+        const filteredLicenseForms = [...licenseForms.slice(0, index), ...licenseForms.slice(index + 1)];
+        setLicenseForms(filteredLicenseForms);
+        setSubmittedLicense((prevData) => {
+            const newData = { ...prevData }; // Create a shallow copy of the previous state
+            delete newData[index]; // Remove the specified index
+            return newData; // Return the updated object
+        });
+    }
+
     async function handleSubmit() {
         const fishData = await createFishOrderInfo(
             fishName,
@@ -94,20 +98,29 @@ function FishInfo({ orderId, formStepData }) {
         );
         const submittedLicenseArray = Object.values(submittedLicense);
 
-        let licenseData;
         if (fishData !== 0) {
-            for (var i = 0; i < submittedLicenseArray.length; i++) {
-                licenseData = await createLicenseOrderInfo(
-                    submittedLicenseArray[i].name,
-                    submittedLicenseArray[i].description,
-                    submittedLicenseArray[i].file,
-                    new Date(submittedLicenseArray[i].date).toISOString(),
-                    fishData
-                )
+            let licenseData;
+
+            if (submittedLicenseArray.length > 0) {
+                for (var i = 0; i < submittedLicenseArray.length; i++) {
+                    console.log(submittedLicenseArray[i]);
+                    licenseData = await createLicenseOrderInfo(
+                        submittedLicenseArray[i].name,
+                        submittedLicenseArray[i].description,
+                        submittedLicenseArray[i].file,
+                        new Date(submittedLicenseArray[i].date).toISOString(),
+                        fishData
+                    )
+                }
+
+                if (licenseData) {
+                    toast("Add Fish and its License to the order successfully");
+                } else {
+                    toast("Unexpected error has been occurred");
+                }
+            } else {
+                toast("Add Fish to the order successfully");
             }
-        }
-        if (licenseData) {
-            toast("Add Fish to the order successfully");
         } else {
             toast("Unexpected error has been occurred");
         }
@@ -211,8 +224,8 @@ function FishInfo({ orderId, formStepData }) {
                 <License
                     key={index}
                     handleLicenseChange={(e) => handleAddLicenseForm(e, index)} // Pass the index to track the form
-                    handleLicenseSubmit={() => handleLicenseSubmit(index)} // Handle submit for the respective form
                     dateChange={(e) => handleLicenseDateChange(e, index)}
+                    handleLicenseFormClose={(e) => handleLicenseClose(e, index)}
                 />
             ))}
         </div>

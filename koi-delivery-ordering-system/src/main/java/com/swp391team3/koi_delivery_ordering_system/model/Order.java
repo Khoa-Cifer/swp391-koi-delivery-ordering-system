@@ -29,6 +29,7 @@ public class Order {
     private String longitude;
     private String latitude;
     private double price;
+    private int usedStatus;
 
     @ManyToOne
     @JoinColumn(name = "storage_id")
