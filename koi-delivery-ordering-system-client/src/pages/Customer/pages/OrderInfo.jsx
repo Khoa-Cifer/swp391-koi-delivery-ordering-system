@@ -5,13 +5,47 @@ import ToastUtil from "../../../components/toastContainer";
 import { toast } from "react-toastify";
 import { CONSTANT_GOOGLE_MAP_API_KEY } from "../../../utils/constants"
 import { createGeneralOrderInfo } from "../../../utils/customers/createOrder";
+import { Calendar } from "react-date-range";
 
 // eslint-disable-next-line react/prop-types
 function OrderInfo({ orderId, formStepData }) {
     const [orderName, setOrderName] = useState("");
     const [orderDescription, setOrderDescription] = useState("");
-    const [receiverAddress, setreceiverAddress] = useState("");
-    const [coordinates, setCoordinates] = useState({ lat: null, lng: null });
+    const [senderAddress, setSenderAddress] = useState("");
+    const [senderCoordinates, setSenderCoordinates] = useState({ lat: null, lng: null });
+    const [receiverAddress, setReceiverAddress] = useState("");
+    const [receiverCoordinates, setReceiverCoordinates] = useState({ lat: null, lng: null });
+    const [expectedFinishDate, setExpectedFinishDate] = useState(null);
+
+    useEffect(() => {
+        const geocodeAddress = () => {
+            if (senderAddress.trim() === '') {
+                return;
+            }
+
+            const geocoder = new window.google.maps.Geocoder();
+
+            geocoder.geocode({ address: senderAddress }, (results, status) => {
+                if (status === 'OK' && results[0]) {
+                    const location = results[0].geometry.location;
+                    setSenderCoordinates({
+                        lat: location.lat(),
+                        lng: location.lng(),
+                    });
+                } else {
+                    setSenderCoordinates({
+                        lat: null,
+                        lng: null,
+                    });
+                }
+            });
+        };
+
+        if (senderAddress.length >= 5) { // Minimal validation for address length
+            geocodeAddress();
+        }
+
+    }, [senderAddress]);
 
     useEffect(() => {
         const geocodeAddress = () => {
@@ -24,12 +58,12 @@ function OrderInfo({ orderId, formStepData }) {
             geocoder.geocode({ address: receiverAddress }, (results, status) => {
                 if (status === 'OK' && results[0]) {
                     const location = results[0].geometry.location;
-                    setCoordinates({
+                    setReceiverCoordinates({
                         lat: location.lat(),
                         lng: location.lng(),
                     });
                 } else {
-                    setCoordinates({
+                    setReceiverCoordinates({
                         lat: null,
                         lng: null,
                     });
@@ -51,10 +85,17 @@ function OrderInfo({ orderId, formStepData }) {
         setOrderDescription(e.target.value);
     }
 
-    const { ref } = usePlacesWidget({
+    const { ref: senderRef } = usePlacesWidget({
         apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
         onPlaceSelected: (place) => {
-            setreceiverAddress(place.formatted_address || "");
+            setSenderAddress(place.formatted_address || "");
+        },
+    });
+
+    const { ref: receiverRef } = usePlacesWidget({
+        apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
+        onPlaceSelected: (place) => {
+            setReceiverAddress(place.formatted_address || "");
         },
     });
 
@@ -68,18 +109,26 @@ function OrderInfo({ orderId, formStepData }) {
                 orderName,
                 orderDescription,
                 receiverAddress,
-                coordinates.lng,
-                coordinates.lat
+                receiverCoordinates.lng,
+                receiverCoordinates.lat,
+                senderAddress,
+                senderCoordinates.lng,
+                senderCoordinates.lat,
+                new Date(expectedFinishDate).toISOString()
             )
             orderId(response);
             if (response) {
                 formStepData(1);
                 toast("Create successfully");
             }
-        // eslint-disable-next-line no-unused-vars
+            // eslint-disable-next-line no-unused-vars
         } catch (e) {
             toast("unexpected error has been occurred")
         }
+    }
+
+    const handleDateChange = (e) => {
+        setExpectedFinishDate(e);
     }
 
     return (
@@ -107,12 +156,25 @@ function OrderInfo({ orderId, formStepData }) {
                     </div>
                     <div className="form-group">
                         <input
+                            placeholder="Sender Address"
                             type="text"
                             name="text"
                             className="form-input"
-                            ref={ref}
+                            ref={senderRef}
                         />
                     </div>
+
+                    <div className="form-group">
+                        <input
+                            placeholder="Destination Address"
+                            type="text"
+                            name="text"
+                            className="form-input"
+                            ref={receiverRef}
+                        />
+                    </div>
+
+                    <Calendar onChange={e => handleDateChange(e)} date={expectedFinishDate} />
 
                     <button onClick={() => handleSubmit()} className="form-button">
                         Submit & Next Step

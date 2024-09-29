@@ -30,10 +30,18 @@ public class OrderServiceImpl implements IOrderService {
         System.out.println(dto.getName());
         newOrder.setName(dto.getName());
         newOrder.setDescription(dto.getDescription());
-        newOrder.setDestinationAddress(dto.getDestinationAddress());
-        newOrder.setLatitude(dto.getLatitude());
-        newOrder.setLongitude(dto.getLongitude());
 
+        newOrder.setDestinationAddress(dto.getDestinationAddress());
+        newOrder.setDestinationLatitude(dto.getDestinationLatitude());
+        newOrder.setDestinationLongitude(dto.getDestinationLongitude());
+
+        newOrder.setSenderAddress(dto.getSenderAddress());
+        newOrder.setSenderLatitude(dto.getSenderLatitude());
+        newOrder.setSenderLongitude(dto.getSenderLongitude());
+
+        newOrder.setExpectedFinishDate(dto.getExpectedFinishDate());
+
+        newOrder.setUsedStatus(0); //0 is not used, 1 is completed
         //Created date
         newOrder.setCreatedDate(new Date());
         Order savedOrder = orderRepository.save(newOrder);

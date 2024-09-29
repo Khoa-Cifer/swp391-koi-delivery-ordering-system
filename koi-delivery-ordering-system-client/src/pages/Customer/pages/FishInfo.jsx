@@ -13,17 +13,17 @@ const CustomBoxContainer = styled(Box)(() => ({
 // eslint-disable-next-line react/prop-types
 function FishInfo({ orderId, formStepData }) {
     const [fishName, setFishName] = useState("");
-    const [fishAge, setFishAge] = useState(0);
-    const [fishSize, setFishSize] = useState(0);
-    const [fishWeight, setFishWeight] = useState(0);
-    const [fishPrice, setFishPrice] = useState(0);
+    const [fishAge, setFishAge] = useState("");
+    const [fishSize, setFishSize] = useState("");
+    const [fishWeight, setFishWeight] = useState("");
+    const [fishPrice, setFishPrice] = useState("");
     const [licenseForms, setLicenseForms] = useState([]); // Manage multiple forms
 
     const [file, setFile] = useState();
     const [previewUrl, setPreviewUrl] = useState(null);
 
     const [submittedLicense, setSubmittedLicense] = useState({});
-
+    const [totalAddedFishes, setTotalAddedFishes] = useState(0);
     const handleAddLicenseForm = (e, index) => {
         const { name, value, files } = e.target;
         let newFormData;
@@ -98,7 +98,7 @@ function FishInfo({ orderId, formStepData }) {
         );
         const submittedLicenseArray = Object.values(submittedLicense);
 
-        if (fishData !== 0) {
+        if (fishData) {
             let licenseData;
 
             if (submittedLicenseArray.length > 0) {
@@ -112,7 +112,7 @@ function FishInfo({ orderId, formStepData }) {
                         fishData
                     )
                 }
-
+                console.log(licenseData);
                 if (licenseData) {
                     toast("Add Fish and its License to the order successfully");
                 } else {
@@ -121,9 +121,19 @@ function FishInfo({ orderId, formStepData }) {
             } else {
                 toast("Add Fish to the order successfully");
             }
+            setSubmittedLicense({});
+            setFishName("");
+            setFishAge("");
+            setFishSize("");
+            setFishWeight("");
+            setFishPrice("");
+            setFile(null);
+            setLicenseForms([]);
+            setTotalAddedFishes(totalAddedFishes + 1);
         } else {
             toast("Unexpected error has been occurred");
         }
+
     }
 
     function handleAgeChange(e) {
@@ -155,6 +165,7 @@ function FishInfo({ orderId, formStepData }) {
                                 type="text"
                                 name="name"
                                 className="form-input"
+                                value={fishName}
                                 onChange={e => handleNameChange(e)}
                             />
                         </div>
@@ -164,6 +175,7 @@ function FishInfo({ orderId, formStepData }) {
                                 type="number"
                                 name="age"
                                 className="form-input"
+                                value={fishAge}
                                 onChange={e => handleAgeChange(e)}
                             />
                         </div>
@@ -173,6 +185,7 @@ function FishInfo({ orderId, formStepData }) {
                                 type="number"
                                 name="size"
                                 className="form-input"
+                                value={fishSize}
                                 onChange={e => handleSizeChange(e)}
                             />
                         </div>
@@ -182,6 +195,7 @@ function FishInfo({ orderId, formStepData }) {
                                 type="number"
                                 name="weight"
                                 className="form-input"
+                                value={fishWeight}
                                 onChange={e => handleWeightChange(e)}
                             />
                         </div>
@@ -191,6 +205,7 @@ function FishInfo({ orderId, formStepData }) {
                                 type="number"
                                 name="price"
                                 className="form-input"
+                                value={fishPrice}
                                 onChange={e => handlePriceChange(e)}
                             />
                         </div>
@@ -209,9 +224,11 @@ function FishInfo({ orderId, formStepData }) {
                             <button className="form-button" onClick={() => addNewForm()}>
                                 Add License
                             </button>
-                            <button className="form-button" onClick={() => handleContinue()}>
-                                Next Step
-                            </button>
+                            {totalAddedFishes > 0 && (
+                                <button className="form-button" onClick={() => handleContinue()}>
+                                    Next Step
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
