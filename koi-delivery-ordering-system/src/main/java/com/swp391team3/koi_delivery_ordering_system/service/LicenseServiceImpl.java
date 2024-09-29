@@ -49,6 +49,7 @@ public class LicenseServiceImpl implements ILicenseService{
         Optional<Fish> foundedFish = fishRepository.findById(request.getFishId());
         newLicense.setFile(uploadedFile);
         newLicense.setFish(foundedFish.get());
+        newLicense.setDateOfIssue(request.getLicenseDateOfIssue());
         licenseRepository.save(newLicense);
         return newLicense;
     }

@@ -2,6 +2,8 @@ import { Box, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import { createFishOrderInfo, createLicenseOrderInfo } from "../../../utils/customers/createOrder";
 import License from "../utils/License";
+import { toast } from "react-toastify";
+import ToastUtil from "../../../components/toastContainer";
 
 const CustomBoxContainer = styled(Box)(() => ({
     display: "flex",
@@ -26,7 +28,6 @@ function FishInfo({ orderId, formStepData }) {
 
     const handleAddLicenseForm = (e, index) => {
         const { name, value, files } = e.target;
-
         let newFormData;
         
         if (files) {
@@ -43,6 +44,11 @@ function FishInfo({ orderId, formStepData }) {
     const handleLicenseSubmit = () => {
         setSubmittedLicense(licenseFormData);
     };
+
+    const handleLicenseDateChange = (e, index) => {
+        const newFormData = { ...licenseFormData, [index]: { ...licenseFormData[index], 'date': e } };
+        setLicenseFormData(newFormData);
+    }
 
     const addNewForm = () => {
         setLicenseForms([...licenseForms, licenseForms.length]); // Add a new form based on its index
@@ -86,21 +92,24 @@ function FishInfo({ orderId, formStepData }) {
             file,
             orderId
         );
-        console.log(fishData);
         const submittedLicenseArray = Object.values(submittedLicense);
 
+        let licenseData;
         if (fishData !== 0) {
             for (var i = 0; i < submittedLicenseArray.length; i++) {
-                console.log('check')
-                const licenseData = await createLicenseOrderInfo(
+                licenseData = await createLicenseOrderInfo(
                     submittedLicenseArray[i].name,
                     submittedLicenseArray[i].description,
                     submittedLicenseArray[i].file,
+                    new Date(submittedLicenseArray[i].date).toISOString(),
                     fishData
-                );
-                console.log(licenseData);
+                )
             }
-
+        }
+        if (licenseData) {
+            toast("Add Fish to the order successfully");
+        } else {
+            toast("Unexpected error has been occurred");
         }
     }
 
@@ -122,6 +131,7 @@ function FishInfo({ orderId, formStepData }) {
 
     return (
         <div>
+            <ToastUtil />
             <CustomBoxContainer>
                 <div className="form-container">
                     <h1>Fish Information</h1>
@@ -202,6 +212,7 @@ function FishInfo({ orderId, formStepData }) {
                     key={index}
                     handleLicenseChange={(e) => handleAddLicenseForm(e, index)} // Pass the index to track the form
                     handleLicenseSubmit={() => handleLicenseSubmit(index)} // Handle submit for the respective form
+                    dateChange={(e) => handleLicenseDateChange(e, index)}
                 />
             ))}
         </div>

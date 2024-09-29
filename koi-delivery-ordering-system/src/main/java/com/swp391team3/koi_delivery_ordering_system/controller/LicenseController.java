@@ -5,6 +5,7 @@ import com.swp391team3.koi_delivery_ordering_system.requestDto.FishLicenseReques
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderFishInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.ILicenseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +25,7 @@ public class LicenseController {
             @RequestParam("licenseName") String licenseName,
             @RequestParam("licenseDescription") String licenseDescription,
             @RequestParam("licenseImage") MultipartFile licenseImage,
+            @RequestParam("licenseDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date licenseDate,
             @RequestParam("fishId") Long fishId
     ) throws IOException {
         FishLicenseRequestDTO request = new FishLicenseRequestDTO();
@@ -31,6 +33,7 @@ public class LicenseController {
         request.setLicenseDescription(licenseDescription);
         request.setLicenseImage(licenseImage);
         request.setFishId(fishId);
+        request.setLicenseDateOfIssue(licenseDate);
         return ResponseEntity.ok(licenseService.createLicenseRelatedToFishId(request));
     }
 

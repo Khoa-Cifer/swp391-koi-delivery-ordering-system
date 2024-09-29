@@ -2,7 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import axiosClient from "../axios";
 
 export async function createGeneralOrderInfo(
-    orderName,
+    name,
     description,
     destinationAddress,
     longitude,
@@ -14,7 +14,7 @@ export async function createGeneralOrderInfo(
         const customerId = customerInfo.sub.substring(2);
         const response = await axiosClient.post("orders/createOrderGeneralData", {
             customerId,
-            orderName,
+            name,
             description,
             destinationAddress,
             longitude,
@@ -60,6 +60,7 @@ export async function createLicenseOrderInfo(
     licenseName,
     licenseDescription,
     licenseImage,
+    licenseDate,
     fishId
 ) {
     try {
@@ -67,6 +68,7 @@ export async function createLicenseOrderInfo(
             licenseName,
             licenseDescription,
             licenseImage,
+            licenseDate,
             fishId
         }, {
             headers: {

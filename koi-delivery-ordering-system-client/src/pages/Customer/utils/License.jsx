@@ -1,5 +1,10 @@
 import { Box, styled } from "@mui/material";
 import { useEffect, useState } from "react";
+import { Calendar } from "react-date-range";
+
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+import './license.scss'
 
 const LicenseCustomBoxContainer = styled(Box)(() => ({
     display: "flex",
@@ -9,9 +14,10 @@ const LicenseCustomBoxContainer = styled(Box)(() => ({
 }));
 
 // eslint-disable-next-line react/prop-types
-const License = ({ handleLicenseChange, handleLicenseSubmit }) => {
+const License = ({ handleLicenseChange, handleLicenseSubmit, dateChange }) => {
     const [previewUrl, setPreviewUrl] = useState(null);
     const [file, setFile] = useState();
+    const [date, setDate] = useState(null);
 
     useEffect(() => {
         if (!file) {
@@ -33,6 +39,11 @@ const License = ({ handleLicenseChange, handleLicenseSubmit }) => {
             setFile(e.target.files[0]);
         }
     };
+
+    const handleDateChange = (e) => {
+        setDate(e);
+        dateChange(e);
+    }
 
     return (
         <LicenseCustomBoxContainer>
@@ -57,6 +68,8 @@ const License = ({ handleLicenseChange, handleLicenseSubmit }) => {
                             onChange={handleLicenseChange}
                         />
                     </div>
+                    <Calendar onChange={e => handleDateChange(e)} date={date} />
+
                     <div className="form-group">
                         <input
                             type="file"

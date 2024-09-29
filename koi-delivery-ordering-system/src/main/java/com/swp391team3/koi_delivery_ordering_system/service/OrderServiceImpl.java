@@ -27,12 +27,15 @@ public class OrderServiceImpl implements IOrderService {
         Order newOrder = new Order();
         Optional<Customer> orderCreator = customerRepository.findById(dto.getCustomerId());
         newOrder.setCustomer(orderCreator.get());
-//        newOrder.setOrderStatus(orderStatus.PREPARING);
+        System.out.println(dto.getName());
         newOrder.setName(dto.getName());
         newOrder.setDescription(dto.getDescription());
         newOrder.setDestinationAddress(dto.getDestinationAddress());
         newOrder.setLatitude(dto.getLatitude());
         newOrder.setLongitude(dto.getLongitude());
+
+        //Created date
+        newOrder.setCreatedDate(new Date());
         Order savedOrder = orderRepository.save(newOrder);
         //return order's id for next step
         return savedOrder.getId();
