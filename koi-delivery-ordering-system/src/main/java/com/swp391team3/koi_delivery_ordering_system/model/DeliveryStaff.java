@@ -38,9 +38,9 @@ public class DeliveryStaff implements UserDetails {
     @JoinColumn(name = "avatar_id", referencedColumnName = "id")
     private File file;
 
-    @OneToMany(mappedBy = "driver")
-    @JsonIgnore
-    private Set<Order> drivers;
+//    @OneToMany(mappedBy = "driver")
+//    @JsonIgnore
+//    private Set<Order> drivers;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
