@@ -15,12 +15,8 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Use a lightweight server to serve the app
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-
 # Expose the port
-EXPOSE 80
+EXPOSE 5173
 
 # Start nginx server
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "run", "dev"]
