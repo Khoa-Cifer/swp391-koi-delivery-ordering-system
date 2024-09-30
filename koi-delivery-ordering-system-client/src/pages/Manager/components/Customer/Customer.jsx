@@ -19,7 +19,9 @@ function Customer() {
 
     return (
         <div>
-            <Button variant="contained" style={{ maxWidth: "30%" }}>Create New Customer</Button>
+            <div style={{ display: "flex", justifyContent: "flex-end", marginRight: "30px" }}>
+                <Button variant="contained" style={{ maxWidth: "30%" }}>Create New Customer</Button>
+            </div>
 
             <TableContainer component={Paper} style={{ marginTop: "25px" }}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
