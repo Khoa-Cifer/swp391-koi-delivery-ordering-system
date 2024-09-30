@@ -16,29 +16,39 @@ const LicenseCustomBoxContainer = styled(Box)(() => ({
 
 // eslint-disable-next-line react/prop-types
 const License = ({ handleLicenseChange, dateChange, handleLicenseFormClose }) => {
-    const [previewUrl, setPreviewUrl] = useState(null);
-    const [file, setFile] = useState();
+    const [previewUrls, setPreviewUrls] = useState(null);
     const [date, setDate] = useState(null);
+    const [fileInputs, setFileInputs] = useState([{ id: 1, file: null }]);
 
     useEffect(() => {
-        if (!file) {
-            return;
-        }
+        const filePreviews = fileInputs.map((input) => {
+            if (!input.file) return null;
 
-        const reader = new FileReader();
+            const reader = new FileReader();
+            reader.readAsDataURL(input.file);
 
-        reader.onloadend = () => {
-            setPreviewUrl(reader.result);
-        }
+            return new Promise((resolve) => {
+                reader.onloadend = () => {
+                    resolve(reader.result);
+                };
+            });
+        });
 
-        reader.readAsDataURL(file);
-    }, [file]);
+        Promise.all(filePreviews).then((results) => {
+            setPreviewUrls(results.filter(Boolean));
+        });
+    }, [fileInputs]);
 
-    const handleFileChange = (e) => {
+    const handleFileChange = (e, index) => {
+        const file = e.target.files[0];
+        const updatedFileInputs = [...fileInputs];
+        updatedFileInputs[index].file = file;
+        setFileInputs(updatedFileInputs);
         handleLicenseChange(e);
-        if (e.target.files) {
-            setFile(e.target.files[0]);
-        }
+    };
+
+    const addFileInput = () => {
+        setFileInputs([...fileInputs, { id: fileInputs.length + 1, file: null }]);
     };
 
     const handleDateChange = (e) => {
@@ -75,18 +85,26 @@ const License = ({ handleLicenseChange, dateChange, handleLicenseFormClose }) =>
                     </div>
                     <Calendar onChange={e => handleDateChange(e)} date={date} />
 
-                    <div className="form-group">
-                        <input
-                            type="file"
-                            name="file"
-                            className="form-input"
-                            onChange={e => handleFileChange(e)}
-                        />
-                    </div>
+
+                    {fileInputs && fileInputs.map && fileInputs.map((input, index) => (
+                        <div className="form-group" key={input.id}>
+                            <input
+                                type="file"
+                                name={`file-${input.id}`}
+                                className="form-input"
+                                onChange={e => handleFileChange(e, index)}
+                            />
+                        </div>
+                    ))}
+                    <button className="form-button" type="button" onClick={addFileInput}>
+                        Add Another File
+                    </button>
                 </div>
             </div>
             <div>
-                {previewUrl && <img src={previewUrl} alt="Preview" style={{ maxWidth: "40vw" }} />}
+                {previewUrls && previewUrls.map && previewUrls.map((url, index) => (
+                    <img key={index} src={url} alt={`Preview ${index + 1}`} style={{ width: '200px', height: '200px' }} />
+                ))}
             </div>
         </LicenseCustomBoxContainer>
     );
