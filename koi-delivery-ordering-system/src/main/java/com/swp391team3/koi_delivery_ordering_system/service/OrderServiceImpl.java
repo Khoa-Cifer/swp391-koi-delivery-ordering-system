@@ -22,17 +22,27 @@ public class OrderServiceImpl implements IOrderService {
     private final CustomerRepository customerRepository;
     private final OrderStatus orderStatus;
 
-    @Override
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
         Order newOrder = new Order();
         Optional<Customer> orderCreator = customerRepository.findById(dto.getCustomerId());
         newOrder.setCustomer(orderCreator.get());
-//        newOrder.setOrderStatus(orderStatus.PREPARING);
+        System.out.println(dto.getName());
         newOrder.setName(dto.getName());
         newOrder.setDescription(dto.getDescription());
+
         newOrder.setDestinationAddress(dto.getDestinationAddress());
-        newOrder.setLatitude(dto.getLatitude());
-        newOrder.setLongitude(dto.getLongitude());
+        newOrder.setDestinationLatitude(dto.getDestinationLatitude());
+        newOrder.setDestinationLongitude(dto.getDestinationLongitude());
+
+        newOrder.setSenderAddress(dto.getSenderAddress());
+        newOrder.setSenderLatitude(dto.getSenderLatitude());
+        newOrder.setSenderLongitude(dto.getSenderLongitude());
+
+        newOrder.setExpectedFinishDate(dto.getExpectedFinishDate());
+
+        newOrder.setOrderStatus(orderStatus.DRAFT); //0 is not used, 1 is completed
+        //Created date
+        newOrder.setCreatedDate(new Date());
         Order savedOrder = orderRepository.save(newOrder);
         //return order's id for next step
         return savedOrder.getId();

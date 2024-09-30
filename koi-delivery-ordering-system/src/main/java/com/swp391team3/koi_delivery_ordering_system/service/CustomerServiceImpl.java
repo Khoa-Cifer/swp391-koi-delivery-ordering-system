@@ -1,6 +1,8 @@
 package com.swp391team3.koi_delivery_ordering_system.service;
 
+import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailService;
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.EmailDetailDTO;
 import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class CustomerServiceImpl implements ICustomerService {
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @Override
     public String customerRegister(String email, String password, String username, String phoneNumber) {
@@ -33,6 +36,13 @@ public class CustomerServiceImpl implements ICustomerService {
         newCustomer.setPhoneNumber(phoneNumber);
 
         customerRepository.save(newCustomer);
+        //mail sending
+        EmailDetailDTO emailDetail = new EmailDetailDTO();
+        emailDetail.setReceiver((Object) newCustomer);
+        emailDetail.setSubject("Welcome to KOI DELIVERY SYSTEM! We're glad you're here");
+        emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
+        emailService.sendEmail(emailDetail);
+
         return "Register successfully";
     }
 

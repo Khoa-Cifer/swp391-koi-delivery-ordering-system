@@ -1,5 +1,6 @@
 import "./content.scss";
-function Content() {
+
+function HomeContent() {
   const newsData = [
     {
       category: "ECOMMERCE",
@@ -254,4 +255,4 @@ function Content() {
   );
 }
 
-export default Content;
+export default HomeContent;

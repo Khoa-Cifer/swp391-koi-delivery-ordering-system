@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface FileRepository extends JpaRepository<File, Long>, CrudRepository<File, Long> {
+public interface FileRepository extends JpaRepository<File, Long>{
     Optional<File> findByName(String fileName);
 
     @Query("SELECT i.name FROM File i")
