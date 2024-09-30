@@ -5,6 +5,7 @@ import Sidebar from "./layout/Sidebar";
 import Customer from "./components/Customer/Customer";
 import DeliveryStaff from "./components/DeliveryStaff/DeliveryStaff";
 import { List, ListItem, ListItemText } from "@mui/material";
+import Storage from "./components/Storage/Storage";
 
 function Admin() {
   const [selectedDataType, setSelectedDataType] = useState('');
@@ -44,7 +45,7 @@ function Admin() {
       case 'Delivery Type':
         return <p>Delivery Type Body Loaded</p>;
       case 'Storage':
-        return <p>Storage Body Loaded</p>;
+        return <Storage />;
     }
   }
 

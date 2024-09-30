@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/admin/manager")
+@RequestMapping("/api/manager")
 public class ManagerController {
     private final IManagerService managerService;
 

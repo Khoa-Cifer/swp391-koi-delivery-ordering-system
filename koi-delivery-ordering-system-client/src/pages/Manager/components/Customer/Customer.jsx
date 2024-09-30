@@ -7,7 +7,6 @@ function Customer() {
 
     async function fetchCustomers() {
         let fetchedData = await getAllCustomers();
-        console.log(fetchedData);
         if (fetchedData) {
             setCustomerData(fetchedData);
         }

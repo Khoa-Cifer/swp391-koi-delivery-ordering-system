@@ -16,7 +16,6 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-
 public class LicenseServiceImpl implements ILicenseService{
     private final LicenseRepository licenseRepository;
     private final IFileService fileService;
