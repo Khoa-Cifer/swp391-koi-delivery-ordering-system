@@ -1,11 +1,12 @@
 import { Box, Button, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import 'react-toastify/dist/ReactToastify.css';
 import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";
 import { usePlacesWidget } from "react-google-autocomplete";
 import { CONSTANT_GOOGLE_MAP_API_KEY } from "../../../../utils/constants";
 import { createStorage, getAllStorages } from "../../../../utils/admin/storage";
+import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 
 function Storage() {
     const [storageData, setStorageData] = useState([]);
@@ -13,6 +14,8 @@ function Storage() {
     const [name, setName] = useState("");
     const [address, setAddress] = useState("");
     const [coordinates, setCoordinates] = useState({ lat: null, lng: null });
+
+    const [map, setMap] = useState(null)
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
@@ -49,16 +52,14 @@ function Storage() {
         if (fetchedData) { setStorageData(fetchedData) };
     }
 
-    const { ref } = usePlacesWidget({
-        apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
-        onPlaceSelected: (place) => {
-            setAddress(place.formatted_address || "");
-        },
-    });
-
     useEffect(() => {
         fetchStorageData();
     }, []);
+
+    const { isLoaded } = useJsApiLoader({
+        id: 'google-map-script',
+        googleMapsApiKey: CONSTANT_GOOGLE_MAP_API_KEY
+    })
 
     const modalStyle = {
         position: 'absolute',
@@ -70,7 +71,6 @@ function Storage() {
         boxShadow: 24,
         p: 4,
         borderRadius: 2,
-        zIndex: 1300, // Ensure modal is on top
     };
 
     async function handleCreateStorage() {
@@ -86,7 +86,29 @@ function Storage() {
         handleClose();
     }
 
-    return (
+    const containerStyle = {
+        width: '400px',
+        height: '400px'
+    };
+
+    const center = {
+        lat: -3.745,
+        lng: -38.523
+    };
+
+    const onLoad = useCallback(function callback(map) {
+        // This is just an example of getting and using the map instance!!! don't just blindly copy!
+        const bounds = new window.google.maps.LatLngBounds(center);
+        map.fitBounds(bounds);
+
+        setMap(map)
+    }, [])
+
+    const onUnmount = useCallback(function callback(map) {
+        setMap(null)
+    }, [])
+
+    return isLoaded && (
         <div>
             <ToastUtil />
             <div className={open ? 'blur' : ''}>
@@ -111,10 +133,9 @@ function Storage() {
                                 name="text"
                                 onChange={(e) => setName(e.target.value)}
                                 className="form-input"
-                                ref={ref}
                             />
                         </div>
-                        <div className="form-group">
+                        {/* <div className="form-group">
                             <input
                                 style={{
                                     width: "100%",
@@ -127,7 +148,17 @@ function Storage() {
                                 className="form-input"
                                 ref={ref}
                             />
-                        </div>
+                        </div> */}
+                        <GoogleMap
+                            mapContainerStyle={containerStyle}
+                            center={center}
+                            zoom={10}
+                            onLoad={onLoad}
+                            onUnmount={onUnmount}
+                        >
+                            { /* Child components, such as markers, info windows, etc. */}
+                            <></>
+                        </GoogleMap>
                         <Button
                             variant="contained"
                             color="primary"
