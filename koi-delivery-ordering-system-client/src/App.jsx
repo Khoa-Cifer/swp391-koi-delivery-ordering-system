@@ -29,12 +29,12 @@ function App() {
             <Route path="/login-sales-staff" element={<LoginSaleStaff />} />
             <Route path="/login-delivery-staff" element={<LoginDeliveryStaff />} />
 
-            <Route path="/admin" element={
+            {/* <Route path="/admin" element={
               <PrivateRoute allowedRoles={4}>
                 <Admin />
               </PrivateRoute>
-            } />
-            {/* <Route path="/admin" element={<Admin />} /> */}
+            } /> */}
+            <Route path="/admin" element={<Admin />} />
             <Route path="/delivery-staff" element={
               <PrivateRoute allowedRoles={3}>
                 <DeliveryStaff />
