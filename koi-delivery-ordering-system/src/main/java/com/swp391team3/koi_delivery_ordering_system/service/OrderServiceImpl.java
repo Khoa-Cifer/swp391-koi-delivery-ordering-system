@@ -5,12 +5,14 @@ import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepositor
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderFishInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.utils.LocationUtil;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +23,7 @@ public class OrderServiceImpl implements IOrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
     private final OrderStatus orderStatus;
+    private final IStorageService storageService;
 
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
         Order newOrder = new Order();
@@ -61,5 +64,35 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public void deleteOrderById(Long id) {
         orderRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<Order> filterOrderToStorage(Long id) {
+        Optional<Order> foundedOrder = getOrderById(id);
+        List<Storage> allStorages = storageService.getAllStorages();
+
+        double minDistance = Double.MAX_VALUE;
+        Storage nearestStorage = null;
+
+        for (int index = 0; index < allStorages.size(); index++) {
+            double orderLat = Double.parseDouble(foundedOrder.get().getSenderLatitude());
+            double orderLong = Double.parseDouble(foundedOrder.get().getSenderLongitude());
+            double storageLat = Double.parseDouble(allStorages.get(index).getLatitude());
+            double storageLong = Double.parseDouble(allStorages.get(index).getLongitude());
+            double distance = LocationUtil.calculateDistance(
+                orderLat, orderLong, storageLat, storageLong);
+            if (distance <= 50) {
+                if (minDistance > distance) {
+                    minDistance = distance;
+                    nearestStorage = allStorages.get(index);
+                }
+            }
+        }
+
+        if (nearestStorage != null) {
+            foundedOrder.get().setStorage(nearestStorage);
+            orderRepository.save(foundedOrder.get());
+        }
+        return foundedOrder;
     }
 }

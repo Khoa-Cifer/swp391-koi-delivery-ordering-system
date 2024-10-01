@@ -1,12 +1,6 @@
 package com.swp391team3.koi_delivery_ordering_system.utils;
 
-import com.swp391team3.koi_delivery_ordering_system.model.Order;
-
-import java.util.List;
-
 public class LocationUtil {
-//    public static List<Order> filterOrderByLocation(String destinationLongitude, String destinationLatitude, String senderLongitude, String senderLatitude)
-
     private static final double R = 6371.0;
 
     // Method to calculate distance between two lat/long points using Haversine formula
