@@ -1,6 +1,30 @@
+import { useState } from "react";
 import "./LoginDeliveryStaff.scss";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../authentication/AuthProvider";
 
 function LoginDelivery() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const auth = useAuth();
+
+  function handleEmailChange(e) {
+    setEmail(e.target.value);
+  }
+
+  function handlePasswordChange(e) {
+    setPassword(e.target.value);
+  }
+
+  async function handleLogin(roleId) {
+    const data = await userLogin(email, password, roleId);
+    if (data) {
+      auth.handleLogin(data);
+      navigate("/customer-home");
+    }
+  }
+
   return (
     <div className="login-delivery-container">
       <div className="card">
