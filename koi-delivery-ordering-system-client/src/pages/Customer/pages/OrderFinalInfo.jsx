@@ -1,9 +1,19 @@
-import { Box, Grid, TextField, Typography } from "@mui/material";
+import { Box, Grid, ListItem, ListItemText, TextField, Typography } from "@mui/material";
 import ToastUtil from "../../../components/toastContainer";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { getOrderById } from "../../../utils/customers/getOrder";
 import dateTimeConvert from "../../../components/utils";
 import { getFishesByOrderId } from "../../../utils/customers/getFish";
+import TextArea from "antd/es/input/TextArea";
+
+const commonStyles = {
+    bgcolor: 'background.paper',
+    borderColor: 'text.primary',
+    m: 1,
+    border: 1,
+    width: '100%',
+    height: '15rem',
+};
 
 // eslint-disable-next-line react/prop-types
 function OrderFinalInfo({ orderId }) {
@@ -13,8 +23,6 @@ function OrderFinalInfo({ orderId }) {
     useEffect(async () => {
         const postedOrder = await getOrderById(orderId);
         setPostedData(postedOrder);
-        // const fishOrder = await getFishesByOrderId(orderId);
-        // setFishOrderData(fishOrder);
         console.log(postedOrder);
     }, [])
 
@@ -27,7 +35,7 @@ function OrderFinalInfo({ orderId }) {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
-                                label="First Name"
+                                label="Create Date"
                                 value={dateTimeConvert(postedData.createdDate)}
                                 InputProps={{
                                     readOnly: true,
@@ -38,8 +46,8 @@ function OrderFinalInfo({ orderId }) {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
-                                label="Last Name"
-                                value={postedData.destinationAddress}
+                                label="Expect Finish Date"
+                                value={dateTimeConvert(postedData.expectedFinishDate)}
                                 InputProps={{
                                     readOnly: true,
                                 }}
@@ -49,7 +57,7 @@ function OrderFinalInfo({ orderId }) {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
-                                label="Email"
+                                label="Sender Address"
                                 value={postedData.senderAddress}
                                 InputProps={{
                                     readOnly: true,
@@ -60,13 +68,48 @@ function OrderFinalInfo({ orderId }) {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
-                                label="Phone"
-                                value={dateTimeConvert(postedData.expectedFinishDate)}
+                                label="Receive Address"
+                                value={postedData.destinationAddress}
                                 InputProps={{
                                     readOnly: true,
                                 }}
                             />
                         </Grid>
+
+
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                fullWidth
+                                label="Order Name"
+                                value={postedData.name}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                fullWidth
+                                label="Tracking Id"
+                                value={postedData.trackingId}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} sm={12}>
+                            <TextArea
+                                fullWidth
+                                label="Description"
+                                value={postedData.description}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </Grid>
+                   
                     </Grid>
                     {fishOrderData && fishOrderData.length > 0 && fishOrderData.map && fishOrderData.map((fish, index) => (
                         <Box key={index}>

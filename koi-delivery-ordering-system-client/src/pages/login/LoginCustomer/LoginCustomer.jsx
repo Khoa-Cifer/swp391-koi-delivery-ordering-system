@@ -4,6 +4,8 @@ import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../authentication/AuthProvider";
 import { userLogin } from "../../../utils/customers/user";
+import { toast } from "react-toastify";
+import ToastUtil from "../../../components/toastContainer";
 
 function LoginCustomer() {
   const [email, setEmail] = useState("");
@@ -22,12 +24,15 @@ function LoginCustomer() {
     const data = await userLogin(email, password, roleId);
     if (data) {
       auth.handleLogin(data);
-      navigate("/customer-home");
+      navigate("/");
+    } else {
+      toast("Invalid username or password");
     }
   }
 
   return (
     <div className="login">
+      <ToastUtil />
       <div className="wraper">
         <div className="login__form">
           <h3 className="text-center">

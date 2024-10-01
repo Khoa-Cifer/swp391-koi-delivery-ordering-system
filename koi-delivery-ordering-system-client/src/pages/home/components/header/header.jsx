@@ -3,11 +3,14 @@ import "./header.scss";
 import { useEffect, useState } from "react";
 import { Button, Popover } from "@mui/material";
 import logo from '../../../../assets/logo.png';
+import { useAuth } from "../../../../authentication/AuthProvider";
+import { jwtDecode } from "jwt-decode";
 // import {  Grid} from "antd";
 function Header() {
   const [customerUsername, setCustomerUsername] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
+  const auth = useAuth();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -18,21 +21,22 @@ function Header() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('userData');
+    auth.handleLogout();
     window.location.reload();
   }
 
   const handleService = () => {
-    if (localStorage.getItem('userData')) {
+    if (localStorage.getItem('token')) {
       navigate("/customer-home");
     }
   }
 
   useEffect(() => {
-    const customerDataFromLocalStorage = localStorage.getItem('userData');
-    if (customerDataFromLocalStorage) {
-      const parsedData = JSON.parse(customerDataFromLocalStorage);
-      setCustomerUsername(parsedData.username);
+    const token = localStorage.getItem("token");
+    const user = token ? jwtDecode(token) : null;
+    console.log(user);
+    if (user) {
+      setCustomerUsername(user.userData.username);
     };
   }, []);
 

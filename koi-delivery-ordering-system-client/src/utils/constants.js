@@ -1,1 +1,1 @@
-export const CONSTANT_GOOGLE_MAP_API_KEY = import.meta.env.GOOGLE_MAP_API_KEY
+export const CONSTANT_GOOGLE_MAP_API_KEY = "AIzaSyAXVVX57lXbBHX8KWqqCPpo5HOQXhzx3kc";

@@ -1,7 +1,12 @@
 package com.swp391team3.koi_delivery_ordering_system.utils;
 
-public class LocationUtil {
+public class Utilities {
     private static final double R = 6371.0;
+    private static final int CODE_LENGTH = 6; // Total length of numeric part
+
+    public static String generateOrderCode(String prefix, Long orderId) {
+        return prefix + String.format("%0" + CODE_LENGTH + "d", orderId);
+    }
 
     // Method to calculate distance between two lat/long points using Haversine formula
     public static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
