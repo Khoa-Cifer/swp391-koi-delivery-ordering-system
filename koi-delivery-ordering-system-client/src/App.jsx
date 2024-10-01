@@ -3,7 +3,7 @@ import Home from "./pages/home/Home";
 import SignUp from "./pages/register/register";
 import Admin from "./pages/Manager/Admin";
 import Customer from "./pages/Customer/Customer";
-import EditCustomerProfile from "./pages/Customer/pages/EditCustomerProfile";
+import EditCustomerProfile from "./pages/Customer/components/EditCustomerProfile";
 import DeliveryStaff from "./pages/DeliveryStaff/home_delivery/delivery_staff/DeliveryStaff";
 import AuthProvider from "./authentication/AuthProvider";
 import PrivateRoute from "./authentication/PrivateRoute";
@@ -16,6 +16,7 @@ import DeliveryOrderList from "./pages/DeliveryStaff/delivery_order_list/Deliver
 import DeliveryOrderDetail from "./pages/DeliveryStaff/delivery_order_detail/DeliveryOrderDetail";
 import DeliveryFishDetail from "./pages/DeliveryStaff/delivery_fish_detail/DeliveryFishDetail";
 import LoginAdmin from "./pages/login/LoginAdmin/LoginAdmin";
+import Sales_staff_home from "./pages/SalesStaff/SalesStaffHome/Sales_staff_home";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="/login-customer" element={<LoginCustomer />} />
             <Route path="/login-sales-staff" element={<LoginSaleStaff />} />
             <Route path="/login-delivery-staff" element={<LoginDeliveryStaff />} />
+            <Route path="/login-admin" element={<LoginAdmin />} />
 
             {/* <Route path="/admin" element={
               <PrivateRoute allowedRoles={4}>
@@ -56,7 +58,9 @@ function App() {
             <Route path="/delivery-order-list" element={<DeliveryOrderList />} />
             <Route path="/delivery-order-detail" element={<DeliveryOrderDetail />} />
             <Route path="/delivery-fish-detail" element={<DeliveryFishDetail />} />
-            <Route path="/login-admin" element={<LoginAdmin />} />
+           
+            <Route path="/sales-staff-home" element={<Sales_staff_home />} />
+
           </Routes>
         </Router>
       </main>
