@@ -32,10 +32,10 @@ public class Fish {
     private File file;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     @OneToMany(mappedBy = "fish")
-    @JsonIgnore
     private Set<License> licenses;
 }

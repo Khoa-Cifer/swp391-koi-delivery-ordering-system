@@ -51,9 +51,9 @@ function DeliveryStaff() {
         <div>
             <ToastUtil />
             <div className={open ? 'blur' : ''}>
-                <Button variant="contained" style={{ maxWidth: "30%" }} onClick={handleOpen}>
-                    Create New Delivery Staff
-                </Button>
+                <div style={{ display: "flex", justifyContent: "flex-end", marginRight: "30px" }}>
+                    <Button onClick={handleOpen} variant="contained" style={{ maxWidth: "30%" }}>Create New Delivery Staff</Button>
+                </div>
                 <Modal
                     open={open}
                     onClose={handleClose}

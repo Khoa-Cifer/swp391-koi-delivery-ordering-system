@@ -1,8 +1,8 @@
 import axiosClient from "../axios";
 
-export async function getAllCustomers() {
+export async function getOrderById(orderId) {
     try {
-        const response = await axiosClient.get("customer/getAllCustomer");
+        const response = await axiosClient.get(`orders/getOrderById/${orderId}`);
         return response.data;
     } catch (error) {
         console.log(error);

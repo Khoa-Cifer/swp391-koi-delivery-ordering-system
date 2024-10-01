@@ -37,11 +37,11 @@ public class CustomerServiceImpl implements ICustomerService {
 
         customerRepository.save(newCustomer);
         //mail sending
-        EmailDetailDTO emailDetail = new EmailDetailDTO();
-        emailDetail.setReceiver((Object) newCustomer);
-        emailDetail.setSubject("Welcome to KOI DELIVERY SYSTEM! We're glad you're here");
-        emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
-        emailService.sendEmail(emailDetail);
+//        EmailDetailDTO emailDetail = new EmailDetailDTO();
+//        emailDetail.setReceiver((Object) newCustomer);
+//        emailDetail.setSubject("Welcome to KOI DELIVERY SYSTEM! We're glad you're here");
+//        emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
+//        emailService.sendEmail(emailDetail);
 
         return "Register successfully";
     }

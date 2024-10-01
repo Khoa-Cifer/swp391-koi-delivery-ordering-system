@@ -4,6 +4,8 @@ import com.swp391team3.koi_delivery_ordering_system.model.Fish;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderFishInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IFishService;
 import lombok.RequiredArgsConstructor;
+import okhttp3.Response;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,6 +45,11 @@ public class FishController {
         request.setFishImage(fishImage);
         request.setOrderId(orderId);
         return fishService.createFishByOrderId(request);
+    }
+
+    @GetMapping("/getFishByOrderId/{orderId}")
+    public ResponseEntity<List<Fish>> getFishesByOrderId(@PathVariable("orderId") Long orderId) {
+        return ResponseEntity.ok(fishService.getFishesByOrderId(orderId));
     }
 
     @GetMapping("/getFishById")

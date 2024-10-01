@@ -4,6 +4,8 @@ import Header from "./layout/Header";
 import Sidebar from "./layout/Sidebar";
 import Customer from "./components/Customer/Customer";
 import DeliveryStaff from "./components/DeliveryStaff/DeliveryStaff";
+import { List, ListItem, ListItemText } from "@mui/material";
+import Storage from "./components/Storage/Storage";
 
 function Admin() {
   const [selectedDataType, setSelectedDataType] = useState('');
@@ -42,25 +44,30 @@ function Admin() {
         return <p>License Type Body Loaded</p>;
       case 'Delivery Type':
         return <p>Delivery Type Body Loaded</p>;
+      case 'Storage':
+        return <Storage />;
     }
   }
 
   return (
     <div className="admin-container">
       <div className="admin-container-left">
-        <div className="logo">Logo</div>
 
         <div>
           <hr></hr>
         </div>
 
         <div className="dashboard">
-          <h4>DASHBOARD</h4>
+          <p style={{ margin: "0" }}>DASHBOARD</p>
         </div>
 
         <div className="admin-users">
           <h4>ADMIN USERS</h4>
-          <div className="admin-info">Admin users</div>
+          <List>
+            <ListItem button key={'check'}>
+              <ListItemText primary={'text'} />
+            </ListItem>
+          </List>
         </div>
 
         <div className="modules">
@@ -76,7 +83,7 @@ function Admin() {
         <Header />
 
         <div className="dashboard-info">
-          <h2>DASHBOARD</h2>
+          <h2 style={{ marginTop: "0" }}>DASHBOARD</h2>
         </div>
         <p>Selected Data Type: {selectedDataType}</p>
         {renderContent()}

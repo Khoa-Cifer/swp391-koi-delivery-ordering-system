@@ -1,6 +1,6 @@
 import { Box, styled } from "@mui/material";
 import { useEffect, useState } from "react";
-import { createFishOrderInfo, createLicenseOrderInfo } from "../../../utils/customers/createOrder";
+import { createFishOrderInfo, createLicenseFiles, createLicenseOrderInfo } from "../../../utils/customers/createOrder";
 import License from "../utils/License";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../components/toastContainer";
@@ -48,7 +48,7 @@ function FishInfo({ orderId, formStepData }) {
         setLicenseForms([...licenseForms, licenseForms.length]); // Add a new form based on its index
     };
 
-    const handleFileChange = (e) => {
+    const handleFishFileChange = (e) => {
         if (e.target.files) {
             setFile(e.target.files[0]);
         }
@@ -103,16 +103,25 @@ function FishInfo({ orderId, formStepData }) {
 
             if (submittedLicenseArray.length > 0) {
                 for (var i = 0; i < submittedLicenseArray.length; i++) {
-                    console.log(submittedLicenseArray[i]);
                     licenseData = await createLicenseOrderInfo(
                         submittedLicenseArray[i].name,
                         submittedLicenseArray[i].description,
-                        submittedLicenseArray[i].file,
                         new Date(submittedLicenseArray[i].date).toISOString(),
                         fishData
                     )
+                    const fileList = Object.keys(submittedLicenseArray[i])
+                        .filter(key => key.startsWith("file-"))  // Filter keys that start with "file-"
+                        .map(key => submittedLicenseArray[i][key]);  // Map them to their respective values
+                    try {
+                        const licenseFiles = await createLicenseFiles(
+                            licenseData,
+                            fileList
+                        )
+                    } catch (error) {
+                        console.log(error);
+                        toast("Unexpected error has been occurred");
+                    }
                 }
-                console.log(licenseData);
                 if (licenseData) {
                     toast("Add Fish and its License to the order successfully");
                 } else {
@@ -214,7 +223,7 @@ function FishInfo({ orderId, formStepData }) {
                                 type="file"
                                 name="file"
                                 className="form-input"
-                                onChange={e => handleFileChange(e)}
+                                onChange={e => handleFishFileChange(e)}
                             />
                         </div>
                         <div style={{ display: "flex", gap: "10px" }}>
@@ -237,7 +246,7 @@ function FishInfo({ orderId, formStepData }) {
                 </div>
             </CustomBoxContainer>
 
-            {licenseForms.map((form, index) => (
+            {licenseForms.map((index) => (
                 <License
                     key={index}
                     handleLicenseChange={(e) => handleAddLicenseForm(e, index)} // Pass the index to track the form

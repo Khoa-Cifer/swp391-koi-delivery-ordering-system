@@ -18,11 +18,6 @@ function LoginCustomer() {
     setPassword(e.target.value);
   }
 
-  // async function handleLogin() {
-  //   console.log(userType);
-  //   // const data = await userLogin(email, password);
-  // }
-
   async function handleLogin(roleId) {
     const data = await userLogin(email, password, roleId);
     if (data) {

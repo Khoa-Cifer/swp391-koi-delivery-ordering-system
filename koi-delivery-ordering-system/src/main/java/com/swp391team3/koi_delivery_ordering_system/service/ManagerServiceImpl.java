@@ -3,6 +3,8 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestRegisterDTO;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ManagerServiceImpl implements IManagerService{
     private final ManagerRepository managerRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<Manager> getAllManager() {
@@ -42,5 +45,41 @@ public class ManagerServiceImpl implements IManagerService{
     @Override
     public void deleteManagerById(Long id) {
         managerRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean managerLogin(String email, String password) {
+        Manager matchedManager = getManagerByEmail(email);
+        if (matchedManager != null) {
+            if (passwordEncoder.matches(password, matchedManager.getPassword())) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String createNewManager(UserRequestRegisterDTO request) {
+        Manager newManager = new Manager();
+        boolean emailDuplicatedCheck = managerRepository.existsByEmail(request.getEmail());
+
+        if (emailDuplicatedCheck) {
+            return "This email already exists";
+        }
+
+        newManager.setEmail(request.getEmail());
+        newManager.setPhoneNumber(request.getPhoneNumber());
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        newManager.setPassword(encodedPassword);
+        newManager.setUsername(request.getUsername());
+        managerRepository.save(newManager);
+        return "Account create successfully";
+    }
+
+    @Override
+    public Manager getManagerByEmail(String email) {
+        return managerRepository.findByEmail(email);
     }
 }

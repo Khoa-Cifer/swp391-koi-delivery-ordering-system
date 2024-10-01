@@ -55,6 +55,7 @@ function OrderInfo({ orderId, formStepData }) {
 
             const geocoder = new window.google.maps.Geocoder();
 
+            //Đổi toạ độ
             geocoder.geocode({ address: receiverAddress }, (results, status) => {
                 if (status === 'OK' && results[0]) {
                     const location = results[0].geometry.location;

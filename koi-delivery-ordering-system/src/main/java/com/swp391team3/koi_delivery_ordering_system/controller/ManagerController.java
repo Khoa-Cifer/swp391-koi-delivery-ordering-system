@@ -1,6 +1,7 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.Manager;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestRegisterDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IManagerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/admin/manager")
+@RequestMapping("/api/manager")
 public class ManagerController {
     private final IManagerService managerService;
 

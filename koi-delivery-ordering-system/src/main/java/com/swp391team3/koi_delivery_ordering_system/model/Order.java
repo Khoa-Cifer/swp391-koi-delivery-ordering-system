@@ -39,6 +39,7 @@ public class Order {
     private Storage storage;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
@@ -55,7 +56,6 @@ public class Order {
     private Rating rating;
 
     @OneToMany(mappedBy = "order")
-    @JsonIgnore
     private Set<Fish> fishes;
 
     @ManyToOne

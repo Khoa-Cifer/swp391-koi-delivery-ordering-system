@@ -18,7 +18,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class FishServiceImpl implements IFishService {
     private final FishRepository fishRepository;
-    private final FileRepository fileRepository;
     private final OrderRepository orderRepository;
     private final IFileService fileService;
 
@@ -56,6 +55,15 @@ public class FishServiceImpl implements IFishService {
         } catch (Exception e) {
             System.out.println(e);
             return 0L;
+        }
+    }
+
+    @Override
+    public List<Fish> getFishesByOrderId(Long orderId) {
+        try {
+            return fishRepository.findFishesByOrderId(orderId);
+        } catch (Exception e) {
+            return null;
         }
     }
 }
