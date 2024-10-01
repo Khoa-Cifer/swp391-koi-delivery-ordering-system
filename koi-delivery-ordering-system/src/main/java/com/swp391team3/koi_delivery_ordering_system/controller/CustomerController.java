@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/admin/customer")
+@RequestMapping("/api/customer")
 public class CustomerController {
     private final ICustomerService customerService;
 

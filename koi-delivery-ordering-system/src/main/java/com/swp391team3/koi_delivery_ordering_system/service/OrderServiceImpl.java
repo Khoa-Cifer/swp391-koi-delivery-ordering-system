@@ -3,6 +3,7 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 import com.swp391team3.koi_delivery_ordering_system.model.*;
 import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderFishInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import lombok.RequiredArgsConstructor;
@@ -21,35 +22,27 @@ public class OrderServiceImpl implements IOrderService {
     private final CustomerRepository customerRepository;
     private final OrderStatus orderStatus;
 
-    @Override
-    public Order createOrder(String trackingId, String name, int orderStatus, String description, Date createdDate, Date last, Customer customer, DeliveryStaff driver, SalesStaff sales, DeliveringType deliveringType, double price) {
-        Order order = new Order();
-        order.setTrackingId(trackingId);
-        order.setName(name);
-//        order.setOrderStatus(orderStatus);
-//        order.setDescription(description);
-//        order.setCreatedDate(createdDate);
-//        order.setLastUpdatedDate(last);
-//        order.setCustomer(customer);
-//        order.setDriver(driver);
-        order.setSalesStaff(sales);
-        order.setDeliveringType(deliveringType);
-        order.setPrice(price);
-
-        return orderRepository.save(order);
-    }
-
-    @Override
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
         Order newOrder = new Order();
         Optional<Customer> orderCreator = customerRepository.findById(dto.getCustomerId());
         newOrder.setCustomer(orderCreator.get());
-//        newOrder.setOrderStatus(orderStatus.PREPARING);
+        System.out.println(dto.getName());
         newOrder.setName(dto.getName());
         newOrder.setDescription(dto.getDescription());
+
         newOrder.setDestinationAddress(dto.getDestinationAddress());
-        newOrder.setLatitude(dto.getLatitude());
-        newOrder.setLongitude(dto.getLongitude());
+        newOrder.setDestinationLatitude(dto.getDestinationLatitude());
+        newOrder.setDestinationLongitude(dto.getDestinationLongitude());
+
+        newOrder.setSenderAddress(dto.getSenderAddress());
+        newOrder.setSenderLatitude(dto.getSenderLatitude());
+        newOrder.setSenderLongitude(dto.getSenderLongitude());
+
+        newOrder.setExpectedFinishDate(dto.getExpectedFinishDate());
+
+        newOrder.setOrderStatus(orderStatus.DRAFT); //0 is not used, 1 is completed
+        //Created date
+        newOrder.setCreatedDate(new Date());
         Order savedOrder = orderRepository.save(newOrder);
         //return order's id for next step
         return savedOrder.getId();

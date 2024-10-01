@@ -44,10 +44,6 @@ public class Customer implements UserDetails {
     @JsonIgnore
     private Set<Rating> ratingSet;
 
-    @OneToMany(mappedBy = "sender")
-    @JsonIgnore
-    private Set<Fish> fishes;
-
     @OneToMany(mappedBy = "customer")
     @JsonIgnore
     private Set<Transaction> transactions;

@@ -1,6 +1,6 @@
 import "./LoginAdmin.scss";
 
-function Login_admin() {
+function LoginAdmin() {
   return (
     <div className="login-admin-container">
       <div className="card">
@@ -30,4 +30,4 @@ function Login_admin() {
     </div>
   );
 }
-export default Login_admin;
+export default LoginAdmin;

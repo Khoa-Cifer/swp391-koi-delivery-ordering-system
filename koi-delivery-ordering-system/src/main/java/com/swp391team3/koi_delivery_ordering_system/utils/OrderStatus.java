@@ -5,10 +5,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class OrderStatus {
-    public final int PREPARING = 0;
+    public final int DRAFT = 0;
     public final int POSTED = 1;
     public final int ORDER_RECEIVED = 2;
-    public final int ORDER_CONFIRM = 3;
+    public final int ORDER_CONFIRMED = 3;
     public final int DELIVERING = 4;
     public final int COMPLETE = 5;
     public final int FAILED = 6;

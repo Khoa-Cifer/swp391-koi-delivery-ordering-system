@@ -1,6 +1,6 @@
 import axiosClient from "../axios";
 
-const prefixAdminDeliveryStaff = "admin/deliveryStaff/";
+const prefixAdminDeliveryStaff = "deliveryStaff/";
 
 export async function getAllDeliveryStaff() {
     try {

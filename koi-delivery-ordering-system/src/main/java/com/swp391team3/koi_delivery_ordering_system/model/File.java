@@ -25,8 +25,4 @@ public class File {
     private String type;
     private String filePath;
     private int versionCopy = 0;
-
-    @OneToMany(mappedBy = "file")
-    @JsonIgnore
-    private Set<License> licenses;
 }

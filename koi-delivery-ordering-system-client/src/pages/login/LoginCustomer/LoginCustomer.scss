@@ -62,7 +62,7 @@ input {
   line-height: 1.5;
 }
 
-button {
+.customer-login-btn {
   font-family: "Roboto", sans-serif;
   cursor: pointer;
   display: inline-block;
@@ -74,7 +74,6 @@ button {
   border: 0;
   color: #fff;
   border-radius: 3px;
-  background-color: #ffbd3f;
   padding: 10px 36px;
   width: 100%;
   -webkit-transition: all 0.3s ease-in-out;
