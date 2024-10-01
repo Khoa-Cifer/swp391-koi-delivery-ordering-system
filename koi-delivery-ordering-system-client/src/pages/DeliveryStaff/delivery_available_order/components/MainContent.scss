@@ -3,86 +3,86 @@
   width: 70%;
   margin: 0 auto;
   padding: 20px;
-}
 
-/* Các nút lọc */
-.filter-buttons {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 5%;
-  gap: 5%;
-}
-
-.filter-button {
-  padding: 10px 20px;
-  background-color: #c3f4fd;
-  border: none;
-  color: black;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 13vw;
-}
-
-.filter-button:hover {
-  background-color: rgb(205, 246, 242);
-}
-
-/* Các thẻ đơn hàng */
-.order-row {
-  display: flex;
-  flex-grow: 3;
-  flex-wrap: wrap; /* Đảm bảo các thẻ sẽ xuống hàng nếu không đủ chỗ */
-  justify-content: space-around; /* Căn đều các thẻ trong hàng */
-  gap: 5%;
-}
-
-/* Mỗi thẻ đơn hàng sẽ chiếm 48% chiều rộng */
-.order-card {
-  flex: 0 0 30%; /* 48% width để vừa 2 thẻ trong 1 hàng */
-  padding: 20px;
-  background-color: #e4e2e2;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 7%;
-  gap: 5%;
-}
-
-.card-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 4%;
-}
-
-.card-text {
-  font-size: 14px;
-  margin-bottom: 4%;
-}
-
-.button-container {
-  display: flex;
-  justify-content: space-between;
-  button {
-    width: 70%;
-    font-size: 13px;
+  /* Các nút lọc */
+  .filter-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 5%;
+    gap: 5%;
   }
-  column-gap: 5%;
-}
 
-.btn {
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 12px;
-}
+  .filter-button {
+    padding: 10px 20px;
+    background-color: #c3f4fd;
+    border: none;
+    color: black;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 13vw;
+  }
 
-.status-btn {
-  background-color: blue;
-  color: white;
-}
+  .filter-button:hover {
+    background-color: rgb(205, 246, 242);
+  }
 
-.detail-btn {
-  background-color: green;
-  color: white;
+  /* Các thẻ đơn hàng */
+  .order-row {
+    display: flex;
+    flex-grow: 3;
+    flex-wrap: wrap; /* Đảm bảo các thẻ sẽ xuống hàng nếu không đủ chỗ */
+    justify-content: space-around; /* Căn đều các thẻ trong hàng */
+    gap: 5%;
+  }
+
+  /* Mỗi thẻ đơn hàng sẽ chiếm 48% chiều rộng */
+  .order-card {
+    flex: 0 0 30%; /* 48% width để vừa 2 thẻ trong 1 hàng */
+    padding: 20px;
+    background-color: #e4e2e2;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 7%;
+    gap: 5%;
+  }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 4%;
+  }
+
+  .card-text {
+    font-size: 14px;
+    margin-bottom: 4%;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    button {
+      width: 70%;
+      font-size: 13px;
+    }
+    column-gap: 5%;
+  }
+
+  .btn {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .status-btn {
+    background-color: blue;
+    color: white;
+  }
+
+  .detail-btn {
+    background-color: green;
+    color: white;
+  }
 }
