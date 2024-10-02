@@ -22,7 +22,7 @@ function LoginAdmin() {
     const data = await userLogin(email, password, roleId);
     if (data) {
       auth.handleLogin(data);
-      navigate("/customer-home");
+      navigate("/admin");
     }
   }
 

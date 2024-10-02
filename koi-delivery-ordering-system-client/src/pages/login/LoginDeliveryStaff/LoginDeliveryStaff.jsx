@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./LoginDeliveryStaff.scss";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../authentication/AuthProvider";
+import { userLogin } from "../../../utils/customers/user";
 
 function LoginDelivery() {
   const [email, setEmail] = useState("");
@@ -21,7 +22,7 @@ function LoginDelivery() {
     const data = await userLogin(email, password, roleId);
     if (data) {
       auth.handleLogin(data);
-      navigate("/customer-home");
+      navigate("/delivery-order-home");
     }
   }
 
@@ -32,7 +33,12 @@ function LoginDelivery() {
         <form>
           <div className="form-group">
             <label htmlFor="username">Email</label>
-            <input type="text" id="email" placeholder="Type your email" />
+            <input
+             type="text"
+              id="email" 
+              placeholder="Type your email" 
+              onChange={e => handleEmailChange(e)}
+              />
           </div>
 
           <div className="form-group">
@@ -41,6 +47,7 @@ function LoginDelivery() {
               type="password"
               id="password"
               placeholder="Type your password"
+              onChange={e => handlePasswordChange(e)}
             />
           </div>
 
@@ -51,7 +58,7 @@ function LoginDelivery() {
           </div>
 
           <div className="btn">
-          <button type="submit" >
+          <button onClick={handleLogin}>
             Login
           </button>
           </div>

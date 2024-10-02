@@ -1,13 +1,17 @@
 import { useState } from "react";
 import "./LoginCustomer.scss";
-import { Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Button, Typography } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../authentication/AuthProvider";
 import { userLogin } from "../../../utils/customers/user";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../components/toastContainer";
 
 function LoginCustomer() {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false)
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -62,7 +66,10 @@ function LoginCustomer() {
               Customer
             </Button>
           </div>
-          <a href="/register">Sign Up here</a>
+          <div className="form__bottom">
+            <Typography><Link to={"/register"}>Sign up here</Link></Typography>
+            <Typography>Are you with us ?</Typography>
+          </div>
         </div>
       </div>
     </div>

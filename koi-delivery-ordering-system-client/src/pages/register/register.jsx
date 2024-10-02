@@ -3,6 +3,7 @@ import "./register.scss";
 import { userRegister } from "../../utils/customers/user";
 import { toast } from "react-toastify";
 import ToastUtil from "../../components/toastContainer";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
   // return (
@@ -109,7 +110,7 @@ const SignUp = () => {
         </button>
 
         <p className="login-link">
-          Already have an account? <a href="/login-customer">Login here</a>
+          Already have an account? <Link to={"/login-customer"}>Login here</Link>
         </p>
       </div>
     </div>
