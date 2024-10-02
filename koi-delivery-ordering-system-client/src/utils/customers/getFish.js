@@ -8,3 +8,14 @@ export async function getFishesByOrderId(orderId) {
         console.log(error);
     }
 }
+
+export async function getFishFileByFileId(id) {
+    try {
+        const response = await axiosClient.get(`images/getFileSystem/${id}`, {
+            responseType: 'blob',
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}

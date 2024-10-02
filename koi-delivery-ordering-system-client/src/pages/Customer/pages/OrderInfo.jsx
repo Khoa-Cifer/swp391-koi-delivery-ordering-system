@@ -29,14 +29,7 @@ function OrderInfo({ orderId, formStepData }) {
     const [receiverAddress, setReceiverAddress] = useState("");
     const [receiverCoordinates, setReceiverCoordinates] = useState({ lat: null, lng: null });
     const [expectedFinishDate, setExpectedFinishDate] = useState(null);
-    const [selectedPosition, setSelectedPosition] = useState(null);
     const [selectedButton, setSelectedButton] = useState(0);
-
-    const { isLoaded } = useJsApiLoader({
-        // id: 'google-map-script',
-        googleMapsApiKey: CONSTANT_GOOGLE_MAP_API_KEY,
-        libraries: ['places']
-    })
 
     const onMapClick = useCallback((e) => {
         const lat = e.latLng.lat();
@@ -67,35 +60,35 @@ function OrderInfo({ orderId, formStepData }) {
 
     const [map, setMap] = useState(null)
 
-    // useEffect(() => {
-    //     const geocodeAddress = () => {
-    //         if (senderAddress.trim() === '') {
-    //             return;
-    //         }
+    useEffect(() => {
+        const geocodeAddress = () => {
+            if (senderAddress.trim() === '') {
+                return;
+            }
 
-    //         const geocoder = new window.google.maps.Geocoder();
+            const geocoder = new window.google.maps.Geocoder();
 
-    //         geocoder.geocode({ address: senderAddress }, (results, status) => {
-    //             if (status === 'OK' && results[0]) {
-    //                 const location = results[0].geometry.location;
-    //                 setSenderCoordinates({
-    //                     lat: location.lat(),
-    //                     lng: location.lng(),
-    //                 });
-    //             } else {
-    //                 setSenderCoordinates({
-    //                     lat: null,
-    //                     lng: null,
-    //                 });
-    //             }
-    //         });
-    //     };
+            geocoder.geocode({ address: senderAddress }, (results, status) => {
+                if (status === 'OK' && results[0]) {
+                    const location = results[0].geometry.location;
+                    setSenderCoordinates({
+                        lat: location.lat(),
+                        lng: location.lng(),
+                    });
+                } else {
+                    setSenderCoordinates({
+                        lat: null,
+                        lng: null,
+                    });
+                }
+            });
+        };
 
-    //     if (senderAddress.length >= 5) { // Minimal validation for address length
-    //         geocodeAddress();
-    //     }
+        if (senderAddress.length >= 5) { // Minimal validation for address length
+            geocodeAddress();
+        }
 
-    // }, [senderAddress]);
+    }, [senderAddress]);
 
     const center = {
         lat: -3.745,
@@ -114,58 +107,64 @@ function OrderInfo({ orderId, formStepData }) {
         setMap(null)
     }, [])
 
-    // useEffect(() => {
-    //     const geocodeAddress = () => {
-    //         if (receiverAddress.trim() === '') {
-    //             return;
-    //         }
+    useEffect(() => {
+        const geocodeAddress = () => {
+            if (receiverAddress.trim() === '') {
+                return;
+            }
 
-    //         const geocoder = new window.google.maps.Geocoder();
+            const geocoder = new window.google.maps.Geocoder();
 
-    //         //Đổi toạ độ
-    //         geocoder.geocode({ address: receiverAddress }, (results, status) => {
-    //             if (status === 'OK' && results[0]) {
-    //                 const location = results[0].geometry.location;
-    //                 setReceiverCoordinates({
-    //                     lat: location.lat(),
-    //                     lng: location.lng(),
-    //                 });
-    //             } else {
-    //                 setReceiverCoordinates({
-    //                     lat: null,
-    //                     lng: null,
-    //                 });
-    //             }
-    //         });
-    //     };
+            //Đổi toạ độ
+            geocoder.geocode({ address: receiverAddress }, (results, status) => {
+                if (status === 'OK' && results[0]) {
+                    const location = results[0].geometry.location;
+                    setReceiverCoordinates({
+                        lat: location.lat(),
+                        lng: location.lng(),
+                    });
+                } else {
+                    setReceiverCoordinates({
+                        lat: null,
+                        lng: null,
+                    });
+                }
+            });
+        };
 
-    //     if (receiverAddress.length >= 5) { // Minimal validation for address length
-    //         geocodeAddress();
-    //     }
+        if (receiverAddress.length >= 5) { // Minimal validation for address length
+            geocodeAddress();
+        }
 
-    // }, [receiverAddress]);
+    }, [receiverAddress]);
 
     function handleNameChange(e) {
         setOrderName(e.target.value);
+    }
+
+    function handleSenderAddressChange(e) {
+        setSenderAddress(e.target.value);
+    }
+
+    function handleReceiverAddressChange(e) {
+        setReceiverAddress(e.target.value);
     }
 
     function handleDescChange(e) {
         setOrderDescription(e.target.value);
     }
 
-    // const { ref: senderRef } = usePlacesWidget({
-    //     apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
-    //     onPlaceSelected: (place) => {
-    //         setSenderAddress(place.formatted_address || "");
-    //     },
-    // });
+    const { ref: senderRef } = usePlacesWidget({
+        onPlaceSelected: (place) => {
+            setSenderAddress(place.formatted_address || "");
+        },
+    });
 
-    // const { ref: receiverRef } = usePlacesWidget({
-    //     apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
-    //     onPlaceSelected: (place) => {
-    //         setReceiverAddress(place.formatted_address || "");
-    //     },
-    // });
+    const { ref: receiverRef } = usePlacesWidget({
+        onPlaceSelected: (place) => {
+            setReceiverAddress(place.formatted_address || "");
+        },
+    });
 
     async function handleSubmit() {
         if (!orderName || !orderDescription || !receiverAddress) {
@@ -232,7 +231,9 @@ function OrderInfo({ orderId, formStepData }) {
                             type="text"
                             name="text"
                             className="form-input"
+                            onChange={e => handleSenderAddressChange(e)}
                             value={senderAddress}
+                            ref={senderRef}
                         />
                     </div>
 
@@ -242,7 +243,9 @@ function OrderInfo({ orderId, formStepData }) {
                             type="text"
                             name="text"
                             className="form-input"
+                            onChange={e => handleReceiverAddressChange(e)}
                             value={receiverAddress}
+                            ref={receiverRef}
                         />
                     </div>
 
@@ -253,40 +256,38 @@ function OrderInfo({ orderId, formStepData }) {
                     </button>
                 </div>
             </div>
-            {isLoaded && (
-                <div>
-                    <Flex gap="small" wrap style={{ marginBottom: "20px" }}>
-                        <Button
-                            type="primary"
-                            onClick={() => handleButtonClick(0)}
-                            style={{
-                                backgroundColor: selectedButton === 0 ? 'blue' : '',
-                            }}
-                        >
-                            Select Address for Sender
-                        </Button>
-                        <Button
-                            onClick={() => handleButtonClick(1)}
-                            style={{
-                                backgroundColor: selectedButton === 1 ? 'blue' : '',
-                            }}
-                        >
-                            Select Address for Receiver
-                        </Button>
-                    </Flex>
-                    <GoogleMap
-                        mapContainerStyle={containerStyle}
-                        center={center}
-                        zoom={10}
-                        onLoad={onLoad}
-                        onUnmount={onUnmount}
-                        onClick={onMapClick}
+            <div>
+                <Flex gap="small" wrap style={{ marginBottom: "20px" }}>
+                    <Button
+                        type="primary"
+                        onClick={() => handleButtonClick(0)}
+                        style={{
+                            backgroundColor: selectedButton === 0 ? 'blue' : '',
+                        }}
                     >
-                        { /* Child components, such as markers, info windows, etc. */}
-                        <></>
-                    </GoogleMap>
-                </div>
-            )}
+                        Select Address for Sender
+                    </Button>
+                    <Button
+                        onClick={() => handleButtonClick(1)}
+                        style={{
+                            backgroundColor: selectedButton === 1 ? 'blue' : '',
+                        }}
+                    >
+                        Select Address for Receiver
+                    </Button>
+                </Flex>
+                <GoogleMap
+                    mapContainerStyle={containerStyle}
+                    center={center}
+                    zoom={10}
+                    onLoad={onLoad}
+                    onUnmount={onUnmount}
+                    onClick={onMapClick}
+                >
+                    { /* Child components, such as markers, info windows, etc. */}
+                    <></>
+                </GoogleMap>
+            </div>
         </CustomBoxContainer>
     )
 }
