@@ -3,7 +3,7 @@
   border: 2px solid skyblue;
   background-color: #c3f4fd;
   padding: 20px;
-  margin: 5% 0 0 100px;
+  margin-left: 100px;
   height: 65vh;
   width: 15%;
 
@@ -25,12 +25,14 @@
     margin: 5%;
   }
 
+
   .list-function {
     margin-top: 15%;
 
     .button {
       margin-bottom: 5%;
-      background-color: white;
+      background-color: rgb(255, 255, 255);
+      color: #151f5f;
       border-radius: 20px;
     }
   }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import logo from '../../../assets/logo.svg'
+import logo from '../../../assets/logo.png'
 import { AppBar, Toolbar, Button, Avatar, IconButton, Menu, MenuItem, Box, styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 

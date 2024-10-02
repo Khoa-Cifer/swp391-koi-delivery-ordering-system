@@ -13,7 +13,7 @@ function Sidebar() {
         />
       </div>
 
-      <div className="function">
+      <div className="profile">
         <div>User Name:</div>
         <div>Phone Number:</div>
         <div>Email:</div>
