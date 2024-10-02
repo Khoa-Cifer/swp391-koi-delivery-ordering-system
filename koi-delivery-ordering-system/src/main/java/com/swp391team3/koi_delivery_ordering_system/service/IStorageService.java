@@ -9,5 +9,5 @@ public interface IStorageService {
     public Storage createStorage(StorageRequestCreationDTO request);
     public Storage updateStorage(StorageRequestCreationDTO request, Long storageId);
     public boolean deleteStorage(StorageRequestCreationDTO request);
-    public List<Storage> getALlStorages();
+    public List<Storage> getAllStorages();
 }

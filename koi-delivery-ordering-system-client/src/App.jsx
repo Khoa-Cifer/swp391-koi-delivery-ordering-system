@@ -16,7 +16,6 @@ import DeliveryOrderList from "./pages/DeliveryStaff/delivery_order_list/Deliver
 import DeliveryOrderDetail from "./pages/DeliveryStaff/delivery_order_detail/DeliveryOrderDetail";
 import DeliveryFishDetail from "./pages/DeliveryStaff/delivery_fish_detail/DeliveryFishDetail";
 import LoginAdmin from "./pages/login/LoginAdmin/LoginAdmin";
-import Sales_staff_home from "./pages/SalesStaff/SalesStaffHome/Sales_staff_home";
 
 function App() {
   return (
@@ -26,16 +25,18 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<SignUp />} />
+
             <Route path="/login-customer" element={<LoginCustomer />} />
             <Route path="/login-sales-staff" element={<LoginSaleStaff />} />
             <Route path="/login-delivery-staff" element={<LoginDeliveryStaff />} />
             <Route path="/login-admin" element={<LoginAdmin />} />
 
-            {/* <Route path="/admin" element={
+            <Route path="/admin" element={
               <PrivateRoute allowedRoles={4}>
                 <Admin />
               </PrivateRoute>
-            } /> */}
+            } />
+
             <Route path="/admin" element={<Admin />} />
             <Route path="/delivery-staff" element={
               <PrivateRoute allowedRoles={3}>
@@ -48,19 +49,44 @@ function App() {
                 <EditCustomerProfile />
               </PrivateRoute>
             } />
-            <Route path="/delivery-order-home" element={<DeliveryOrderHome />} />
-            <Route path="/order-available" element={<OrderAvailable />} />
+
+
             <Route path="/customer-home" element={
               <PrivateRoute allowedRoles={1}>
                 <Customer />
               </PrivateRoute>
             } />
-            <Route path="/delivery-order-list" element={<DeliveryOrderList />} />
-            <Route path="/delivery-order-detail" element={<DeliveryOrderDetail />} />
-            <Route path="/delivery-fish-detail" element={<DeliveryFishDetail />} />
-           
-            <Route path="/sales-staff-home" element={<Sales_staff_home />} />
 
+            <Route path="/delivery-order-home" element={
+              <PrivateRoute allowedRoles={2}>
+                <DeliveryOrderHome />
+              </PrivateRoute>
+            } />
+
+
+            <Route path="/order-available" element={
+              <PrivateRoute allowedRoles={2}>
+                <OrderAvailable />
+              </PrivateRoute>
+            } />
+
+            <Route path="/delivery-order-list" element={
+              <PrivateRoute allowedRoles={2}>
+                <DeliveryOrderList />
+              </PrivateRoute>
+            } />
+
+            <Route path="/delivery-order-detail" element={
+              <PrivateRoute allowedRoles={2}>
+                <DeliveryOrderDetail />
+              </PrivateRoute>
+            } />
+
+            <Route path="/delivery-fish-detail" element={
+              <PrivateRoute allowedRoles={2}>
+                <DeliveryFishDetail />
+              </PrivateRoute>
+            } />
           </Routes>
         </Router>
       </main>

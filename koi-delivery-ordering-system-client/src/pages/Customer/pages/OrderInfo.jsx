@@ -1,11 +1,24 @@
-import { Box } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, styled } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
 import { usePlacesWidget } from "react-google-autocomplete";
 import ToastUtil from "../../../components/toastContainer";
 import { toast } from "react-toastify";
 import { CONSTANT_GOOGLE_MAP_API_KEY } from "../../../utils/constants"
 import { createGeneralOrderInfo } from "../../../utils/customers/createOrder";
 import { Calendar } from "react-date-range";
+import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import { Button, Flex } from "antd";
+
+const CustomBoxContainer = styled(Box)(() => ({
+    display: "flex",
+    gap: "40px"
+}));
+
+const containerStyle = {
+    width: '700px',
+    height: '80vh',
+    maxWidth: '40vw'
+};
 
 // eslint-disable-next-line react/prop-types
 function OrderInfo({ orderId, formStepData }) {
@@ -16,67 +29,121 @@ function OrderInfo({ orderId, formStepData }) {
     const [receiverAddress, setReceiverAddress] = useState("");
     const [receiverCoordinates, setReceiverCoordinates] = useState({ lat: null, lng: null });
     const [expectedFinishDate, setExpectedFinishDate] = useState(null);
+    const [selectedPosition, setSelectedPosition] = useState(null);
+    const [selectedButton, setSelectedButton] = useState(0);
 
-    useEffect(() => {
-        const geocodeAddress = () => {
-            if (senderAddress.trim() === '') {
-                return;
-            }
+    const { isLoaded } = useJsApiLoader({
+        // id: 'google-map-script',
+        googleMapsApiKey: CONSTANT_GOOGLE_MAP_API_KEY,
+        libraries: ['places']
+    })
 
-            const geocoder = new window.google.maps.Geocoder();
+    const onMapClick = useCallback((e) => {
+        const lat = e.latLng.lat();
+        const lng = e.latLng.lng();
 
-            geocoder.geocode({ address: senderAddress }, (results, status) => {
-                if (status === 'OK' && results[0]) {
-                    const location = results[0].geometry.location;
-                    setSenderCoordinates({
-                        lat: location.lat(),
-                        lng: location.lng(),
-                    });
-                } else {
-                    setSenderCoordinates({
-                        lat: null,
-                        lng: null,
-                    });
-                }
-            });
-        };
-
-        if (senderAddress.length >= 5) { // Minimal validation for address length
-            geocodeAddress();
+        if (selectedButton === 0) {
+            setSenderCoordinates({ lat, lng })
+        } else {
+            setReceiverCoordinates({ lat, lng })
         }
 
-    }, [senderAddress]);
+        // Initialize the Geocoder
+        const geocoder = new window.google.maps.Geocoder();
 
-    useEffect(() => {
-        const geocodeAddress = () => {
-            if (receiverAddress.trim() === '') {
-                return;
-            }
-
-            const geocoder = new window.google.maps.Geocoder();
-
-            //Đổi toạ độ
-            geocoder.geocode({ address: receiverAddress }, (results, status) => {
-                if (status === 'OK' && results[0]) {
-                    const location = results[0].geometry.location;
-                    setReceiverCoordinates({
-                        lat: location.lat(),
-                        lng: location.lng(),
-                    });
+        // Reverse Geocode to get the address
+        geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+            if (status === "OK" && results[0]) {
+                if (selectedButton === 0) {
+                    setSenderAddress(results[0].formatted_address);
                 } else {
-                    setReceiverCoordinates({
-                        lat: null,
-                        lng: null,
-                    });
+                    setReceiverAddress(results[0].formatted_address);
                 }
-            });
-        };
+            } else {
+                console.error("Geocoder failed due to: " + status);
+            }
+        });
+    }, [selectedButton]);
 
-        if (receiverAddress.length >= 5) { // Minimal validation for address length
-            geocodeAddress();
-        }
+    const [map, setMap] = useState(null)
 
-    }, [receiverAddress]);
+    // useEffect(() => {
+    //     const geocodeAddress = () => {
+    //         if (senderAddress.trim() === '') {
+    //             return;
+    //         }
+
+    //         const geocoder = new window.google.maps.Geocoder();
+
+    //         geocoder.geocode({ address: senderAddress }, (results, status) => {
+    //             if (status === 'OK' && results[0]) {
+    //                 const location = results[0].geometry.location;
+    //                 setSenderCoordinates({
+    //                     lat: location.lat(),
+    //                     lng: location.lng(),
+    //                 });
+    //             } else {
+    //                 setSenderCoordinates({
+    //                     lat: null,
+    //                     lng: null,
+    //                 });
+    //             }
+    //         });
+    //     };
+
+    //     if (senderAddress.length >= 5) { // Minimal validation for address length
+    //         geocodeAddress();
+    //     }
+
+    // }, [senderAddress]);
+
+    const center = {
+        lat: -3.745,
+        lng: -38.523
+    };
+
+    const onLoad = useCallback(function callback(map) {
+        // This is just an example of getting and using the map instance!!! don't just blindly copy!
+        const bounds = new window.google.maps.LatLngBounds(center);
+        map.fitBounds(bounds);
+
+        setMap(map)
+    }, [])
+
+    const onUnmount = useCallback(function callback(map) {
+        setMap(null)
+    }, [])
+
+    // useEffect(() => {
+    //     const geocodeAddress = () => {
+    //         if (receiverAddress.trim() === '') {
+    //             return;
+    //         }
+
+    //         const geocoder = new window.google.maps.Geocoder();
+
+    //         //Đổi toạ độ
+    //         geocoder.geocode({ address: receiverAddress }, (results, status) => {
+    //             if (status === 'OK' && results[0]) {
+    //                 const location = results[0].geometry.location;
+    //                 setReceiverCoordinates({
+    //                     lat: location.lat(),
+    //                     lng: location.lng(),
+    //                 });
+    //             } else {
+    //                 setReceiverCoordinates({
+    //                     lat: null,
+    //                     lng: null,
+    //                 });
+    //             }
+    //         });
+    //     };
+
+    //     if (receiverAddress.length >= 5) { // Minimal validation for address length
+    //         geocodeAddress();
+    //     }
+
+    // }, [receiverAddress]);
 
     function handleNameChange(e) {
         setOrderName(e.target.value);
@@ -86,19 +153,19 @@ function OrderInfo({ orderId, formStepData }) {
         setOrderDescription(e.target.value);
     }
 
-    const { ref: senderRef } = usePlacesWidget({
-        apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
-        onPlaceSelected: (place) => {
-            setSenderAddress(place.formatted_address || "");
-        },
-    });
+    // const { ref: senderRef } = usePlacesWidget({
+    //     apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
+    //     onPlaceSelected: (place) => {
+    //         setSenderAddress(place.formatted_address || "");
+    //     },
+    // });
 
-    const { ref: receiverRef } = usePlacesWidget({
-        apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
-        onPlaceSelected: (place) => {
-            setReceiverAddress(place.formatted_address || "");
-        },
-    });
+    // const { ref: receiverRef } = usePlacesWidget({
+    //     apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
+    //     onPlaceSelected: (place) => {
+    //         setReceiverAddress(place.formatted_address || "");
+    //     },
+    // });
 
     async function handleSubmit() {
         if (!orderName || !orderDescription || !receiverAddress) {
@@ -132,8 +199,12 @@ function OrderInfo({ orderId, formStepData }) {
         setExpectedFinishDate(e);
     }
 
+    const handleButtonClick = (buttonType) => {
+        setSelectedButton(buttonType);
+    };
+
     return (
-        <Box>
+        <CustomBoxContainer>
             <ToastUtil />
             <div className="form-container">
                 <div className="form">
@@ -161,7 +232,7 @@ function OrderInfo({ orderId, formStepData }) {
                             type="text"
                             name="text"
                             className="form-input"
-                            ref={senderRef}
+                            value={senderAddress}
                         />
                     </div>
 
@@ -171,7 +242,7 @@ function OrderInfo({ orderId, formStepData }) {
                             type="text"
                             name="text"
                             className="form-input"
-                            ref={receiverRef}
+                            value={receiverAddress}
                         />
                     </div>
 
@@ -182,7 +253,41 @@ function OrderInfo({ orderId, formStepData }) {
                     </button>
                 </div>
             </div>
-        </Box>
+            {isLoaded && (
+                <div>
+                    <Flex gap="small" wrap style={{ marginBottom: "20px" }}>
+                        <Button
+                            type="primary"
+                            onClick={() => handleButtonClick(0)}
+                            style={{
+                                backgroundColor: selectedButton === 0 ? 'blue' : '',
+                            }}
+                        >
+                            Select Address for Sender
+                        </Button>
+                        <Button
+                            onClick={() => handleButtonClick(1)}
+                            style={{
+                                backgroundColor: selectedButton === 1 ? 'blue' : '',
+                            }}
+                        >
+                            Select Address for Receiver
+                        </Button>
+                    </Flex>
+                    <GoogleMap
+                        mapContainerStyle={containerStyle}
+                        center={center}
+                        zoom={10}
+                        onLoad={onLoad}
+                        onUnmount={onUnmount}
+                        onClick={onMapClick}
+                    >
+                        { /* Child components, such as markers, info windows, etc. */}
+                        <></>
+                    </GoogleMap>
+                </div>
+            )}
+        </CustomBoxContainer>
     )
 }
 

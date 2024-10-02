@@ -3,12 +3,10 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 import com.swp391team3.koi_delivery_ordering_system.model.*;
 import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderFishInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.utils.Utilities;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -21,12 +19,13 @@ public class OrderServiceImpl implements IOrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
     private final OrderStatus orderStatus;
+    private final IStorageService storageService;
 
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
         Order newOrder = new Order();
         Optional<Customer> orderCreator = customerRepository.findById(dto.getCustomerId());
         newOrder.setCustomer(orderCreator.get());
-        System.out.println(dto.getName());
+
         newOrder.setName(dto.getName());
         newOrder.setDescription(dto.getDescription());
 
@@ -44,6 +43,10 @@ public class OrderServiceImpl implements IOrderService {
         //Created date
         newOrder.setCreatedDate(new Date());
         Order savedOrder = orderRepository.save(newOrder);
+        //Based on the order's id, generate the tracking code
+        String trackingCode = Utilities.generateOrderCode("OD", savedOrder.getId());
+        savedOrder.setTrackingId(trackingCode);
+        orderRepository.save(newOrder);
         //return order's id for next step
         return savedOrder.getId();
     }
@@ -61,5 +64,35 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public void deleteOrderById(Long id) {
         orderRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<Order> filterOrderToStorage(Long id) {
+        Optional<Order> foundedOrder = getOrderById(id);
+        List<Storage> allStorages = storageService.getAllStorages();
+
+        double minDistance = Double.MAX_VALUE;
+        Storage nearestStorage = null;
+
+        for (int index = 0; index < allStorages.size(); index++) {
+            double orderLat = Double.parseDouble(foundedOrder.get().getSenderLatitude());
+            double orderLong = Double.parseDouble(foundedOrder.get().getSenderLongitude());
+            double storageLat = Double.parseDouble(allStorages.get(index).getLatitude());
+            double storageLong = Double.parseDouble(allStorages.get(index).getLongitude());
+            double distance = Utilities.calculateDistance(
+                orderLat, orderLong, storageLat, storageLong);
+            if (distance <= 50) {
+                if (minDistance > distance) {
+                    minDistance = distance;
+                    nearestStorage = allStorages.get(index);
+                }
+            }
+        }
+
+        if (nearestStorage != null) {
+            foundedOrder.get().setStorage(nearestStorage);
+            orderRepository.save(foundedOrder.get());
+        }
+        return foundedOrder;
     }
 }

@@ -8,6 +8,18 @@ import { CONSTANT_GOOGLE_MAP_API_KEY } from "../../../../utils/constants";
 import { createStorage, getAllStorages } from "../../../../utils/admin/storage";
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 
+const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: 2,
+};
+
 function Storage() {
     const [storageData, setStorageData] = useState([]);
     const [open, setOpen] = useState(false);
@@ -60,18 +72,6 @@ function Storage() {
         id: 'google-map-script',
         googleMapsApiKey: CONSTANT_GOOGLE_MAP_API_KEY
     })
-
-    const modalStyle = {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        boxShadow: 24,
-        p: 4,
-        borderRadius: 2,
-    };
 
     async function handleCreateStorage() {
         if (coordinates.lat && coordinates.lng) {
