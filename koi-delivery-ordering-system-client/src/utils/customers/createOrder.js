@@ -110,3 +110,13 @@ export async function createLicenseFiles(
     }
     return response.data
 }
+
+export async function postOrder(orderId) {
+    try {
+        const response = await axiosClient.post(`orders/postOrder/${orderId}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}

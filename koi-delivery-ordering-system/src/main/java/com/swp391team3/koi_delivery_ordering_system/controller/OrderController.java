@@ -25,6 +25,11 @@ public class OrderController {
         return ResponseEntity.ok(createdOrder);
     }
 
+    @PostMapping("/postOrder/{id}")
+    public ResponseEntity<?> postOrder(@PathVariable Long id) {
+        return ResponseEntity.ok(orderService.postOrder(id));
+    }
+
     //Get All Orders
     //PASSED
     @GetMapping("/getAllOrders")

@@ -24,8 +24,8 @@ public class FileController {
                 .body(uploadImage);
     }
 
-    @GetMapping("/getFileSystem")
-    public ResponseEntity<byte[]> downloadImageFromFileSystem(@RequestParam("id") Long id) throws IOException {
+    @GetMapping("/getFileSystem/{id}")
+    public ResponseEntity<byte[]> downloadImageFromFileSystem(@PathVariable("id") Long id) throws IOException {
         byte[] imageData = imageService.getFileFromFileSystem(id);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))

@@ -13,5 +13,6 @@ public interface IOrderService {
     public List<Order> getAllOrders();
     public Optional<Order> getOrderById(Long id);
     public void deleteOrderById(Long id);
-    public Optional<Order> filterOrderToStorage(Long id); 
+    public Optional<Order> filterOrderToStorage(Long id);
+    public boolean postOrder(Long id);
 }

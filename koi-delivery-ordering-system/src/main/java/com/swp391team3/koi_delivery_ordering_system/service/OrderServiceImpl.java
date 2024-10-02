@@ -95,4 +95,12 @@ public class OrderServiceImpl implements IOrderService {
         }
         return foundedOrder;
     }
+
+    @Override
+    public boolean postOrder(Long id) {
+        Optional<Order> completeOrder = orderRepository.findById(id);
+        completeOrder.get().setOrderStatus(orderStatus.POSTED);
+        orderRepository.save(completeOrder.get());
+        return true;
+    }
 }
