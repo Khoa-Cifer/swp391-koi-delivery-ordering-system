@@ -30,7 +30,6 @@ public class FileController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(imageData);
-
     }
 
     @PutMapping("/fileSystem/update")
