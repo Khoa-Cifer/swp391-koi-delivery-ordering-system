@@ -22,7 +22,7 @@ public class Utilities {
 
         double a = Math.sin(dlat / 2) * Math.sin(dlat / 2)
                 + Math.cos(lat1Rad) * Math.cos(lat2Rad)
-                + Math.sin(dlon / 2) * Math.sin(dlon / 2);
+                * Math.sin(dlon / 2) * Math.sin(dlon / 2);
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
