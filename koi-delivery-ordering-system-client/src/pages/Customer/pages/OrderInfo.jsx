@@ -8,6 +8,7 @@ import { createGeneralOrderInfo } from "../../../utils/customers/createOrder";
 import { Calendar } from "react-date-range";
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import { Button, Flex } from "antd";
+import { filterOrder } from "../../../utils/customers/order";
 
 const CustomBoxContainer = styled(Box)(() => ({
     display: "flex",
@@ -183,11 +184,15 @@ function OrderInfo({ orderId, formStepData }) {
                 senderCoordinates.lat,
                 new Date(expectedFinishDate).toISOString()
             )
-            orderId(response);
-            if (response) {
+            const filter = await filterOrder(response);
+            if (filter) {
+                orderId(filter);
                 formStepData(1);
                 toast("Create successfully");
+            } else {
+                toast("Unsupported Area");
             }
+
             // eslint-disable-next-line no-unused-vars
         } catch (e) {
             toast("unexpected error has been occurred")
