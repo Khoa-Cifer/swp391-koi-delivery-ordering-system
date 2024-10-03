@@ -18,7 +18,7 @@ public class FileController {
     private final IFileService imageService;
 
     @PostMapping("/uploadFileSystem")
-    public ResponseEntity<?> uploadImageToFIleSystem(@RequestParam("image") MultipartFile file) throws IOException {
+    public ResponseEntity<?> uploadImageToFileSystem(@RequestParam("image") MultipartFile file) throws IOException {
         File uploadImage = imageService.uploadFileToFileSystem(file);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);

@@ -3,14 +3,15 @@ import ToastUtil from "../../../components/toastContainer";
 import { useEffect, useState } from "react";
 import { getOrderById } from "../../../utils/customers/order";
 import dateTimeConvert from "../../../components/utils";
-import { getFishFileByFileId } from "../../../utils/customers/fish";
 import TextArea from "antd/es/input/TextArea";
 import { postOrder } from "../../../utils/customers/order";
 import { toast } from "react-toastify";
+import { getFileByFileId } from "../../../utils/customers/file";
 
 const SubmitButton = styled(Button)(() => ({
     padding: "10px 80px"
 }))
+
 // eslint-disable-next-line react/prop-types
 function OrderFinalInfo({ orderId }) {
     const [postedData, setPostedData] = useState();
@@ -26,7 +27,7 @@ function OrderFinalInfo({ orderId }) {
             const fileIds = postedOrder.fishes.map(fish => fish.file.id);
             if (fileIds && fileIds.length > 0) {
                 const fishFilesPromises = fileIds.map(async fileId => {
-                    const response = await getFishFileByFileId(fileId);
+                    const response = await getFileByFileId(fileId);
                     return URL.createObjectURL(response); // Create Object URL from response blob
                 });
 

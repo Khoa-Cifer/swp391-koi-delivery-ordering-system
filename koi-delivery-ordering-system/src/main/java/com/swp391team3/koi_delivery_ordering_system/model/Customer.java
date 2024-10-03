@@ -48,6 +48,10 @@ public class Customer implements UserDetails {
     @JsonIgnore
     private Set<Transaction> transactions;
 
+    @OneToMany(mappedBy = "customer")
+    @JsonIgnore
+    private Set<OrderPaymentHistory> orderPaymentHistorySet;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();

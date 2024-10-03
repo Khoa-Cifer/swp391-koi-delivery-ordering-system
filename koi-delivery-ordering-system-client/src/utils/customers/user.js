@@ -47,3 +47,23 @@ export async function userUpdateProfile(id, email, username, phoneNumber, passwo
         console.log(error);
     }
 }
+
+export async function userUpdateProfileImage(id, file) {
+    try {
+        const response = await axiosClient.put("customer/updateCustomerAvatar",
+            {
+                id,
+                file
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function loadUserAvatarImage(id) {
+    // try {
+    //     // const response
+    // }
+}

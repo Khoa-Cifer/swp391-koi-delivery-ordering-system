@@ -2,18 +2,21 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 
 import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailService;
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
+import com.swp391team3.koi_delivery_ordering_system.model.File;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.CustomerRequestUpdateDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.EmailDetailDTO;
 import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestRegisterDTO;
 import lombok.RequiredArgsConstructor;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +24,7 @@ public class CustomerServiceImpl implements ICustomerService {
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final IFileService fileService;
 
     @Override
     public String customerRegister(String email, String password, String username, String phoneNumber) {
@@ -118,5 +122,19 @@ public class CustomerServiceImpl implements ICustomerService {
         customer.setPhoneNumber(request.getPhoneNumber());
         customerRepository.save(customer);
         return "Update Info Successfully";
+    }
+
+    @Override
+    public String customerUpdateAvatar(Long id, MultipartFile file) throws IOException {
+        Optional<Customer> customer = customerRepository.findById(id);
+        if (customer.get().getFile() == null) {
+            File newFile = fileService.uploadFileToFileSystem(file);
+            if (newFile != null) {
+                return "Update Avatar successfully";
+            }
+        } else {
+            return fileService.updateFileInFileSystem(customer.get().getFile().getId(), file);
+        }
+        return "";
     }
 }

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import default_avatar from "../../../../assets/default-avatar.jpg"
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { userUpdateProfile } from "../../../../utils/customers/user";
+import { userUpdateProfile, userUpdateProfileImage } from "../../../../utils/customers/user";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../../components/toastContainer";
 import { useAuth } from "../../../../authentication/AuthProvider";
@@ -75,6 +75,17 @@ function CustomerEditProfile() {
                 user.password
             );
         }
+
+        if (selectedImage) {
+            const imageResponse = await userUpdateProfileImage(
+                customerId,
+                selectedImage,
+            )
+            if (imageResponse) {
+                toast(imageResponse);
+            }
+        }
+
         if (response) {
             toast(response);
             auth.handleLogout();

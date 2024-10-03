@@ -21,7 +21,7 @@ public class OrderDelivering {
     private Date createdDate;
     private Date lastUpdatedDate;
     private Date finishDate;
-    private String destinationAddress;
+    private String currentAddress;
     private String longitude;
     private String latitude;
     private int deliveryProcessType;

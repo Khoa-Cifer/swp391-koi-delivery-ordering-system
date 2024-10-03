@@ -22,4 +22,8 @@ public class OrderPaymentHistory {
     @OneToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private Customer customer;
 }

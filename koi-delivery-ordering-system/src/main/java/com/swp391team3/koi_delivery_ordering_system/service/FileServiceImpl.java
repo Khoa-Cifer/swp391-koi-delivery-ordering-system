@@ -76,10 +76,7 @@ public class FileServiceImpl implements IFileService {
         newFile.transferTo(new java.io.File(folderPath + file.getId() + "_" + newFile.getOriginalFilename()));
         fileRepository.save(file);
 
-        if (file != null) {
-            return "file modified successfully : " + filePath;
-        }
-        return "Unexpected error occurred";
+        return "file modified successfully : " + filePath;
     }
 
     @Override
