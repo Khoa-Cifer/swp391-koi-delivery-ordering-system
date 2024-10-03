@@ -16,5 +16,10 @@ public interface IOrderService {
     public Optional<Order> filterOrderToStorage(Long id);
     public boolean postOrder(Long id);
 
+    public boolean cancelOrder(Long id);
+    public boolean confirmOrder(Long id);
+    public boolean deliveryPickup(Long id);
+    public boolean receiveOrder(Long id);
+    public boolean confirmReceivedOrder(Long id);
     public List<Order> getOrderByStatus(int status);
 }
