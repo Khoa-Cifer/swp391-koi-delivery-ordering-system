@@ -7,8 +7,8 @@ import EditCustomerProfile from "./pages/Customer/components/EditCustomerProfile
 import DeliveryStaff from "./pages/DeliveryStaff/home_delivery/delivery_staff/DeliveryStaff";
 import AuthProvider from "./authentication/AuthProvider";
 import PrivateRoute from "./authentication/PrivateRoute";
-import OrderAvailable from "./pages/DeliveryStaff/delivery_available_order/OrderAvailable"
-import DeliveryOrderHome from "./pages/DeliveryStaff/delivery_order_home/DeliveryOrderHome"
+import OrderAvailable from "./pages/DeliveryStaff/delivery_available_order/OrderAvailable";
+import DeliveryOrderHome from "./pages/DeliveryStaff/delivery_order_home/DeliveryOrderHome";
 import LoginCustomer from "./pages/login/LoginCustomer/LoginCustomer";
 import LoginSaleStaff from "./pages/login/LoginSaleStaff/LoginSaleStaff";
 import LoginDeliveryStaff from "./pages/login/LoginDeliveryStaff/LoginDeliveryStaff";
@@ -27,35 +27,58 @@ function App() {
             <Route path="/register" element={<SignUp />} />
             <Route path="/login-customer" element={<LoginCustomer />} />
             <Route path="/login-sales-staff" element={<LoginSaleStaff />} />
-            <Route path="/login-delivery-staff" element={<LoginDeliveryStaff />} />
+            <Route
+              path="/login-delivery-staff"
+              element={<LoginDeliveryStaff />}
+            />
 
-            <Route path="/admin" element={
-              <PrivateRoute allowedRoles={4}>
-                <Admin />
-              </PrivateRoute>
-            } />
+            <Route
+              path="/admin"
+              element={
+                <PrivateRoute allowedRoles={4}>
+                  <Admin />
+                </PrivateRoute>
+              }
+            />
             {/* <Route path="/admin" element={<Admin />} /> */}
-            <Route path="/delivery-staff" element={
-              <PrivateRoute allowedRoles={3}>
-                <DeliveryStaff />
-              </PrivateRoute>
-            } />
+            <Route
+              path="/delivery-staff"
+              element={
+                <PrivateRoute allowedRoles={3}>
+                  <DeliveryStaff />
+                </PrivateRoute>
+              }
+            />
 
-            <Route path="/customer-edit-profile" element={
-              <PrivateRoute allowedRoles={1}>
-                <EditCustomerProfile />
-              </PrivateRoute>
-            } />
-            <Route path="/delivery-order-home" element={<DeliveryOrderHome />} />
+            <Route
+              path="/customer-edit-profile"
+              element={<EditCustomerProfile />}
+            />
+            <Route
+              path="/delivery-order-home"
+              element={<DeliveryOrderHome />}
+            />
             <Route path="/order-available" element={<OrderAvailable />} />
-            <Route path="/customer-home" element={
-              <PrivateRoute allowedRoles={1}>
-                <Customer />
-              </PrivateRoute>
-            } />
-            <Route path="/delivery-order-list" element={<DeliveryOrderList />} />
-            <Route path="/delivery-order-detail" element={<DeliveryOrderDetail />} />
-            <Route path="/delivery-fish-detail" element={<DeliveryFishDetail />} />
+            <Route
+              path="/customer-home"
+              element={
+                <PrivateRoute allowedRoles={1}>
+                  <Customer />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/delivery-order-list"
+              element={<DeliveryOrderList />}
+            />
+            <Route
+              path="/delivery-order-detail"
+              element={<DeliveryOrderDetail />}
+            />
+            <Route
+              path="/delivery-fish-detail"
+              element={<DeliveryFishDetail />}
+            />
             <Route path="/login-admin" element={<LoginAdmin />} />
           </Routes>
         </Router>
@@ -63,6 +86,5 @@ function App() {
     </AuthProvider>
   );
 }
-
 
 export default App;
