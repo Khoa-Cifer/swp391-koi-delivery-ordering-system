@@ -107,10 +107,13 @@ public class CustomerServiceImpl implements ICustomerService {
                 return "This email already exist";
             }
         }
-        
+
         Customer customer = optionalCustomer.get();
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
-        customer.setPassword(encodedPassword);
+        if (!request.getPassword().isEmpty()) {
+            String encodedPassword = passwordEncoder.encode(request.getPassword());
+            customer.setPassword(encodedPassword);
+        }
+
         customer.setEmail(request.getEmail());
         customer.setPhoneNumber(request.getPhoneNumber());
         customerRepository.save(customer);

@@ -19,8 +19,10 @@ function CustomerEditProfile() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [selectedImage, setSelectedImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(default_avatar);
+    const [updatePassword, setUpdatePassword] = useState(false);
 
     const auth = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchUserData() {
@@ -55,20 +57,36 @@ function CustomerEditProfile() {
         const token = localStorage.getItem("token");
         const customerInfo = jwtDecode(token);
         const customerId = customerInfo.sub.substring(2);
-        const response = await userUpdateProfile(
-            customerId,
-            user.email,
-            user.username,
-            user.phoneNumber,
-            user.password
-        );
+        let response = null;
+        if (updatePassword === false) {
+            response = await userUpdateProfile(
+                customerId,
+                user.email,
+                user.username,
+                user.phoneNumber,
+                "" //If do not update password, set to empty string
+            );
+        } else {
+            response = await userUpdateProfile(
+                customerId,
+                user.email,
+                user.username,
+                user.phoneNumber,
+                user.password
+            );
+        }
         if (response) {
             toast(response);
             auth.handleLogout();
+            navigate("/");
         } else {
             toast("Unexpected error has been occurred");
         }
     };
+
+    const handleUpdatePasswordState = () => {
+        setUpdatePassword(!updatePassword);
+    }
 
     return user && (
         <Container maxWidth="md" style={{ marginTop: "30px" }}>
@@ -95,6 +113,8 @@ function CustomerEditProfile() {
                             />
                             <PhotoCamera />
                         </IconButton>
+                        <Button></Button>
+                        <Button variant="outlined" size="small" onClick={handleUpdatePasswordState}>Update password</Button>
                     </Grid>
 
                     {/* Form Section */}
@@ -136,30 +156,36 @@ function CustomerEditProfile() {
                                         required
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        label="Password"
-                                        name="password"
-                                        onChange={handleChange}
-                                        type="password"
-                                        fullWidth
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        label="Confirm Password"
-                                        name="confirm Password"
-                                        onChange={handleConfirmPasswordChange}
-                                        type="password"
-                                        fullWidth
-                                    />
-                                </Grid>
+                                {updatePassword && (
+                                    <>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                label="Password"
+                                                name="password"
+                                                onChange={handleChange}
+                                                type="password"
+                                                fullWidth
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                label="Confirm Password"
+                                                name="confirm Password"
+                                                onChange={handleConfirmPasswordChange}
+                                                type="password"
+                                                fullWidth
+                                            />
+                                        </Grid>
+                                    </>
+                                )}
+
                             </Grid>
                             <Box sx={{ mt: 3, display: "flex", gap: "16px" }}>
                                 <Button variant="outlined" onClick={handleSubmit} fullWidth>
                                     Cancel
                                 </Button>
-                                {user.email && user.username && user.phoneNumber && user.password && (confirmPassword === user.password) ? (
+                                {user.email && user.username && user.phoneNumber &&
+                                    (updatePassword ? confirmPassword === user.password : true) ? (
                                     <Button
                                         variant="contained"
                                         onClick={handleSubmit}
