@@ -1,4 +1,4 @@
-import "./Header.scss";
+import "./sales_header.scss";
 import {Button } from "antd";
 import logo from "../../../../assets/logo.png";
 import avatar from "../../../../assets/avatar.png";

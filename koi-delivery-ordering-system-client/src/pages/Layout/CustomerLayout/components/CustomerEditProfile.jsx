@@ -1,10 +1,10 @@
 import { Avatar, Box, Button, Container, Grid, Paper, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import default_avatar from "../assets/default-avatar.jpg"
+import default_avatar from "../../../../assets/default-avatar.jpg"
 import { useNavigate } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
-function EditProfile({ role, username, email, amount, phoneNumber, destination }) {
+function CustomerEditProfile({ role, username, email, amount, phoneNumber, destination }) {
     const [user, setUser] = useState({
         name: username,
         role: role,
@@ -12,7 +12,7 @@ function EditProfile({ role, username, email, amount, phoneNumber, destination }
         password: '',
         confirmPassword: '',
         phoneNumber: phoneNumber,
-        amount: amount ,
+        amount: amount,
     });
     const navigate = useNavigate();
 
@@ -126,4 +126,4 @@ function EditProfile({ role, username, email, amount, phoneNumber, destination }
     )
 }
 
-export default EditProfile;
+export default CustomerEditProfile;

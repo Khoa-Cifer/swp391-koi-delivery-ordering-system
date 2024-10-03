@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import logo from '../../../assets/logo.png'
-import { AppBar, Toolbar, Button, Avatar, IconButton, Menu, MenuItem, Box, styled } from '@mui/material';
+import { Menu, MenuItem, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-
-const HeaderWrapper = styled(AppBar)`
-  background-color: #1976d2;
-`;
+import "./customer_header.scss";
+import { Button } from "antd";
+import logo from "../../../../../assets/logo.png";
+import avatar from "../../../../../assets/avatar.png";
 
 function Header() {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -26,21 +25,34 @@ function Header() {
 
     const handleLogout = () => {
         setAnchorEl(null);
-        localStorage.removeItem('userData');
+        localStorage.removeItem('token');
         navigate("/");
     }
 
     return (
-        <HeaderWrapper position="fixed" sx={{ width: "100vw" }}>
-            <Toolbar>
-                <div className="logo"><img src={logo} alt="Logo" style={{ width: "40px" }} /></div>
-                <Button color="inherit">Home</Button>
-                <Button color="inherit">About</Button>
-                <Button color="inherit">Contact</Button>
+        <div className="sale-header-container">
+            <div className="logo">
+                <img
+                    src={logo}
+                    alt="Logo"
+                    style={{ width: "180px", height: "180px" }}
+                />
+            </div>
+
+            <div className="function">
+                <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }}><strong>Home</strong></Button>
+                <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }}><strong>About</strong></Button>
+                <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }}><strong>Contact</strong></Button>
+            </div>
+
+            <div className="logo">
                 <Box sx={{ ml: 2 }}>
-                    <IconButton onClick={handleMenuOpen}>
-                        <Avatar alt="User Avatar" src="/path-to-avatar.jpg" />
-                    </IconButton>
+                    <img
+                        src={avatar}
+                        onClick={handleMenuOpen}
+                        alt="avatar"
+                        style={{ width: "5vw", height: "10vh", marginRight: "30px" }}
+                    />
                     <Menu
                         style={{ marginTop: "40px" }}
                         anchorEl={anchorEl}
@@ -59,8 +71,9 @@ function Header() {
                         <MenuItem onClick={handleLogout}>Logout</MenuItem>
                     </Menu>
                 </Box>
-            </Toolbar>
-        </HeaderWrapper>
+
+            </div>
+        </div>
     );
 }
 
