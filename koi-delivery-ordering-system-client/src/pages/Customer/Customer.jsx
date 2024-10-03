@@ -1,12 +1,9 @@
 import { Box, styled, Tab, Tabs } from "@mui/material";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Sidebar from "./components/Sidebar";
 import PropTypes from 'prop-types';
 import OrderInfo from "./pages/OrderInfo";
 import FishInfo from "./pages/FishInfo";
 import { useState } from "react";
-import "./components/body_customer.scss"
+import "./customer_home.scss"
 import OrderFinalInfo from "./pages/OrderFinalInfo";
 
 const CustomTab = styled(Tab)(() => ({
@@ -62,48 +59,34 @@ function Customer() {
     }
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-            {/* Header */}
-            <Header />
-
-            <Box sx={{ display: 'flex', flex: 1 }}>
-                {/* Main Content */}
-                <Box component="main" sx={{ flexGrow: 1, p: 2, mt: '64px', display: "flex" }}>
-                    <Sidebar />
-                    <div style={{ width: "100%" }}>
-                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                            <Tabs value={value} onChange={handleChange}>
-                                <CustomTab label="Order Info" {...a11yProps(0)} disabled={formStep > 0} />
-                                {formStep >= 1 && (
-                                    <CustomTab label="Fish Info" {...a11yProps(1)} disabled={formStep > 1} />
-                                )}
-                                {formStep >= 2 && (
-                                    <CustomTab label="Order Detail" {...a11yProps(2)} />
-                                )}
-                            </Tabs>
-                        </Box>
-                        <CustomTabPanel value={value} index={0}>
-                            <div className="body-container">
-                                <OrderInfo orderId={e => handleOrderId(e)} formStepData={e => handleFormStep(e)} />
-                            </div>
-                        </CustomTabPanel>
-                        <CustomTabPanel value={value} index={1}>
-                            <div className="body-container">
-                                <FishInfo orderId={generalData} formStepData={e => handleFormStep(e)} />
-                            </div>
-                        </CustomTabPanel>
-                        <CustomTabPanel value={value} index={2}>
-                            <div className="body-container">
-                                <OrderFinalInfo orderId={generalData} formStepData={e => handleFormStep(e)} />
-                            </div>
-                        </CustomTabPanel>
-                    </div>
-                </Box>
+        <div style={{ width: "100%" }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Tabs value={value} onChange={handleChange}>
+                    <CustomTab label="Order Info" {...a11yProps(0)} disabled={formStep > 0} />
+                    {formStep >= 1 && (
+                        <CustomTab label="Fish Info" {...a11yProps(1)} disabled={formStep > 1} />
+                    )}
+                    {formStep >= 2 && (
+                        <CustomTab label="Order Detail" {...a11yProps(2)} />
+                    )}
+                </Tabs>
             </Box>
-
-            {/* Footer */}
-            <Footer />
-        </Box>
+            <CustomTabPanel value={value} index={0}>
+                <div className="body-container">
+                    <OrderInfo orderId={e => handleOrderId(e)} formStepData={e => handleFormStep(e)} />
+                </div>
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={1}>
+                <div className="body-container">
+                    <FishInfo orderId={generalData} formStepData={e => handleFormStep(e)} />
+                </div>
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={2}>
+                <div className="body-container">
+                    <OrderFinalInfo orderId={generalData} formStepData={e => handleFormStep(e)} />
+                </div>
+            </CustomTabPanel>
+        </div>
     )
 }
 

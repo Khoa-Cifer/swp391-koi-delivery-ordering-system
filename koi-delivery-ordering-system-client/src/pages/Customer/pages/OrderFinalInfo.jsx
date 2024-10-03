@@ -1,21 +1,12 @@
 import { Box, Button, Grid, styled, TextField, Typography } from "@mui/material";
 import ToastUtil from "../../../components/toastContainer";
-import { Fragment, useEffect, useState } from "react";
-import { getOrderById } from "../../../utils/customers/getOrder";
+import { useEffect, useState } from "react";
+import { getOrderById } from "../../../utils/customers/order";
 import dateTimeConvert from "../../../components/utils";
-import { getFishesByOrderId, getFishFileByFileId } from "../../../utils/customers/getFish";
+import { getFishFileByFileId } from "../../../utils/customers/fish";
 import TextArea from "antd/es/input/TextArea";
-import { postOrder } from "../../../utils/customers/createOrder";
+import { postOrder } from "../../../utils/customers/order";
 import { toast } from "react-toastify";
-
-const commonStyles = {
-    bgcolor: 'background.paper',
-    borderColor: 'text.primary',
-    m: 1,
-    border: 1,
-    width: '100%',
-    height: '15rem',
-};
 
 const SubmitButton = styled(Button)(() => ({
     padding: "10px 80px"

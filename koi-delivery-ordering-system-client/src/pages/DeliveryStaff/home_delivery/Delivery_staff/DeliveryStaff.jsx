@@ -1,6 +1,6 @@
-import Banner_delivery from "../components-delivery/banner/BannerDelivery";
-import Header_delivery from "../components-delivery/header/HeaderDelivery";
-import History_delivery from "../components-delivery/history/HistoryDelivery";
+import BannerDelivery from "../components-delivery/banner/BannerDelivery";
+import HeaderDelivery from "../components-delivery/header/HeaderDelivery";
+import HistoryDelivery from "../components-delivery/history/HistoryDelivery";
 import "./delivery_staff.scss";
 
 function DeliveryStaff() {
@@ -8,9 +8,9 @@ function DeliveryStaff() {
     <div className="background-delivery-container">
       <div className="background-delivery">
         <>
-          <Header_delivery />
-          <Banner_delivery />
-          <History_delivery />
+          <HeaderDelivery />
+          <BannerDelivery />
+          <HistoryDelivery />
         </>
       </div>
     </div>

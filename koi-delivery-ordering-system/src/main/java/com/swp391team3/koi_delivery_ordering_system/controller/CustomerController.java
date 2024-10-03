@@ -1,6 +1,8 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.CustomerRequestUpdateDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestRegisterDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.ICustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -68,5 +70,10 @@ public class CustomerController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @PutMapping("/updateCustomerProfile")
+    public ResponseEntity<?> updateCustomerProfile(@RequestBody CustomerRequestUpdateDTO request) {
+        return ResponseEntity.ok(customerService.customerUpdateProfile(request));
     }
 }

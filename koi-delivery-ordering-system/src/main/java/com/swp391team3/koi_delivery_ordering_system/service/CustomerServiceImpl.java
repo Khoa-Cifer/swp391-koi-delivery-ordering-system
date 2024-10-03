@@ -2,11 +2,14 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 
 import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailService;
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.CustomerRequestUpdateDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.EmailDetailDTO;
 import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestRegisterDTO;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,12 +39,13 @@ public class CustomerServiceImpl implements ICustomerService {
         newCustomer.setPhoneNumber(phoneNumber);
 
         customerRepository.save(newCustomer);
-        //mail sending
-//        EmailDetailDTO emailDetail = new EmailDetailDTO();
-//        emailDetail.setReceiver((Object) newCustomer);
-//        emailDetail.setSubject("Welcome to KOI DELIVERY SYSTEM! We're glad you're here");
-//        emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
-//        emailService.sendEmail(emailDetail);
+
+//        mail sending
+        EmailDetailDTO emailDetail = new EmailDetailDTO();
+        emailDetail.setReceiver((Object) newCustomer);
+        emailDetail.setSubject("Welcome to KOI DELIVERY SYSTEM! We're glad you're here");
+        emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
+        emailService.sendEmail(emailDetail);
 
         return "Register successfully";
     }
@@ -90,5 +94,29 @@ public class CustomerServiceImpl implements ICustomerService {
     @Override
     public void deleteCustomerById(Long id) {
         customerRepository.deleteById(id);    
+    }
+
+    @Override
+    public String customerUpdateProfile(CustomerRequestUpdateDTO request) {
+        Optional<Customer> optionalCustomer = customerRepository.findById(request.getId());
+
+        Customer customerCheck = customerRepository.findCustomerByEmail(request.getEmail());
+        if (customerCheck != null) {
+            if ((!Objects.equals(customerCheck.getId(), optionalCustomer.get().getId()))
+                    && (Objects.equals(customerCheck.getEmail(), optionalCustomer.get().getEmail()))) {
+                return "This email already exist";
+            }
+        }
+
+        Customer customer = optionalCustomer.get();
+        if (!request.getPassword().isEmpty()) {
+            String encodedPassword = passwordEncoder.encode(request.getPassword());
+            customer.setPassword(encodedPassword);
+        }
+
+        customer.setEmail(request.getEmail());
+        customer.setPhoneNumber(request.getPhoneNumber());
+        customerRepository.save(customer);
+        return "Update Info Successfully";
     }
 }
