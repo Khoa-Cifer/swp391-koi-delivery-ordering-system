@@ -109,7 +109,7 @@ public class OrderServiceImpl implements IOrderService {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
-            order.setOrderStatus(orderStatus.DRAFT);
+            order.setOrderStatus(orderStatus.FAILED);
             orderRepository.save(order);
             return true;
         }

@@ -52,7 +52,7 @@ public class SalesStaffController {
     }
 
     //Confirm Order
-    @PostMapping("/{id}/confirm-order")
+    @PostMapping("/confirm-order/{id}")
     public ResponseEntity<?> confirmOrder(@PathVariable Long id) {
         boolean isConfirmed = orderService.confirmOrder(id);
 
@@ -63,7 +63,7 @@ public class SalesStaffController {
         }
     }
     //
-    @DeleteMapping("/{id}/cancel")
+    @DeleteMapping("/cancel/{id}")
     public ResponseEntity<?> cancelOrder(@PathVariable Long id) {
         boolean isCancelled = orderService.cancelOrder(id);
         if (isCancelled) {
@@ -72,7 +72,7 @@ public class SalesStaffController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/{id}/confirmReceived")
+    @PostMapping("/confirmReceived/{id}")
     public ResponseEntity<String> confirmReceivedOrder(@PathVariable Long id) {
         boolean isConfirmed = orderService.confirmReceivedOrder(id);
         if (isConfirmed) {
