@@ -43,7 +43,7 @@ public class EmailService {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
 
             //Setting up necessary details
-            mimeMessageHelper.setFrom("koideliveringsystem.swp.fpt@gmail.com");
+            mimeMessageHelper.setFrom("koideliveringsystemswp@gmail.com");
             if(emailDetail.getReceiver() instanceof Customer){
                 mimeMessageHelper.setTo(((Customer) emailDetail.getReceiver()).getEmail());
             } else if(emailDetail.getReceiver() instanceof DeliveryStaff){

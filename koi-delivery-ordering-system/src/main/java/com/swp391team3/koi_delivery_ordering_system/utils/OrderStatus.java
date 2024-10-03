@@ -7,9 +7,11 @@ import org.springframework.stereotype.Component;
 public class OrderStatus {
     public final int DRAFT = 0;
     public final int POSTED = 1;
-    public final int ORDER_RECEIVED = 2;
-    public final int ORDER_CONFIRMED = 3;
-    public final int DELIVERING = 4;
-    public final int COMPLETE = 5;
-    public final int FAILED = 6;
+    public final int ORDER_ACCEPTED = 2;
+    public final int ORDER_GETTING = 3;
+    public final int ORDER_RECEIVED = 4;
+    public final int ORDER_CONFIRMED = 5;
+    public final int DELIVERING = 6;
+    public final int COMPLETE = 7;
+    public final int FAILED = 8;
 }

@@ -5,6 +5,7 @@ import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderFishInfoRequ
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,5 +49,16 @@ public class OrderController {
     public ResponseEntity<Void> deleteOrderById(@PathVariable Long id) {
         orderService.deleteOrderById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Order>> getOrdersByStatus(@PathVariable int status) {
+        List<Order> orders = orderService.getOrderByStatus(status);
+
+        if (orders.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(orders);
+        } else {
+            return ResponseEntity.ok(orders);
+        }
     }
 }

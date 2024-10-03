@@ -103,4 +103,12 @@ public class OrderServiceImpl implements IOrderService {
         orderRepository.save(completeOrder.get());
         return true;
     }
+
+    @Override
+    public List<Order> getOrderByStatus(int status) {
+        List<Order> orders = orderRepository.findByOrderStatus(status);
+        return orders;
+    }
+
+
 }
