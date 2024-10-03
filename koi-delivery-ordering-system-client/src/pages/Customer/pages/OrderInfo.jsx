@@ -3,10 +3,9 @@ import { useCallback, useEffect, useState } from "react";
 import { usePlacesWidget } from "react-google-autocomplete";
 import ToastUtil from "../../../components/toastContainer";
 import { toast } from "react-toastify";
-import { CONSTANT_GOOGLE_MAP_API_KEY } from "../../../utils/constants"
-import { createGeneralOrderInfo } from "../../../utils/customers/createOrder";
+import { createGeneralOrderInfo } from "../../../utils/customers/order";
 import { Calendar } from "react-date-range";
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap } from "@react-google-maps/api";
 import { Button, Flex } from "antd";
 import { filterOrder } from "../../../utils/customers/order";
 

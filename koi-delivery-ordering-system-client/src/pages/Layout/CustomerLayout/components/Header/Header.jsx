@@ -5,12 +5,14 @@ import "./customer_header.scss";
 import { Button } from "antd";
 import logo from "../../../../../assets/logo.png";
 import avatar from "../../../../../assets/avatar.png";
+import { useAuth } from "../../../../../authentication/AuthProvider";
 
 function Header() {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
-
+    const auth = useAuth();
+    
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -25,7 +27,7 @@ function Header() {
 
     const handleLogout = () => {
         setAnchorEl(null);
-        localStorage.removeItem('token');
+        auth.handleLogout();
         navigate("/");
     }
 

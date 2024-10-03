@@ -1,54 +1,100 @@
-import { Avatar, Box, Button, Container, Grid, Paper, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import { Avatar, Box, Button, Container, Grid, IconButton, Paper, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import default_avatar from "../../../../assets/default-avatar.jpg"
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import { userUpdateProfile } from "../../../../utils/customers/user";
+import { toast } from "react-toastify";
+import ToastUtil from "../../../../components/toastContainer";
+import { useAuth } from "../../../../authentication/AuthProvider";
+import { PhotoCamera } from "@mui/icons-material";
 
-// eslint-disable-next-line react/prop-types
-function CustomerEditProfile({ role, username, email, amount, phoneNumber, destination }) {
+function CustomerEditProfile() {
     const [user, setUser] = useState({
-        name: username,
-        role: role,
-        email: email,
+        username: '',
+        email: '',
+        phoneNumber: '',
         password: '',
-        confirmPassword: '',
-        phoneNumber: phoneNumber,
-        amount: amount,
     });
-    const navigate = useNavigate();
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [imagePreview, setImagePreview] = useState(default_avatar);
+
+    const auth = useAuth();
+
+    useEffect(() => {
+        async function fetchUserData() {
+            const userData = JSON.parse(localStorage.getItem("userData"));
+            console.log(userData);
+            setUser(userData);
+        }
+        fetchUserData();
+    }, [])
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedImage(file);
+            setImagePreview(URL.createObjectURL(file)); // Create a preview URL for the selected image
+        }
+    };
 
     const handleChange = (e) => {
-        setUser({
-            ...user,
-            [e.target.name]: e.target.value,
-        });
+        const { name, value } = e.target;
+        setUser((prevUser) => ({
+            ...prevUser,
+            [name]: value,
+        }));
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        navigate(destination);
-    };
-
-    const handleCancel = () => {
-        navigate(destination);
+    const handleConfirmPasswordChange = (e) => {
+        setConfirmPassword(e.target.value);
     }
 
-    return (
+    async function handleSubmit() {
+        const token = localStorage.getItem("token");
+        const customerInfo = jwtDecode(token);
+        const customerId = customerInfo.sub.substring(2);
+        const response = await userUpdateProfile(
+            customerId,
+            user.email,
+            user.username,
+            user.phoneNumber,
+            user.password
+        );
+        if (response) {
+            toast(response);
+            auth.handleLogout();
+        } else {
+            toast("Unexpected error has been occurred");
+        }
+    };
+
+    return user && (
         <Container maxWidth="md" style={{ marginTop: "30px" }}>
+            <ToastUtil />
             <Paper elevation={3} sx={{ padding: 4 }}>
                 <Grid container spacing={4}>
                     {/* Avatar Section */}
                     <Grid item xs={12} sm={4} sx={{ textAlign: 'center' }}>
                         <Avatar
-                            alt={user.name}
-                            src={default_avatar}
+                            alt={user.username}
+                            src={imagePreview}
                             sx={{ width: 180, height: 180, margin: '0 auto' }}
                         />
-                        <Typography variant="h6" component="h2" sx={{ mt: 2 }}>
-                            {role}
-                        </Typography>
-                        <Typography variant="body1" color="textSecondary">
-                            {username}
-                        </Typography>
+                        <IconButton
+                            color="primary"
+                            aria-label="upload picture"
+                            component="label"
+                        >
+                            <input
+                                hidden
+                                accept="image/*"
+                                type="file"
+                                onChange={handleImageChange}
+                            />
+                            <PhotoCamera />
+                        </IconButton>
                     </Grid>
 
                     {/* Form Section */}
@@ -61,9 +107,10 @@ function CustomerEditProfile({ role, username, email, amount, phoneNumber, desti
                                 <Grid item xs={12}>
                                     <TextField
                                         label="Name"
-                                        name="name"
-                                        value={user.name}
+                                        name="username"
+                                        value={user.username}
                                         onChange={handleChange}
+                                        type="text"
                                         fullWidth
                                         required
                                     />
@@ -93,7 +140,6 @@ function CustomerEditProfile({ role, username, email, amount, phoneNumber, desti
                                     <TextField
                                         label="Password"
                                         name="password"
-                                        value={user.password}
                                         onChange={handleChange}
                                         type="password"
                                         fullWidth
@@ -102,9 +148,8 @@ function CustomerEditProfile({ role, username, email, amount, phoneNumber, desti
                                 <Grid item xs={12}>
                                     <TextField
                                         label="Confirm Password"
-                                        name="confirmPassword"
-                                        value={user.confirmPassword}
-                                        onChange={handleChange}
+                                        name="confirm Password"
+                                        onChange={handleConfirmPasswordChange}
                                         type="password"
                                         fullWidth
                                     />
@@ -114,9 +159,25 @@ function CustomerEditProfile({ role, username, email, amount, phoneNumber, desti
                                 <Button variant="outlined" onClick={handleSubmit} fullWidth>
                                     Cancel
                                 </Button>
-                                <Button variant="contained" onClick={handleCancel} fullWidth>
-                                    Save Changes
-                                </Button>
+                                {user.email && user.username && user.phoneNumber && user.password && (confirmPassword === user.password) ? (
+                                    <Button
+                                        variant="contained"
+                                        onClick={handleSubmit}
+                                        fullWidth
+                                    >
+                                        Save Changes
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        variant="contained"
+                                        onClick={handleSubmit}
+                                        fullWidth
+                                        disabled
+                                    >
+                                        Save Changes
+                                    </Button>
+                                )}
+
                             </Box>
                         </Box>
                     </Grid>
