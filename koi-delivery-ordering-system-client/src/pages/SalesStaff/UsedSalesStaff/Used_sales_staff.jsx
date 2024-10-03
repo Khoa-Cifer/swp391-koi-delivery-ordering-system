@@ -1,7 +1,8 @@
 import { Box } from "@mui/material";
-import Card from "../SalesComponent/Card/Card";
+import Card from "./Card/Card";
 import Header from "../SalesComponent/Header/Header";
 import Sidebar from "../SalesComponent/Sidebar/Sidebar";
+
 
 function Sales_staff_home() {
   return (
