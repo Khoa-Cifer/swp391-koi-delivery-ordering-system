@@ -35,7 +35,7 @@ public class StorageServiceImpl implements IStorageService {
     }
 
     @Override
-    public List<Storage> getALlStorages() {
+    public List<Storage> getAllStorages() {
         return storageRepository.findAll();
     }
 }

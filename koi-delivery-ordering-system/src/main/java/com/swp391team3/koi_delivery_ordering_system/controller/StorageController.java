@@ -19,6 +19,6 @@ public class StorageController {
 
     @GetMapping("/getAllStorages")
     public ResponseEntity<?> getAllStorages() {
-        return ResponseEntity.ok(storageService.getALlStorages());
+        return ResponseEntity.ok(storageService.getAllStorages());
     }
 }

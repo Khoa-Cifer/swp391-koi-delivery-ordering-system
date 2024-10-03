@@ -10,6 +10,7 @@ const Sidebar = () => {
           className="avatar"
         />
       </div>
+
       <List>
         <ListItem button>
           <ListItemText primary="Home" />

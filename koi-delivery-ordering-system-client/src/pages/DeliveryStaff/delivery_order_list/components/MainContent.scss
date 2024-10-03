@@ -2,71 +2,71 @@
   padding: 20px;
   width: 50vw;
   margin: auto;
-}
 
-.order-row-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
+  .order-row-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
 
-.order-list-row {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 7.5%;
-  justify-content: end;
-}
+  .order-list-row {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 7.5%;
+    justify-content: end;
+  }
 
-.order-list-card {
-  flex: 0 1 41%; /* Thẻ chiếm 30% chiều rộng, đảm bảo không nhỏ hơn 30% */
-  padding: 20px;
-  background-color: #e4e2e2;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  height: auto; /* Chiều cao tự động để nội dung không bị cắt */
-  margin-bottom: 2%;
-}
+  .order-list-card {
+    flex: 0 1 41%; /* Thẻ chiếm 30% chiều rộng, đảm bảo không nhỏ hơn 30% */
+    padding: 20px;
+    background-color: #e4e2e2;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    height: auto; /* Chiều cao tự động để nội dung không bị cắt */
+    margin-bottom: 2%;
+  }
 
-.card-list-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
+  .card-list-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
 
-.card-list-text {
-  font-size: 14px;
-  margin-bottom: 10px;
-}
+  .card-list-text {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
 
-.button-list-container {
-  display: flex;
-  justify-content: space-between;
-}
+  .button-list-container {
+    display: flex;
+    justify-content: space-between;
+  }
 
-.status-btn,
-.detail-btn {
-  width: 48%;
-  font-size: 13px;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
+  .status-btn,
+  .detail-btn {
+    width: 48%;
+    font-size: 13px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 
-.status-btn {
-  background-color: blue;
-  color: white;
-}
+  .status-btn {
+    background-color: blue;
+    color: white;
+  }
 
-.detail-btn {
-  background-color: green;
-  color: white;
-}
+  .detail-btn {
+    background-color: green;
+    color: white;
+  }
 
-.view-more-list-button {
-  border: none;
-  background-color: rgb(58, 181, 166);
-  color: white;
-  border-radius: 20px;
-  font-size: 12px;
+  .view-more-list-button {
+    border: none;
+    background-color: rgb(58, 181, 166);
+    color: white;
+    border-radius: 20px;
+    font-size: 12px;
+  }
 }

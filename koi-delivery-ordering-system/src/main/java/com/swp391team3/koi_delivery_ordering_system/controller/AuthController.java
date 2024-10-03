@@ -2,19 +2,19 @@ package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
+import com.swp391team3.koi_delivery_ordering_system.model.Manager;
 import com.swp391team3.koi_delivery_ordering_system.model.SalesStaff;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestLoginDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestRegisterDTO;
-import com.swp391team3.koi_delivery_ordering_system.responseDto.UserResponseLoginDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.ICustomerService;
 import com.swp391team3.koi_delivery_ordering_system.service.IDeliveryStaffService;
+import com.swp391team3.koi_delivery_ordering_system.service.IManagerService;
 import com.swp391team3.koi_delivery_ordering_system.service.ISalesStaffService;
 import com.swp391team3.koi_delivery_ordering_system.config.security.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +27,7 @@ public class AuthController {
     private final ICustomerService customerService;
     private final ISalesStaffService salesStaffService;
     private final IDeliveryStaffService deliveryStaffService;
+    private final IManagerService managerService;
 
     @Autowired
     TokenService tokenService;
@@ -57,7 +58,15 @@ public class AuthController {
                 DeliveryStaff foundDeliveryStaff = deliveryStaffService.getDeliveryStaffByEmail(request.getEmail());
                 response = tokenService.generateToken(foundDeliveryStaff);
             }
+        } else if (userType == 4) {
+            boolean status = managerService.managerLogin(request.getEmail(), request.getPassword());
+            if (status) {
+                foundUserStatus = userType;
+                Manager foundManager = managerService.getManagerByEmail(request.getEmail());
+                response = tokenService.generateToken(foundManager);
+            }
         }
+
         if (foundUserStatus == 0) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
@@ -68,5 +77,10 @@ public class AuthController {
     @PostMapping("/register")
     public String register(@RequestBody UserRequestRegisterDTO request) {
         return customerService.customerRegister(request.getEmail(), request.getPassword(), request.getUsername(), request.getPhoneNumber());
+    }
+
+    @PostMapping("/createNewManager")
+    public ResponseEntity<?> createNewManager(@RequestBody UserRequestRegisterDTO request) {
+        return ResponseEntity.ok(managerService.createNewManager(request));
     }
 }

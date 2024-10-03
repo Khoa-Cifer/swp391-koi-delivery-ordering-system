@@ -73,9 +73,9 @@ function Customer() {
                     <div style={{ width: "100%" }}>
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <Tabs value={value} onChange={handleChange}>
-                                <CustomTab label="Order Info" {...a11yProps(0)} />
+                                <CustomTab label="Order Info" {...a11yProps(0)} disabled={formStep > 0} />
                                 {formStep >= 1 && (
-                                    <CustomTab label="Fish Info" {...a11yProps(1)} />
+                                    <CustomTab label="Fish Info" {...a11yProps(1)} disabled={formStep > 1} />
                                 )}
                                 {formStep >= 2 && (
                                     <CustomTab label="Order Detail" {...a11yProps(2)} />

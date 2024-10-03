@@ -15,7 +15,8 @@ import LoginDeliveryStaff from "./pages/login/LoginDeliveryStaff/LoginDeliverySt
 import DeliveryOrderList from "./pages/DeliveryStaff/delivery_order_list/DeliveryOrderList";
 import DeliveryOrderDetail from "./pages/DeliveryStaff/delivery_order_detail/DeliveryOrderDetail";
 import DeliveryFishDetail from "./pages/DeliveryStaff/delivery_fish_detail/DeliveryFishDetail";
-import LoginAdmin from "./pages/login/LoginAdmin/LoginAdmin";
+import Used_sales_staff from "./pages/SalesStaff/UsedSalesStaff/Used_sales_staff";
+import LoginAdmin from "./pages/login/Loginadmin/LoginAdmin";
 
 function App() {
   return (
@@ -25,22 +26,25 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<SignUp />} />
+
             <Route path="/login-customer" element={<LoginCustomer />} />
             <Route path="/login-sales-staff" element={<LoginSaleStaff />} />
             <Route
               path="/login-delivery-staff"
               element={<LoginDeliveryStaff />}
             />
+            <Route path="/login-admin" element={<LoginAdmin />} />
 
-            <Route
+            {/* <Route
               path="/admin"
               element={
                 <PrivateRoute allowedRoles={4}>
                   <Admin />
                 </PrivateRoute>
               }
-            />
-            {/* <Route path="/admin" element={<Admin />} /> */}
+            /> */}
+
+            <Route path="/admin" element={<Admin />} />
             <Route
               path="/delivery-staff"
               element={
@@ -52,13 +56,13 @@ function App() {
 
             <Route
               path="/customer-edit-profile"
-              element={<EditCustomerProfile />}
+              element={
+                <PrivateRoute allowedRoles={1}>
+                  <EditCustomerProfile />
+                </PrivateRoute>
+              }
             />
-            <Route
-              path="/delivery-order-home"
-              element={<DeliveryOrderHome />}
-            />
-            <Route path="/order-available" element={<OrderAvailable />} />
+
             <Route
               path="/customer-home"
               element={
@@ -67,19 +71,55 @@ function App() {
                 </PrivateRoute>
               }
             />
+
+            <Route
+              path="/delivery-order-home"
+              element={
+                <PrivateRoute allowedRoles={2}>
+                  <DeliveryOrderHome />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/order-available"
+              element={
+                <PrivateRoute allowedRoles={2}>
+                  <OrderAvailable />
+                </PrivateRoute>
+              }
+            />
+
             <Route
               path="/delivery-order-list"
-              element={<DeliveryOrderList />}
+              element={
+                <PrivateRoute allowedRoles={2}>
+                  <DeliveryOrderList />
+                </PrivateRoute>
+              }
             />
+
             <Route
               path="/delivery-order-detail"
-              element={<DeliveryOrderDetail />}
+              element={
+                <PrivateRoute allowedRoles={2}>
+                  <DeliveryOrderDetail />
+                </PrivateRoute>
+              }
             />
+
             <Route
               path="/delivery-fish-detail"
-              element={<DeliveryFishDetail />}
+              element={
+                <PrivateRoute allowedRoles={2}>
+                  <DeliveryFishDetail />
+                </PrivateRoute>
+              }
             />
-            <Route path="/login-admin" element={<LoginAdmin />} />
+
+            */ Sale-staff
+            <Route path="/used-sales-staff" element={<Used_sales_staff />} />
+
           </Routes>
         </Router>
       </main>

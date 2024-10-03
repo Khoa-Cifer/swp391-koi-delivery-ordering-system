@@ -7,4 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import com.swp391team3.koi_delivery_ordering_system.model.Manager;
 
 public interface ManagerRepository extends JpaRepository<Manager, Long> {
+    boolean existsByEmail(String email);
+
+    Manager findByEmail(String email);
 }

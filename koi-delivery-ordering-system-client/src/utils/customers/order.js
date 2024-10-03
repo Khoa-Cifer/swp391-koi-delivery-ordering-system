@@ -120,3 +120,12 @@ export async function postOrder(orderId) {
         return false;
     }
 }
+
+export async function filterOrder(orderId) {
+    try {
+        const response = await axiosClient.post(`orders/filterOrderDistance/${orderId}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}

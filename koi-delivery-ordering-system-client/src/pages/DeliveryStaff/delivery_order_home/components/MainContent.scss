@@ -6,72 +6,72 @@
   padding: 40px;
 
   align-items: center;
-}
 
-.map-container {
-  width: 45vw;
-  height: 50vh;
-  background-color: #f1f1f1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 20px;
-  margin-bottom: 20px;
-}
+  .map-container {
+    width: 45vw;
+    height: 50vh;
+    background-color: #f1f1f1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
 
-.card-container {
-  display: flex;
-  justify-content: space-around;
-  width: -2%;
-}
+  .card-container {
+    display: flex;
+    justify-content: space-around;
+    width: -2%;
+  }
 
-.card {
-  background-color: white;
-  border-radius: 20px;
-  padding: 20px;
-  width: 13vw;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin: 10px;
-  font-size: 12px;
-}
+  .card {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    width: 13vw;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    font-size: 12px;
+  }
 
-.button-container {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-}
+  .button-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
 
-.status-button {
-  padding: 10px 20px;
-  border: none;
-  background-color: blue;
-  border-radius: 10px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-}
+  .status-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: blue;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
 
-.detail-button {
-  padding: 10px 20px;
-  border: none;
-  background-color: green;
-  color: white;
-  border-radius: 10px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  margin-left: 10px;
-  cursor: pointer;
-  font-size: 10px;
-}
+  .detail-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: green;
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 10px;
+  }
 
-.view-more-button {
-  padding: 10px 20px;
-  border: none;
-  background-color: rgb(58, 181, 166);
-  color: white;
-  border-radius: 20px;
-  cursor: pointer;
-  display: flex;
-  justify-content: end;
-}
-.view-more-container {
-  align-self: flex-end;
+  .view-more-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: rgb(58, 181, 166);
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: end;
+  }
+  .view-more-container {
+    align-self: flex-end;
+  }
 }
