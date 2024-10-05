@@ -8,11 +8,12 @@
   .filter-buttons {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 5%;
+    margin: 2% 0 7% 2%;
     gap: 5%;
   }
 
   .filter-button {
+    font-size: 0.8em;
     padding: 10px 20px;
     background-color: #c3f4fd;
     border: none;
