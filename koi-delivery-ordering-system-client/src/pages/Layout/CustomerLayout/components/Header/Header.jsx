@@ -53,12 +53,12 @@ function Header() {
     }
 
     return (
-        <div className="sale-header-container">
+        <div className="customer-header-container">
             <div className="logo">
                 <img
                     src={logo}
                     alt="Logo"
-                    style={{ width: "180px", height: "180px" }}
+                    style={{ width: "180px"}}
                 />
             </div>
 
