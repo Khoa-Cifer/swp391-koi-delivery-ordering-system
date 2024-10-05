@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import ToastUtil from "../../../components/toastContainer";
 import { createFishOrderInfo } from "../../../utils/customers/fish";
 import { createLicenseFiles, createLicenseOrderInfo } from "../../../utils/customers/license";
+import { calculateOrderPrice } from "../../../utils/customers/order";
 
 const CustomBoxContainer = styled(Box)(() => ({
     display: "flex",
@@ -140,6 +141,7 @@ function FishInfo({ orderId, formStepData }) {
             setFile(null);
             setLicenseForms([]);
             setTotalAddedFishes(totalAddedFishes + 1);
+            await calculateOrderPrice(orderId);
         } else {
             toast("Unexpected error has been occurred");
         }

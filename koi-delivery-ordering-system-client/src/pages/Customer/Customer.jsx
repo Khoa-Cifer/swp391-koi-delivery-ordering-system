@@ -59,7 +59,7 @@ function Customer() {
     }
 
     return (
-        <div style={{ width: "100%" }}>
+        <div>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChange}>
                     <CustomTab label="Order Info" {...a11yProps(0)} disabled={formStep > 0} />

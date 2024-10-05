@@ -4,16 +4,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";
 import { usePlacesWidget } from "react-google-autocomplete";
-import { CONSTANT_GOOGLE_MAP_API_KEY } from "../../../../utils/constants";
 import { createStorage, getAllStorages } from "../../../../utils/admin/storage";
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap } from "@react-google-maps/api";
 
 const modalStyle = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 800,
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4,
@@ -21,6 +20,12 @@ const modalStyle = {
 };
 
 function Storage() {
+    const centerDefault = {
+        lat: 10.75,
+        lng: 106.6667
+    };  
+    
+    const [center, setCenter] = useState(centerDefault);
     const [storageData, setStorageData] = useState([]);
     const [open, setOpen] = useState(false);
     const [name, setName] = useState("");
@@ -37,6 +42,36 @@ function Storage() {
         setAddress("");
         setCoordinates({ lat: null, lng: null });
     };
+
+    const onMapClick = useCallback((e) => {
+        const lat = e.latLng.lat();
+        const lng = e.latLng.lng();
+
+        console.log(e);
+
+        setCenter({
+            lat: e.latLng.lat(),
+            lng: e.latLng.lng()
+        })
+        
+        setCoordinates({ lat, lng })
+
+        // Initialize the Geocoder
+        const geocoder = new window.google.maps.Geocoder();
+
+        // Reverse Geocode to get the address
+        geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+            if (status === "OK" && results[0]) {
+                if (results[0].formatted_address.includes("+")) {
+                    console.log("Invalid token");
+                } else {
+                    setAddress(results[0].formatted_address);
+                }
+            } else {
+                console.error("Geocoder failed due to: " + status);
+            }
+        });
+    }, []);
 
     useEffect(() => {
         const geocodeAddress = () => {
@@ -63,14 +98,13 @@ function Storage() {
         if (fetchedData) { setStorageData(fetchedData) };
     }
 
+    const { ref: storageAddress } = usePlacesWidget({
+        onPlaceSelected: (place) => console.log(place.formatted_address),
+    })
+
     useEffect(() => {
         fetchStorageData();
     }, []);
-
-    const { isLoaded } = useJsApiLoader({
-        id: 'google-map-script',
-        googleMapsApiKey: CONSTANT_GOOGLE_MAP_API_KEY
-    })
 
     async function handleCreateStorage() {
         if (coordinates.lat && coordinates.lng) {
@@ -86,20 +120,11 @@ function Storage() {
     }
 
     const containerStyle = {
-        width: '400px',
+        width: '800px',
         height: '400px'
     };
 
-    const center = {
-        lat: -3.745,
-        lng: -38.523
-    };
-
     const onLoad = useCallback(function callback(map) {
-        // This is just an example of getting and using the map instance!!! don't just blindly copy!
-        const bounds = new window.google.maps.LatLngBounds(center);
-        map.fitBounds(bounds);
-
         setMap(map)
     }, [])
 
@@ -107,7 +132,11 @@ function Storage() {
         setMap(null)
     }, [])
 
-    return isLoaded && (
+    const handleStorageAddressChange = (e) => {
+        setAddress(e.target.value);
+    }
+
+    return (
         <div>
             <ToastUtil />
             <div className={open ? 'blur' : ''}>
@@ -134,7 +163,8 @@ function Storage() {
                                 className="form-input"
                             />
                         </div>
-                        {/* <div className="form-group">
+
+                        <div className="form-group">
                             <input
                                 style={{
                                     width: "100%",
@@ -142,18 +172,21 @@ function Storage() {
                                 }}
                                 placeholder="Address"
                                 type="text"
-                                onChange={(e) => setAddress(e.target.value)}
                                 name="text"
                                 className="form-input"
-                                ref={ref}
+                                value={address}
+                                onChange={handleStorageAddressChange}
+                                ref={storageAddress}
                             />
-                        </div> */}
+                        </div>
+
                         <GoogleMap
                             mapContainerStyle={containerStyle}
                             center={center}
                             zoom={10}
                             onLoad={onLoad}
                             onUnmount={onUnmount}
+                            onClick={onMapClick}
                         >
                             { /* Child components, such as markers, info windows, etc. */}
                             <></>

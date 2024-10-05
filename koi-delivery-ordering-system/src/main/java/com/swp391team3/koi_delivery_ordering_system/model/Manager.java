@@ -35,10 +35,6 @@ public class Manager implements UserDetails {
     @JoinColumn(name = "avatar_id", referencedColumnName = "id")
     private File file;
 
-    @OneToMany(mappedBy = "sender")
-    @JsonIgnore
-    private Set<Notification> senders;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();

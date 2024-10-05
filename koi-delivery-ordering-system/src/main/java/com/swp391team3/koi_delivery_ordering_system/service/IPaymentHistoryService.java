@@ -8,5 +8,6 @@ import java.util.Optional;
 public interface IPaymentHistoryService {
     public List<OrderPaymentHistory> getAllPaymentHistory();
     public Optional<OrderPaymentHistory> getPaymentHistoryById(Long id);
-    public OrderPaymentHistory updatePaymentHistory(Long id, String description);
+    public OrderPaymentHistory updatePaymentHistory(Long id);
+    public boolean logPaymentHistory(double amount, Long orderId, Long customerId);
 }

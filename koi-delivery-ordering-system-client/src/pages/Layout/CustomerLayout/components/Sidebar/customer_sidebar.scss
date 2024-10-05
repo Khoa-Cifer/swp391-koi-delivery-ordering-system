@@ -1,40 +1,45 @@
-.sidebar-body {
-    border-radius: 25px;
-    border: 2px solid skyblue;
-    background-color: #c3f4fd;
-    padding: 20px;
-    margin-left: 100px;
-    height: 80vh;
-    width: 15%;
-  
-    .avatar {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #ddd;
+.sidebar-body-customer {
+  border-radius: 25px;
+  border: 2px solid skyblue;
+  background-color: #c3f4fd;
+  padding: 20px;
+  margin-left: 100px;
+  height: 80vh;
+  width: 15vw;
+
+  .avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+  }
+
+  .image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+  }
+
+  .profile {
+    margin: 5%;
+  }
+
+
+  .list-function {
+    margin-top: 15%;
+
+    .button {
+      margin-bottom: 5%;
+      background-color: rgb(255, 255, 255);
+      color: #151f5f;
+      border-radius: 20px;
+      cursor: pointer;
     }
-  
-    .image-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 30px 0;
-    }
-    .profile {
-      margin: 5%;
-    }
-  
-  
-    .list-function {
-      margin-top: 15%;
-  
-      .button {
-        margin-bottom: 5%;
-        background-color: rgb(255, 255, 255);
-        color: #151f5f;
-        border-radius: 20px;
-      }
+
+    .button:hover {
+      background-color: rgba(0, 0, 0, 0.1);
     }
   }
-  
+}

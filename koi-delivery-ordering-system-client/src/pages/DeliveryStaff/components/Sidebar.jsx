@@ -2,7 +2,7 @@ import { List, ListItem, ListItemText } from "@mui/material";
 import "./sidebar.scss";
 const Sidebar = () => {
   return (
-    <div className="sidebar-body">
+    <div className="sidebar-body-delivery">
       <div className="image-container">
         <img
           src={"./assets/default-avatar.jpg"}

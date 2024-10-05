@@ -31,7 +31,7 @@ public class VNPayConfiguration {
     @Value("${payment.vnPay.returnUrl}")
     private String vnp_ReturnUrl;
 
-    public Map<String, String> getVNPayConfig() {
+    public Map<String, String> getVNPayConfig(Long customerId) {
         Map<String, String> vnpParamsMap = new HashMap<>();
         vnpParamsMap.put("vnp_TmnCode", vnp_TmnCode);
         vnpParamsMap.put("vnp_CurrCode", "VND");
@@ -41,7 +41,7 @@ public class VNPayConfiguration {
         vnpParamsMap.put("vnp_Version", vnp_Version);
         vnpParamsMap.put("vnp_Command", vnp_Command);
         vnpParamsMap.put("vnp_OrderType", orderType);
-        vnpParamsMap.put("vnp_ReturnUrl", vnp_ReturnUrl);
+        vnpParamsMap.put("vnp_ReturnUrl", vnp_ReturnUrl + "/" + customerId);
 
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");

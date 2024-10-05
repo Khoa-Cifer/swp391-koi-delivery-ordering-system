@@ -3,19 +3,28 @@ import ToastUtil from "../../../components/toastContainer";
 import { useEffect, useState } from "react";
 import { getOrderById } from "../../../utils/customers/order";
 import dateTimeConvert from "../../../components/utils";
-import { getFishFileByFileId } from "../../../utils/customers/fish";
-import TextArea from "antd/es/input/TextArea";
 import { postOrder } from "../../../utils/customers/order";
 import { toast } from "react-toastify";
+import { getFileByFileId } from "../../../utils/customers/file";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+import { paymentOpenGateway } from "../../../utils/customers/payment";
 
 const SubmitButton = styled(Button)(() => ({
     padding: "10px 80px"
 }))
+
 // eslint-disable-next-line react/prop-types
 function OrderFinalInfo({ orderId }) {
     const [postedData, setPostedData] = useState();
     const [fishOrderData, setFishOrderData] = useState([]);
     const [fishFiles, setFishFiles] = useState([]);
+
+    const navigate = useNavigate();
+
+    const token = localStorage.getItem("token");
+    const customerInfo = jwtDecode(token);
+    const customerId = customerInfo.sub.substring(2);
 
     useEffect(() => {
         async function fetchData() {
@@ -26,7 +35,7 @@ function OrderFinalInfo({ orderId }) {
             const fileIds = postedOrder.fishes.map(fish => fish.file.id);
             if (fileIds && fileIds.length > 0) {
                 const fishFilesPromises = fileIds.map(async fileId => {
-                    const response = await getFishFileByFileId(fileId);
+                    const response = await getFileByFileId(fileId);
                     return URL.createObjectURL(response); // Create Object URL from response blob
                 });
 
@@ -39,10 +48,25 @@ function OrderFinalInfo({ orderId }) {
     }, []);
 
     async function handlePostOrder() {
+        const paymentOpen = await paymentOpenGateway(customerId, Math.floor(postedData.price), "NCB");
+        if (paymentOpen) {
+            const newWindow = window.open(paymentOpen.paymentUrl, "_blank");
+            if (newWindow) {
+                // Use setInterval to periodically check if the window is closed
+                const checkWindowClosed = setInterval(() => {
+                    if (newWindow.closed) {
+                        clearInterval(checkWindowClosed); // Stop checking
+                        console.log("Payment window closed. Proceeding...");
+                        // Perform the action you want after the window is closed
+                    }
+                }, 1000); // Check every 1 second
+            }
+        }
+        console.log("check");
         const response = await postOrder(orderId);
         if (response) {
             toast("Order posted successfully");
-            
+
         } else {
             toast("Unexpected error has been occurred");
         }
@@ -126,11 +150,22 @@ function OrderFinalInfo({ orderId }) {
                             />
                         </Grid>
 
-                        <Grid item xs={12} sm={12}>
-                            <TextArea
+                        <Grid item xs={12} sm={6}>
+                            <TextField
                                 fullWidth
-                                label="Description"
+                                label="Tracking Id"
                                 value={postedData.description}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                fullWidth
+                                label="Tracking Id"
+                                value={`${Math.floor(postedData.price)} VND`}
                                 InputProps={{
                                     readOnly: true,
                                 }}
