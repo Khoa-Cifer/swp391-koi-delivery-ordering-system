@@ -80,7 +80,7 @@ public class OrderServiceImpl implements IOrderService {
             double storageLat = Double.parseDouble(allStorages.get(index).getLatitude());
             double storageLong = Double.parseDouble(allStorages.get(index).getLongitude());
             double distance = Utilities.calculateDistance(
-                orderLat, orderLong, storageLat, storageLong);
+                    orderLat, orderLong, storageLat, storageLong);
             if (distance <= 50) {
                 if (minDistance > distance) {
                     minDistance = distance;
@@ -102,5 +102,80 @@ public class OrderServiceImpl implements IOrderService {
         completeOrder.get().setOrderStatus(orderStatus.POSTED);
         orderRepository.save(completeOrder.get());
         return true;
+    }
+
+    @Override
+    public boolean cancelOrder(Long id) {
+        Optional<Order> optionalOrder = orderRepository.findById(id);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            order.setOrderStatus(orderStatus.FAILED);
+            orderRepository.save(order);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean confirmOrder(Long id) {
+        Optional<Order> optionalOrder = orderRepository.findById(id);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            if (order.getOrderStatus() == orderStatus.POSTED) { // Kiểm tra trạng thái hiện tại
+                order.setOrderStatus(orderStatus.ORDER_ACCEPTED); // Chuyển trạng thái thành ORDER_ACCEPTED
+                orderRepository.save(order);
+                return true; // Thành công
+            }
+        }
+        return false; // Không thành công
+    }
+
+    @Override
+    public boolean deliveryPickup(Long id) {
+        Optional<Order> optionalOrder = orderRepository.findById(id);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            if (order.getOrderStatus() == orderStatus.ORDER_ACCEPTED) { // Kiểm tra trạng thái hiện tại
+                order.setOrderStatus(orderStatus.ORDER_GETTING); // Chuyển trạng thái thành ORDER_ACCEPTED
+                orderRepository.save(order);
+                return true; // Thành công
+            }
+        }
+        return false; // Không thành công
+    }
+
+    @Override
+    public boolean receiveOrder(Long id) {
+        Optional<Order> optionalOrder = orderRepository.findById(id);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            if (order.getOrderStatus() == orderStatus.ORDER_GETTING) { // Kiểm tra trạng thái hiện tại
+                order.setOrderStatus(orderStatus.ORDER_RECEIVED); // Chuyển trạng thái thành ORDER_ACCEPTED
+                orderRepository.save(order);
+                return true; // Thành công
+            }
+        }
+        return false; // Không thành công
+    }
+
+    @Override
+    public boolean confirmReceivedOrder(Long id) {
+        Optional<Order> optionalOrder = orderRepository.findById(id);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            if (order.getOrderStatus() == orderStatus.ORDER_RECEIVED) { // Kiểm tra trạng thái hiện tại
+                order.setOrderStatus(orderStatus.ORDER_CONFIRMED); // Chuyển trạng thái thành ORDER_ACCEPTED
+                orderRepository.save(order);
+                return true; // Thành công
+            }
+        }
+        return false; // Không thành công
+    }
+
+
+    @Override
+    public List<Order> getOrderByStatus(int status) {
+        List<Order> orders = orderRepository.findByOrderStatus(status);
+        return orders;
     }
 }

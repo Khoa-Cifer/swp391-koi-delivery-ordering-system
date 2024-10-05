@@ -1,14 +1,15 @@
 import { useState } from "react";
-import "./Admin.scss";
-import Header from "./layout/Header";
-import Sidebar from "./layout/Sidebar";
-import Customer from "./components/Customer/Customer";
-import DeliveryStaff from "./components/DeliveryStaff/DeliveryStaff";
+import "./Dashboard.scss";
+import Header from "../Header/Header";
+import Sidebar from "../Sidebar/Sidebar";
+import Customer from "../../components/Customer/Customer";
+import DeliveryStaff from "../../components/DeliveryStaff/DeliveryStaff";
 import { List, ListItem, ListItemText } from "@mui/material";
-import Storage from "./components/Storage/Storage";
+import Storage from "../../components/Storage/Storage";
+import { Image } from "antd";
 
-function Admin() {
-  const [selectedDataType, setSelectedDataType] = useState('');
+function Dashboard() {
+  const [selectedDataType, setSelectedDataType] = useState("");
 
   const handleDataTypeChange = (dataType) => {
     setSelectedDataType(dataType);
@@ -16,42 +17,45 @@ function Admin() {
 
   const renderContent = () => {
     switch (selectedDataType) {
-      case 'Customer':
+      case "Customer":
         return <Customer />;
-      case 'Delivery Staff':
+      case "Delivery Staff":
         return <DeliveryStaff />;
-      case 'File':
+      case "File":
         return <p>File Body Loaded</p>;
-      case 'Fish':
+      case "Fish":
         return <p>Fish Body Loaded</p>;
-      case 'License':
+      case "License":
         return <p>License Body Loaded</p>;
-      case 'Manager':
+      case "Manager":
         return <p>Manager Body Loaded</p>;
-      case 'News':
+      case "News":
         return <p>News Body Loaded</p>;
-      case 'Notification':
+      case "Notification":
         return <p>Notification Body Loaded</p>;
-      case 'Order':
+      case "Order":
         return <p>Order Body Loaded</p>;
-      case 'Rating':
+      case "Rating":
         return <p>Rating Body Loaded</p>;
-      case 'Sale Staff':
+      case "Sale Staff":
         return <p>Sale Staff Body Loaded</p>;
-      case 'Payment History':
+      case "Payment History":
         return <p>Payment History Body Loaded</p>;
-      case 'License Type':
+      case "License Type":
         return <p>License Type Body Loaded</p>;
-      case 'Delivery Type':
+      case "Delivery Type":
         return <p>Delivery Type Body Loaded</p>;
-      case 'Storage':
+      case "Storage":
         return <Storage />;
     }
-  }
+  };
 
   return (
     <div className="admin-container">
       <div className="admin-container-left">
+        <div className="logo">
+          <Image src="./src/assets/logo.png" />
+        </div>
 
         <div>
           <hr></hr>
@@ -64,8 +68,8 @@ function Admin() {
         <div className="admin-users">
           <h4>ADMIN USERS</h4>
           <List>
-            <ListItem button key={'check'}>
-              <ListItemText primary={'text'} />
+            <ListItem button key={"check"}>
+              <ListItemText primary={"text"} />
             </ListItem>
           </List>
         </div>
@@ -92,4 +96,4 @@ function Admin() {
   );
 }
 
-export default Admin;
+export default Dashboard;

@@ -30,3 +30,20 @@ export async function userRegister(email, username, password, phoneNumber) {
         console.log(error);
     }
 }
+
+export async function userUpdateProfile(id, email, username, phoneNumber, password) {
+    try {
+        const response = await axiosClient.put("customer/updateCustomerProfile",
+            {
+                id,
+                email,
+                password,
+                username,
+                phoneNumber
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}

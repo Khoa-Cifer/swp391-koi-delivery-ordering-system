@@ -60,7 +60,6 @@ function Storage() {
 
     async function fetchStorageData() {
         const fetchedData = await getAllStorages();
-        console.log(fetchedData);
         if (fetchedData) { setStorageData(fetchedData) };
     }
 

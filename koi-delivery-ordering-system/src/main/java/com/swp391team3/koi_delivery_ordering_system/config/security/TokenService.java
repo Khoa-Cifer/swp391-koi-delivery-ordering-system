@@ -47,6 +47,8 @@ public class TokenService {
         String username = null;
         String email = null;
         String roleName = null;
+        String phoneNumber = null;
+
         UserResponseLoginDTO responseLoginUser = new UserResponseLoginDTO();
 
         if (user instanceof Customer) {
@@ -56,10 +58,12 @@ public class TokenService {
             username = customer.getUsername();
             email = customer.getEmail();
             roleName = customer.getAuthorities().toString();
+            phoneNumber = customer.getPhoneNumber();
             int roleId = 1;
 
             responseLoginUser.setUsername(username);
             responseLoginUser.setEmail(email);
+            responseLoginUser.setPhoneNumber(phoneNumber);
             responseLoginUser.setUserRoleName(roleName);
             responseLoginUser.setRoleId(roleId);
         } else if (user instanceof DeliveryStaff) {

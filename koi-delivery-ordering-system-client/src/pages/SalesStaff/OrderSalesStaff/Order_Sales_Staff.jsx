@@ -3,7 +3,7 @@ import Card from "../SalesComponent/Card/Card";
 import Header from "../SalesComponent/Header/Header";
 import Sidebar from "../SalesComponent/Sidebar/Sidebar";
 
-function OrderSalesStaff() {
+function Order_Sales_Staff() {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       {/* Header */}
@@ -23,4 +23,4 @@ function OrderSalesStaff() {
   );
 }
 
-export default OrderSalesStaff;
+export default Order_Sales_Staff;
