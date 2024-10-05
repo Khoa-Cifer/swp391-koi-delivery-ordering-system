@@ -73,7 +73,7 @@ public class FileServiceImpl implements IFileService {
         file.setType(newFile.getContentType());
         file.setFilePath(filePath);
 
-        newFile.transferTo(new java.io.File(folderPath + file.getId() + "_" + newFile.getOriginalFilename()));
+        newFile.transferTo(new java.io.File(folderPath + newFile.getOriginalFilename()));
         fileRepository.save(file);
 
         return "file modified successfully : " + filePath;

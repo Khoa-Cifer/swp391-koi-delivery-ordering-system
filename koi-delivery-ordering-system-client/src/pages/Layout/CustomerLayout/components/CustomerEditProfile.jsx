@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import default_avatar from "../../../../assets/default-avatar.jpg"
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { userUpdateProfile, userUpdateProfileImage } from "../../../../utils/customers/user";
+import { getCustomerById, userUpdateProfile, userUpdateProfileImage } from "../../../../utils/customers/user";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../../components/toastContainer";
 import { useAuth } from "../../../../authentication/AuthProvider";
 import { PhotoCamera } from "@mui/icons-material";
+import { getFileByFileId } from "../../../../utils/customers/file";
 
 function CustomerEditProfile() {
     const [user, setUser] = useState({
@@ -24,11 +25,21 @@ function CustomerEditProfile() {
     const auth = useAuth();
     const navigate = useNavigate();
 
+    const token = localStorage.getItem("token");
+    const customerInfo = jwtDecode(token);
+    const customerId = customerInfo.sub.substring(2);
+    
     useEffect(() => {
         async function fetchUserData() {
             const userData = JSON.parse(localStorage.getItem("userData"));
-            console.log(userData);
             setUser(userData);
+            const customer = await getCustomerById(customerId);
+            if(customer.file) {
+                const imageResponse = await getFileByFileId(customer.file.id);;
+                const imgUrl = URL.createObjectURL(imageResponse);
+                setImagePreview(imgUrl);
+            }
+            // const imageResponse = await getFileByFileId();
         }
         fetchUserData();
     }, [])
@@ -54,9 +65,6 @@ function CustomerEditProfile() {
     }
 
     async function handleSubmit() {
-        const token = localStorage.getItem("token");
-        const customerInfo = jwtDecode(token);
-        const customerId = customerInfo.sub.substring(2);
         let response = null;
         if (updatePassword === false) {
             response = await userUpdateProfile(

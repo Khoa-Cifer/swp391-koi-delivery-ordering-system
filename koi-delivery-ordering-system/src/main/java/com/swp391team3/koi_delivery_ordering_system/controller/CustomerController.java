@@ -79,9 +79,9 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.customerUpdateProfile(request));
     }
 
-    @PutMapping("/updateCustomerAvatar")
+    @PutMapping("/updateCustomerAvatar/{id}")
     public ResponseEntity<?> updateCustomerProfileAvatar(
-            @RequestParam("id") Long id,
+            @PathVariable("id") Long id,
             @RequestParam("file") MultipartFile file) throws IOException {
         return ResponseEntity.ok(customerService.customerUpdateAvatar(id, file));
     }

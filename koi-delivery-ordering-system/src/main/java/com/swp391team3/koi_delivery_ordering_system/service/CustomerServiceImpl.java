@@ -130,6 +130,8 @@ public class CustomerServiceImpl implements ICustomerService {
         if (customer.get().getFile() == null) {
             File newFile = fileService.uploadFileToFileSystem(file);
             if (newFile != null) {
+                customer.get().setFile(newFile);
+                customerRepository.save(customer.get());
                 return "Update Avatar successfully";
             }
         } else {
