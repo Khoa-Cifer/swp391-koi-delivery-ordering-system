@@ -35,6 +35,11 @@
       background-color: rgb(255, 255, 255);
       color: #151f5f;
       border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      background-color: rgba(0, 0, 0, 0.1);
     }
   }
 }

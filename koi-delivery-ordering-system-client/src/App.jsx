@@ -18,6 +18,7 @@ import LoginAdmin from "./pages/login/Loginadmin/LoginAdmin";
 import OrderSalesStaff from "./pages/SalesStaff/OrderSalesStaff/OrderSalesStaff";
 import CustomerLayout from "./pages/Layout/CustomerLayout/CustomerLayout";
 import CustomerEditProfile from "./pages/Layout/CustomerLayout/components/CustomerEditProfile";
+import PaymentSuccess from "./utils/DefaultPages/PaymentSuccess";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -76,7 +77,7 @@ function App() {
             <Route path="/delivery-fish-detail" element={<DeliveryStaffPrivateRoute element={<DeliveryFishDetail />} />} />
 
             <Route path="/order-sales-staff" element={<OrderSalesStaff />} />
-
+            <Route path="/payment-success" element={<PaymentSuccess />} />
           </Routes>
         </Router>
       </main>
