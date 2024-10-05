@@ -16,7 +16,7 @@ import DeliveryOrderList from "./pages/DeliveryStaff/delivery_order_list/Deliver
 import DeliveryOrderDetail from "./pages/DeliveryStaff/delivery_order_detail/DeliveryOrderDetail";
 import DeliveryFishDetail from "./pages/DeliveryStaff/delivery_fish_detail/DeliveryFishDetail";
 import Used_sales_staff from "./pages/SalesStaff/UsedSalesStaff/Used_sales_staff";
-import LoginAdmin from "./pages/login/Loginadmin/LoginAdmin";
+import LoginAdmin from "./pages/login/LoginAdmin/LoginAdmin";
 
 function App() {
   return (
@@ -26,7 +26,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<SignUp />} />
-
             <Route path="/login-customer" element={<LoginCustomer />} />
             <Route path="/login-sales-staff" element={<LoginSaleStaff />} />
             <Route
@@ -34,7 +33,6 @@ function App() {
               element={<LoginDeliveryStaff />}
             />
             <Route path="/login-admin" element={<LoginAdmin />} />
-
             {/* <Route
               path="/admin"
               element={
@@ -43,7 +41,6 @@ function App() {
                 </PrivateRoute>
               }
             /> */}
-
             <Route path="/admin" element={<Admin />} />
             <Route
               path="/delivery-staff"
@@ -53,7 +50,6 @@ function App() {
                 </PrivateRoute>
               }
             />
-
             <Route
               path="/customer-edit-profile"
               element={
@@ -62,7 +58,6 @@ function App() {
                 </PrivateRoute>
               }
             />
-
             <Route
               path="/customer-home"
               element={
@@ -71,16 +66,10 @@ function App() {
                 </PrivateRoute>
               }
             />
-
             <Route
               path="/delivery-order-home"
-              element={
-                <PrivateRoute allowedRoles={2}>
-                  <DeliveryOrderHome />
-                </PrivateRoute>
-              }
+              element={<DeliveryOrderHome />}
             />
-
             <Route
               path="/order-available"
               element={
@@ -89,16 +78,12 @@ function App() {
                 </PrivateRoute>
               }
             />
-
             <Route
               path="/delivery-order-list"
               element={
-                <PrivateRoute allowedRoles={2}>
                   <DeliveryOrderList />
-                </PrivateRoute>
               }
             />
-
             <Route
               path="/delivery-order-detail"
               element={
@@ -107,7 +92,6 @@ function App() {
                 </PrivateRoute>
               }
             />
-
             <Route
               path="/delivery-fish-detail"
               element={
@@ -116,10 +100,8 @@ function App() {
                 </PrivateRoute>
               }
             />
-
             */ Sale-staff
             <Route path="/used-sales-staff" element={<Used_sales_staff />} />
-
           </Routes>
         </Router>
       </main>
