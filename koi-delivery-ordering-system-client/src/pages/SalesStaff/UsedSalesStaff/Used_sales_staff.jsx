@@ -4,7 +4,7 @@ import Header from "../SalesComponent/Header/Header";
 import Sidebar from "../SalesComponent/Sidebar/Sidebar";
 
 
-function Sales_staff_home() {
+function Used_sales_staff() {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       {/* Header */}
@@ -24,4 +24,4 @@ function Sales_staff_home() {
   );
 }
 
-export default Sales_staff_home;
+export default  Used_sales_staff;

@@ -1,18 +1,13 @@
-import "./sales_header.scss";
-import {Button } from "antd";
-import logo from "../../../../assets/logo.png";
+import "./Header.scss";
+import {Button, Image } from "antd";
 import avatar from "../../../../assets/avatar.png";
 
 function Header() {
   return (
     <div className="sale-header-container">
       <div className="logo">
-        <img
-          src={logo}
-          alt="Logo"
-          style={{ width: "180px", height: "180px" }}
-        />
-      </div>
+          <Image src="./src/assets/logo.png" />
+        </div>
 
       <div className="function">
         <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }}><strong>Home</strong></Button>
@@ -20,11 +15,11 @@ function Header() {
         <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }}><strong>Contact</strong></Button>
       </div>
 
-      <div className="logo">
+      <div className="avatar">
         <img
           src={avatar}
           alt="avatar"
-          style={{ width: "5vw", height: "10vh", marginRight: "30px" }}
+          style={{ width: "5vw", height: "8vh", marginRight: "30px" }}
         />
       </div>
     </div>

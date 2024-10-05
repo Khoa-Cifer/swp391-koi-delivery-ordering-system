@@ -4,82 +4,72 @@
   z-index: 500;
   height: 10vh;
   display: flex;
-  justify-content: space-between;
+  // justify-content: space-between;
   align-items: center;
   background-color: #8cbdf6;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   color: white;
   margin: -10px;
-}
 
-.header-left {
-  display: flex;
-  align-items: center;
-}
+  .logo{
+    margin-left: 10%;
+    width: 20%;
+  }
 
-.navigator:hover {
-  cursor: pointer;
-}
+  .header-left {
+    display: flex;
+    align-items: center;
+  }
 
-.dashboard {
-  font-size: 1em;
-  font-weight: bold;
-  display: flex;
-  gap: 100px;
-  color: white;
-}
+  .navigator:hover {
+    cursor: pointer;
+  }
 
-.dashboard button {
-  background-color: transparent;
-  color: black;
-  border: 1px solid white;
-  padding: 10px 20px;
-  margin-left: 10px;
-  border-radius: 5px;
-  width: 100px;
-}
+  .dashboard {
+    font-size: 1.2em;
+    font-weight: bold;
+    display: flex;
+    gap: 100px;
+    color: white;
+    margin-left: 10%;
+    width: 60%;
+  }
 
-.dashboard button:hover {
-  background-color: #70b1fc;
-  color: black;
-}
+  .dashboard button {
+    color: black;
+    border: 1px solid white;
+    padding: 10px 20px;
+    margin-left: 10px;
+    border-radius: 5px;
+    width: 100px;
+  }
 
-.search-bar {
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 1em;
-  width: 400px;
-}
-.search button {
-  background-color: transparent;
-  color: white;
-  border: 1px solid white;
-  width: 100px;
-  margin-left: 5px;
-  padding: 10px 20px;
-}
+  .dashboard button:hover {
+    background-color: #70b1fc;
+    color: black;
+  }
 
-.search button:hover {
-  background-color: white;
-  color: black;
-}
+  .header-right {
+    display: flex;
+    align-items: center;
+    width: 20%;
+  }
 
-.header-right {
-  display: flex;
-  align-items: center;
-}
+  .right{
+     margin-right: 1%;
+  }
 
-.header-right button {
-  background-color: transparent;
-  color: white;
-  border: 1px solid white;
-  padding: 10px 20px;
-  margin-left: 10px;
-  border-radius: 5px;
-}
+  .header-right button {
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+    padding: 10px 20px;
+    margin-left: 10px;
+    border-radius: 5px;
+  }
 
-.header-right button:hover {
-  background-color: white;
-  color: black;
+  .header-right button:hover {
+    background-color: white;
+    color: black;
+  }
 }
