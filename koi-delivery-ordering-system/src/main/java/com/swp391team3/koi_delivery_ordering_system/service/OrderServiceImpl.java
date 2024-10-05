@@ -74,6 +74,7 @@ public class OrderServiceImpl implements IOrderService {
         double minDistance = Double.MAX_VALUE;
         Storage nearestStorage = null;
 
+        System.out.println(allStorages.size());
         for (int index = 0; index < allStorages.size(); index++) {
             double orderLat = Double.parseDouble(foundedOrder.get().getSenderLatitude());
             double orderLong = Double.parseDouble(foundedOrder.get().getSenderLongitude());

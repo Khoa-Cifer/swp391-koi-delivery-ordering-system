@@ -22,6 +22,12 @@ const containerStyle = {
 
 // eslint-disable-next-line react/prop-types
 function OrderInfo({ orderId, formStepData }) {
+    const centerDefault = {
+        lat: 10.75,
+        lng: 106.6667
+    };
+
+    const [center, setCenter] = useState(centerDefault);
     const [orderName, setOrderName] = useState("");
     const [orderDescription, setOrderDescription] = useState("");
     const [senderAddress, setSenderAddress] = useState("");
@@ -35,6 +41,11 @@ function OrderInfo({ orderId, formStepData }) {
         const lat = e.latLng.lat();
         const lng = e.latLng.lng();
 
+        setCenter({
+            lat: e.latLng.lat(),
+            lng: e.latLng.lng()
+        })
+
         if (selectedButton === 0) {
             setSenderCoordinates({ lat, lng })
         } else {
@@ -47,10 +58,14 @@ function OrderInfo({ orderId, formStepData }) {
         // Reverse Geocode to get the address
         geocoder.geocode({ location: { lat, lng } }, (results, status) => {
             if (status === "OK" && results[0]) {
-                if (selectedButton === 0) {
-                    setSenderAddress(results[0].formatted_address);
+                if (results[0].formatted_address.includes("+")) {
+                    console.log("Invalid token");
                 } else {
-                    setReceiverAddress(results[0].formatted_address);
+                    if (selectedButton === 0) {
+                        setSenderAddress(results[0].formatted_address);
+                    } else {
+                        setReceiverAddress(results[0].formatted_address);
+                    }
                 }
             } else {
                 console.error("Geocoder failed due to: " + status);
@@ -90,16 +105,7 @@ function OrderInfo({ orderId, formStepData }) {
 
     }, [senderAddress]);
 
-    const center = {
-        lat: -3.745,
-        lng: -38.523
-    };
-
     const onLoad = useCallback(function callback(map) {
-        // This is just an example of getting and using the map instance!!! don't just blindly copy!
-        const bounds = new window.google.maps.LatLngBounds(center);
-        map.fitBounds(bounds);
-
         setMap(map)
     }, [])
 
@@ -184,10 +190,10 @@ function OrderInfo({ orderId, formStepData }) {
                 new Date(expectedFinishDate).toISOString()
             )
             const filter = await filterOrder(response);
+            toast("Create successfully");
             if (filter) {
                 orderId(filter);
                 formStepData(1);
-                toast("Create successfully");
             } else {
                 toast("Unsupported Area");
             }

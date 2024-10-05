@@ -45,7 +45,7 @@ public class OrderController {
         return order.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteOrderById/{id}")
     public ResponseEntity<Void> deleteOrderById(@PathVariable Long id) {
         orderService.deleteOrderById(id);
         return ResponseEntity.noContent().build();
@@ -60,5 +60,10 @@ public class OrderController {
         } else {
             return ResponseEntity.ok(orders);
         }
+    }
+
+    @PostMapping("/filterOrderDistance/{id}")
+    public ResponseEntity<?> filterOrder(@PathVariable Long id) {
+        return ResponseEntity.ok(orderService.filterOrderToStorage(id));
     }
 }
