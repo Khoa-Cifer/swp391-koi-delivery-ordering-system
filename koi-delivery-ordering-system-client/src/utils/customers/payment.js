@@ -13,3 +13,16 @@ export async function paymentOpenGateway(customerId, amount, bankCode) {
         console.log(error);
     }
 }
+
+export async function logPaymentHistory(customerId, orderId, amount) {
+    try {
+        const response = await axiosClient.post("payment-history/log-payment-history", {
+            customerId,
+            orderId,
+            amount
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}

@@ -20,6 +20,7 @@ import CustomerLayout from "./pages/Layout/CustomerLayout/CustomerLayout";
 import CustomerEditProfile from "./pages/Layout/CustomerLayout/components/CustomerEditProfile";
 import Used_sales_staff from "./pages/SalesStaff/UsedSalesStaff/Used_sales_staff";
 import SalesStaffHome from "./pages/SalesStaff/SalesStaffHome/SalesStaffHome";
+import PaymentSuccess from "./utils/DefaultPages/PaymentSuccess";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -88,7 +89,7 @@ function App() {
             <Route path="/used-sales-staff" element={<Used_sales_staff />} />
             <Route path="/sales-staff-home" element={<SalesStaffHome />} />
 
-
+            <Route path="/payment-success" element={<PaymentSuccess />} />
           </Routes>
         </Router>
       </main>

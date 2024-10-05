@@ -48,6 +48,7 @@ public class PaymentHistoryServiceImpl implements IPaymentHistoryService {
         Optional<Order> order = orderRepository.findById(orderId);
         paymentHistory.setCustomer(customer.get());
         paymentHistory.setOrder(order.get());
+        paymentHistoryRepository.save(paymentHistory);
         return true;
     }
 }

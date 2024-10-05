@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { getFileByFileId } from "../../../utils/customers/file";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { paymentOpenGateway } from "../../../utils/customers/payment";
+import { logPaymentHistory, paymentOpenGateway } from "../../../utils/customers/payment";
 
 const SubmitButton = styled(Button)(() => ({
     padding: "10px 80px"
@@ -50,25 +50,27 @@ function OrderFinalInfo({ orderId }) {
     async function handlePostOrder() {
         const paymentOpen = await paymentOpenGateway(customerId, Math.floor(postedData.price), "NCB");
         if (paymentOpen) {
-            const newWindow = window.open(paymentOpen.paymentUrl, "_blank");
-            if (newWindow) {
-                // Use setInterval to periodically check if the window is closed
-                const checkWindowClosed = setInterval(() => {
-                    if (newWindow.closed) {
-                        clearInterval(checkWindowClosed); // Stop checking
-                        console.log("Payment window closed. Proceeding...");
-                        // Perform the action you want after the window is closed
-                    }
-                }, 1000); // Check every 1 second
-            }
-        }
-        console.log("check");
-        const response = await postOrder(orderId);
-        if (response) {
-            toast("Order posted successfully");
+            let paymentWindow = window.open(paymentOpen.paymentUrl, "_blank");
 
-        } else {
-            toast("Unexpected error has been occurred");
+            // Check every 500ms if the window is closed
+            let checkWindowClosed = setInterval(async function () {
+                if (paymentWindow.closed) {
+                    clearInterval(checkWindowClosed);
+                    console.log("Payment window closed. Proceeding...");
+
+                    const paymentResponse = await logPaymentHistory(customerId, orderId, Math.floor(postedData.price));
+                    if (paymentResponse) {
+                        const response = await postOrder(orderId);
+                        if (response) {
+                            toast("Order posted successfully");
+                        } else {
+                            toast("Unexpected error has been occurred");
+                        }
+                    } else {
+                        toast("Unexpected error has been occurred");
+                    }
+                }
+            }, 500);
         }
     }
 
