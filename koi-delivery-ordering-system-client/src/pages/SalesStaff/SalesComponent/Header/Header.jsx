@@ -1,13 +1,13 @@
 import "./Header.scss";
-import {Button, Image } from "antd";
+import { Button, Image } from "antd";
 import avatar from "../../../../assets/avatar.png";
 
 function Header() {
   return (
     <div className="sale-header-container">
       <div className="logo">
-          <Image src="./src/assets/logo.png" />
-        </div>
+        <Image src="./src/assets/logo.png" />
+      </div>
 
       <div className="function">
         <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }}><strong>Home</strong></Button>
