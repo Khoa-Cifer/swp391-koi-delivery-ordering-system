@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface IPaymentService {
-    public PaymentResponseDTO createVnPayPayment(HttpServletRequest request);
+    public PaymentResponseDTO createVnPayPayment(HttpServletRequest request, Long customerId);
 
 }

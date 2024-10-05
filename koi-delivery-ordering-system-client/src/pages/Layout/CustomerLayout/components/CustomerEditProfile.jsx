@@ -39,7 +39,6 @@ function CustomerEditProfile() {
                 const imgUrl = URL.createObjectURL(imageResponse);
                 setImagePreview(imgUrl);
             }
-            // const imageResponse = await getFileByFileId();
         }
         fetchUserData();
     }, [])

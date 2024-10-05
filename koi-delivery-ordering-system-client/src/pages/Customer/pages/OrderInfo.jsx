@@ -17,7 +17,7 @@ const CustomBoxContainer = styled(Box)(() => ({
 const containerStyle = {
     width: '700px',
     height: '80vh',
-    maxWidth: '40vw'
+    maxWidth: '35vw'
 };
 
 // eslint-disable-next-line react/prop-types
@@ -191,8 +191,8 @@ function OrderInfo({ orderId, formStepData }) {
             )
             const filter = await filterOrder(response);
             toast("Create successfully");
-            if (filter) {
-                orderId(filter);
+            if (filter.storage) {
+                orderId(filter.id);
                 formStepData(1);
             } else {
                 toast("Unsupported Area");

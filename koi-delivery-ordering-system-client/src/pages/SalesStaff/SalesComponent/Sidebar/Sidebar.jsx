@@ -4,7 +4,7 @@ import "./sales_sidebar.scss";
 
 function Sidebar() {
   return (
-    <div className="sidebar-body">
+    <div className="sidebar-body-sales">
       <div className="image-container">
         <img
           src={"./assets/default-avatar.jpg"}

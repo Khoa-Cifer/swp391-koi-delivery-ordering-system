@@ -15,10 +15,10 @@ public class PaymentServiceImpl implements IPaymentService {
     private final VNPayConfiguration vnPayConfiguration;
 
     @Override
-    public PaymentResponseDTO createVnPayPayment(HttpServletRequest request)  {
+    public PaymentResponseDTO createVnPayPayment(HttpServletRequest request, Long customerId)  {
         long amount = Integer.parseInt(request.getParameter("amount")) * 100L;
         String bankCode = request.getParameter("bankCode");
-        Map<String, String> vnpParamsMap = vnPayConfiguration.getVNPayConfig();
+        Map<String, String> vnpParamsMap = vnPayConfiguration.getVNPayConfig(customerId);
         vnpParamsMap.put("vnp_Amount", String.valueOf(amount));
         if (bankCode != null && !bankCode.isEmpty()) {
             vnpParamsMap.put("vnp_BankCode", bankCode);
@@ -29,14 +29,15 @@ public class PaymentServiceImpl implements IPaymentService {
         String hashData = VNPayUtil.getPaymentURL(vnpParamsMap, false);
         String vnpSecureHash = VNPayUtil.hmacSHA512(vnPayConfiguration.getSecretKey(), hashData);
         queryUrl += "&vnp_SecureHash=" + vnpSecureHash;
+//        queryUrl += "&customer_id=" + request.getParameter("customerId");
         String paymentUrl = vnPayConfiguration.getVnp_PayUrl() + "?" + queryUrl;
         PaymentResponseDTO response = new PaymentResponseDTO();
         response.setCode("ok");
         response.setMessage("success");
         response.setPaymentUrl(paymentUrl);
-        for (Map.Entry<String, String> entry : vnpParamsMap.entrySet()) {
-            System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
-        }
+//        for (Map.Entry<String, String> entry : vnpParamsMap.entrySet()) {
+//            System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
+//        }
         return response;
     }
 }

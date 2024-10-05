@@ -1,10 +1,21 @@
 import { ListItem, ListItemText } from "@mui/material";
 import { List } from "antd";
 import "./customer_sidebar.scss";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
+  const navigate = useNavigate();
+
+  const handleOpenEditProfile = () => {
+    navigate("/customer-edit-profile")
+  }
+
+  const handleOpenCreateOrder = () => {
+    navigate("customer-home");
+  }
+
   return (
-    <div className="sidebar-body">
+    <div className="sidebar-body-customer">
       <div className="image-container">
         <img
           src={"./assets/default-avatar.jpg"}
@@ -25,10 +36,16 @@ function Sidebar() {
             <ListItemText primary="Home" />
           </ListItem>
           <ListItem className="button">
-            <ListItemText primary="Profile" />
+            <ListItemText
+              primary="Profile"
+              onClick={handleOpenEditProfile}
+            />
           </ListItem>
           <ListItem className="button">
-            <ListItemText primary="Create Order" />
+            <ListItemText 
+            primary="Create Order" 
+              onClick={handleOpenCreateOrder}
+              />
           </ListItem>
           <ListItem className="button">
             <ListItemText primary="Navigate To Wallet Page" />
