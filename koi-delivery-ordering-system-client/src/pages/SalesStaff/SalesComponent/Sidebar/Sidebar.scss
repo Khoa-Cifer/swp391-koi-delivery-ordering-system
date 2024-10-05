@@ -1,12 +1,11 @@
-.sidebar-body {
+.sidebar-body-sale {
   border-radius: 25px;
-  border: 2px solid skyblue;
+  border: 2px solid bluesky;
   background-color: #c3f4fd;
   padding: 20px;
-  margin-left: 20%;
-  margin-top: 2%;
-  height: 90vh;
-  width: 30%;
+  margin: 2% 0 0 5%;
+
+  width: 50%;
 
   .avatar {
     width: 100px;
@@ -25,7 +24,6 @@
   .profile {
     margin: 5%;
   }
-
 
   .list-function {
     margin-top: 15%;
