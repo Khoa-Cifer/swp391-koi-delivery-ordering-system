@@ -58,7 +58,7 @@ public class PaymentController {
         boolean transactionCreated = transactionService.createTransaction(id, formattedPayDate, parsedAmount);
 
         try {
-            return new RedirectView("http://localhost:5173");
+            return new RedirectView("http://localhost:5173" + "/payment-success" + "?amount=" + amount + "&date=" + payDate + "&transactionNo=" + transactionNo);
 
         } catch (Exception e) {
             return new RedirectView("http://localhost:5173");

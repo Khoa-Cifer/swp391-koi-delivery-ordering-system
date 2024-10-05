@@ -1,11 +1,25 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const PaymentSuccess = () => {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleGoHome = () => {
         navigate('/'); // Navigate to the homepage
     };
+
+    const useQuery = () => {
+        return new URLSearchParams(location.search);
+    };
+
+    const query = useQuery();
+    const amount = query.get('amount');
+    const date = query.get('date');
+    const transactionNo = query.get('transactionNo');
+
+    const year = date.substring(0, 4);
+    const month = date.substring(4, 6);
+    const day = date.substring(6, 8);
 
     return (
         <div style={styles.container}>
@@ -14,9 +28,9 @@ const PaymentSuccess = () => {
 
             <div style={styles.orderSummary}>
                 <h2>Order Summary</h2>
-                <p><strong>Order ID:</strong> 123456789</p>
-                <p><strong>Amount:</strong> $49.99</p>
-                <p><strong>Date:</strong> {new Date().toLocaleDateString()}</p>
+                <p><strong>Transaction ID:</strong> {transactionNo}</p>
+                <p><strong>Amount:</strong> {amount}</p>
+                <p><strong>Date:</strong> {year}/{month}/{day}</p>
             </div>
 
             <button style={styles.button} onClick={handleGoHome}>
