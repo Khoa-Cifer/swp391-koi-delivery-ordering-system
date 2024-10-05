@@ -1,4 +1,5 @@
-import "./Maincontent.scss"
+import { Margin } from "@mui/icons-material";
+import "./Maincontent.scss";
 
 function MainContent() {
   const newsData = [
@@ -35,13 +36,12 @@ function MainContent() {
   ];
 
   return (
-    <div>
-      <div className="news-container">
-        <h2>LATEST NEWS</h2>
-        <p className="description">
-          Visit our blog to discover the latest articles on ecommerce and
-          logistics for any business scale
-        </p>
+    <div className="main-content-container">
+      <div className="news-container-sale">
+        <div className="New">
+          <strong>News</strong>
+        </div>
+
         <div className="news-container">
           <div className="news-grid">
             {newsData.map((news, index) => (
@@ -67,6 +67,46 @@ function MainContent() {
           <div className="view-more">
             <a href="#">View more →</a>
           </div>
+        </div>
+      </div>
+
+      <div className="order-container-sale">
+        <div className="order">
+          <strong>Waiting For Confirm Order</strong>
+        </div>
+        <div className="order-row">
+          <div className="order-card">
+            <h5 className="card-title">Order Name</h5>
+            <p className="card-text">Last Updated Date: 2024-09-26</p>
+            <p className="card-text">Destination Address: ABC Street</p>
+            <div className="button-container">
+              <button className="status-btn">Order Status</button>
+              <button className="detail-btn">Detail</button>
+            </div>
+          </div>
+
+          <div className="order-card">
+            <h5 className="card-title">Order Name</h5>
+            <p className="card-text">Last Updated Date: 2024-09-26</p>
+            <p className="card-text">Destination Address: ABC Street</p>
+            <div className="button-container">
+              <button className="status-btn">Order Status</button>
+              <button className="detail-btn">Detail</button>
+            </div>
+          </div>
+
+          <div className="order-card">
+            <h5 className="card-title">Order Name</h5>
+            <p className="card-text">Last Updated Date: 2024-09-26</p>
+            <p className="card-text">Destination Address: ABC Street</p>
+            <div className="button-container">
+              <button className="status-btn">Order Status</button>
+              <button className="detail-btn">Detail</button>
+            </div>
+          </div>
+        </div>
+        <div className="view-more">
+          <a href="#">View more →</a>
         </div>
       </div>
     </div>

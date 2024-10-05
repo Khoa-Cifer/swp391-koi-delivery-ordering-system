@@ -1,25 +1,20 @@
-.news-container {
-    font-family: Arial, sans-serif;
-    margin-bottom: 60px;
-        
-    h2 {
-      margin-left: 240px;
-      font-size: 36px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
+.main-content-container{
+  .news-container-sale {
+    margin-top: 3%;
 
-    .description {
-      font-size: 16px;
-      color: #181414;
-      margin-bottom: 40px;
-      margin-left: 240px;
+    .New{
+      font-size: 1.2em;
+      color: rgb(5, 10, 176);
+      margin-left: 4%;
     }
 
     .news-grid {
       display: flex;
       justify-content: center;
       gap: 25px;
+      height: auto;
+      margin: 2% 5% 2% 5%;
+
     }
 
     .news-item {
@@ -28,7 +23,7 @@
       overflow: hidden;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s ease;
-      max-width: 22%;
+      max-width: 30%;
       flex: 1;
     }
 
@@ -76,21 +71,86 @@
       color: #888;
     }
 
-    .view-more {
-      margin-top: 30px;
-      display: flex;
-      justify-content: end;
-      margin-right: 250px;
-    }
-
-    .view-more a {
-      font-size: 16px;
-      color: #000;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .view-more a:hover {
-      text-decoration: underline;
-    }
+    
   }
+
+  .order-container-sale {
+    height: 80%;
+    padding: 20px;
+    margin: 3%;
+
+    .order{
+      font-size: 1.2em;
+      color: rgb(5, 10, 176);
+    }
+  
+    /* Các thẻ đơn hàng */
+    .order-row {
+      display: flex;
+      flex-grow: 3;
+      flex-wrap: wrap; /* Đảm bảo các thẻ sẽ xuống hàng nếu không đủ chỗ */
+      justify-content: space-around; /* Căn đều các thẻ trong hàng */
+      margin-top: 3%;
+    }
+  
+    /* Mỗi thẻ đơn hàng sẽ chiếm 48% chiều rộng */
+    .order-card {
+      flex: 0 0 25%; /* 48% width để vừa 2 thẻ trong 1 hàng */
+      padding: 20px;
+      background-color: #e4e2e2;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 7%;
+      gap: 5%;
+    }
+  
+    .card-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 4%;
+    }
+  
+    .card-text {
+      font-size: 14px;
+      margin-bottom: 4%;
+    }
+  
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+  
+      button {
+        width: 100%;
+        font-size: 13px;
+      }
+      column-gap: 5%;
+    }
+  
+    .btn {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+  
+    .status-btn {
+      background-color: rgb(17, 17, 162);
+      color: white;
+    }
+  
+    .detail-btn {
+      background-color: green;
+      color: white;
+    }
+
+    .view-more{
+      justify-content: flex-end;
+      font-size: 1em;
+    }
+    
+    
+  }
+
+}
+
