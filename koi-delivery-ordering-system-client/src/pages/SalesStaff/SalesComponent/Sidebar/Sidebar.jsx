@@ -1,6 +1,6 @@
 import { ListItem, ListItemText } from "@mui/material";
 import { List } from "antd";
-import "./Sidebar.scss";
+import "./sales_sidebar.scss";
 
 function Sidebar() {
   return (

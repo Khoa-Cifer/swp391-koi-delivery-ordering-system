@@ -1,21 +1,29 @@
+import { Box } from "@mui/material";
 import Header from "../SalesComponent/Header/Header";
 import Sidebar from "../SalesComponent/Sidebar/Sidebar";
 import MainContent from "./Conponent/MainContent";
+import HeaderBar from "../../DeliveryStaff/components/HeaderBar";
+import Footer from "../../DeliveryStaff/components/Footer";
 
 function SalesStaffHome() {
   return (
-    <div>
-      <Header />
-      <div className="sales-staff-container" >
-        <div className="sidebar">
-          <Sidebar />
-        </div>
+    <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      {/* Header */}
+      <HeaderBar />
 
-        <div className="content">
+      <Box sx={{ display: "flex", flex: 1, mt: "64px" }}>
+        {/* Sidebar on the left */}
+        <Sidebar />
+
+        {/* Main Content */}
+        <Box component="main" sx={{ flexGrow: 1, p: 2 }}>
           <MainContent />
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+
+      {/* Footer */}
+      <Footer />
+    </Box>
   );
 }
 
