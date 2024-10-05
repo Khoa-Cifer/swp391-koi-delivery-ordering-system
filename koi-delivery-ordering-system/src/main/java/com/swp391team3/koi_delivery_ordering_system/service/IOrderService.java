@@ -22,4 +22,6 @@ public interface IOrderService {
     public boolean receiveOrder(Long id);
     public boolean confirmReceivedOrder(Long id);
     public List<Order> getOrderByStatus(int status);
+
+    public double calculateOrderPrice(Long id);
 }

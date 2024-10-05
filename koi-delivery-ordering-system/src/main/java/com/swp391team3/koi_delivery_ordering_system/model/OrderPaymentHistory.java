@@ -17,9 +17,12 @@ public class OrderPaymentHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private double amount;
-    private String description;
 
     @OneToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private Customer customer;
 }

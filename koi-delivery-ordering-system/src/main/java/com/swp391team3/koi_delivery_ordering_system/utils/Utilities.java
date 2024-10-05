@@ -4,6 +4,15 @@ public class Utilities {
     private static final double R = 6371.0;
     private static final int CODE_LENGTH = 6; // Total length of numeric part
 
+
+    public static boolean compareCountry(String address1, String address2) {
+        if (address1.equalsIgnoreCase(address2)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static String generateOrderCode(String prefix, Long orderId) {
         return prefix + String.format("%0" + CODE_LENGTH + "d", orderId);
     }
@@ -22,7 +31,7 @@ public class Utilities {
 
         double a = Math.sin(dlat / 2) * Math.sin(dlat / 2)
                 + Math.cos(lat1Rad) * Math.cos(lat2Rad)
-                + Math.sin(dlon / 2) * Math.sin(dlon / 2);
+                * Math.sin(dlon / 2) * Math.sin(dlon / 2);
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 

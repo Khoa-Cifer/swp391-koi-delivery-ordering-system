@@ -18,13 +18,13 @@ public class OrderDelivering {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int orderStatus;
     private Date createdDate;
     private Date lastUpdatedDate;
     private Date finishDate;
-    private String destinationAddress;
+    private String currentAddress;
     private String longitude;
     private String latitude;
+    private int deliveryProcessType;
 
     @ManyToOne
     @JoinColumn(name = "delivery_staff_id")

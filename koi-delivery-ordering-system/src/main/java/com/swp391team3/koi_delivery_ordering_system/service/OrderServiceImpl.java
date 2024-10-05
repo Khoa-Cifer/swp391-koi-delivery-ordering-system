@@ -4,6 +4,7 @@ import com.swp391team3.koi_delivery_ordering_system.model.*;
 import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.utils.PriceBoard;
 import com.swp391team3.koi_delivery_ordering_system.utils.Utilities;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,8 @@ public class OrderServiceImpl implements IOrderService {
     private final CustomerRepository customerRepository;
     private final OrderStatus orderStatus;
     private final IStorageService storageService;
+    private final IFishService fishService;
+    private final PriceBoard priceBoard;
 
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
         Order newOrder = new Order();
@@ -81,7 +84,12 @@ public class OrderServiceImpl implements IOrderService {
             double storageLong = Double.parseDouble(allStorages.get(index).getLongitude());
             double distance = Utilities.calculateDistance(
                     orderLat, orderLong, storageLat, storageLong);
-            if (distance <= 50) {
+            String[] senderAddress = foundedOrder.get().getSenderAddress().split(",");
+            String[] storageAddress = allStorages.get(index).getAddress().split(",");
+            String senderCountry = senderAddress[senderAddress.length - 1].trim();
+            String storageCountry = storageAddress[storageAddress.length - 1].trim();
+            boolean distanceResult = Utilities.compareCountry(senderCountry, storageCountry);
+            if (distance <= 50 && distanceResult) {
                 if (minDistance > distance) {
                     minDistance = distance;
                     nearestStorage = allStorages.get(index);
@@ -91,8 +99,10 @@ public class OrderServiceImpl implements IOrderService {
 
         if (nearestStorage != null) {
             foundedOrder.get().setStorage(nearestStorage);
+            nearestStorage.setOrderAmount(nearestStorage.getOrderAmount() + 1);
             orderRepository.save(foundedOrder.get());
         }
+
         return foundedOrder;
     }
 
@@ -177,5 +187,41 @@ public class OrderServiceImpl implements IOrderService {
     public List<Order> getOrderByStatus(int status) {
         List<Order> orders = orderRepository.findByOrderStatus(status);
         return orders;
+    }
+
+    @Override
+    public double calculateOrderPrice(Long id) {
+        List<Fish> fishList = fishService.getFishesByOrderId(id);
+        Optional<Order> order = orderRepository.findById(id);
+        double distance = Utilities.calculateDistance(
+                Double.parseDouble(order.get().getSenderLatitude()),
+                Double.parseDouble(order.get().getSenderLongitude()),
+                Double.parseDouble(order.get().getDestinationLatitude()),
+                Double.parseDouble(order.get().getDestinationLongitude())
+        );
+
+        double price = getPrice(fishList, order, distance);
+        order.get().setPrice(price);
+        orderRepository.save(order.get());
+        return price;
+    }
+
+    private double getPrice(List<Fish> fishList, Optional<Order> order, double distance) {
+        int numberOfBoxes = (int) Math.ceil(fishList.size() / 2.0);
+        String[] senderAddress = order.get().getSenderAddress().split(",");
+        String[] receiverAddress = order.get().getDestinationAddress().split(",");
+        String senderCountry = senderAddress[senderAddress.length - 1].trim();
+        String receiverCountry = receiverAddress[receiverAddress.length - 1].trim();
+        boolean distanceCheck = Utilities.compareCountry(senderCountry, receiverCountry);
+
+        double distancePrice = priceBoard.PRICE_BASE * distance;
+        double boxPrice = priceBoard.BOX_PRICE * numberOfBoxes;
+
+        if (distanceCheck) {
+            distancePrice = distancePrice * priceBoard.PRICE_RATE_DOMESTIC;
+        } else {
+            distancePrice = distancePrice * priceBoard.PRICE_RATE_FOREIGN;
+        }
+        return distancePrice + boxPrice;
     }
 }

@@ -9,17 +9,6 @@ export async function getFishesByOrderId(orderId) {
     }
 }
 
-export async function getFishFileByFileId(id) {
-    try {
-        const response = await axiosClient.get(`images/getFileSystem/${id}`, {
-            responseType: 'blob',
-        });
-        return response.data;
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 export async function createFishOrderInfo(
     fishName,
     fishAge,

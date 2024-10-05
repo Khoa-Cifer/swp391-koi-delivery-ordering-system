@@ -1,18 +1,39 @@
-import { useState } from 'react';
-import { Menu, MenuItem, Box } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Menu, MenuItem, Box, Avatar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import "./customer_header.scss";
 import { Button } from "antd";
 import logo from "../../../../../assets/logo.png";
-import avatar from "../../../../../assets/avatar.png";
+import default_avatar from "../../../../../assets/default-avatar.jpg";
 import { useAuth } from "../../../../../authentication/AuthProvider";
+import { jwtDecode } from 'jwt-decode';
+import { getCustomerById } from '../../../../../utils/customers/user';
+import { getFileByFileId } from '../../../../../utils/customers/file';
 
 function Header() {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
     const auth = useAuth();
+    const [imagePreview, setImagePreview] = useState(default_avatar);
     
+    const token = localStorage.getItem("token");
+    const customerInfo = jwtDecode(token);
+    const customerId = customerInfo.sub.substring(2);
+
+    useEffect(() => {
+        async function fetchUserData() {
+            const customer = await getCustomerById(customerId);
+            if(customer.file) {
+                const imageResponse = await getFileByFileId(customer.file.id);;
+                const imgUrl = URL.createObjectURL(imageResponse);
+                setImagePreview(imgUrl);
+            }
+            // const imageResponse = await getFileByFileId();
+        }
+        fetchUserData();
+    }, [])
+
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -49,8 +70,8 @@ function Header() {
 
             <div className="logo">
                 <Box sx={{ ml: 2 }}>
-                    <img
-                        src={avatar}
+                    <Avatar
+                        src={imagePreview}
                         onClick={handleMenuOpen}
                         alt="avatar"
                         style={{ width: "5vw", height: "10vh", marginRight: "30px" }}
