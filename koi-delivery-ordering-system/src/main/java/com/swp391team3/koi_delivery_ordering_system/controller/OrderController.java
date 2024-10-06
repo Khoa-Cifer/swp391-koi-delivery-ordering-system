@@ -71,22 +71,12 @@ public class OrderController {
         return ResponseEntity.ok(orderService.calculateOrderPrice(id));
     }
 
-    //Confirm Order
-    @PostMapping("/accept-order/{id}")
-    public ResponseEntity<?> acceptOrder(@PathVariable Long id) {
-        boolean isAccepted = orderService.acceptOrder(id);
-        return ResponseEntity.ok(isAccepted);
-    }
-
-    @DeleteMapping("/cancel-order/{id}")
-    public ResponseEntity<?> cancelOrder(@PathVariable Long id) {
-        boolean isCancelled = orderService.cancelOrder(id);
-        return ResponseEntity.ok(isCancelled);
-    }
-
-    @PostMapping("/confirm-order/{id}")
-    public ResponseEntity<?> confirmOrder(@PathVariable Long id) {
-        boolean isConfirmed = orderService.confirmReceivedOrder(id);
-        return ResponseEntity.ok(isConfirmed);
+    @PostMapping("/updateOrderStatus/{id}")
+    public ResponseEntity<?> updateOrderStatus(@PathVariable Long id, @RequestParam int status) {
+        if(orderService.updateOrderStatus(id, status)) {
+            return ResponseEntity.ok("Updated order status successfully");
+        } else {
+            return ResponseEntity.ok("Update failed");
+        }
     }
 }

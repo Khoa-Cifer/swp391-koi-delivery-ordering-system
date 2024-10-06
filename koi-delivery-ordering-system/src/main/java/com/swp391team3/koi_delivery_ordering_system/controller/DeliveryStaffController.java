@@ -50,21 +50,4 @@ public class DeliveryStaffController {
         return ResponseEntity.ok(deliveryStaffService.updateDeliveryStaffById(id, deliveryStaff.getEmail(), deliveryStaff.getPhoneNumber()));
     }
 
-    @PostMapping("/pickup/{id}")
-    public ResponseEntity<String> deliveryPickup(@PathVariable Long id) {
-        boolean isPickedUp = orderService.deliveryPickup(id);
-        if (isPickedUp) {
-            return ResponseEntity.ok("Order is being picked up.");
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @PostMapping("/receive/{id}")
-    public ResponseEntity<String> receiveOrder(@PathVariable Long id) {
-        boolean isReceived = orderService.receiveOrder(id);
-        if (isReceived) {
-            return ResponseEntity.ok("Order received successfully.");
-        }
-        return ResponseEntity.notFound().build();
-    }
 }

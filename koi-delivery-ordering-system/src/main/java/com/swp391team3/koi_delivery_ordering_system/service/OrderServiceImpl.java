@@ -8,7 +8,6 @@ import com.swp391team3.koi_delivery_ordering_system.utils.PriceBoard;
 import com.swp391team3.koi_delivery_ordering_system.utils.Utilities;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -116,72 +115,68 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public boolean cancelOrder(Long id) {
+    public boolean updateOrderStatus(Long id, int newStatus) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
-            order.setOrderStatus(orderStatus.FAILED);
+            int currentStatus = order.getOrderStatus();
+
+            switch (newStatus) {
+                case 2:
+                    if (currentStatus == orderStatus.POSTED) {
+                        order.setOrderStatus(orderStatus.ORDER_ACCEPTED);
+                    } else {
+                        return false;
+                    }
+                    break;
+                case 3:
+                    if (currentStatus == orderStatus.ORDER_ACCEPTED) {
+                        order.setOrderStatus(orderStatus.ORDER_GETTING);
+                    } else {
+                        return false;
+                    }
+                    break;
+                case 4:
+                    if (currentStatus == orderStatus.ORDER_GETTING) {
+                        order.setOrderStatus(orderStatus.ORDER_RECEIVED);
+                    } else {
+                        return false;
+                    }
+                    break;
+                case 5:
+                    if (currentStatus == orderStatus.ORDER_RECEIVED) {
+                        order.setOrderStatus(orderStatus.ORDER_CONFIRMED);
+                    } else {
+                        return false;
+                    }
+                    break;
+                case 6:
+                    if (currentStatus == orderStatus.ORDER_CONFIRMED) {
+                        order.setOrderStatus(orderStatus.DELIVERING);
+                    } else {
+                        return false;
+                    }
+                    break;
+                case 7:
+                    if (currentStatus == orderStatus.DELIVERING) {
+                        order.setOrderStatus(orderStatus.COMPLETE);
+                    } else {
+                        return false;
+                    }
+                    break;
+                case 8:
+                    order.setOrderStatus(orderStatus.FAILED);
+                    break;
+                default:
+                    return false;
+            }
+
             orderRepository.save(order);
             return true;
         }
         return false;
     }
 
-    @Override
-    public boolean acceptOrder(Long id) {
-        Optional<Order> optionalOrder = orderRepository.findById(id);
-        if (optionalOrder.isPresent()) {
-            Order order = optionalOrder.get();
-            if (order.getOrderStatus() == orderStatus.POSTED) { // Kiểm tra trạng thái hiện tại
-                order.setOrderStatus(orderStatus.ORDER_ACCEPTED); // Chuyển trạng thái thành ORDER_ACCEPTED
-                orderRepository.save(order);
-                return true; // Thành công
-            }
-        }
-        return false; // Không thành công
-    }
-
-    @Override
-    public boolean deliveryPickup(Long id) {
-        Optional<Order> optionalOrder = orderRepository.findById(id);
-        if (optionalOrder.isPresent()) {
-            Order order = optionalOrder.get();
-            if (order.getOrderStatus() == orderStatus.ORDER_ACCEPTED) { // Kiểm tra trạng thái hiện tại
-                order.setOrderStatus(orderStatus.ORDER_GETTING); // Chuyển trạng thái thành ORDER_ACCEPTED
-                orderRepository.save(order);
-                return true; // Thành công
-            }
-        }
-        return false; // Không thành công
-    }
-
-    @Override
-    public boolean receiveOrder(Long id) {
-        Optional<Order> optionalOrder = orderRepository.findById(id);
-        if (optionalOrder.isPresent()) {
-            Order order = optionalOrder.get();
-            if (order.getOrderStatus() == orderStatus.ORDER_GETTING) { // Kiểm tra trạng thái hiện tại
-                order.setOrderStatus(orderStatus.ORDER_RECEIVED); // Chuyển trạng thái thành ORDER_ACCEPTED
-                orderRepository.save(order);
-                return true; // Thành công
-            }
-        }
-        return false; // Không thành công
-    }
-
-    @Override
-    public boolean confirmReceivedOrder(Long id) {
-        Optional<Order> optionalOrder = orderRepository.findById(id);
-        if (optionalOrder.isPresent()) {
-            Order order = optionalOrder.get();
-            if (order.getOrderStatus() == orderStatus.ORDER_RECEIVED) { // Kiểm tra trạng thái hiện tại
-                order.setOrderStatus(orderStatus.ORDER_CONFIRMED); // Chuyển trạng thái thành ORDER_ACCEPTED
-                orderRepository.save(order);
-                return true; // Thành công
-            }
-        }
-        return false; // Không thành công
-    }
 
 
     @Override

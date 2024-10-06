@@ -14,11 +14,7 @@ public interface IOrderService {
     public Optional<Order> filterOrderToStorage(Long id);
     public boolean postOrder(Long id);
 
-    public boolean cancelOrder(Long id);
-    public boolean acceptOrder(Long id);
-    public boolean deliveryPickup(Long id);
-    public boolean receiveOrder(Long id);
-    public boolean confirmReceivedOrder(Long id);
+    public boolean updateOrderStatus(Long id, int status);
     public List<Order> getOrderByStatus(int status);
 
     public double calculateOrderPrice(Long id);
