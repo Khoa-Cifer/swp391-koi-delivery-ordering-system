@@ -1,0 +1,23 @@
+.customer-home-order-list {
+    margin: 60px;
+
+    .order-box {
+        padding: 20px;
+        margin-bottom: 20px;
+        width: 100%;
+        background-color: #C3F4FD;
+    }
+
+    .order-main-info {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .order-text-info {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+
+}

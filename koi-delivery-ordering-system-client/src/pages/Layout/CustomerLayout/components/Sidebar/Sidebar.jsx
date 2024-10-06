@@ -4,9 +4,9 @@ import "./customer_sidebar.scss";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import default_avatar from "../../../../../assets/default-avatar.jpg";
-import { getCustomerById } from "../../../../../utils/customers/user";
+import { getCustomerById } from "../../../../../utils/axios/user";
 import { jwtDecode } from "jwt-decode";
-import { getFileByFileId } from "../../../../../utils/customers/file";
+import { getFileByFileId } from "../../../../../utils/axios/file";
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -22,19 +22,23 @@ function Sidebar() {
 
   useEffect(() => {
     async function fetchUserData() {
-        const customer = await getCustomerById(customerId);
-        if(customer.file) {
-            const imageResponse = await getFileByFileId(customer.file.id);;
-            const imgUrl = URL.createObjectURL(imageResponse);
-            setImagePreview(imgUrl);
-        }
-        // const imageResponse = await getFileByFileId();
+      const customer = await getCustomerById(customerId);
+      if (customer.file) {
+        const imageResponse = await getFileByFileId(customer.file.id);;
+        const imgUrl = URL.createObjectURL(imageResponse);
+        setImagePreview(imgUrl);
+      }
+      // const imageResponse = await getFileByFileId();
     }
     fetchUserData();
-}, [])
+  }, [])
 
 
   const handleOpenCreateOrder = () => {
+    navigate("customer-create-order");
+  }
+
+  const handleOpenHome = () => {
     navigate("customer-home");
   }
 
@@ -44,7 +48,7 @@ function Sidebar() {
         <Avatar
           src={imagePreview}
           alt="avatar"
-          style={{ width: "7vw", height: "14vh"}}
+          style={{ width: "7vw", height: "14vh" }}
         />
       </div>
 
@@ -57,7 +61,10 @@ function Sidebar() {
       <div className="list-function">
         <List>
           <ListItem className="button">
-            <ListItemText primary="Home" />
+            <ListItemText
+              primary="Home"
+              onClick={handleOpenHome}
+            />
           </ListItem>
           <ListItem className="button">
             <ListItemText

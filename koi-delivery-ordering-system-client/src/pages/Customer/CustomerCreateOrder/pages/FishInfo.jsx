@@ -2,10 +2,10 @@ import { Box, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import License from "../utils/License";
 import { toast } from "react-toastify";
-import ToastUtil from "../../../components/toastContainer";
-import { createFishOrderInfo } from "../../../utils/customers/fish";
-import { createLicenseFiles, createLicenseOrderInfo } from "../../../utils/customers/license";
-import { calculateOrderPrice } from "../../../utils/customers/order";
+import ToastUtil from "../../../../components/toastContainer";
+import { createFishOrderInfo } from "../../../../utils/axios/fish";
+import { createLicenseFiles, createLicenseOrderInfo } from "../../../../utils/axios/license";
+import { calculateOrderPrice } from "../../../../utils/axios/order";
 
 const CustomBoxContainer = styled(Box)(() => ({
     display: "flex",

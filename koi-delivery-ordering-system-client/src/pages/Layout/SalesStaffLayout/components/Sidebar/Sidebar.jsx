@@ -4,9 +4,9 @@ import "./sales_sidebar.scss";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import default_avatar from "../../../../../assets/default-avatar.jpg";
-import { getCustomerById } from "../../../../../utils/customers/user";
+import { getCustomerById } from "../../../../../utils/axios/user";
 import { jwtDecode } from "jwt-decode";
-import { getFileByFileId } from "../../../../../utils/customers/file";
+import { getFileByFileId } from "../../../../../utils/axios/file";
 
 function Sidebar() {
   const navigate = useNavigate();

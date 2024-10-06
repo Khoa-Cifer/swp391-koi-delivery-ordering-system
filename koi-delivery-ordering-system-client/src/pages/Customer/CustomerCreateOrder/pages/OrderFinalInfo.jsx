@@ -1,14 +1,14 @@
 import { Box, Button, Grid, styled, TextField, Typography } from "@mui/material";
-import ToastUtil from "../../../components/toastContainer";
 import { useEffect, useState } from "react";
-import { getOrderById } from "../../../utils/customers/order";
-import dateTimeConvert from "../../../components/utils";
-import { postOrder } from "../../../utils/customers/order";
+import { getOrderById } from "../../../../utils/axios/order";
+import dateTimeConvert from "../../../../components/utils";
+import { postOrder } from "../../../../utils/axios/order";
 import { toast } from "react-toastify";
-import { getFileByFileId } from "../../../utils/customers/file";
+import { getFileByFileId } from "../../../../utils/axios/file";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { logPaymentHistory, paymentOpenGateway } from "../../../utils/customers/payment";
+import { logPaymentHistory, paymentOpenGateway } from "../../../../utils/axios/payment";
+import ToastUtil from "../../../../components/toastContainer";
 
 const SubmitButton = styled(Button)(() => ({
     padding: "10px 80px"

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import 'react-toastify/dist/ReactToastify.css';
 import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";
-import { createSalesStaff, getAllSalesStaff } from "../../../../utils/admin/salesStaff";
+import { createSalesStaff, getAllSalesStaff } from "../../../../utils/axios/salesStaff";
 
 function SalesStaff() {
     const [salesStaffData, setSalesStaffData] = useState();

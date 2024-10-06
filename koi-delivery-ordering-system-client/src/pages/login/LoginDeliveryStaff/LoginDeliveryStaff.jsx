@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./LoginDeliveryStaff.scss";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../authentication/AuthProvider";
-import { userLogin } from "../../../utils/customers/user";
+import { userLogin } from "../../../utils/axios/user";
 
 function LoginDelivery() {
   const [email, setEmail] = useState("");

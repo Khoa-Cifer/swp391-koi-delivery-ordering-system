@@ -7,7 +7,7 @@ import { useCallback, useState } from "react";
 import GreenMarker from "../../../../assets/succeeded.svg"
 import BlueMarker from "../../../../assets/inTransit.svg"
 import RedMarker from "../../../../assets/failed.svg"
-import { acceptOrder, cancelOrder } from "../../../../utils/customers/order";
+import { acceptOrder, cancelOrder, updateOrderStatus } from "../../../../utils/axios/order";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../../components/toastContainer";
 
@@ -68,8 +68,11 @@ function SalesOrderDetail() {
     lng: parseFloat(state.storage.longitude),
   }
 
+  const cancelledOrderStatus = 8;
+  const acceptedOrderStatus = 2;
+
   async function handleAcceptOrder() {
-    const response = await acceptOrder(state.id);
+    const response = await updateOrderStatus(state.id, acceptedOrderStatus);
     if (response) {
       toast("Order confirmed");
       navigate("/sales-staff-home")
@@ -79,7 +82,7 @@ function SalesOrderDetail() {
   }
 
   async function handleCancelOrder() {
-    const response = await cancelOrder(state.id);
+    const response = await updateOrderStatus(state.id, cancelledOrderStatus);
     if (response) {
       toast("Order cancelled");
       navigate("/sales-staff-home")

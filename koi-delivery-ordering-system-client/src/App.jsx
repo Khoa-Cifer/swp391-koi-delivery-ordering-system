@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/home/Home";
 import SignUp from "./pages/register/register";
 import Admin from "./pages/Manager/layout/Dashboard/Dashboard";
-import Customer from "./pages/Customer/Customer";
 import DeliveryStaff from "./pages/DeliveryStaff/home_delivery/delivery_staff/DeliveryStaff";
 import AuthProvider from "./authentication/AuthProvider";
 import PrivateRoute from "./authentication/PrivateRoute";
@@ -16,7 +15,7 @@ import DeliveryFishDetail from "./pages/DeliveryStaff/delivery_fish_detail/Deliv
 import LoginAdmin from "./pages/login/Loginadmin/LoginAdmin";
 import OrderSalesStaff from "./pages/SalesStaff/OrderSalesStaff/OrderSalesStaff";
 import CustomerLayout from "./pages/Layout/CustomerLayout/CustomerLayout";
-import CustomerEditProfile from "./pages/Layout/CustomerLayout/components/CustomerEditProfile";
+import CustomerEditProfile from "./pages/Customer/CustomerEditProfile/CustomerEditProfile";
 import SalesStaffHome from "./pages/SalesStaff/SalesStaffHome/SalesStaffHome";
 import PaymentSuccess from "./utils/DefaultPages/PaymentSuccess";
 import DeliveryStaffLayout from "./pages/Layout/DeliveryStaffLayout/DeliveryStaffLayout";
@@ -25,6 +24,9 @@ import DeliveryOrderAvailable from "./pages/DeliveryStaff/delivery_available_ord
 import PublicRoute from "./authentication/PublicRoute";
 import SalesOrderDetail from "./pages/SalesStaff/components/sales_order_detail/SalesOrderDetail";
 import SalesFishDetail from "./pages/SalesStaff/components/sales_fish_detail/SalesFishDetail";
+import BasicLayout from "./pages/Layout/BasicLayout/BasicLayout";
+import CustomerCreateOrder from "./pages/Customer/CustomerCreateOrder/CustomerCreateOrder";
+import CustomerHome from "./pages/Customer/CustomerHome/CustomerHome";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -78,7 +80,8 @@ function App() {
             <Route path="/admin" element={<ManagerPrivateRoute element={<Admin />} />} />
 
             <Route element={<CustomerLayout />}>
-              <Route path="/customer-home" element={<CustomerPrivateRoute element={<Customer />} />} />
+              <Route path="/customer-home" element={<CustomerPrivateRoute element={<CustomerHome />} />} />
+              <Route path="/customer-create-order" element={<CustomerPrivateRoute element={<CustomerCreateOrder />} />} />
               <Route path="/customer-edit-profile" element={<CustomerPrivateRoute element={<CustomerEditProfile />} />} />
             </Route>
 
@@ -96,15 +99,16 @@ function App() {
             <Route element={<SalesStaffLayout />}>
               <Route path="/order-sales-staff" element={<SalesStaffPrivateRoute element={<OrderSalesStaff />} />} />
               <Route path="/sales-staff-home" element={<SalesStaffPrivateRoute element={<SalesStaffHome />} />} />
-              <Route path="/sales-order-detail/:id" element={<SalesStaffPrivateRoute element={<SalesOrderDetail />} />} >
-                <Route path="sales-fish-detail/:fishId" element={<SalesStaffPrivateRoute element={<SalesFishDetail />} />} />
+
+            </Route>
+
+            <Route element={<BasicLayout />}>
+              <Route path="/sales-order-detail/:id" element={<AllowedRoute element={<SalesOrderDetail />} />} >
+                <Route path="sales-fish-detail/:fishId" element={<AllowedRoute element={<SalesFishDetail />} />} />
               </Route>
             </Route>
 
-
             <Route path="/payment-success" element={<AllowedRoute element={<PaymentSuccess />} />} />
-
-
           </Routes>
         </Router>
       </main>

@@ -98,3 +98,14 @@ export async function cancelOrder(orderId) {
         console.log(error);
     }
 }
+
+export async function updateOrderStatus(orderId, status) {
+    try {
+        const response = await axiosClient.post(`orders/updateOrderStatus/${orderId}`, {
+            status
+        })
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}

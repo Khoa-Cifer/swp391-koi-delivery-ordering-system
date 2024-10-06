@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";
 import { usePlacesWidget } from "react-google-autocomplete";
-import { createStorage, getAllStorages } from "../../../../utils/admin/storage";
+import { createStorage, getAllStorages } from "../../../../utils/axios/storage";
 import { GoogleMap } from "@react-google-maps/api";
 
 const modalStyle = {

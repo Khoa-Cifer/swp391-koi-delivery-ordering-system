@@ -3,7 +3,7 @@ import "./LoginCustomer.scss";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../authentication/AuthProvider";
-import { userLogin } from "../../../utils/customers/user";
+import { userLogin } from "../../../utils/axios/user";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../components/toastContainer";
 

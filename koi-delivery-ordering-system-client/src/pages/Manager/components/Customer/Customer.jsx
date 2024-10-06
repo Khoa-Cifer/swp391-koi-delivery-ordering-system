@@ -1,20 +1,19 @@
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getAllCustomers } from "../../../../utils/admin/customer";
+import { getAllCustomers } from "../../../../utils/axios/customer";
 
 function Customer() {
     const [customerData, setCustomerData] = useState();
 
-    async function fetchCustomers() {
-        let fetchedData = await getAllCustomers();
-        if (fetchedData) {
-            setCustomerData(fetchedData);
-        }
-    }
-
     useEffect(() => {
+        async function fetchCustomers() {
+            let fetchedData = await getAllCustomers();
+            if (fetchedData) {
+                setCustomerData(fetchedData);
+            }
+        }
         fetchCustomers();
-    }, [])
+    }, []);
 
     return (
         <div>
