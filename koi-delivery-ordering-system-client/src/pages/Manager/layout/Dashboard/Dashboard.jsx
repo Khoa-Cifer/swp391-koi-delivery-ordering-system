@@ -7,6 +7,7 @@ import DeliveryStaff from "../../components/DeliveryStaff/DeliveryStaff";
 import { List, ListItem, ListItemText } from "@mui/material";
 import Storage from "../../components/Storage/Storage";
 import { Image } from "antd";
+import SalesStaff from "../../components/SalesStaff/SalesStaff";
 
 function Dashboard() {
   const [selectedDataType, setSelectedDataType] = useState("");
@@ -38,7 +39,7 @@ function Dashboard() {
       case "Rating":
         return <p>Rating Body Loaded</p>;
       case "Sale Staff":
-        return <p>Sale Staff Body Loaded</p>;
+        return <SalesStaff />
       case "Payment History":
         return <p>Payment History Body Loaded</p>;
       case "License Type":

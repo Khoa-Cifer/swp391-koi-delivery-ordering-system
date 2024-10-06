@@ -1,8 +1,7 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
-import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.DeliveryStaffRequestCreationDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestCreationDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IDeliveryStaffService;
 import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,7 @@ public class DeliveryStaffController {
     private final IOrderService orderService;
 
     @PostMapping("/createDeliveryStaff")
-    public ResponseEntity<?> createDeliveryStaff(@RequestBody DeliveryStaffRequestCreationDTO request) {
+    public ResponseEntity<?> createDeliveryStaff(@RequestBody StaffRequestCreationDTO request) {
         String result = deliveryStaffService.createDeliveryStaff(request.getEmail(), request.getUsername());
         return ResponseEntity.ok(result);
     }
