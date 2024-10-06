@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
-import Sidebar from "../components/Sidebar";
-import HeaderBar from "../components/HeaderBar";
-import Footer from "../components/Footer";
+import Sidebar from "../components/SideBar/Sidebar";
+import HeaderBar from "../components/Header/HeaderBar";
+import Footer from "../components/Footer/Footer";
 import MainContent from "./components/MainContent";
 function DeliveryOrderDetail() {
   return (

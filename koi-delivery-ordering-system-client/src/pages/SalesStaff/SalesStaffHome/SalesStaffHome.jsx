@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import Header from "../SalesComponent/Header/Header";
 import Sidebar from "../SalesComponent/Sidebar/Sidebar";
 import MainContent from "./Conponent/MainContent";
-import Footer from "../../DeliveryStaff/components/Footer";
+import Footer from "../../DeliveryStaff/components/Footer/Footer";
 
 function SalesStaffHome() {
   return (
