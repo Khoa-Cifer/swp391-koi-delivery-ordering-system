@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class SalesStaffController {
     private final ISalesStaffService salesStaffService;
-
     private final IOrderService orderService;
 
     @PostMapping("/createSalesStaff")
@@ -55,38 +54,4 @@ public class SalesStaffController {
         }
         return ResponseEntity.ok("Sales Staff not found");
     }
-
-    //Confirm Order
-    @PostMapping("/confirm-order/{id}")
-    public ResponseEntity<?> confirmOrder(@PathVariable Long id) {
-        boolean isConfirmed = orderService.confirmOrder(id);
-
-        if (isConfirmed) {
-            return ResponseEntity.ok("Order with ID " + id + " has been confirmed and updated to POSTED.");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order with ID " + id + " cannot be confirmed.");
-        }
-    }
-
-    //
-    @DeleteMapping("/cancel/{id}")
-    public ResponseEntity<?> cancelOrder(@PathVariable Long id) {
-        boolean isCancelled = orderService.cancelOrder(id);
-        if (isCancelled) {
-            return ResponseEntity.ok("Order cancelled successfully.");
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @PostMapping("/confirmReceived/{id}")
-    public ResponseEntity<String> confirmReceivedOrder(@PathVariable Long id) {
-        boolean isConfirmed = orderService.confirmReceivedOrder(id);
-        if (isConfirmed) {
-            return ResponseEntity.ok("Received order confirmed successfully.");
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-
-
 }

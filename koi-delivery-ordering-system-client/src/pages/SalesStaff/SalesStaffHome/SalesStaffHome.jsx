@@ -1,5 +1,4 @@
-import { Box } from "@mui/material";
-import MainContent from "./Conponent/MainContent";
+import MainContent from "./components/MainContent";
 
 function SalesStaffHome() {
   return (

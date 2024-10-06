@@ -8,6 +8,7 @@ import com.swp391team3.koi_delivery_ordering_system.utils.PriceBoard;
 import com.swp391team3.koi_delivery_ordering_system.utils.Utilities;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -127,7 +128,7 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public boolean confirmOrder(Long id) {
+    public boolean acceptOrder(Long id) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();

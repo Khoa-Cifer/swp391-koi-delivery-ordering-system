@@ -1,5 +1,4 @@
-import { Box } from "@mui/material";
-import Card from "../SalesComponent/Card/Card";
+import Card from "./components/Card";
 
 function OrderSalesStaff() {
   return (
