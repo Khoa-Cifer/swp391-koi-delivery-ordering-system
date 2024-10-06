@@ -2,9 +2,7 @@ import "./MainContent.scss";
 const MainContent = () => {
   return (
     <div
-      className="available-container {
-"
-    >
+      className="available-container">
       {/* Row for Filter Buttons */}
       <div className="filter-buttons">
         <button className="filter-button">Filter By Receiver Address</button>

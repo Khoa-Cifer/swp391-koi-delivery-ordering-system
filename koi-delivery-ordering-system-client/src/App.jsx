@@ -6,7 +6,6 @@ import Customer from "./pages/Customer/Customer";
 import DeliveryStaff from "./pages/DeliveryStaff/home_delivery/delivery_staff/DeliveryStaff";
 import AuthProvider from "./authentication/AuthProvider";
 import PrivateRoute from "./authentication/PrivateRoute";
-import OrderAvailable from "./pages/DeliveryStaff/delivery_available_order/OrderAvailable";
 import DeliveryOrderHome from "./pages/DeliveryStaff/delivery_order_home/DeliveryOrderHome";
 import LoginCustomer from "./pages/login/LoginCustomer/LoginCustomer";
 import LoginSaleStaff from "./pages/login/LoginSaleStaff/LoginSaleStaff";
@@ -15,12 +14,14 @@ import DeliveryOrderList from "./pages/DeliveryStaff/delivery_order_list/Deliver
 import DeliveryOrderDetail from "./pages/DeliveryStaff/delivery_order_detail/DeliveryOrderDetail";
 import DeliveryFishDetail from "./pages/DeliveryStaff/delivery_fish_detail/DeliveryFishDetail";
 import LoginAdmin from "./pages/login/Loginadmin/LoginAdmin";
-import Order_Sales_Staff from "./pages/SalesStaff/OrderSalesStaff/Order_Sales_Staff";
+import OrderSalesStaff from "./pages/SalesStaff/OrderSalesStaff/OrderSalesStaff";
 import CustomerLayout from "./pages/Layout/CustomerLayout/CustomerLayout";
 import CustomerEditProfile from "./pages/Layout/CustomerLayout/components/CustomerEditProfile";
-import Used_sales_staff from "./pages/SalesStaff/UsedSalesStaff/Used_sales_staff";
 import SalesStaffHome from "./pages/SalesStaff/SalesStaffHome/SalesStaffHome";
 import PaymentSuccess from "./utils/DefaultPages/PaymentSuccess";
+import DeliveryStaffLayout from "./pages/Layout/DeliveryStaffLayout/DeliveryStaffLayout";
+import SalesStaffLayout from "./pages/Layout/SalesStaffLayout/SalesStaffLayout";
+import DeliveryOrderAvailable from "./pages/DeliveryStaff/delivery_available_order/DeliveryOrderAvailable";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -61,9 +62,9 @@ function App() {
             <Route path="/login-delivery-staff" element={<LoginDeliveryStaff />} />
             <Route path="/login-admin" element={<LoginAdmin />} />
 
-            {/* <Route path="/admin" element={<ManagerPrivateRoute element={<Admin />} />} /> */}
+            <Route path="/admin" element={<ManagerPrivateRoute element={<Admin />} />} />
 
-            <Route path="/admin" element={<Admin />} />
+            {/* <Route path="/admin" element={<Admin />} /> */}
 
             <Route element={<CustomerLayout />}>
               <Route path="/customer-home" element={<CustomerPrivateRoute element={<Customer />} />} />
@@ -78,16 +79,25 @@ function App() {
             <Route path="/delivery-order-detail" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderDetail />} />} />
             <Route path="/delivery-fish-detail" element={<DeliveryStaffPrivateRoute element={<DeliveryFishDetail />} />} /> */}
 
-            <Route path="/delivery-staff" element={ <DeliveryStaff />} />
-            <Route path="/delivery-order-home" element={<DeliveryOrderHome />} />
-            <Route path="/order-available" element={<OrderAvailable/>} />
-            <Route path="/delivery-order-list" element={<DeliveryOrderList />} />
-            <Route path="/delivery-order-detail" element={<DeliveryOrderDetail />} />
-            <Route path="/delivery-fish-detail" element={<DeliveryFishDetail  />} />
+            <Route path="/delivery-staff" element={<DeliveryStaff />} />
 
-            <Route path="/order-sales-staff" element={<Order_Sales_Staff />} />
-            <Route path="/used-sales-staff" element={<Used_sales_staff />} />
-            <Route path="/sales-staff-home" element={<SalesStaffHome />} />
+            <Route element={<DeliveryStaffLayout />}>
+              <Route path="/delivery-order-home" element={<DeliveryOrderHome />} />
+              <Route path="/order-available" element={<DeliveryOrderAvailable />} />
+              <Route path="/delivery-order-list" element={<DeliveryOrderList />} />
+              <Route path="/delivery-order-detail" element={<DeliveryOrderDetail />} />
+              <Route path="/delivery-fish-detail" element={<DeliveryFishDetail />} />
+            </Route>
+
+
+            <Route element={<SalesStaffLayout />}>
+              <Route path="/order-sales-staff" element={<OrderSalesStaff />} />
+              {/* <Route path="/order-sales-staff" element={<SalesStaffPrivateRoute element={<OrderSalesStaff />} />} /> */}
+              {/* <Route path="/used-sales-staff" element={<Used_sales_staff />} /> */}
+              <Route path="/sales-staff-home" element={<SalesStaffHome />} />
+              {/* <Route path="/sales-staff-home" element={<SalesStaffPrivateRoute element={<SalesStaffHome />} />} /> */}
+            </Route>
+
 
             <Route path="/payment-success" element={<PaymentSuccess />} />
           </Routes>

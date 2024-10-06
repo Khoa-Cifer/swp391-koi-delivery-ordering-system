@@ -30,8 +30,8 @@ const MainContent = () => {
       <div className="card-container">
         {cards.map((card) => (
           <div key={card.id} className="card">
-            <p>Name:{card.name}</p>
-            <p>Last Updated Date:{card.expectedFinishDate}</p>
+            <p>Name: {card.name}</p>
+            <p>Last Updated Date: {card.expectedFinishDate}</p>
             <p>Destination Address: {card.destinationAddress}</p>
             <div className="button-container">
               <button className="status-button">Order Status</button>

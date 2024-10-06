@@ -1,10 +1,12 @@
-.sidebar-body-delivery {
+.sidebar-body-sales {
   border-radius: 25px;
   border: 2px solid skyblue;
   background-color: #c3f4fd;
   padding: 20px;
-  margin: 4% 0 5% 5%;
-  width: 18%;
+  margin: 2% 0 5% 5%;
+  width: 35%;
+  max-width: 15vw;
+  min-width: 15vw;
 
   .avatar {
     width: 100px;

@@ -1,11 +1,13 @@
-.sidebar-body-sales {
+.sidebar-body-delivery-staff {
   border-radius: 25px;
   border: 2px solid skyblue;
   background-color: #c3f4fd;
   padding: 20px;
   margin: 2% 0 5% 5%;
   width: 35%;
-
+  max-width: 15vw;
+  min-width: 15vw;
+  
   .avatar {
     width: 100px;
     height: 100px;
@@ -20,6 +22,7 @@
     align-items: center;
     margin: 30px 0;
   }
+
   .profile {
     margin: 5%;
   }

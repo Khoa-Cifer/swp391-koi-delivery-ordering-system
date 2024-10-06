@@ -4,7 +4,7 @@
     height: 100%;
     margin: -10px;
 
-    .logo{
+    .logo {
         width: 15vw;
         height: 5vh;
         margin-top: 5%;
@@ -13,13 +13,13 @@
     .admin-container-left {
         width: 15%;
     }
-    
+
     .admin-users h4,
     .modules h4 {
         color: #01428E;
         margin: 10px;
     }
-    
+
     .dashboard {
         background-color: #C3F4FD;
         color: #01428E;
@@ -29,7 +29,7 @@
         border-radius: 20px;
         margin: 20px;
     }
-    
+
     .modules-information button {
         background-color: transparent;
         color: black;
@@ -39,46 +39,45 @@
         height: 50px;
         margin: 20px;
     }
-    
+
     .modules-information button:hover {
         background-color: #C3F4FD;
         color: #01428E;
     }
-    
+
     .modules-information button {
         border-radius: 20px;
     }
-    
+
     .admin-container-right {
         background-color: #C3F4FD;
-         margin: 30px;
+        margin: 0 0 30px 30px;
         width: 100%;
         border-radius: 20px;
         justify-content: space-between;
-    
+
     }
-    
+
     .header {
         display: flex;
         justify-content: space-between;
         background-color: #C3F4FD;
     }
-    
+
     .header-right {
         margin-right: 30px;
     }
-    
+
     .header h3 {
         margin: 20px;
     }
-    
+
     .dashboard-info {
         background-color: white;
         color: #01428E;
     }
-    
+
     .dashboard-info h2 {
         margin-left: 30px;
     }
 }
-
