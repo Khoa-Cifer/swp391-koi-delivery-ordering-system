@@ -18,4 +18,6 @@ public interface IOrderService {
     public List<Order> getOrderByStatus(int status);
 
     public double calculateOrderPrice(Long id);
+
+    public List<Order> findOrdersForDelivery(Long id);
 }

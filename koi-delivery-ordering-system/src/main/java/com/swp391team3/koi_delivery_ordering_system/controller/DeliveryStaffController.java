@@ -50,4 +50,10 @@ public class DeliveryStaffController {
         return ResponseEntity.ok(deliveryStaffService.updateDeliveryStaffById(id, deliveryStaff.getEmail(), deliveryStaff.getPhoneNumber()));
     }
 
+    @PostMapping("/findOrdersForDelivery")
+    public ResponseEntity<?> findOrdersForDelivery(@RequestBody Long id) {
+        return ResponseEntity.ok(orderService.findOrdersForDelivery(id));
+    }
+
+
 }

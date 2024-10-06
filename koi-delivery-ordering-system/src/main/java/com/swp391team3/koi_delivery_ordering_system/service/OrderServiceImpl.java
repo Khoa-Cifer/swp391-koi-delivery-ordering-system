@@ -2,27 +2,37 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 
 import com.swp391team3.koi_delivery_ordering_system.model.*;
 import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
+import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
+import com.swp391team3.koi_delivery_ordering_system.repository.OrderDeliveringRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.utils.PriceBoard;
 import com.swp391team3.koi_delivery_ordering_system.utils.Utilities;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
+
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements IOrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
+    private final OrderDeliveringRepository orderDeliveringRepository;
     private final OrderStatus orderStatus;
     private final IStorageService storageService;
     private final IFishService fishService;
     private final PriceBoard priceBoard;
+    private final DeliveryStaffRepository deliveryStaffRepository;
 
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
         Order newOrder = new Order();
@@ -178,7 +188,6 @@ public class OrderServiceImpl implements IOrderService {
     }
 
 
-
     @Override
     public List<Order> getOrderByStatus(int status) {
         List<Order> orders = orderRepository.findByOrderStatus(status);
@@ -202,6 +211,36 @@ public class OrderServiceImpl implements IOrderService {
         return price;
     }
 
+    @Override
+    public List<Order> findOrdersForDelivery(Long id) {
+        Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(id);
+        if(optionalDeliveryStaff.isPresent()) {
+            DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
+
+            List<Order> orders = orderRepository.findByOrderStatus(2);
+
+            List<Order> result = orders.stream()
+                    .filter(order -> Utilities.calculateDistance(
+                            Double.parseDouble(deliveryStaff.getLatitude()),
+                            Double.parseDouble(deliveryStaff.getLongitude()),
+                            Double.parseDouble(order.getSenderLatitude()),
+                            Double.parseDouble(order.getSenderLongitude())) <= 20)
+                    .sorted(Comparator.comparingDouble(order ->
+                            Utilities.calculateDistance(
+                                    Double.parseDouble(deliveryStaff.getLatitude()),
+                                    Double.parseDouble(deliveryStaff.getLongitude()),
+                                    Double.parseDouble(order.getSenderLatitude()),
+                                    Double.parseDouble(order.getSenderLongitude()))))
+                    .limit(5)
+                    .collect(Collectors.toList());
+
+            return result;
+        }
+        return null;
+    }
+
+
+
     private double getPrice(List<Fish> fishList, Optional<Order> order, double distance) {
         int numberOfBoxes = (int) Math.ceil(fishList.size() / 2.0);
         String[] senderAddress = order.get().getSenderAddress().split(",");
@@ -220,4 +259,5 @@ public class OrderServiceImpl implements IOrderService {
         }
         return distancePrice + boxPrice;
     }
+
 }
