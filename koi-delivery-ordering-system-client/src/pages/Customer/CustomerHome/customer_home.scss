@@ -6,18 +6,26 @@
         margin-bottom: 20px;
         width: 100%;
         background-color: #C3F4FD;
-    }
 
-    .order-main-info {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-
-        .order-text-info {
+        .order-main-info {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            gap: 20px;
+
+            .order-text-info {
+                display: flex;
+                justify-content: space-between;
+
+                .icon-group {
+                    display: flex;
+                    gap: 2px;
+                }
+
+            }
+        }
+
+        .button-icon:hover {
+            cursor: pointer;
         }
     }
-
-
 }
