@@ -1,6 +1,6 @@
 import "./Maincontent.scss";
 import { useEffect, useState } from "react";
-import { getOrdersByStatus } from "../../../../utils/customers/order";
+import { getOrdersByStatus } from "../../../../utils/axios/order";
 import dateTimeConvert from "../../../../components/utils";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";

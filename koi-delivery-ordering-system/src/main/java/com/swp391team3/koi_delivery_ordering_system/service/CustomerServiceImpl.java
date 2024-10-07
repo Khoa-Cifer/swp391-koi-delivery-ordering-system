@@ -6,7 +6,6 @@ import com.swp391team3.koi_delivery_ordering_system.model.File;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.CustomerRequestUpdateDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.EmailDetailDTO;
 import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestRegisterDTO;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;

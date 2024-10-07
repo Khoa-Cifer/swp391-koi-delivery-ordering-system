@@ -1,14 +1,14 @@
 import { Avatar, Box, Button, Container, Grid, IconButton, Paper, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import default_avatar from "../../../../assets/default-avatar.jpg"
+import default_avatar from "../../../assets/default-avatar.jpg"
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { getCustomerById, userUpdateProfile, userUpdateProfileImage } from "../../../../utils/customers/user";
+import { getCustomerById, userUpdateProfile, userUpdateProfileImage } from "../../../utils/axios/user";
 import { toast } from "react-toastify";
-import ToastUtil from "../../../../components/toastContainer";
-import { useAuth } from "../../../../authentication/AuthProvider";
 import { PhotoCamera } from "@mui/icons-material";
-import { getFileByFileId } from "../../../../utils/customers/file";
+import { useAuth } from "../../../authentication/AuthProvider";
+import { getFileByFileId } from "../../../utils/axios/file";
+import ToastUtil from "../../../components/toastContainer";
 
 function CustomerEditProfile() {
     const [user, setUser] = useState({

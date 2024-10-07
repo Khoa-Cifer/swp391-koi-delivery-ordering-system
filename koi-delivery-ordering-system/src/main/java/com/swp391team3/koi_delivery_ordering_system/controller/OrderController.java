@@ -71,12 +71,8 @@ public class OrderController {
         return ResponseEntity.ok(orderService.calculateOrderPrice(id));
     }
 
-    @PostMapping("/updateOrderStatus/{id}")
-    public ResponseEntity<?> updateOrderStatus(@PathVariable Long id, @RequestParam int status) {
-        if(orderService.updateOrderStatus(id, status)) {
-            return ResponseEntity.ok("Updated order status successfully");
-        } else {
-            return ResponseEntity.ok("Update failed");
-        }
+    @PostMapping("/updateOrderStatus/{id}/{status}")
+    public ResponseEntity<?> updateOrderStatus(@PathVariable Long id, @PathVariable int status) {
+        return ResponseEntity.ok(orderService.updateOrderStatus(id, status));
     }
 }

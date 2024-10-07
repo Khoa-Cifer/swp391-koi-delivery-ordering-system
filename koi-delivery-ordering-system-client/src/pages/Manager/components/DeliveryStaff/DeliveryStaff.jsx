@@ -1,6 +1,6 @@
 import { Box, Button, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { createDeliveryStaff, getAllDeliveryStaff } from "../../../../utils/admin/deliveryStaff";
+import { createDeliveryStaff, getAllDeliveryStaff } from "../../../../utils/axios/deliveryStaff";
 import 'react-toastify/dist/ReactToastify.css';
 import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";

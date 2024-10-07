@@ -92,7 +92,7 @@
       display: flex;
       flex-grow: 3;
       flex-wrap: wrap; /* Đảm bảo các thẻ sẽ xuống hàng nếu không đủ chỗ */
-      justify-content: space-around; /* Căn đều các thẻ trong hàng */
+      gap: 30px;
       margin-top: 3%;
     }
   

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import OrderInfo from "./pages/OrderInfo";
 import FishInfo from "./pages/FishInfo";
 import { useState } from "react";
-import "./customer_home.scss"
+import "./customer_create_order.scss"
 import OrderFinalInfo from "./pages/OrderFinalInfo";
 
 const CustomTab = styled(Tab)(() => ({
@@ -40,7 +40,7 @@ function a11yProps(index) {
 }
 
 
-function Customer() {
+function CustomerCreateOrder() {
     const [generalData, setGeneralData] = useState({});
     const [value, setValue] = useState(0);
     const [formStep, setFormStep] = useState(0);
@@ -90,4 +90,4 @@ function Customer() {
     )
 }
 
-export default Customer;
+export default CustomerCreateOrder;

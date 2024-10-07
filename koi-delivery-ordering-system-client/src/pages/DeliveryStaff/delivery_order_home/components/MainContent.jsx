@@ -1,34 +1,48 @@
-import axios from "axios";
 import "./MainContent.scss";
 import { useEffect, useState } from "react";
+import { getOrdersByStatus } from "../../../../utils/axios/order";
+import { Button } from "@mui/material";
+import dateTimeConvert from "../../../../components/utils";
+
 const MainContent = () => {
   // State để lưu trữ dữ liệu lấy từ API
-  const [cards, setCards] = useState([]);
+  const [acceptedOrders, setAcceptedOrders] = useState();
 
   // Hàm lấy dữ liệu từ API
-  const fetchCards = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:8080/api/orders/getAllOrders"
-      );
-      console.log(response);
-      setCards(response.data); // Giả sử API trả về một mảng các đối tượng 'cards'
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  // const fetchCards = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       "http://localhost:8080/api/orders/getAllOrders"
+  //     );
+  //     console.log(response);
+  //     setCards(response.data); // Giả sử API trả về một mảng các đối tượng 'cards'
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+  const acceptedOrderStatus = 2;
 
   // Sử dụng useEffect để gọi API khi component được render
   useEffect(() => {
-    fetchCards();
-  }, []);
+    async function fetchAcceptedOrders() {
+      const response = await getOrdersByStatus(acceptedOrderStatus);
+      setAcceptedOrders(response);
+    }
+
+    fetchAcceptedOrders();
+  }, [])
+
+  // useEffect(() => {
+  //   fetchCards();
+  // }, []);
+
   return (
-    <div className="order-container">
+    <div className="delivery-order-container">
       <div className="map-container">
         <p>Google Map</p>
       </div>
-      <div className="card-container">
-        {cards.map((card) => (
+      {/* <div className="card-container">
+        {acceptedOrders.map((card) => (
           <div key={card.id} className="card">
             <p>Name: {card.name}</p>
             <p>Last Updated Date: {card.expectedFinishDate}</p>
@@ -42,6 +56,99 @@ const MainContent = () => {
       </div>
       <div className="view-more-container">
         <button className="view-more-button">View More >>></button>
+      </div> */}
+
+      <div className="order-container-sale">
+        {/* Waiting for accepted order */}
+        {acceptedOrders && acceptedOrders.length > 0 && (
+          <div>
+            <div className="order">
+              <strong>Your Order</strong>
+            </div>
+            <div className="order-row">
+              {acceptedOrders && acceptedOrders.map && acceptedOrders.map((order, index) => {
+                // Show all orders if showAll is true, otherwise show only the first 3
+                if (index >= 3) return null;
+                return (
+                  <div className="order-card" key={order.id}>
+                    <h5 className="card-title">Order {order.name}</h5>
+                    <p className="card-text">Created Date: {dateTimeConvert(order.createdDate)}</p>
+                    <p className="card-text">Expected Finish Date: {dateTimeConvert(order.expectedFinishDate)}</p>
+                    <div className="button-container">
+                      <Button variant="contained">Detail</Button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {acceptedOrders.length > 3 && (
+              <div className="view-more">
+                <a href="#">View more →</a>
+              </div>
+            )}
+          </div>
+        )}
+
+        {acceptedOrders && acceptedOrders.length > 0 && (
+          <div>
+            <div className="order">
+              <strong>Waiting For Getting Order</strong>
+            </div>
+            <div className="order-row">
+              {acceptedOrders && acceptedOrders.map && acceptedOrders.map((order, index) => {
+                // Show all orders if showAll is true, otherwise show only the first 3
+                if (index >= 3) return null;
+                return (
+                  <div className="order-card" key={order.id}>
+                    <h5 className="card-title">Order {order.name}</h5>
+                    <p className="card-text">Created Date: {dateTimeConvert(order.createdDate)}</p>
+                    <p className="card-text">Expected Finish Date: {dateTimeConvert(order.expectedFinishDate)}</p>
+                    <div className="button-container">
+                      <Button variant="contained">Detail</Button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {acceptedOrders.length > 3 && (
+              <div className="view-more">
+                <a href="#">View more →</a>
+              </div>
+            )}
+          </div>
+        )}
+
+        {acceptedOrders && acceptedOrders.length > 0 && (
+          <div>
+            <div className="order">
+              <strong>Waiting For Delivered Order</strong>
+            </div>
+            <div className="order-row">
+              {acceptedOrders && acceptedOrders.map && acceptedOrders.map((order, index) => {
+                // Show all orders if showAll is true, otherwise show only the first 3
+                if (index >= 3) return null;
+                return (
+                  <div className="order-card" key={order.id}>
+                    <h5 className="card-title">Order {order.name}</h5>
+                    <p className="card-text">Created Date: {dateTimeConvert(order.createdDate)}</p>
+                    <p className="card-text">Expected Finish Date: {dateTimeConvert(order.expectedFinishDate)}</p>
+                    <div className="button-container">
+                      <Button variant="contained">Detail</Button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {acceptedOrders.length > 3 && (
+              <div className="view-more">
+                <a href="#">View more →</a>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
