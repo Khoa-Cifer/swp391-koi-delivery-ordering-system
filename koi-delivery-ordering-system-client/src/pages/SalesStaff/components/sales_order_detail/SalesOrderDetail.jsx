@@ -7,7 +7,7 @@ import { useCallback, useState } from "react";
 import GreenMarker from "../../../../assets/succeeded.svg"
 import BlueMarker from "../../../../assets/inTransit.svg"
 import RedMarker from "../../../../assets/failed.svg"
-import { acceptOrder, cancelOrder, updateOrderStatus } from "../../../../utils/axios/order";
+import { updateOrderStatus } from "../../../../utils/axios/order";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../../components/toastContainer";
 
@@ -45,7 +45,7 @@ function SalesOrderDetail() {
   const [center, setCenter] = useState(centerDefault);
   const { state } = location;
   const [map, setMap] = useState(null);
-
+  
   const onLoad = useCallback(function callback(map) {
     setMap(map)
   }, [])

@@ -23,7 +23,6 @@ public class TransactionServiceImpl implements ITransactionService {
             Optional<Customer> paidCustomer = customerRepository.findById(customerId);
             Transaction transaction = new Transaction();
             transaction.setTransactionDate(createdDate);
-            transaction.setTransactionStatus(true);
             transaction.setAmount(amount);
             transaction.setCustomer(paidCustomer.get());
 //            paidCustomer.get().setAmount(paidCustomer.get().getAmount() + amount);

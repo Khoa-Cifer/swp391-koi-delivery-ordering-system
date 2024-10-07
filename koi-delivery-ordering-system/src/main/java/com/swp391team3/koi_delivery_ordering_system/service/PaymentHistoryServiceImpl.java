@@ -1,6 +1,5 @@
 package com.swp391team3.koi_delivery_ordering_system.service;
 
-
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.model.Order;
 import com.swp391team3.koi_delivery_ordering_system.model.OrderPaymentHistory;
@@ -32,11 +31,12 @@ public class PaymentHistoryServiceImpl implements IPaymentHistoryService {
 
     @Override
     public OrderPaymentHistory updatePaymentHistory(Long id) {
-//        OrderPaymentHistory orderPaymentHistory = paymentHistoryRepository.findById(id).get();
-//        if(orderPaymentHistory != null) {
-//            orderPaymentHistory.setDescription(description);
-//            return paymentHistoryRepository.save(orderPaymentHistory);
-//        }
+        // OrderPaymentHistory orderPaymentHistory =
+        // paymentHistoryRepository.findById(id).get();
+        // if(orderPaymentHistory != null) {
+        // orderPaymentHistory.setDescription(description);
+        // return paymentHistoryRepository.save(orderPaymentHistory);
+        // }
         return null;
     }
 
@@ -48,7 +48,23 @@ public class PaymentHistoryServiceImpl implements IPaymentHistoryService {
         Optional<Order> order = orderRepository.findById(orderId);
         paymentHistory.setCustomer(customer.get());
         paymentHistory.setOrder(order.get());
+        paymentHistory.setPaymentStatus(false);
         paymentHistoryRepository.save(paymentHistory);
         return true;
+    }
+
+    @Override
+    public boolean confirmPaymentHistory(Long customerId, double amount) {
+        try {
+            List<OrderPaymentHistory> orderPaymentHistories = paymentHistoryRepository
+                    .findPaymentHistoriesByCustomerIdAndAmount(
+                            customerId, amount);
+            OrderPaymentHistory foundPaymentHistory = orderPaymentHistories.get(0);
+            foundPaymentHistory.setPaymentStatus(true);
+            paymentHistoryRepository.save(foundPaymentHistory);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

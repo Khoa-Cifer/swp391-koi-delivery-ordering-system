@@ -86,7 +86,7 @@ function App() {
             </Route>
 
             <Route element={<DeliveryStaffLayout />}>
-              <Route path="/delivery-staff" element={<DeliveryStaffPrivateRoute element={<DeliveryStaff />} />} />
+              <Route path="/delivery-staff-home" element={<DeliveryStaffPrivateRoute element={<DeliveryStaff />} />} />
               <Route path="/delivery-order-home" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderHome />} />} />
               <Route path="/delivery-order-available" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderAvailable />} />} />
               <Route path="/delivery-order-list" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderList />} />} />

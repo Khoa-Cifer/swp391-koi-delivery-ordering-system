@@ -47,8 +47,6 @@ function Storage() {
         const lat = e.latLng.lat();
         const lng = e.latLng.lng();
 
-        console.log(e);
-
         setCenter({
             lat: e.latLng.lat(),
             lng: e.latLng.lng()

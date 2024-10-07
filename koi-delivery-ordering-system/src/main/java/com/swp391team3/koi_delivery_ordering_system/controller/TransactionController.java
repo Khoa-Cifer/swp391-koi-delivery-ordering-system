@@ -13,12 +13,19 @@ import java.util.Date;
 public class TransactionController {
     private final ITransactionService transactionService;
 
-    @PostMapping("/log-transaction/{id}")
-    public ResponseEntity<?> logTransaction(
-            @PathVariable("id") Long id,
-            @RequestParam("createdDate")Date createdDate,
-            @RequestParam("amount") double amount
+    // @PostMapping("/log-transaction/{id}")
+    // public ResponseEntity<?> logTransaction(
+    //         @PathVariable("id") Long id,
+    //         @RequestParam("createdDate")Date createdDate,
+    //         @RequestParam("amount") double amount
+    // ) {
+    //     return ResponseEntity.ok(transactionService.createTransaction(id, createdDate, amount));
+    // }
+
+    @GetMapping("/check-transaction/{id}")
+    public ResponseEntity<?> checkExistTransaction(
+        @PathVariable("id") Long id
     ) {
-        return ResponseEntity.ok(transactionService.createTransaction(id, createdDate, amount));
+        return null;
     }
 }
