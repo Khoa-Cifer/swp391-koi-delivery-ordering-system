@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useState } from "react";
 import PostedOrder from "./pages/PostedOrder";
 import "./customer_home.scss"
+import DraftOrder from "./pages/DraftOrder";
 
 const CustomTab = styled(Tab)(() => ({
     maxWidth: "20%"
@@ -61,7 +62,7 @@ function CustomerHome() {
                     <PostedOrder />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
-                    Item Two
+                    <DraftOrder />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
                     Item Three

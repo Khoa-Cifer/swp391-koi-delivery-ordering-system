@@ -71,8 +71,8 @@ public class OrderController {
         return ResponseEntity.ok(orderService.calculateOrderPrice(id));
     }
 
-    @PostMapping("/updateOrderStatus/{id}")
-    public ResponseEntity<?> updateOrderStatus(@PathVariable Long id, @RequestParam int status) {
+    @PostMapping("/updateOrderStatus/{id}/{status}")
+    public ResponseEntity<?> updateOrderStatus(@PathVariable Long id, @PathVariable int status) {
         return ResponseEntity.ok(orderService.updateOrderStatus(id, status));
     }
 }

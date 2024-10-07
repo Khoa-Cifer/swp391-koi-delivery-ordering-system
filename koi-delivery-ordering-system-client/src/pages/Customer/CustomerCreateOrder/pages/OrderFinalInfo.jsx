@@ -58,6 +58,7 @@ function OrderFinalInfo({ orderId }) {
                     clearInterval(checkWindowClosed);
                     console.log("Payment window closed. Proceeding...");
 
+                    //Check later
                     const paymentResponse = await logPaymentHistory(customerId, orderId, Math.floor(postedData.price));
                     if (paymentResponse) {
                         const response = await postOrder(orderId);

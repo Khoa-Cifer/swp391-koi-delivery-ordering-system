@@ -1,7 +1,6 @@
 import { Box, Paper, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getOrdersByStatus } from "../../../../utils/axios/order";
-import ToastUtil from "../../../../components/toastContainer";
 import dateTimeConvert from "../../../../components/utils";
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
@@ -21,7 +20,7 @@ const OrderInfoHeader = styled(Typography)(() => ({
     fontSize: "12px",
 }));
 
-function PostedOrder() {
+function DraftOrder() {
     const [orders, setOrders] = useState();
     const [expandedOrderId, setExpandedOrderId] = useState(null); // To track expanded orders
 
@@ -31,20 +30,19 @@ function PostedOrder() {
     };
 
     useEffect(() => {
-        const postedOrderStatus = 1;
-        async function fetchPostedOrder() {
-            const response = await getOrdersByStatus(postedOrderStatus);
+        const draftOrderStatus = 0;
+        async function fetchDraftOrder() {
+            const response = await getOrdersByStatus(draftOrderStatus);
             if (response) {
                 setOrders(response);
             }
         }
 
-        fetchPostedOrder();
+        fetchDraftOrder();
     }, []);
 
     return (
         <div className="customer-home-order-list">
-            <ToastUtil />
             {orders && orders.map && orders.map((order) => (
                 <>
                     <Box sx={{ ...commonStyles, borderRadius: '16px' }} className="order-box" key={order.id}>
@@ -143,4 +141,4 @@ function PostedOrder() {
     )
 }
 
-export default PostedOrder;
+export default DraftOrder;
