@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./register.scss";
-import { userRegister } from "../../utils/axios/user";
+import { userRegister } from "../../utils/axios/customer";
 import { toast } from "react-toastify";
 import ToastUtil from "../../components/toastContainer";
 import { Link } from "react-router-dom";
