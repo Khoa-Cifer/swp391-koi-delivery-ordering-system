@@ -76,8 +76,8 @@ function HomeContent() {
             </h2>
             <p>
               With the vision of becoming the leading cross-border eCommerce
-              enabler for both sellers and buyers, Ezbuy Japan strives to
-              provide comprehensive cross-border eCommerce solutions, powered by
+              enabler for both sellers and buyers, DELIVERKIN strives to provide
+              comprehensive cross-border eCommerce solutions, powered by
               world-class technology, outstanding expertise, and a passion for
               serving clients to help businesses unlock growth potential.
             </p>
@@ -214,7 +214,7 @@ function HomeContent() {
                 <div className="service-number">04</div>
                 <h3 className="service-title">Cross-border Shipping</h3>
                 <p className="service-description">
-                  Ezbuy Japan offers international delivery by air and sea from
+                  DELIVERKIN offers international delivery by air and sea from
                   Japan to over 220 countries. We provide various shipping
                   methods and optional services to ensure your packages arrive
                   safely and efficiently.
