@@ -14,8 +14,11 @@ export async function createGeneralOrderInfo(
 ) {
     try {
         const token = localStorage.getItem("token");
-        const customerInfo = jwtDecode(token);
-        const customerId = customerInfo.sub.substring(2);
+        let customerId;
+        if (token) {
+            const customerInfo = jwtDecode(token);
+            customerId = customerInfo.sub.substring(2);
+        }
         const response = await axiosClient.post("orders/createOrderGeneralData", {
             customerId,
             name,

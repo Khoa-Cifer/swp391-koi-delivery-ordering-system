@@ -72,7 +72,7 @@ const MainContent = () => {
 
       <div className="order-container-sale">
         {/* Waiting for accepted order */}
-        {acceptedOrders && acceptedOrders.length > 0 && (
+        {/* {acceptedOrders && acceptedOrders.length > 0 && (
           <div>
             <div className="order">
               <strong>Your Working Order</strong>
@@ -100,7 +100,7 @@ const MainContent = () => {
               </div>
             )}
           </div>
-        )}
+        )} */}
 
         {acceptedOrders && acceptedOrders.length > 0 && (
           <div>
@@ -117,7 +117,7 @@ const MainContent = () => {
                     <p className="card-text">Created Date: {dateTimeConvert(order.createdDate)}</p>
                     <p className="card-text">Expected Finish Date: {dateTimeConvert(order.expectedFinishDate)}</p>
                     <div className="button-container">
-                      <Button variant="contained">Detail</Button>
+                      <Button variant="contained" onClick={() => handleViewDetail(order)}>Detail</Button>
                     </div>
                   </div>
                 );

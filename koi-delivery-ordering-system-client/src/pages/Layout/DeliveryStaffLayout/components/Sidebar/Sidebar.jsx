@@ -17,21 +17,24 @@ function Sidebar() {
   }
 
   const token = localStorage.getItem("token");
-  const customerInfo = jwtDecode(token);
-  const customerId = customerInfo.sub.substring(2);
+  let customerId;
+  if (token) {
+    const customerInfo = jwtDecode(token);
+    customerId = customerInfo.sub.substring(2);
+  }
 
   useEffect(() => {
     async function fetchUserData() {
-        const customer = await getCustomerById(customerId);
-        if(customer.file) {
-            const imageResponse = await getFileByFileId(customer.file.id);;
-            const imgUrl = URL.createObjectURL(imageResponse);
-            setImagePreview(imgUrl);
-        }
-        // const imageResponse = await getFileByFileId();
+      const customer = await getCustomerById(customerId);
+      if (customer.file) {
+        const imageResponse = await getFileByFileId(customer.file.id);;
+        const imgUrl = URL.createObjectURL(imageResponse);
+        setImagePreview(imgUrl);
+      }
+      // const imageResponse = await getFileByFileId();
     }
     fetchUserData();
-}, [])
+  }, [])
 
 
   const handleOpenCreateOrder = () => {
@@ -44,7 +47,7 @@ function Sidebar() {
         <Avatar
           src={imagePreview}
           alt="avatar"
-          style={{ width: "7vw", height: "14vh"}}
+          style={{ width: "7vw", height: "14vh" }}
         />
       </div>
 

@@ -21,8 +21,8 @@ import DeliveryStaffLayout from "./pages/Layout/DeliveryStaffLayout/DeliveryStaf
 import SalesStaffLayout from "./pages/Layout/SalesStaffLayout/SalesStaffLayout";
 import DeliveryOrderAvailable from "./pages/DeliveryStaff/delivery_available_order/DeliveryOrderAvailable";
 import PublicRoute from "./authentication/PublicRoute";
-import SalesOrderDetail from "./pages/SalesStaff/components/sales_order_detail/SalesOrderDetail";
-import SalesFishDetail from "./pages/SalesStaff/components/sales_fish_detail/SalesFishDetail";
+import SalesOrderDetail from "./pages/SalesStaff/components/SalesOrderDetail/SalesOrderDetail";
+import SalesFishDetail from "./pages/SalesStaff/components/SalesFishDetail/SalesFishDetail";
 import BasicLayout from "./pages/Layout/BasicLayout/BasicLayout";
 import CustomerCreateOrder from "./pages/Customer/CustomerCreateOrder/CustomerCreateOrder";
 import CustomerHome from "./pages/Customer/CustomerHome/CustomerHome";

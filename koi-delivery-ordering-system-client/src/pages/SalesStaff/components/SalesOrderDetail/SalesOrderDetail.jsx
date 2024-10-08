@@ -42,10 +42,13 @@ function SalesOrderDetail() {
     width: "100%",
     height: "50vh",
   }
-
+  
   const token = localStorage.getItem("token");
-  const salesInfo = jwtDecode(token);
-  const salesId = salesInfo.sub.substring(2);
+  let salesId;
+  if (token) {
+      const salesInfo = jwtDecode(token);
+      salesId = salesInfo.sub.substring(2);
+  }
 
   const [center, setCenter] = useState(centerDefault);
   const { state } = location;

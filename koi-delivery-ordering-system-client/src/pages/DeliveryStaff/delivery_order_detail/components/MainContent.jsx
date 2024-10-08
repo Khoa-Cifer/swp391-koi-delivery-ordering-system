@@ -98,8 +98,11 @@ function MainContent() {
   }
 
   const token = localStorage.getItem("token");
-  const deliveryStaffInfo = jwtDecode(token);
-  const deliveryStaffId = deliveryStaffInfo.sub.substring(2);
+  let deliveryStaffId;
+  if (token) {
+    const deliveryStaffInfo = jwtDecode(token);
+    deliveryStaffId = deliveryStaffInfo.sub.substring(2);
+  }
 
   const [center, setCenter] = useState(centerDefault);
   const { state } = location;

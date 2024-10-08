@@ -23,8 +23,12 @@ function OrderFinalInfo({ orderId }) {
     const navigate = useNavigate();
 
     const token = localStorage.getItem("token");
-    const customerInfo = jwtDecode(token);
-    const customerId = customerInfo.sub.substring(2);
+    let customerId;
+    if (token) {
+        const customerInfo = jwtDecode(token);
+        customerId = customerInfo.sub.substring(2);
+    }
+
 
     useEffect(() => {
         async function fetchData() {
