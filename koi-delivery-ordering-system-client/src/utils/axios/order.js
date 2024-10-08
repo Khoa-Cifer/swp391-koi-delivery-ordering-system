@@ -81,24 +81,6 @@ export async function getOrdersByStatus(orderStatus) {
     }
 }
 
-export async function acceptOrder(orderId) {
-    try {
-        const response = await axiosClient.post(`orders/accept-order/${orderId}`)
-        return response.data;
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-export async function cancelOrder(orderId) {
-    try {
-        const response = await axiosClient.post(`orders/cancel-order/${orderId}`)
-        return response.data;
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 export async function updateOrderStatus(orderId, status) {
     try {
         const response = await axiosClient.post(`orders/updateOrderStatus/${orderId}/${status}`)

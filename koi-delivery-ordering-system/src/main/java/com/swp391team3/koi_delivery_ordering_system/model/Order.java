@@ -45,11 +45,15 @@ public class Order {
 
     @OneToMany(mappedBy = "order")
     @JsonIgnore
-    private Set<OrderDelivering> orderDeliverings;
+    private Set<OrderDelivering> orderDeliveringSet;
 
     @ManyToOne
     @JoinColumn(name = "sales_id")
     private SalesStaff salesStaff;
+
+    @ManyToOne
+    @JoinColumn(name = "sales_confirm_id")
+    private SalesStaff salesStaffConfirmation;
 
     @OneToOne(mappedBy = "ratedFor")
     @JsonIgnore

@@ -2,6 +2,7 @@ import { List, ListItem, ListItemText, styled } from "@mui/material";
 import { Image, Typography } from "antd";
 import { useState } from "react";
 import logo from "../../../../assets/logo.png"
+import { useNavigate } from "react-router-dom";
 
 const CustomTypo = styled(Typography)(() => ({
     fontSize: "16px",
@@ -10,16 +11,32 @@ const CustomTypo = styled(Typography)(() => ({
 }));
 
 // eslint-disable-next-line react/prop-types
-function Sidebar({ onDataTypeChange }) {
+function Sidebar() {
+    const navigate = useNavigate();
+
     const [selectedItem, setSelectedItem] = useState(null);
-    const dataItemList = ["Customer", "Delivery Staff", "File", "Fish", "License", "Manager", "News", "Notification",
-        "Order", "Rating", "Sale Staff", "Payment History", "Delivery Type", "Storage"];
+    const dataItemList = [
+        "Customer",
+        "Delivery Staff",
+        // "File",
+        // "Fish",
+        // "License",
+        // "Manager",
+        // "News",
+        // "Order",
+        // "Rating",
+        "Sales Staff",
+        // "Payment History",
+        // "Delivery Type",
+        "Storage"
+    ];
 
     const dashboardItemList = ["Dashboard", "Report"];
 
     const handleClick = (e) => {
         setSelectedItem(e); // Set the selected item
-        onDataTypeChange(e); // Call the parent's function
+        const navLink = e.toLowerCase().replace(/ /g, "-");
+        navigate(`/admin/${navLink}`);
     };
 
     return (
@@ -56,6 +73,7 @@ function Sidebar({ onDataTypeChange }) {
                             }} />
                         </ListItem>
                     ))}
+
                 </List>
             </div>
 

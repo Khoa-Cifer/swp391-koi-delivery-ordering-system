@@ -96,9 +96,6 @@ function SalesOrderDetail() {
     }
   }
 
-
-console.log(salesInfo);
-console.log(salesId);
   return (
     <div className="sales-order-details-container">
       {/* Order Details Table */}

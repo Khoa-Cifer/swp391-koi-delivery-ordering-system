@@ -239,45 +239,6 @@ public class OrderServiceImpl implements IOrderService {
         return null;
     }
 
-    @Override
-    public void generateOrderDelivering(Order order, DeliveryStaff deliveryStaff) {
-        OrderDelivering orderDelivering = new OrderDelivering();
-
-        orderDelivering.setCreatedDate(new Date());
-        orderDelivering.setLastUpdatedDate(new Date());
-
-        LocalDate finishDate = LocalDate.now().plusDays(3);
-        orderDelivering.setFinishDate(Date.from(finishDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-
-        orderDelivering.setOrder(order);
-        orderDelivering.setDriver(deliveryStaff);
-
-        orderDelivering.setCurrentAddress(order.getSenderAddress());
-        orderDelivering.setLongitude(order.getSenderLongitude());
-        orderDelivering.setLatitude(order.getSenderLatitude());
-        orderDelivering.setDeliveryProcessType(0);
-
-
-        orderDeliveringRepository.save(orderDelivering);
-    }
-
-    @Override
-    public boolean startDelivery(Long id, Long driverId) {
-        Optional<Order> optionalOrder = orderRepository.findById(id);
-        Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(driverId);
-        if (optionalOrder.isPresent()) {
-            Order order = optionalOrder.get();
-            updateOrderStatus(id, orderStatus.ORDER_GETTING);
-            if(optionalDeliveryStaff.isPresent()) {
-                DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
-                generateOrderDelivering(order, deliveryStaff);
-                return true;
-            }
-        }
-        return false;
-    }
-
-
     private double getPrice(List<Fish> fishList, Optional<Order> order, double distance) {
         int numberOfBoxes = (int) Math.ceil(fishList.size() / 2.0);
         String[] senderAddress = order.get().getSenderAddress().split(",");

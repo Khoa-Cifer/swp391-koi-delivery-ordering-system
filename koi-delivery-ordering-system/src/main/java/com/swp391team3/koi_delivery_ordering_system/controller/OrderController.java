@@ -61,6 +61,11 @@ public class OrderController {
         }
     }
 
+    @GetMapping("/getOrderByDeliveryStaffId/{deliveryStaffId}")
+    public ResponseEntity<List<Order>> getOrdersByDeliveryStaff(@PathVariable Long deliveryStaffId) {
+return  null;
+    }
+
     @PostMapping("/filterOrderDistance/{id}")
     public ResponseEntity<?> filterOrder(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.filterOrderToStorage(id).get());

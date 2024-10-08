@@ -3,10 +3,13 @@ import { useEffect, useState } from "react";
 import { getOrdersByStatus } from "../../../../utils/axios/order";
 import { Button } from "@mui/material";
 import dateTimeConvert from "../../../../components/utils";
+import { useNavigate } from "react-router-dom";
 
 const MainContent = () => {
   // State để lưu trữ dữ liệu lấy từ API
   const [acceptedOrders, setAcceptedOrders] = useState();
+  const [confirmedOrders, setConfirmedOrders] = useState();
+  const navigate = useNavigate();
 
   // Hàm lấy dữ liệu từ API
   // const fetchCards = async () => {
@@ -21,16 +24,25 @@ const MainContent = () => {
   //   }
   // };
   const acceptedOrderStatus = 2;
+  const confirmedOrderStatus = 5;
 
   // Sử dụng useEffect để gọi API khi component được render
   useEffect(() => {
     async function fetchAcceptedOrders() {
-      const response = await getOrdersByStatus(acceptedOrderStatus);
-      setAcceptedOrders(response);
+      const acceptedOrderResponse = await getOrdersByStatus(acceptedOrderStatus);
+      const confirmedOrderResponse = await getOrdersByStatus(confirmedOrderStatus);
+      setAcceptedOrders(acceptedOrderResponse);
+      setConfirmedOrders(confirmedOrderResponse);
     }
 
     fetchAcceptedOrders();
   }, [])
+
+  const handleViewDetail = (order) => {
+    navigate(`/delivery-order-detail/${order.id}`, {
+      state: order
+    })
+  }
 
   // useEffect(() => {
   //   fetchCards();
@@ -63,7 +75,7 @@ const MainContent = () => {
         {acceptedOrders && acceptedOrders.length > 0 && (
           <div>
             <div className="order">
-              <strong>Your Order</strong>
+              <strong>Your Working Order</strong>
             </div>
             <div className="order-row">
               {acceptedOrders && acceptedOrders.map && acceptedOrders.map((order, index) => {
@@ -75,7 +87,7 @@ const MainContent = () => {
                     <p className="card-text">Created Date: {dateTimeConvert(order.createdDate)}</p>
                     <p className="card-text">Expected Finish Date: {dateTimeConvert(order.expectedFinishDate)}</p>
                     <div className="button-container">
-                      <Button variant="contained">Detail</Button>
+                      <Button variant="contained" onClick={() => handleViewDetail(order)}>Detail</Button>
                     </div>
                   </div>
                 );
@@ -120,13 +132,13 @@ const MainContent = () => {
           </div>
         )}
 
-        {acceptedOrders && acceptedOrders.length > 0 && (
+        {confirmedOrderStatus && confirmedOrderStatus.length > 0 && (
           <div>
             <div className="order">
               <strong>Waiting For Delivered Order</strong>
             </div>
             <div className="order-row">
-              {acceptedOrders && acceptedOrders.map && acceptedOrders.map((order, index) => {
+              {confirmedOrderStatus && confirmedOrderStatus.map && confirmedOrderStatus.map((order, index) => {
                 // Show all orders if showAll is true, otherwise show only the first 3
                 if (index >= 3) return null;
                 return (
@@ -142,7 +154,7 @@ const MainContent = () => {
               })}
             </div>
 
-            {acceptedOrders.length > 3 && (
+            {confirmedOrderStatus.length > 3 && (
               <div className="view-more">
                 <a href="#">View more →</a>
               </div>

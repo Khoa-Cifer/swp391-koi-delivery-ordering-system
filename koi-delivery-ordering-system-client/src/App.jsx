@@ -85,7 +85,7 @@ function App() {
             <Route path="/login-admin" element={<LoginAdmin />} />
 
             <Route element={<ManagerLayout />}>
-              <Route path="/admin" element={<ManagerPrivateRoute element={<Report />} />} />
+              <Route path="/admin/report" element={<ManagerPrivateRoute element={<Report />} />} />
               <Route path="/admin/dashboard" element={<ManagerPrivateRoute element={<Dashboard />} />} />
               <Route path="/admin/storage" element={<ManagerPrivateRoute element={<Storage />} />} />
               <Route path="/admin/customer" element={<ManagerPrivateRoute element={<Customer />} />} />
@@ -113,14 +113,12 @@ function App() {
             <Route element={<SalesStaffLayout />}>
               <Route path="/order-sales-staff" element={<SalesStaffPrivateRoute element={<OrderSalesStaff />} />} />
               <Route path="/sales-staff-home" element={<SalesStaffPrivateRoute element={<SalesStaffHome />} />} />
-            
-              <Route path="/sales-order-detail/:id" element={<AllowedRoute element={<SalesOrderDetail />} />} >
-                <Route path="sales-fish-detail/:fishId" element={<AllowedRoute element={<SalesFishDetail />} />} />
-              </Route>
+              <Route path="/sales-order-detail/:id" element={<AllowedRoute element={<SalesOrderDetail />} />} />
+              <Route path="/sales-order-detail/sales-fish-detail/:fishId" element={<AllowedRoute element={<SalesFishDetail />} />} />
             </Route>
 
             <Route element={<BasicLayout />}>
-             
+
             </Route>
 
             <Route path="/payment-success" element={<AllowedRoute element={<PaymentSuccess />} />} />

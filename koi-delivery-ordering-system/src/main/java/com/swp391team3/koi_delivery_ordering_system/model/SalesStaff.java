@@ -43,6 +43,10 @@ public class SalesStaff implements UserDetails {
     @JsonIgnore
     private Set<Order> orders;
 
+    @OneToMany(mappedBy = "salesStaffConfirmation")
+    @JsonIgnore
+    private Set<Order> ordersConfirmed;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
