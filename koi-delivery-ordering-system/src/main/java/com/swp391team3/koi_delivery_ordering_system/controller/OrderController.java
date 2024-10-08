@@ -1,7 +1,6 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.Order;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderFishInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +50,7 @@ public class OrderController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/status/{status}")
+    @GetMapping("/getOrderByStatus/{status}")
     public ResponseEntity<List<Order>> getOrdersByStatus(@PathVariable int status) {
         List<Order> orders = orderService.getOrderByStatus(status);
 
@@ -70,5 +69,10 @@ public class OrderController {
     @PostMapping("/calculatePrice/{id}")
     public ResponseEntity<?> calculateOrderPrice(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.calculateOrderPrice(id));
+    }
+
+    @PostMapping("/updateOrderStatus/{id}/{status}")
+    public ResponseEntity<?> updateOrderStatus(@PathVariable Long id, @PathVariable int status) {
+        return ResponseEntity.ok(orderService.updateOrderStatus(id, status));
     }
 }

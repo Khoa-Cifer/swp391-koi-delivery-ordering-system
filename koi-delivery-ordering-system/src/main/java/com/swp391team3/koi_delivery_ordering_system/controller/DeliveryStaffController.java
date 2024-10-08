@@ -1,8 +1,7 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
-import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.DeliveryStaffRequestCreationDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestCreationDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IDeliveryStaffService;
 import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,7 @@ public class DeliveryStaffController {
     private final IOrderService orderService;
 
     @PostMapping("/createDeliveryStaff")
-    public ResponseEntity<?> createDeliveryStaff(@RequestBody DeliveryStaffRequestCreationDTO request) {
+    public ResponseEntity<?> createDeliveryStaff(@RequestBody StaffRequestCreationDTO request) {
         String result = deliveryStaffService.createDeliveryStaff(request.getEmail(), request.getUsername());
         return ResponseEntity.ok(result);
     }
@@ -51,21 +50,18 @@ public class DeliveryStaffController {
         return ResponseEntity.ok(deliveryStaffService.updateDeliveryStaffById(id, deliveryStaff.getEmail(), deliveryStaff.getPhoneNumber()));
     }
 
-    @PostMapping("/pickup/{id}")
-    public ResponseEntity<String> deliveryPickup(@PathVariable Long id) {
-        boolean isPickedUp = orderService.deliveryPickup(id);
-        if (isPickedUp) {
-            return ResponseEntity.ok("Order is being picked up.");
+    @PostMapping("/findOrdersForDelivery")
+    public ResponseEntity<?> findOrdersForDelivery(@RequestBody Long id) {
+        return ResponseEntity.ok(orderService.findOrdersForDelivery(id));
+    }
+    @PostMapping("/startDelivery/{id}")
+    public ResponseEntity<?> startDelivery(@PathVariable Long id, @RequestBody Long driverId) {
+        if(orderService.startDelivery(id, driverId)){
+            return ResponseEntity.ok("Delivering order");
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.badRequest().build();
     }
 
-    @PostMapping("/receive/{id}")
-    public ResponseEntity<String> receiveOrder(@PathVariable Long id) {
-        boolean isReceived = orderService.receiveOrder(id);
-        if (isReceived) {
-            return ResponseEntity.ok("Order received successfully.");
-        }
-        return ResponseEntity.notFound().build();
-    }
+
+
 }

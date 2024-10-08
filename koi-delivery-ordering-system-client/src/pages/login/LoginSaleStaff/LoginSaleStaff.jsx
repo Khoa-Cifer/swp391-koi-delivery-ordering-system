@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { userLogin } from "../../../utils/customers/user";
+import { userLogin } from "../../../utils/axios/customer";
 import { useAuth } from "../../../authentication/AuthProvider";
 import "./LoginSaleStaff.scss"
 import { useState } from "react";
@@ -22,7 +22,7 @@ function LoginSaleStaff() {
     const data = await userLogin(email, password, roleId);
     if (data) {
       auth.handleLogin(data);
-      navigate("/customer-home");
+      navigate("/sales-staff-home");
     }
   }
 

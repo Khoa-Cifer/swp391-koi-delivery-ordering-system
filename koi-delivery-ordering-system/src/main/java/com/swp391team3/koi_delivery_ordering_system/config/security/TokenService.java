@@ -67,11 +67,47 @@ public class TokenService {
             responseLoginUser.setUserRoleName(roleName);
             responseLoginUser.setRoleId(roleId);
         } else if (user instanceof DeliveryStaff) {
-            userId = "D_" + ((DeliveryStaff) user).getId();
+            DeliveryStaff deliveryStaff = (DeliveryStaff) user;
+            userId = "D_" + deliveryStaff.getId();
+            username = deliveryStaff.getUsername();
+            email = deliveryStaff.getEmail();
+            roleName = deliveryStaff.getAuthorities().toString();
+            phoneNumber = deliveryStaff.getPhoneNumber();
+            int roleId = 3;
+
+            responseLoginUser.setUsername(username);
+            responseLoginUser.setEmail(email);
+            responseLoginUser.setPhoneNumber(phoneNumber);
+            responseLoginUser.setUserRoleName(roleName);
+            responseLoginUser.setRoleId(roleId);
         } else if (user instanceof Manager) {
-            userId = "M_" + ((Manager) user).getId();
+            Manager manager = (Manager) user;
+            userId = "M_" + manager.getId();
+            username = manager.getUsername();
+            email = manager.getEmail();
+            roleName = manager.getAuthorities().toString();
+            phoneNumber = manager.getPhoneNumber();
+            int roleId = 4;
+
+            responseLoginUser.setUsername(username);
+            responseLoginUser.setEmail(email);
+            responseLoginUser.setPhoneNumber(phoneNumber);
+            responseLoginUser.setUserRoleName(roleName);
+            responseLoginUser.setRoleId(roleId);
         } else if (user instanceof SalesStaff) {
-            userId = "S_" + ((SalesStaff) user).getId();
+            SalesStaff salesStaff = (SalesStaff) user;
+            userId = "S_" + salesStaff.getId();
+            username = salesStaff.getUsername();
+            email = salesStaff.getEmail();
+            roleName = salesStaff.getAuthorities().toString();
+            phoneNumber = salesStaff.getPhoneNumber();
+            int roleId = 2;
+
+            responseLoginUser.setUsername(username);
+            responseLoginUser.setEmail(email);
+            responseLoginUser.setPhoneNumber(phoneNumber);
+            responseLoginUser.setUserRoleName(roleName);
+            responseLoginUser.setRoleId(roleId);
         }
 
         if (userId == null) {

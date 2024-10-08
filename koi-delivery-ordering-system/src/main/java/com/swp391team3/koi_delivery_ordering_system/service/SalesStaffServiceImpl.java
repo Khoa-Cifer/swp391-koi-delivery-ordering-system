@@ -17,20 +17,21 @@ public class SalesStaffServiceImpl implements ISalesStaffService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public String createSalesStaff(String email, String password, String username, String phoneNumber) {
+    public String createSalesStaff(String email, String username) {
         SalesStaff newSalesStaff = new SalesStaff();
-        newSalesStaff.setEmail(email);
 
         boolean emailDuplicatedCheck = salesStaffRepository.existsByEmail(email);
         if (emailDuplicatedCheck) {
             return "This email already exists";
         }
 
-        String encodedPassword = passwordEncoder.encode(password);
+        newSalesStaff.setEmail(email);
+
+        String defaultPassword = "123";
+        String encodedPassword = passwordEncoder.encode(defaultPassword);
         newSalesStaff.setPassword(encodedPassword);
 
         newSalesStaff.setUsername(username);
-        newSalesStaff.setPhoneNumber(phoneNumber);
 
         salesStaffRepository.save(newSalesStaff);
         return "Account create successfully";

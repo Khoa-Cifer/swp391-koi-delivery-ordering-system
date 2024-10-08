@@ -1,5 +1,6 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
+import com.swp391team3.koi_delivery_ordering_system.requestDto.PaymentRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IPaymentHistoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +14,8 @@ import java.util.Date;
 public class PaymentHistoryController {
     private final IPaymentHistoryService paymentHistoryService;
 
-    @PostMapping("/log-transaction/{id}")
-    public ResponseEntity<?> logTransaction(
-            @RequestParam("customerId") Long customerId,
-            @RequestParam("orderId") Long orderId,
-            @RequestParam("amount") double amount
-    ) {
-        return ResponseEntity.ok(paymentHistoryService.logPaymentHistory(amount, orderId, customerId));
+    @PostMapping("/log-payment-history")
+    public ResponseEntity<?> logTransaction(@RequestBody PaymentRequestDTO request) {
+        return ResponseEntity.ok(paymentHistoryService.logPaymentHistory(request.getAmount(), request.getOrderId(), request.getCustomerId()));
     }
 }

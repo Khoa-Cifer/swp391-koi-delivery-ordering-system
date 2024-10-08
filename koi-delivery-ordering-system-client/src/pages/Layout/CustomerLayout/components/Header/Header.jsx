@@ -7,8 +7,8 @@ import logo from "../../../../../assets/logo.png";
 import default_avatar from "../../../../../assets/default-avatar.jpg";
 import { useAuth } from "../../../../../authentication/AuthProvider";
 import { jwtDecode } from 'jwt-decode';
-import { getCustomerById } from '../../../../../utils/customers/user';
-import { getFileByFileId } from '../../../../../utils/customers/file';
+import { getCustomerById } from '../../../../../utils/axios/customer';
+import { getFileByFileId } from '../../../../../utils/axios/file';
 
 function Header() {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -53,12 +53,12 @@ function Header() {
     }
 
     return (
-        <div className="sale-header-container">
+        <div className="customer-header-container">
             <div className="logo">
                 <img
                     src={logo}
                     alt="Logo"
-                    style={{ width: "180px", height: "180px" }}
+                    style={{ width: "180px"}}
                 />
             </div>
 

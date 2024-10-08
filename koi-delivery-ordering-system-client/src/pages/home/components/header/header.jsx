@@ -34,7 +34,6 @@ function Header() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const user = token ? jwtDecode(token) : null;
-    console.log(user);
     if (user) {
       setCustomerUsername(user.userData.username);
     }

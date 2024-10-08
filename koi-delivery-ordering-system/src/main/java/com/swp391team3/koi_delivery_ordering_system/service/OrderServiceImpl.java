@@ -2,27 +2,37 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 
 import com.swp391team3.koi_delivery_ordering_system.model.*;
 import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
+import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
+import com.swp391team3.koi_delivery_ordering_system.repository.OrderDeliveringRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.utils.PriceBoard;
 import com.swp391team3.koi_delivery_ordering_system.utils.Utilities;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
+
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements IOrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
+    private final OrderDeliveringRepository orderDeliveringRepository;
     private final OrderStatus orderStatus;
     private final IStorageService storageService;
     private final IFishService fishService;
     private final PriceBoard priceBoard;
+    private final DeliveryStaffRepository deliveryStaffRepository;
 
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
         Order newOrder = new Order();
@@ -115,71 +125,66 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public boolean cancelOrder(Long id) {
+    public boolean updateOrderStatus(Long id, int newStatus) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
-            order.setOrderStatus(orderStatus.FAILED);
+            int currentStatus = order.getOrderStatus();
+
+            switch (newStatus) {
+                case 2:
+                    if (currentStatus == orderStatus.POSTED) {
+                        order.setOrderStatus(orderStatus.ORDER_ACCEPTED);
+                    } else {
+                        return false;
+                    }
+                    break;
+                case 3:
+                    if (currentStatus == orderStatus.ORDER_ACCEPTED) {
+                        order.setOrderStatus(orderStatus.ORDER_GETTING);
+                    } else {
+                        return false;
+                    }
+                    break;
+                case 4:
+                    if (currentStatus == orderStatus.ORDER_GETTING) {
+                        order.setOrderStatus(orderStatus.ORDER_RECEIVED);
+                    } else {
+                        return false;
+                    }
+                    break;
+                case 5:
+                    if (currentStatus == orderStatus.ORDER_RECEIVED) {
+                        order.setOrderStatus(orderStatus.ORDER_CONFIRMED);
+                    } else {
+                        return false;
+                    }
+                    break;
+                case 6:
+                    if (currentStatus == orderStatus.ORDER_CONFIRMED) {
+                        order.setOrderStatus(orderStatus.DELIVERING);
+                    } else {
+                        return false;
+                    }
+                    break;
+                case 7:
+                    if (currentStatus == orderStatus.DELIVERING) {
+                        order.setOrderStatus(orderStatus.COMPLETE);
+                    } else {
+                        return false;
+                    }
+                    break;
+                case 8:
+                    order.setOrderStatus(orderStatus.FAILED);
+                    break;
+                default:
+                    return false;
+            }
+
             orderRepository.save(order);
             return true;
         }
         return false;
-    }
-
-    @Override
-    public boolean confirmOrder(Long id) {
-        Optional<Order> optionalOrder = orderRepository.findById(id);
-        if (optionalOrder.isPresent()) {
-            Order order = optionalOrder.get();
-            if (order.getOrderStatus() == orderStatus.POSTED) { // Kiểm tra trạng thái hiện tại
-                order.setOrderStatus(orderStatus.ORDER_ACCEPTED); // Chuyển trạng thái thành ORDER_ACCEPTED
-                orderRepository.save(order);
-                return true; // Thành công
-            }
-        }
-        return false; // Không thành công
-    }
-
-    @Override
-    public boolean deliveryPickup(Long id) {
-        Optional<Order> optionalOrder = orderRepository.findById(id);
-        if (optionalOrder.isPresent()) {
-            Order order = optionalOrder.get();
-            if (order.getOrderStatus() == orderStatus.ORDER_ACCEPTED) { // Kiểm tra trạng thái hiện tại
-                order.setOrderStatus(orderStatus.ORDER_GETTING); // Chuyển trạng thái thành ORDER_ACCEPTED
-                orderRepository.save(order);
-                return true; // Thành công
-            }
-        }
-        return false; // Không thành công
-    }
-
-    @Override
-    public boolean receiveOrder(Long id) {
-        Optional<Order> optionalOrder = orderRepository.findById(id);
-        if (optionalOrder.isPresent()) {
-            Order order = optionalOrder.get();
-            if (order.getOrderStatus() == orderStatus.ORDER_GETTING) { // Kiểm tra trạng thái hiện tại
-                order.setOrderStatus(orderStatus.ORDER_RECEIVED); // Chuyển trạng thái thành ORDER_ACCEPTED
-                orderRepository.save(order);
-                return true; // Thành công
-            }
-        }
-        return false; // Không thành công
-    }
-
-    @Override
-    public boolean confirmReceivedOrder(Long id) {
-        Optional<Order> optionalOrder = orderRepository.findById(id);
-        if (optionalOrder.isPresent()) {
-            Order order = optionalOrder.get();
-            if (order.getOrderStatus() == orderStatus.ORDER_RECEIVED) { // Kiểm tra trạng thái hiện tại
-                order.setOrderStatus(orderStatus.ORDER_CONFIRMED); // Chuyển trạng thái thành ORDER_ACCEPTED
-                orderRepository.save(order);
-                return true; // Thành công
-            }
-        }
-        return false; // Không thành công
     }
 
 
@@ -206,6 +211,73 @@ public class OrderServiceImpl implements IOrderService {
         return price;
     }
 
+    @Override
+    public List<Order> findOrdersForDelivery(Long id) {
+        Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(id);
+        if(optionalDeliveryStaff.isPresent()) {
+            DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
+
+            List<Order> orders = orderRepository.findByOrderStatus(2);
+
+            List<Order> result = orders.stream()
+                    .filter(order -> Utilities.calculateDistance(
+                            Double.parseDouble(deliveryStaff.getLatitude()),
+                            Double.parseDouble(deliveryStaff.getLongitude()),
+                            Double.parseDouble(order.getSenderLatitude()),
+                            Double.parseDouble(order.getSenderLongitude())) <= 20)
+                    .sorted(Comparator.comparingDouble(order ->
+                            Utilities.calculateDistance(
+                                    Double.parseDouble(deliveryStaff.getLatitude()),
+                                    Double.parseDouble(deliveryStaff.getLongitude()),
+                                    Double.parseDouble(order.getSenderLatitude()),
+                                    Double.parseDouble(order.getSenderLongitude()))))
+                    .limit(5)
+                    .collect(Collectors.toList());
+
+            return result;
+        }
+        return null;
+    }
+
+    @Override
+    public void generateOrderDelivering(Order order, DeliveryStaff deliveryStaff) {
+        OrderDelivering orderDelivering = new OrderDelivering();
+
+        orderDelivering.setCreatedDate(new Date());
+        orderDelivering.setLastUpdatedDate(new Date());
+
+        LocalDate finishDate = LocalDate.now().plusDays(3);
+        orderDelivering.setFinishDate(Date.from(finishDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+        orderDelivering.setOrder(order);
+        orderDelivering.setDriver(deliveryStaff);
+
+        orderDelivering.setCurrentAddress(order.getSenderAddress());
+        orderDelivering.setLongitude(order.getSenderLongitude());
+        orderDelivering.setLatitude(order.getSenderLatitude());
+        orderDelivering.setDeliveryProcessType(0);
+
+
+        orderDeliveringRepository.save(orderDelivering);
+    }
+
+    @Override
+    public boolean startDelivery(Long id, Long driverId) {
+        Optional<Order> optionalOrder = orderRepository.findById(id);
+        Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(driverId);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            updateOrderStatus(id, orderStatus.ORDER_GETTING);
+            if(optionalDeliveryStaff.isPresent()) {
+                DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
+                generateOrderDelivering(order, deliveryStaff);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     private double getPrice(List<Fish> fishList, Optional<Order> order, double distance) {
         int numberOfBoxes = (int) Math.ceil(fishList.size() / 2.0);
         String[] senderAddress = order.get().getSenderAddress().split(",");
@@ -224,4 +296,5 @@ public class OrderServiceImpl implements IOrderService {
         }
         return distancePrice + boxPrice;
     }
+
 }

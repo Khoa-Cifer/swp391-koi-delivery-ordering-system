@@ -1,14 +1,94 @@
-.order-container {
+.delivery-order-container {
   display: flex;
   flex-direction: column;
   max-width: 100%;
-  margin: -2% auto;
   padding: 40px;
 
-  align-items: center;
+  .order-container-sale {
+    height: 80%;
+    padding: 20px;
+    margin: 3%;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+
+    .order{
+      font-size: 1.2em;
+      color: rgb(5, 10, 176);
+    }
+  
+    /* Các thẻ đơn hàng */
+    .order-row {
+      display: flex;
+      flex-grow: 3;
+      flex-wrap: wrap; /* Đảm bảo các thẻ sẽ xuống hàng nếu không đủ chỗ */
+      gap: 30px;
+      margin-top: 3%;
+    }
+  
+    /* Mỗi thẻ đơn hàng sẽ chiếm 48% chiều rộng */
+    .order-card {
+      flex: 0 0 25%; /* 48% width để vừa 2 thẻ trong 1 hàng */
+      padding: 20px;
+      background-color: #e4e2e2;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 7%;
+      gap: 5%;
+    }
+  
+    .card-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 4%;
+    }
+  
+    .card-text {
+      font-size: 14px;
+      margin-bottom: 4%;
+    }
+  
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+  
+      button {
+        width: 100%;
+        font-size: 13px;
+        margin-bottom: 20px;
+      }
+
+      column-gap: 5%;
+    }
+  
+    .btn {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+  
+    .status-btn {
+      background-color: rgb(17, 17, 162);
+      color: white;
+    }
+  
+    .detail-btn {
+      background-color: green;
+      color: white;
+    }
+
+    .view-more{
+      justify-content: flex-end;
+      font-size: 1em;
+    }
+    
+    
+  }
 
   .map-container {
-    width: 45vw;
+    width: 60vw;
     height: 50vh;
     background-color: #f1f1f1;
     display: flex;
@@ -20,11 +100,17 @@
 
   .card-container {
     display: flex;
-    justify-content: space-around;
-    width: -2%;
+    flex-wrap: wrap;
+    /* Optional: to add space between cards */
   }
 
   .card {
+    flex: 1 1 30%;
+    /* Each card takes up approximately 30% of the row */
+    margin: 10px;
+    /* Add margin for spacing between cards */
+    box-sizing: border-box;
+    /* Ensure padding doesn't affect the card's width */
     background-color: white;
     border-radius: 20px;
     padding: 20px;
@@ -71,6 +157,7 @@
     display: flex;
     justify-content: end;
   }
+
   .view-more-container {
     align-self: flex-end;
   }

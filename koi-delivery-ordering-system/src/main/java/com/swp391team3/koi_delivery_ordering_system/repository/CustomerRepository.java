@@ -10,4 +10,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Long>{
 
     @Query("SELECT c FROM Customer c WHERE c.email like :email")
     Customer findCustomerByEmail(String email);
+    
 }

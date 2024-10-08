@@ -52,13 +52,14 @@ public class PaymentController {
         Date formattedPayDate = formatDate.parse(payDate);
 
         // Parse amount to double
-        double parsedAmount = Double.parseDouble(amount);
-
+        String modifiedAmount = amount.substring(0, amount.length() - 2);
+        double parsedAmount = Double.parseDouble(modifiedAmount);
         // Create a transaction
-        boolean transactionCreated = transactionService.createTransaction(id, formattedPayDate, parsedAmount);
+        transactionService.createTransaction(id, formattedPayDate, parsedAmount);
+        paymentHistoryService.confirmPaymentHistory(id, parsedAmount);
 
         try {
-            return new RedirectView("http://localhost:5173" + "/payment-success" + "?amount=" + amount + "&date=" + payDate + "&transactionNo=" + transactionNo);
+            return new RedirectView("http://localhost:5173" + "/payment-success" + "?amount=" + modifiedAmount + "&date=" + payDate + "&transactionNo=" + transactionNo);
 
         } catch (Exception e) {
             return new RedirectView("http://localhost:5173");
