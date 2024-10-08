@@ -1,15 +1,24 @@
 import "./MainContent.scss";
 import { useEffect, useState } from "react";
-import { getOrdersByStatus } from "../../../../utils/axios/order";
+import { getOrdersByStatus, getOrdersRecommendedForDeliveryStaff } from "../../../../utils/axios/order";
 import { Button } from "@mui/material";
 import dateTimeConvert from "../../../../components/utils";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const MainContent = () => {
   // State để lưu trữ dữ liệu lấy từ API
   const [acceptedOrders, setAcceptedOrders] = useState();
   const [confirmedOrders, setConfirmedOrders] = useState();
+  const [recommendedOrders, setRecommendedOrders] = useState();
   const navigate = useNavigate();
+
+  const token = localStorage.getItem("token");
+  let deliveryStaffId;
+  if (token) {
+    const deliveryStaffInfo = jwtDecode(token);
+    deliveryStaffId = deliveryStaffInfo.sub.substring(2);
+  }
 
   // Hàm lấy dữ liệu từ API
   // const fetchCards = async () => {
@@ -31,8 +40,10 @@ const MainContent = () => {
     async function fetchAcceptedOrders() {
       const acceptedOrderResponse = await getOrdersByStatus(acceptedOrderStatus);
       const confirmedOrderResponse = await getOrdersByStatus(confirmedOrderStatus);
+      const recommendedOrderResponse = await getOrdersRecommendedForDeliveryStaff(deliveryStaffId);
       setAcceptedOrders(acceptedOrderResponse);
       setConfirmedOrders(confirmedOrderResponse);
+      setRecommendedOrders(recommendedOrderResponse);
     }
 
     fetchAcceptedOrders();

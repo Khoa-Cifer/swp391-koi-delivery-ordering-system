@@ -86,4 +86,14 @@ return  null;
     public ResponseEntity<?> updateOrderSalesAction(@RequestBody OrderSalesStaffCheckingRequestDTO request) {
         return ResponseEntity.ok(orderService.updateOrderSalesAction(request.getOrderId(), request.getSalesId(), request.getActionStatus()));
     }
+
+    @GetMapping("/recommendOrdersForDelivery/{deliveryStaffId}")
+    public ResponseEntity<?> recommendOrdersForDelivery(@PathVariable Long deliveryStaffId, @RequestBody int deliveryProcessType) {
+        return ResponseEntity.ok(orderService.findOrdersForDelivery(deliveryStaffId));
+    }
+
+    @GetMapping("/onGoingGettingOrder/{deliveryStaffId}")
+    public ResponseEntity<?> onGoingGettingOrdersForDelivery(@PathVariable Long deliveryStaffId, @RequestBody int deliveryProcessType) {
+        return ResponseEntity.ok(orderService.onGoingGettingOrdersForDelivery(deliveryStaffId, deliveryProcessType));
+    }
 }

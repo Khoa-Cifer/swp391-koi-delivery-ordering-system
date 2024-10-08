@@ -16,10 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -187,7 +184,6 @@ public class OrderServiceImpl implements IOrderService {
         return false;
     }
 
-
     @Override
     public List<Order> getOrderByStatus(int status) {
         List<Order> orders = orderRepository.findByOrderStatus(status);
@@ -224,7 +220,7 @@ public class OrderServiceImpl implements IOrderService {
                             Double.parseDouble(deliveryStaff.getLatitude()),
                             Double.parseDouble(deliveryStaff.getLongitude()),
                             Double.parseDouble(order.getSenderLatitude()),
-                            Double.parseDouble(order.getSenderLongitude())) <= 20)
+                            Double.parseDouble(order.getSenderLongitude())) <= 40)
                     .sorted(Comparator.comparingDouble(order ->
                             Utilities.calculateDistance(
                                     Double.parseDouble(deliveryStaff.getLatitude()),
@@ -237,6 +233,17 @@ public class OrderServiceImpl implements IOrderService {
             return result;
         }
         return null;
+    }
+
+    @Override
+    public List<Order> onGoingGettingOrdersForDelivery(Long id, int deliveryProcessType) {
+        List<Order> gettingOrder = getOrderByStatus(orderStatus.ORDER_GETTING);
+        List<Order> onGoingOrder = new ArrayList<>();
+        for (int i = 0; i < gettingOrder.size(); i++) {
+            Optional<Order> foundOrder = orderRepository.findOrderByDeliveryStaffId(id, gettingOrder.get(i).getId(), deliveryProcessType);
+            foundOrder.ifPresent(onGoingOrder::add);
+        }
+        return  onGoingOrder;
     }
 
     @Override
@@ -278,5 +285,4 @@ public class OrderServiceImpl implements IOrderService {
         }
         return distancePrice + boxPrice;
     }
-
 }

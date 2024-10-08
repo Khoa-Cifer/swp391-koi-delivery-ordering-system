@@ -49,12 +49,6 @@ public class DeliveryStaffController {
     public ResponseEntity<?> updateDeliveryStaff(@PathVariable Long id, @RequestBody DeliveryStaff deliveryStaff) {
         return ResponseEntity.ok(deliveryStaffService.updateDeliveryStaffById(id, deliveryStaff.getEmail(), deliveryStaff.getPhoneNumber()));
     }
-
-    @PostMapping("/findOrdersForDelivery")
-    public ResponseEntity<?> findOrdersForDelivery(@RequestBody Long id) {
-        return ResponseEntity.ok(orderService.findOrdersForDelivery(id));
-    }
-
 //    @PostMapping("/startDelivery/{id}")
 //    public ResponseEntity<?> startDelivery(@PathVariable Long id, @RequestBody Long driverId) {
 //        if(orderService.startDelivery(id, driverId)){

@@ -105,3 +105,12 @@ export async function updateOrderSalesAction(orderId, salesId, actionStatus) {
         console.log(error);
     }
 }
+
+export async function getOrdersRecommendedForDeliveryStaff(deliveryStaffId) {
+    try {
+        const response = await axiosClient.get(`orders/recommendOrdersForDelivery/${deliveryStaffId}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
