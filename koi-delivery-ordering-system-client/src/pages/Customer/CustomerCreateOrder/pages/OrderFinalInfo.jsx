@@ -52,6 +52,7 @@ function OrderFinalInfo({ orderId }) {
     }, []);
 
     async function handlePostOrder() {
+        const paymentResponse = await logPaymentHistory(customerId, orderId, Math.floor(postedData.price));
         const paymentOpen = await paymentOpenGateway(customerId, Math.floor(postedData.price), "NCB");
         if (paymentOpen) {
             let paymentWindow = window.open(paymentOpen.paymentUrl, "_blank");
@@ -63,7 +64,6 @@ function OrderFinalInfo({ orderId }) {
                     console.log("Payment window closed. Proceeding...");
 
                     //Check later
-                    const paymentResponse = await logPaymentHistory(customerId, orderId, Math.floor(postedData.price));
                     if (paymentResponse) {
                         const response = await postOrder(orderId);
                         if (response) {
