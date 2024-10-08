@@ -23,8 +23,8 @@ function Storage() {
     const centerDefault = {
         lat: 10.75,
         lng: 106.6667
-    };  
-    
+    };
+
     const [center, setCenter] = useState(centerDefault);
     const [storageData, setStorageData] = useState([]);
     const [open, setOpen] = useState(false);
@@ -51,7 +51,7 @@ function Storage() {
             lat: e.latLng.lat(),
             lng: e.latLng.lng()
         })
-        
+
         setCoordinates({ lat, lng })
 
         // Initialize the Geocoder
@@ -137,6 +137,9 @@ function Storage() {
     return (
         <div>
             <ToastUtil />
+            <div className="dashboard-info">
+                <h2 style={{ marginTop: "0" }}>Storage</h2>
+            </div>
             <div className={open ? 'blur' : ''}>
                 <div style={{ display: "flex", justifyContent: "flex-end", marginRight: "30px" }}>
                     <Button onClick={handleOpen} variant="contained" style={{ maxWidth: "30%" }}>Create New Storage</Button>
