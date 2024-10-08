@@ -12,31 +12,11 @@ function Sidebar() {
   const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState(default_avatar);
 
-  const handleOpenEditProfile = () => {
-    navigate("/customer-edit-profile")
-  }
-
   const token = localStorage.getItem("token");
   const customerInfo = jwtDecode(token);
   const customerId = customerInfo.sub.substring(2);
 
-  useEffect(() => {
-    async function fetchUserData() {
-        const customer = await getCustomerById(customerId);
-        if(customer.file) {
-            const imageResponse = await getFileByFileId(customer.file.id);;
-            const imgUrl = URL.createObjectURL(imageResponse);
-            setImagePreview(imgUrl);
-        }
-        // const imageResponse = await getFileByFileId();
-    }
-    fetchUserData();
-}, [])
 
-
-  const handleOpenCreateOrder = () => {
-    navigate("customer-home");
-  }
 
   return (
     <div className="sidebar-body-sales">
@@ -62,21 +42,34 @@ function Sidebar() {
           <ListItem className="button">
             <ListItemText
               primary="Profile"
-              onClick={handleOpenEditProfile}
             />
           </ListItem>
           <ListItem className="button">
             <ListItemText
-              primary="Create Order"
-              onClick={handleOpenCreateOrder}
+              primary="Assign Order"
             />
           </ListItem>
           <ListItem className="button">
+            <ListItemText
+              primary="Posted Order"
+            />
+          </ListItem>
+          <ListItem className="button">
+            <ListItemText
+              primary="Received Order"
+            />
+          </ListItem>
+          <ListItem className="button">
+            <ListItemText
+              primary="Post News"
+            />
+          </ListItem>
+          {/* <ListItem className="button">
             <ListItemText primary="Navigate To Wallet Page" />
           </ListItem>
           <ListItem className="button">
             <ListItemText primary="Contact Support" />
-          </ListItem>
+          </ListItem> */}
         </List>
       </div>
     </div>

@@ -10,6 +10,7 @@ import RedMarker from "../../../../assets/failed.svg"
 import { updateOrderStatus } from "../../../../utils/axios/order";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../../components/toastContainer";
+import { jwtDecode } from "jwt-decode";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#fff',
@@ -42,6 +43,10 @@ function SalesOrderDetail() {
     height: "50vh",
   }
 
+  const token = localStorage.getItem("token");
+  const salesInfo = jwtDecode(token);
+  const salesId = salesInfo.sub.substring(2);
+
   const [center, setCenter] = useState(centerDefault);
   const { state } = location;
   const [map, setMap] = useState(null);
@@ -72,7 +77,7 @@ function SalesOrderDetail() {
   const acceptedOrderStatus = 2;
 
   async function handleAcceptOrder() {
-    const response = await updateOrderStatus(state.id, acceptedOrderStatus);
+    const response = await updateOrderStatus(state.id, acceptedOrderStatus, salesId);
     if (response) {
       toast("Order confirmed");
       navigate("/sales-staff-home")
@@ -91,6 +96,9 @@ function SalesOrderDetail() {
     }
   }
 
+
+console.log(salesInfo);
+console.log(salesId);
   return (
     <div className="sales-order-details-container">
       {/* Order Details Table */}

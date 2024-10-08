@@ -113,12 +113,14 @@ function App() {
             <Route element={<SalesStaffLayout />}>
               <Route path="/order-sales-staff" element={<SalesStaffPrivateRoute element={<OrderSalesStaff />} />} />
               <Route path="/sales-staff-home" element={<SalesStaffPrivateRoute element={<SalesStaffHome />} />} />
-            </Route>
-
-            <Route element={<BasicLayout />}>
+            
               <Route path="/sales-order-detail/:id" element={<AllowedRoute element={<SalesOrderDetail />} />} >
                 <Route path="sales-fish-detail/:fishId" element={<AllowedRoute element={<SalesFishDetail />} />} />
               </Route>
+            </Route>
+
+            <Route element={<BasicLayout />}>
+             
             </Route>
 
             <Route path="/payment-success" element={<AllowedRoute element={<PaymentSuccess />} />} />

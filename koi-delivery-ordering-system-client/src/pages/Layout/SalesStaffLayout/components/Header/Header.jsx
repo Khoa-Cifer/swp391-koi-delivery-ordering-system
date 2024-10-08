@@ -42,10 +42,6 @@ function Header() {
         setAnchorEl(null);
     };
 
-    const handleOpenEditProfile = () => {
-        navigate("/customer-edit-profile")
-    }
-
     const handleLogout = () => {
         setAnchorEl(null);
         auth.handleLogout();
@@ -90,7 +86,7 @@ function Header() {
                             horizontal: 'right',
                         }}
                     >
-                        <MenuItem onClick={handleOpenEditProfile}>Profile</MenuItem>
+                        <MenuItem>Profile</MenuItem>
                         <MenuItem onClick={handleLogout}>Logout</MenuItem>
                     </Menu>
                 </Box>

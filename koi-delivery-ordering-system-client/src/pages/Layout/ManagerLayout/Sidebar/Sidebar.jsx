@@ -75,7 +75,6 @@ function Sidebar({ onDataTypeChange }) {
                                     borderRadius: selectedItem === text ? '8px' : '0px', // Add border-radius if selected
                                     transition: 'background-color 0.3s, border-radius 0.3s', // Smooth transition for better UX
                                 }}
-
                             >
                                 <ListItemText primary={text} style={{
                                     color: selectedItem === text ? '#FFFFFF' : '#000000'
