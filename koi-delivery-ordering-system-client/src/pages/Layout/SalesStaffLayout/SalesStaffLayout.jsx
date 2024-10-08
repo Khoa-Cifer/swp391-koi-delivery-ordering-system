@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 function SalesStaffLayout() {
     return (
-        <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", height: "100vh", maxWidth: "100vw" }}>
             {/* Header */}
             <Header />
 

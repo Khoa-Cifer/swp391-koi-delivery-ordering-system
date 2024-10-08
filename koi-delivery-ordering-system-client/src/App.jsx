@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/home/Home";
 import SignUp from "./pages/register/register";
-import DeliveryStaff from "./pages/DeliveryStaff/home_delivery/delivery_staff/DeliveryStaff";
+import DeliveryStaffHome from "./pages/DeliveryStaff/home_delivery/Delivery_staff/DeliveryStaffHome";
 import AuthProvider from "./authentication/AuthProvider";
 import PrivateRoute from "./authentication/PrivateRoute";
 import DeliveryOrderHome from "./pages/DeliveryStaff/delivery_order_home/DeliveryOrderHome";
@@ -29,6 +29,10 @@ import CustomerHome from "./pages/Customer/CustomerHome/CustomerHome";
 import Report from "./pages/Manager/Report/Report";
 import ManagerLayout from "./pages/Layout/ManagerLayout/ManagerLayout";
 import Storage from "./pages/Manager/SystemData/Storage/Storage";
+import Customer from "./pages/Manager/SystemData/Customer/Customer";
+import DeliveryStaff from "./pages/Manager/SystemData/DeliveryStaff/DeliveryStaff";
+import SalesStaff from "./pages/Manager/SystemData/SalesStaff/SalesStaff";
+import Dashboard from "./pages/Manager/Report/Dashboard";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -81,7 +85,11 @@ function App() {
 
             <Route element={<ManagerLayout />}>
               <Route path="/admin" element={<ManagerPrivateRoute element={<Report />} />} />
+              <Route path="/admin/dashboard" element={<ManagerPrivateRoute element={<Dashboard />} />} />
               <Route path="/admin/storage" element={<ManagerPrivateRoute element={<Storage />} />} />
+              <Route path="/admin/customer" element={<ManagerPrivateRoute element={<Customer />} />} />
+              <Route path="/admin/delivery-staff" element={<ManagerPrivateRoute element={<DeliveryStaff />} />} />
+              <Route path="/admin/sales-staff" element={<ManagerPrivateRoute element={<SalesStaff />} />} />
             </Route>
 
             <Route element={<CustomerLayout />}>
@@ -91,7 +99,7 @@ function App() {
             </Route>
 
             <Route element={<DeliveryStaffLayout />}>
-              <Route path="/delivery-staff-home" element={<DeliveryStaffPrivateRoute element={<DeliveryStaff />} />} />
+              <Route path="/delivery-staff-home" element={<DeliveryStaffPrivateRoute element={<DeliveryStaffHome />} />} />
               <Route path="/delivery-order-home" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderHome />} />} />
               <Route path="/delivery-order-available" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderAvailable />} />} />
               <Route path="/delivery-order-list" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderList />} />} />

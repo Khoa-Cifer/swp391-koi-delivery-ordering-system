@@ -17,6 +17,9 @@ function Customer() {
 
     return (
         <div>
+             <div className="dashboard-info">
+                <h2 style={{ marginTop: "0" }}>Customer</h2>
+            </div>
             <div style={{ display: "flex", justifyContent: "flex-end", marginRight: "30px" }}>
                 <Button variant="contained" style={{ maxWidth: "30%" }}>Create New Customer</Button>
             </div>

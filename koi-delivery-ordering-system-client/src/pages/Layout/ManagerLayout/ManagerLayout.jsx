@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "./manager_layout.scss";
 import Header from "./Header/Header";
 import Sidebar from "./Sidebar/Sidebar";
