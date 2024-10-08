@@ -2,7 +2,6 @@
   position: fixed;
   width: 100vw;
   z-index: 500;
-  height: 10vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -53,6 +52,7 @@
     display: flex;
     align-items: center;
     width: 40%;
+    justify-content: space-around;
   }
 
   .right {
@@ -71,5 +71,11 @@
   .header-right button:hover {
     background-color: white;
     color: black;
+  }
+  .welcome-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-left: 20px;
   }
 }
