@@ -10,7 +10,7 @@ import { useAuth } from "../../../authentication/AuthProvider";
 import { getFileByFileId } from "../../../utils/axios/file";
 import ToastUtil from "../../../components/toastContainer";
 
-function CustomerEditProfile() {
+function SalesStaffEditProfile() {
     const [user, setUser] = useState({
         username: '',
         email: '',
@@ -231,4 +231,4 @@ function CustomerEditProfile() {
     )
 }
 
-export default CustomerEditProfile;
+export default SalesStaffEditProfile;

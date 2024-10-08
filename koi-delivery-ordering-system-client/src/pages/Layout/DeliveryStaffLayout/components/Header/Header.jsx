@@ -7,7 +7,7 @@ import logo from "../../../../../assets/logo.png";
 import default_avatar from "../../../../../assets/default-avatar.jpg";
 import { useAuth } from "../../../../../authentication/AuthProvider";
 import { jwtDecode } from 'jwt-decode';
-import { getCustomerById } from '../../../../../utils/axios/user';
+import { getCustomerById } from '../../../../../utils/axios/customer';
 import { getFileByFileId } from '../../../../../utils/axios/file';
 
 function Header() {

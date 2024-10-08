@@ -3,7 +3,7 @@ import HeaderDelivery from "../components-delivery/header/HeaderDelivery";
 import HistoryDelivery from "../components-delivery/history/HistoryDelivery";
 import "./delivery_staff.scss";
 
-function DeliveryStaff() {
+function DeliveryStaffHome() {
   return (
     <div className="background-delivery-container">
       <div className="background-delivery">
@@ -17,4 +17,4 @@ function DeliveryStaff() {
   );
 }
 
-export default DeliveryStaff;
+export default DeliveryStaffHome;

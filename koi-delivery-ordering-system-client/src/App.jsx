@@ -1,8 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/home/Home";
 import SignUp from "./pages/register/register";
-import Admin from "./pages/Manager/layout/Dashboard/Dashboard";
-import DeliveryStaff from "./pages/DeliveryStaff/home_delivery/delivery_staff/DeliveryStaff";
+import DeliveryStaffHome from "./pages/DeliveryStaff/home_delivery/Delivery_staff/DeliveryStaffHome";
 import AuthProvider from "./authentication/AuthProvider";
 import PrivateRoute from "./authentication/PrivateRoute";
 import DeliveryOrderHome from "./pages/DeliveryStaff/delivery_order_home/DeliveryOrderHome";
@@ -27,6 +26,14 @@ import SalesFishDetail from "./pages/SalesStaff/components/sales_fish_detail/Sal
 import BasicLayout from "./pages/Layout/BasicLayout/BasicLayout";
 import CustomerCreateOrder from "./pages/Customer/CustomerCreateOrder/CustomerCreateOrder";
 import CustomerHome from "./pages/Customer/CustomerHome/CustomerHome";
+import Report from "./pages/Manager/Report/Report";
+import ManagerLayout from "./pages/Layout/ManagerLayout/ManagerLayout";
+import Storage from "./pages/Manager/SystemData/Storage/Storage";
+import Customer from "./pages/Manager/SystemData/Customer/Customer";
+import DeliveryStaff from "./pages/Manager/SystemData/DeliveryStaff/DeliveryStaff";
+import SalesStaff from "./pages/Manager/SystemData/SalesStaff/SalesStaff";
+import Dashboard from "./pages/Manager/Report/Dashboard";
+import "./App.css"
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -77,7 +84,14 @@ function App() {
             <Route path="/login-delivery-staff" element={<LoginDeliveryStaff />} />
             <Route path="/login-admin" element={<LoginAdmin />} />
 
-            <Route path="/admin" element={<ManagerPrivateRoute element={<Admin />} />} />
+            <Route element={<ManagerLayout />}>
+              <Route path="/admin" element={<ManagerPrivateRoute element={<Report />} />} />
+              <Route path="/admin/dashboard" element={<ManagerPrivateRoute element={<Dashboard />} />} />
+              <Route path="/admin/storage" element={<ManagerPrivateRoute element={<Storage />} />} />
+              <Route path="/admin/customer" element={<ManagerPrivateRoute element={<Customer />} />} />
+              <Route path="/admin/delivery-staff" element={<ManagerPrivateRoute element={<DeliveryStaff />} />} />
+              <Route path="/admin/sales-staff" element={<ManagerPrivateRoute element={<SalesStaff />} />} />
+            </Route>
 
             <Route element={<CustomerLayout />}>
               <Route path="/customer-home" element={<CustomerPrivateRoute element={<CustomerHome />} />} />
@@ -86,7 +100,7 @@ function App() {
             </Route>
 
             <Route element={<DeliveryStaffLayout />}>
-              <Route path="/delivery-staff-home" element={<DeliveryStaffPrivateRoute element={<DeliveryStaff />} />} />
+              <Route path="/delivery-staff-home" element={<DeliveryStaffPrivateRoute element={<DeliveryStaffHome />} />} />
               <Route path="/delivery-order-home" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderHome />} />} />
               <Route path="/delivery-order-available" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderAvailable />} />} />
               <Route path="/delivery-order-list" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderList />} />} />
@@ -99,7 +113,6 @@ function App() {
             <Route element={<SalesStaffLayout />}>
               <Route path="/order-sales-staff" element={<SalesStaffPrivateRoute element={<OrderSalesStaff />} />} />
               <Route path="/sales-staff-home" element={<SalesStaffPrivateRoute element={<SalesStaffHome />} />} />
-
             </Route>
 
             <Route element={<BasicLayout />}>

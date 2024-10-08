@@ -31,10 +31,6 @@ public class Manager implements UserDetails {
     private String password;
     private String phoneNumber;
 
-    @OneToOne
-    @JoinColumn(name = "avatar_id", referencedColumnName = "id")
-    private File file;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();

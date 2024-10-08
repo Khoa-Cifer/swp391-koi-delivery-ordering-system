@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { userLogin } from "../../../utils/axios/user";
+import { userLogin } from "../../../utils/axios/customer";
 import { useAuth } from "../../../authentication/AuthProvider";
 import "./LoginSaleStaff.scss"
 import { useState } from "react";
