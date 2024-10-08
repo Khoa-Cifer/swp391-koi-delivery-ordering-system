@@ -1,7 +1,13 @@
-import { List, ListItem, ListItemText } from "@mui/material";
-import { Image } from "antd";
+import { List, ListItem, ListItemText, styled } from "@mui/material";
+import { Image, Typography } from "antd";
 import { useState } from "react";
 import logo from "../../../../assets/logo.png"
+
+const CustomTypo = styled(Typography)(() => ({
+    fontSize: "16px",
+    color: "#01428E",
+    margin: "10px",
+}));
 
 // eslint-disable-next-line react/prop-types
 function Sidebar({ onDataTypeChange }) {
@@ -31,7 +37,7 @@ function Sidebar({ onDataTypeChange }) {
             </div>
 
             <div className="admin-users">
-                <h4>ADMIN USERS</h4>
+                <CustomTypo>ADMIN USERS</CustomTypo>
                 <List>
                     {dashboardItemList && dashboardItemList.map && dashboardItemList.map((text) => (
                         <ListItem
@@ -45,14 +51,16 @@ function Sidebar({ onDataTypeChange }) {
                                 transition: 'background-color 0.3s, border-radius 0.3s', // Smooth transition for better UX
                             }}
                         >
-                            <ListItemText primary={text} />
+                            <ListItemText primary={text} style={{
+                                color: selectedItem === text ? '#FFFFFF' : '#000000'
+                            }} />
                         </ListItem>
                     ))}
                 </List>
             </div>
 
             <div className="modules">
-                <h4>MODULES</h4>
+                <CustomTypo>MODULES</CustomTypo>
 
                 <div className="modules-information">
                     <List>
@@ -69,7 +77,9 @@ function Sidebar({ onDataTypeChange }) {
                                 }}
 
                             >
-                                <ListItemText primary={text} />
+                                <ListItemText primary={text} style={{
+                                    color: selectedItem === text ? '#FFFFFF' : '#000000'
+                                }} />
                             </ListItem>
                         ))}
                     </List>

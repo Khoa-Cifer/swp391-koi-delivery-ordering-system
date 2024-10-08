@@ -1,10 +1,7 @@
-import { Avatar, Box, Button, Divider, Menu, MenuItem, Typography } from "@mui/material";
+import { Box, Button, Divider } from "@mui/material";
 import "./header.scss"
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import default_avatar from "../../../../assets/default-avatar.jpg";
 import { useAuth } from "../../../../authentication/AuthProvider";
-import { jwtDecode } from 'jwt-decode';
 
 function Header() {
   const navigate = useNavigate();

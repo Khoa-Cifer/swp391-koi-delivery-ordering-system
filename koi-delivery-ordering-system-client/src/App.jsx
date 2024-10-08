@@ -33,6 +33,7 @@ import Customer from "./pages/Manager/SystemData/Customer/Customer";
 import DeliveryStaff from "./pages/Manager/SystemData/DeliveryStaff/DeliveryStaff";
 import SalesStaff from "./pages/Manager/SystemData/SalesStaff/SalesStaff";
 import Dashboard from "./pages/Manager/Report/Dashboard";
+import "./App.css"
 
 function App() {
   // eslint-disable-next-line react/prop-types
