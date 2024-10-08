@@ -27,12 +27,12 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements IOrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
-    private final OrderDeliveringRepository orderDeliveringRepository;
     private final OrderStatus orderStatus;
     private final IStorageService storageService;
     private final IFishService fishService;
     private final PriceBoard priceBoard;
     private final DeliveryStaffRepository deliveryStaffRepository;
+    private final ISalesStaffService salesStaffService;
 
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
         Order newOrder = new Order();
@@ -118,7 +118,7 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public boolean postOrder(Long id) {
-        Optional<Order> completeOrder = orderRepository.findById(id);
+        Optional<Order> completeOrder = getOrderById(id);
         completeOrder.get().setOrderStatus(orderStatus.POSTED);
         orderRepository.save(completeOrder.get());
         return true;
@@ -126,7 +126,7 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public boolean updateOrderStatus(Long id, int newStatus) {
-        Optional<Order> optionalOrder = orderRepository.findById(id);
+        Optional<Order> optionalOrder = getOrderById(id);
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
             int currentStatus = order.getOrderStatus();
@@ -197,7 +197,7 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public double calculateOrderPrice(Long id) {
         List<Fish> fishList = fishService.getFishesByOrderId(id);
-        Optional<Order> order = orderRepository.findById(id);
+        Optional<Order> order = getOrderById(id);
         double distance = Utilities.calculateDistance(
                 Double.parseDouble(order.get().getSenderLatitude()),
                 Double.parseDouble(order.get().getSenderLongitude()),
@@ -237,6 +237,27 @@ public class OrderServiceImpl implements IOrderService {
             return result;
         }
         return null;
+    }
+
+    @Override
+    public boolean updateOrderSalesAction(Long orderId, Long salesId, int action) {
+        Optional<Order> foundedOrder = getOrderById(orderId);
+        Optional<SalesStaff> foundedSalesStaff = salesStaffService.getSalesStaffById(salesId);
+        switch(action) {
+            case 0:
+                foundedOrder.get().setSalesStaffAccept(foundedSalesStaff.get());
+                break;
+            case 1:
+                foundedOrder.get().setSalesStaffConfirmation(foundedSalesStaff.get());
+                break;
+            case 2:
+                foundedOrder.get().setSalesStaffCancellation(foundedSalesStaff.get());
+                break;
+            default:
+                return false;
+        }
+        orderRepository.save(foundedOrder.get());
+        return true;
     }
 
     private double getPrice(List<Fish> fishList, Optional<Order> order, double distance) {

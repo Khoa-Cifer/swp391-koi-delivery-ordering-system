@@ -20,4 +20,6 @@ public interface IOrderService {
     public double calculateOrderPrice(Long id);
 
     public List<Order> findOrdersForDelivery(Long id);
+
+    public boolean updateOrderSalesAction(Long orderId, Long salesId, int action);
 }

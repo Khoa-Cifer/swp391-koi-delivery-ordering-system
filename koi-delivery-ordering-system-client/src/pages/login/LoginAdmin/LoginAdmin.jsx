@@ -3,6 +3,8 @@ import "./LoginAdmin.scss";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../authentication/AuthProvider";
 import { userLogin } from "../../../utils/axios/customer";
+import ToastUtil from "../../../components/toastContainer";
+import { toast } from "react-toastify";
 
 function LoginAdmin() {
   const [email, setEmail] = useState("");
@@ -23,11 +25,15 @@ function LoginAdmin() {
     if (data) {
       auth.handleLogin(data);
       navigate("/admin/dashboard");
+      toast("Login successfully");
+    } else {
+      toast("Wrong email or password");
     }
   }
 
   return (
     <div className="login-admin-container">
+      <ToastUtil />
       <div className="card">
         <h3 className="text-center">
           <strong>Admin Login</strong>

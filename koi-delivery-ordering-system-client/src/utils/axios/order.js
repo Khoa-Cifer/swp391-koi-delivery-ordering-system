@@ -89,3 +89,16 @@ export async function updateOrderStatus(orderId, status) {
         console.log(error);
     }
 }
+
+export async function updateOrderSalesAction(orderId, salesId, actionStatus) {
+    try {
+        const response = await axiosClient.put("orders/updateOrderSales", {
+            orderId,
+            salesId,
+            actionStatus
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
