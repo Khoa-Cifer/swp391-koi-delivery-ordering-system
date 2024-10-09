@@ -23,4 +23,5 @@ public interface IOrderService {
     public List<Order> onGoingGettingOrdersForDelivery(Long id, int deliveryProcessType);
 
     public boolean updateOrderSalesAction(Long orderId, Long salesId, int action);
+    public Optional<Order> getOrderByTrackingId(String trackingId);
 }

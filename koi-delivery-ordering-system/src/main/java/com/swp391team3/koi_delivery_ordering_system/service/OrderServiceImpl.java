@@ -267,6 +267,11 @@ public class OrderServiceImpl implements IOrderService {
         return true;
     }
 
+    @Override
+    public Optional<Order> getOrderByTrackingId(String trackingId) {
+        return orderRepository.findByTrackingId(trackingId);
+    }
+
     private double getPrice(List<Fish> fishList, Optional<Order> order, double distance) {
         int numberOfBoxes = (int) Math.ceil(fishList.size() / 2.0);
         String[] senderAddress = order.get().getSenderAddress().split(",");

@@ -12,6 +12,9 @@ import java.util.Optional;
 public interface OrderRepository extends JpaRepository<Order, Long>{
     List<Order> findByOrderStatus(int status);
 
+    @Query("SELECT o FROM Order o WHERE o.trackingId LIKE :trackingId AND o.orderStatus NOT IN (0, 8)")
+    Optional<Order> findByTrackingId(String trackingId);
+
     @Query("SELECT o FROM OrderDelivering od JOIN od.order o " +
             "WHERE od.order.id = :orderId " +
             "AND od.driver.id = :deliveryStaffId " +

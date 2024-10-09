@@ -96,4 +96,9 @@ return  null;
     public ResponseEntity<?> onGoingGettingOrdersForDelivery(@PathVariable Long deliveryStaffId, @RequestBody int deliveryProcessType) {
         return ResponseEntity.ok(orderService.onGoingGettingOrdersForDelivery(deliveryStaffId, deliveryProcessType));
     }
+
+    @GetMapping("/searchOrderByTrackingId/{trackingId}")
+    public ResponseEntity<?> getOrderByTrackingId(@PathVariable String trackingId) {
+        return ResponseEntity.ok(orderService.getOrderByTrackingId(trackingId));
+    }
 }
