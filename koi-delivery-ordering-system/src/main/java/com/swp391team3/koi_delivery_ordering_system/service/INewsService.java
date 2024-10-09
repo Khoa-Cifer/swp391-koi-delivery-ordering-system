@@ -9,4 +9,5 @@ public interface INewsService {
     public List<News> getAllNews();
     public Optional<News> getNewsById(Long id);
     public void deleteNewsById(Long id);
+    public News createNews(News news);
 }

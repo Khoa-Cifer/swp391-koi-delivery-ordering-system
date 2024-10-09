@@ -27,4 +27,10 @@ public class NewsServiceImpl implements INewsService {
     public void deleteNewsById(Long id) {
         newsRepository.deleteById(id);
     }
+
+    @Override
+    public News createNews(News news) {
+        news.setCreatedDate(new java.util.Date());
+        return newsRepository.save(news);
+    }
 }
