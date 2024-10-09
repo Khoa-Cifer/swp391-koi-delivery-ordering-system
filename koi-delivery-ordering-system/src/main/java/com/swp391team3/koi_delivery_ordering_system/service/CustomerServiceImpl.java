@@ -48,7 +48,7 @@ public class CustomerServiceImpl implements ICustomerService {
         emailDetail.setReceiver((Object) newCustomer);
         emailDetail.setSubject("Welcome to KOI DELIVERY SYSTEM! We're glad you're here");
         emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
-        emailService.sendEmail(emailDetail);
+        emailService.sendEmail(emailDetail, 1);
 
         return "Register successfully";
     }
@@ -78,7 +78,7 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public Optional<Customer> getCustomerById(Long id) {
-        return customerRepository.findById(id);    
+        return customerRepository.findById(id);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public void deleteCustomerById(Long id) {
-        customerRepository.deleteById(id);    
+        customerRepository.deleteById(id);
     }
 
     @Override

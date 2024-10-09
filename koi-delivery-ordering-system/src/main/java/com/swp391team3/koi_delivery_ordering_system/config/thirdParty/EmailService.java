@@ -2,6 +2,7 @@ package com.swp391team3.koi_delivery_ordering_system.config.thirdParty;
 
 import com.swp391team3.koi_delivery_ordering_system.model.*;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.EmailDetailDTO;
+import com.swp391team3.koi_delivery_ordering_system.utils.TypeMail;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,10 @@ public class EmailService {
     TemplateEngine templateEngine;
     @Autowired
     JavaMailSender javaMailSender;
+    @Autowired
+    TypeMail typeMail;
 
-    public void sendEmail(EmailDetailDTO emailDetail) {
+    public void sendEmail(EmailDetailDTO emailDetail, int type) {
         try {
             Context context = new Context();
             if(emailDetail.getReceiver() instanceof Customer){
@@ -37,7 +40,12 @@ public class EmailService {
             context.setVariable("link", emailDetail.getLink());
 
             String template = templateEngine.process("welcome-template", context);
-
+            if(type == typeMail.WELCOME_TEMPLE) {
+                template = templateEngine.process("welcome-template", context);
+            } else if (type == typeMail.DELIVERY_TEMPLE) {
+                template = templateEngine.process("delivery-template", context);
+                context.setVariable("link", emailDetail.getLink());
+            }
             //Creating a simple mail message
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
