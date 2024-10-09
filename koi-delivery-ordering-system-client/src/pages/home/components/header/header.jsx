@@ -5,7 +5,7 @@ import { Button, Popover } from "@mui/material";
 import logo from "../../../../assets/logo.png";
 import { useAuth } from "../../../../authentication/AuthProvider";
 import { jwtDecode } from "jwt-decode";
-// import {  Grid} from "antd";
+
 function Header() {
   const [customerUsername, setCustomerUsername] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
@@ -59,55 +59,80 @@ function Header() {
       </div>
 
       <div className="header-right">
-        <div className="right">
-          <button className="contact-btn">
-            <NavLink style={{ textDecoration: "none", color: "inherit", fontSize: "1.3em " }}>
-              Contact
-            </NavLink>
-          </button>
-          {customerUsername ? (
-            <span aria-describedby={id} onClick={handleClick}>
-              Welcome, {customerUsername}
-            </span>
-          ) : (
-            <>
-              <button className="register-btn">
+        {customerUsername ? (
+          <div className="welcome-section">
+            <div className="">
+              <span aria-describedby={id} onClick={handleClick}>
+                Welcome, {customerUsername}
+              </span>
+              <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+              >
+                <Button onClick={handleLogout} sx={{ p: 2 }}>
+                  Logout
+                </Button>
+              </Popover>
+            </div>
+            <div className="">
+              <button className="contact-btn">
                 <NavLink
-                  to={"/register"}
-                  style={{ textDecoration: "none", color: "inherit", fontSize: "1.3em" }}
+                  style={{
+                    textDecoration: "none",
+                    color: "inherit",
+                    fontSize: "1.3em ",
+                  }}
                 >
-                  Register
+                  Contact
                 </NavLink>
               </button>
-              <button className="login-btn">
-                <NavLink
-                  to={"/login-customer"}
-                  style={{ textDecoration: "none", color: "inherit", fontSize: "1.3em" }}
-                >
-                  Log In
-                </NavLink>
-              </button>
-            </>
-          )}
-        </div>
-
-        <Popover
-          id={id}
-          open={open}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-        >
-          <Button onClick={handleLogout} sx={{ p: 2 }}>
-            View Profile
-          </Button>
-          <Button onClick={handleLogout} sx={{ p: 2 }}>
-            Logout
-          </Button>
-        </Popover>
+            </div>
+          </div>
+        ) : (
+          <>
+            <button className="register-btn">
+              <NavLink
+                to={"/register"}
+                style={{
+                  textDecoration: "none",
+                  color: "inherit",
+                  fontSize: "1.3em",
+                }}
+              >
+                Register
+              </NavLink>
+            </button>
+            <button className="login-btn">
+              <NavLink
+                to={"/login-customer"}
+                style={{
+                  textDecoration: "none",
+                  color: "inherit",
+                  fontSize: "1.3em",
+                }}
+              >
+                Log In
+              </NavLink>
+            </button>
+            <button className="contact-btn">
+              <NavLink
+                style={{
+                  textDecoration: "none",
+                  color: "inherit",
+                  fontSize: "1.3em ",
+                }}
+              >
+                Contact
+              </NavLink>
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

@@ -23,8 +23,12 @@ function OrderFinalInfo({ orderId }) {
     const navigate = useNavigate();
 
     const token = localStorage.getItem("token");
-    const customerInfo = jwtDecode(token);
-    const customerId = customerInfo.sub.substring(2);
+    let customerId;
+    if (token) {
+        const customerInfo = jwtDecode(token);
+        customerId = customerInfo.sub.substring(2);
+    }
+
 
     useEffect(() => {
         async function fetchData() {
@@ -48,7 +52,9 @@ function OrderFinalInfo({ orderId }) {
     }, []);
 
     async function handlePostOrder() {
+        const paymentResponse = await logPaymentHistory(customerId, orderId, Math.floor(postedData.price));
         const paymentOpen = await paymentOpenGateway(customerId, Math.floor(postedData.price), "NCB");
+
         if (paymentOpen) {
             let paymentWindow = window.open(paymentOpen.paymentUrl, "_blank");
 
@@ -56,10 +62,6 @@ function OrderFinalInfo({ orderId }) {
             let checkWindowClosed = setInterval(async function () {
                 if (paymentWindow.closed) {
                     clearInterval(checkWindowClosed);
-                    console.log("Payment window closed. Proceeding...");
-
-                    //Check later
-                    const paymentResponse = await logPaymentHistory(customerId, orderId, Math.floor(postedData.price));
                     if (paymentResponse) {
                         const response = await postOrder(orderId);
                         if (response) {

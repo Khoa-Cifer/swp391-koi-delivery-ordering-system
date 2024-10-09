@@ -54,17 +54,12 @@ public class PaymentHistoryServiceImpl implements IPaymentHistoryService {
     }
 
     @Override
-    public boolean confirmPaymentHistory(Long customerId, double amount) {
-        try {
-            List<OrderPaymentHistory> orderPaymentHistories = paymentHistoryRepository
-                    .findPaymentHistoriesByCustomerIdAndAmount(
-                            customerId, amount);
-            OrderPaymentHistory foundPaymentHistory = orderPaymentHistories.get(0);
-            foundPaymentHistory.setPaymentStatus(true);
-            paymentHistoryRepository.save(foundPaymentHistory);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public void confirmPaymentHistory(Long customerId, double amount) {
+        List<OrderPaymentHistory> orderPaymentHistories = paymentHistoryRepository
+                .findPaymentHistoriesByCustomerIdAndAmount(
+                        customerId, amount);
+        OrderPaymentHistory foundPaymentHistory = orderPaymentHistories.get(0);
+        foundPaymentHistory.setPaymentStatus(true);
+        paymentHistoryRepository.save(foundPaymentHistory);
     }
 }

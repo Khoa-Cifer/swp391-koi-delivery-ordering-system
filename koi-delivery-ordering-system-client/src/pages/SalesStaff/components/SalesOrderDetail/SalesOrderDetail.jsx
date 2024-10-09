@@ -7,9 +7,10 @@ import { useCallback, useState } from "react";
 import GreenMarker from "../../../../assets/succeeded.svg"
 import BlueMarker from "../../../../assets/inTransit.svg"
 import RedMarker from "../../../../assets/failed.svg"
-import { updateOrderStatus } from "../../../../utils/axios/order";
+import { updateOrderSalesAction, updateOrderStatus } from "../../../../utils/axios/order";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../../components/toastContainer";
+import { jwtDecode } from "jwt-decode";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#fff',
@@ -41,6 +42,13 @@ function SalesOrderDetail() {
     width: "100%",
     height: "50vh",
   }
+  
+  const token = localStorage.getItem("token");
+  let salesId;
+  if (token) {
+      const salesInfo = jwtDecode(token);
+      salesId = salesInfo.sub.substring(2);
+  }
 
   const [center, setCenter] = useState(centerDefault);
   const { state } = location;
@@ -71,9 +79,13 @@ function SalesOrderDetail() {
   const cancelledOrderStatus = 8;
   const acceptedOrderStatus = 2;
 
+  const acceptSales = 0;
+  const cancelSales = 2;
+  
   async function handleAcceptOrder() {
-    const response = await updateOrderStatus(state.id, acceptedOrderStatus);
-    if (response) {
+    const response = await updateOrderStatus(state.id, acceptedOrderStatus, salesId);
+    const salesUpdateOrderResponse = await updateOrderSalesAction(state.id, salesId, acceptSales);
+    if (response && salesUpdateOrderResponse) {
       toast("Order confirmed");
       navigate("/sales-staff-home")
     } else {
@@ -83,7 +95,8 @@ function SalesOrderDetail() {
 
   async function handleCancelOrder() {
     const response = await updateOrderStatus(state.id, cancelledOrderStatus);
-    if (response) {
+    const salesUpdateOrderResponse = await updateOrderSalesAction(state.id, salesId, cancelSales);
+    if (response && salesUpdateOrderResponse) {
       toast("Order cancelled");
       navigate("/sales-staff-home")
     } else {

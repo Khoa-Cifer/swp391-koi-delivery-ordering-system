@@ -8,7 +8,7 @@ function HomeContent() {
       description:
         "Are you living in Japan and looking to send goods abroad? With just a few simple steps, you can easily manage cross-border shipping using the Ezbuy...",
       imageUrl:
-        "https://img2.thuthuatphanmem.vn/uploads/2019/03/07/hinh-anh-ca-koi-buom-dep_111106426.png",
+        "https://img.meta.com.vn/Data/image/2020/12/25/ho-ca-koi-dep-1.jpg",
       author: "Macy",
       date: "2024-08-01",
     },
@@ -18,7 +18,7 @@ function HomeContent() {
       description:
         "For international enterprises, importing goods from Japan in large quantities is an urgent and frequent need. However, this process comes with many challeng...",
       imageUrl:
-        "https://img2.thuthuatphanmem.vn/uploads/2019/03/07/hinh-anh-ca-koi-buom-dep_111106426.png",
+        "https://viewgarden.vn/wp-content/uploads/2021/05/Ca-koi-dep.jpg",
       author: "Macy",
       date: "2024-04-09",
     },
@@ -76,8 +76,8 @@ function HomeContent() {
             </h2>
             <p>
               With the vision of becoming the leading cross-border eCommerce
-              enabler for both sellers and buyers, Ezbuy Japan strives to
-              provide comprehensive cross-border eCommerce solutions, powered by
+              enabler for both sellers and buyers, DELIVERKIN strives to provide
+              comprehensive cross-border eCommerce solutions, powered by
               world-class technology, outstanding expertise, and a passion for
               serving clients to help businesses unlock growth potential.
             </p>
@@ -103,14 +103,14 @@ function HomeContent() {
           </div>
           <div className="banner-image">
             <img
-              src="https://img2.thuthuatphanmem.vn/uploads/2019/03/07/hinh-anh-ca-koi-buom-dep_111106426.png "
+              src="https://img2.thuthuatphanmem.vn/uploads/2019/03/07/hinh-anh-ho-ca-koi-dep_111108115.jpg "
               alt="delivery"
             />
           </div>
         </div>
 
         <div className="why-work-with-us">
-          <h2>WHY WORK WITH EZBUY JAPAN?</h2>
+          <h2>WHY WORK WITH DELIVERKIN?</h2>
           <div className="features-grid">
             {features.map((feature, index) => (
               <div key={index} className="feature-card">
@@ -130,7 +130,7 @@ function HomeContent() {
             <div className="service-item">
               <div className="service-content">
                 <div className="service-number">01</div>
-                <h3 className="service-title">We are</h3>
+                <h3 className="service-title">We are KoiShip</h3>
                 <p className="service-description">
                   Welcome to KoiShip, the trusted name in koi fish shipping.
                   Whether you are a seasoned collector or a first-time buyer, we
@@ -142,10 +142,13 @@ function HomeContent() {
                   we are committed to delivering them healthy, happy, and
                   stress-free, right to your doorstep.
                 </p>
+                <a href="#" className="learn-more">
+                  Learn more →
+                </a>
               </div>
               <div className="service-image">
                 <img
-                  src="https://tse1.mm.bing.net/th?id=OIP.1w0AxZbUEKgXN70bmt5y0QHaE8&pid=Api&P=0&h=180"
+                  src="https://img5.thuthuatphanmem.vn/uploads/2021/11/20/hinh-ca-koi-dep_090134493.jpg"
                   alt="Service"
                 />
               </div>
@@ -155,7 +158,7 @@ function HomeContent() {
             <div className="service-item reverse-layout">
               <div className="service-image">
                 <img
-                  src="https://tse1.mm.bing.net/th?id=OIP.1w0AxZbUEKgXN70bmt5y0QHaE8&pid=Api&P=0&h=180"
+                  src="https://i.ytimg.com/vi/iySSjcjwq9w/maxresdefault.jpg"
                   alt="Service 2"
                 />
               </div>
@@ -168,6 +171,9 @@ function HomeContent() {
                   methods and optional services to ensure your packages arrive
                   safely and efficiently.
                 </p>
+                <a href="#" className="learn-more">
+                  Learn more →
+                </a>
               </div>
             </div>
 
@@ -184,10 +190,13 @@ function HomeContent() {
                   geographical barriers and unlock a world of potential markets
                   through our comprehensive international delivery solution.
                 </p>
+                <a href="#" className="learn-more">
+                  Learn more →
+                </a>
               </div>
               <div className="service-image">
                 <img
-                  src="https://tse1.mm.bing.net/th?id=OIP.1w0AxZbUEKgXN70bmt5y0QHaE8&pid=Api&P=0&h=180"
+                  src="https://denanphuoc.vn/wp-content/uploads/2020/11/Ca-Koi-la-bieu-tuong-may-man-thinh-vuong-scaled.jpg"
                   alt="Service"
                 />
               </div>
@@ -197,7 +206,7 @@ function HomeContent() {
             <div className="service-item reverse-layout">
               <div className="service-image">
                 <img
-                  src="https://tse1.mm.bing.net/th?id=OIP.1w0AxZbUEKgXN70bmt5y0QHaE8&pid=Api&P=0&h=180"
+                  src="https://dhouse-vn.com/wp-content/uploads/2022/08/Ban-ve-thiet-ke-ho-ca-koi-1.jpeg"
                   alt="Service 2"
                 />
               </div>
@@ -205,7 +214,7 @@ function HomeContent() {
                 <div className="service-number">04</div>
                 <h3 className="service-title">Cross-border Shipping</h3>
                 <p className="service-description">
-                  Ezbuy Japan offers international delivery by air and sea from
+                  DELIVERKIN offers international delivery by air and sea from
                   Japan to over 220 countries. We provide various shipping
                   methods and optional services to ensure your packages arrive
                   safely and efficiently.
@@ -221,8 +230,9 @@ function HomeContent() {
         <div className="news-container">
           <h2>LATEST NEWS</h2>
           <p className="description">
-            Visit our blog to discover the latest articles on ecommerce and
-            logistics for any business scale
+            When you visit our blog, you will explore the latest insights and
+            articles on eCommerce and logistics, tailored for businesses of all
+            sizes.
           </p>
           <div className="news-container">
             <div className="news-grid">

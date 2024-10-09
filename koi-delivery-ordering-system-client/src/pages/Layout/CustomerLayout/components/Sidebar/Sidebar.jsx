@@ -23,12 +23,14 @@ function Sidebar() {
   }
 
   const token = localStorage.getItem("token");
-  const customerInfo = jwtDecode(token);
-  const customerId = customerInfo.sub.substring(2);
+  let customerId;
+  let customerInfo
+  if (token) {
+    customerInfo = jwtDecode(token);
+    customerId = customerInfo.sub.substring(2);
+  }
 
-  console.log(customerInfo);
   useEffect(() => {
-
     async function fetchUserData() {
       const customer = await getCustomerById(customerId);
       if (customer.file) {
@@ -50,7 +52,7 @@ function Sidebar() {
     navigate("customer-home");
   }
 
-  return (
+  return customerInfo && (
     <div className="sidebar-body-customer">
       <div className="image-container">
         <Avatar
