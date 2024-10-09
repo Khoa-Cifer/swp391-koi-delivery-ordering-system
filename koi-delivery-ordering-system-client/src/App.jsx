@@ -8,7 +8,6 @@ import DeliveryOrderHome from "./pages/DeliveryStaff/delivery_order_home/Deliver
 import LoginCustomer from "./pages/login/LoginCustomer/LoginCustomer";
 import LoginSaleStaff from "./pages/login/LoginSaleStaff/LoginSaleStaff";
 import LoginDeliveryStaff from "./pages/login/LoginDeliveryStaff/LoginDeliveryStaff";
-import DeliveryOrderList from "./pages/DeliveryStaff/delivery_order_list/DeliveryOrderList";
 import DeliveryOrderDetail from "./pages/DeliveryStaff/delivery_order_detail/DeliveryOrderDetail";
 import DeliveryFishDetail from "./pages/DeliveryStaff/delivery_fish_detail/DeliveryFishDetail";
 import LoginAdmin from "./pages/login/Loginadmin/LoginAdmin";
@@ -34,6 +33,7 @@ import DeliveryStaff from "./pages/Manager/SystemData/DeliveryStaff/DeliveryStaf
 import SalesStaff from "./pages/Manager/SystemData/SalesStaff/SalesStaff";
 import Dashboard from "./pages/Manager/Report/Dashboard";
 import "./App.css"
+import Page404 from "./pages/DefaultError/404";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -103,7 +103,6 @@ function App() {
               <Route path="/delivery-staff-home" element={<DeliveryStaffPrivateRoute element={<DeliveryStaffHome />} />} />
               <Route path="/delivery-order-home" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderHome />} />} />
               <Route path="/delivery-order-available" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderAvailable />} />} />
-              <Route path="/delivery-order-list" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderList />} />} />
 
               <Route path="/delivery-order-detail/:id" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderDetail />} />} />
               <Route path="/delivery-order-detail/:id/delivery-fish-detail/:fishId" element={<DeliveryStaffPrivateRoute element={<DeliveryFishDetail />} />} />
@@ -116,11 +115,8 @@ function App() {
               <Route path="/sales-order-detail/:id/sales-fish-detail/:fishId" element={<AllowedRoute element={<SalesFishDetail />} />} />
             </Route>
 
-            <Route element={<BasicLayout />}>
-
-            </Route>
-
             <Route path="/payment-success" element={<AllowedRoute element={<PaymentSuccess />} />} />
+            <Route path="/test" element={<Page404 />} />
           </Routes>
         </Router>
       </main>
