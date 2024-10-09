@@ -16,10 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,12 +24,12 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements IOrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
-    private final OrderDeliveringRepository orderDeliveringRepository;
     private final OrderStatus orderStatus;
     private final IStorageService storageService;
     private final IFishService fishService;
     private final PriceBoard priceBoard;
     private final DeliveryStaffRepository deliveryStaffRepository;
+    private final ISalesStaffService salesStaffService;
 
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
         Order newOrder = new Order();
@@ -118,7 +115,7 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public boolean postOrder(Long id) {
-        Optional<Order> completeOrder = orderRepository.findById(id);
+        Optional<Order> completeOrder = getOrderById(id);
         completeOrder.get().setOrderStatus(orderStatus.POSTED);
         orderRepository.save(completeOrder.get());
         return true;
@@ -126,7 +123,7 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public boolean updateOrderStatus(Long id, int newStatus) {
-        Optional<Order> optionalOrder = orderRepository.findById(id);
+        Optional<Order> optionalOrder = getOrderById(id);
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
             int currentStatus = order.getOrderStatus();
@@ -187,7 +184,6 @@ public class OrderServiceImpl implements IOrderService {
         return false;
     }
 
-
     @Override
     public List<Order> getOrderByStatus(int status) {
         List<Order> orders = orderRepository.findByOrderStatus(status);
@@ -197,7 +193,7 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public double calculateOrderPrice(Long id) {
         List<Fish> fishList = fishService.getFishesByOrderId(id);
-        Optional<Order> order = orderRepository.findById(id);
+        Optional<Order> order = getOrderById(id);
         double distance = Utilities.calculateDistance(
                 Double.parseDouble(order.get().getSenderLatitude()),
                 Double.parseDouble(order.get().getSenderLongitude()),
@@ -224,7 +220,7 @@ public class OrderServiceImpl implements IOrderService {
                             Double.parseDouble(deliveryStaff.getLatitude()),
                             Double.parseDouble(deliveryStaff.getLongitude()),
                             Double.parseDouble(order.getSenderLatitude()),
-                            Double.parseDouble(order.getSenderLongitude())) <= 20)
+                            Double.parseDouble(order.getSenderLongitude())) <= 40)
                     .sorted(Comparator.comparingDouble(order ->
                             Utilities.calculateDistance(
                                     Double.parseDouble(deliveryStaff.getLatitude()),
@@ -240,43 +236,41 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public void generateOrderDelivering(Order order, DeliveryStaff deliveryStaff) {
-        OrderDelivering orderDelivering = new OrderDelivering();
-
-        orderDelivering.setCreatedDate(new Date());
-        orderDelivering.setLastUpdatedDate(new Date());
-
-        LocalDate finishDate = LocalDate.now().plusDays(3);
-        orderDelivering.setFinishDate(Date.from(finishDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-
-        orderDelivering.setOrder(order);
-        orderDelivering.setDriver(deliveryStaff);
-
-        orderDelivering.setCurrentAddress(order.getSenderAddress());
-        orderDelivering.setLongitude(order.getSenderLongitude());
-        orderDelivering.setLatitude(order.getSenderLatitude());
-        orderDelivering.setDeliveryProcessType(0);
-
-
-        orderDeliveringRepository.save(orderDelivering);
+    public List<Order> onGoingGettingOrdersForDelivery(Long id, int deliveryProcessType) {
+        List<Order> gettingOrder = getOrderByStatus(orderStatus.ORDER_GETTING);
+        List<Order> onGoingOrder = new ArrayList<>();
+        for (int i = 0; i < gettingOrder.size(); i++) {
+            Optional<Order> foundOrder = orderRepository.findOrderByDeliveryStaffId(id, gettingOrder.get(i).getId(), deliveryProcessType);
+            foundOrder.ifPresent(onGoingOrder::add);
+        }
+        return  onGoingOrder;
     }
 
     @Override
-    public boolean startDelivery(Long id, Long driverId) {
-        Optional<Order> optionalOrder = orderRepository.findById(id);
-        Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(driverId);
-        if (optionalOrder.isPresent()) {
-            Order order = optionalOrder.get();
-            updateOrderStatus(id, orderStatus.ORDER_GETTING);
-            if(optionalDeliveryStaff.isPresent()) {
-                DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
-                generateOrderDelivering(order, deliveryStaff);
-                return true;
-            }
+    public boolean updateOrderSalesAction(Long orderId, Long salesId, int action) {
+        Optional<Order> foundedOrder = getOrderById(orderId);
+        Optional<SalesStaff> foundedSalesStaff = salesStaffService.getSalesStaffById(salesId);
+        switch(action) {
+            case 0:
+                foundedOrder.get().setSalesStaffAccept(foundedSalesStaff.get());
+                break;
+            case 1:
+                foundedOrder.get().setSalesStaffConfirmation(foundedSalesStaff.get());
+                break;
+            case 2:
+                foundedOrder.get().setSalesStaffCancellation(foundedSalesStaff.get());
+                break;
+            default:
+                return false;
         }
-        return false;
+        orderRepository.save(foundedOrder.get());
+        return true;
     }
 
+    @Override
+    public Optional<Order> getOrderByTrackingId(String trackingId) {
+        return orderRepository.findByTrackingId(trackingId);
+    }
 
     private double getPrice(List<Fish> fishList, Optional<Order> order, double distance) {
         int numberOfBoxes = (int) Math.ceil(fishList.size() / 2.0);
@@ -296,5 +290,4 @@ public class OrderServiceImpl implements IOrderService {
         }
         return distancePrice + boxPrice;
     }
-
 }

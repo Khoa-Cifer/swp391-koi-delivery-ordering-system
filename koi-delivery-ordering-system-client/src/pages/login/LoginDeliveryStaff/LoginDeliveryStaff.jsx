@@ -3,6 +3,8 @@ import "./LoginDeliveryStaff.scss";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../authentication/AuthProvider";
 import { userLogin } from "../../../utils/axios/customer";
+import { toast } from "react-toastify";
+import ToastUtil from "../../../components/toastContainer";
 
 function LoginDelivery() {
   const [email, setEmail] = useState("");
@@ -23,11 +25,15 @@ function LoginDelivery() {
     if (data) {
       auth.handleLogin(data);
       navigate("/delivery-order-home");
+      toast("Login successfully");
+    } else {
+      toast("Wrong email or password");
     }
   }
 
   return (
     <div className="login-delivery-container">
+      <ToastUtil />
       <div className="card">
         <h3 className="text-center">Dellivery Staff Login</h3>
         <div className="form-group">

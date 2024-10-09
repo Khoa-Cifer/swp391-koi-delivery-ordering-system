@@ -14,8 +14,11 @@ export async function createGeneralOrderInfo(
 ) {
     try {
         const token = localStorage.getItem("token");
-        const customerInfo = jwtDecode(token);
-        const customerId = customerInfo.sub.substring(2);
+        let customerId;
+        if (token) {
+            const customerInfo = jwtDecode(token);
+            customerId = customerInfo.sub.substring(2);
+        }
         const response = await axiosClient.post("orders/createOrderGeneralData", {
             customerId,
             name,
@@ -81,27 +84,31 @@ export async function getOrdersByStatus(orderStatus) {
     }
 }
 
-export async function acceptOrder(orderId) {
-    try {
-        const response = await axiosClient.post(`orders/accept-order/${orderId}`)
-        return response.data;
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-export async function cancelOrder(orderId) {
-    try {
-        const response = await axiosClient.post(`orders/cancel-order/${orderId}`)
-        return response.data;
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 export async function updateOrderStatus(orderId, status) {
     try {
         const response = await axiosClient.post(`orders/updateOrderStatus/${orderId}/${status}`)
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function updateOrderSalesAction(orderId, salesId, actionStatus) {
+    try {
+        const response = await axiosClient.put("orders/updateOrderSales", {
+            orderId,
+            salesId,
+            actionStatus
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function getOrdersRecommendedForDeliveryStaff(deliveryStaffId) {
+    try {
+        const response = await axiosClient.get(`orders/recommendOrdersForDelivery/${deliveryStaffId}`);
         return response.data;
     } catch (error) {
         console.log(error);

@@ -2,6 +2,7 @@ package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.Order;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderSalesStaffCheckingRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -61,6 +62,11 @@ public class OrderController {
         }
     }
 
+    @GetMapping("/getOrderByDeliveryStaffId/{deliveryStaffId}")
+    public ResponseEntity<List<Order>> getOrdersByDeliveryStaff(@PathVariable Long deliveryStaffId) {
+return  null;
+    }
+
     @PostMapping("/filterOrderDistance/{id}")
     public ResponseEntity<?> filterOrder(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.filterOrderToStorage(id).get());
@@ -74,5 +80,25 @@ public class OrderController {
     @PostMapping("/updateOrderStatus/{id}/{status}")
     public ResponseEntity<?> updateOrderStatus(@PathVariable Long id, @PathVariable int status) {
         return ResponseEntity.ok(orderService.updateOrderStatus(id, status));
+    }
+
+    @PutMapping("/updateOrderSales")
+    public ResponseEntity<?> updateOrderSalesAction(@RequestBody OrderSalesStaffCheckingRequestDTO request) {
+        return ResponseEntity.ok(orderService.updateOrderSalesAction(request.getOrderId(), request.getSalesId(), request.getActionStatus()));
+    }
+
+    @GetMapping("/recommendOrdersForDelivery/{deliveryStaffId}")
+    public ResponseEntity<?> recommendOrdersForDelivery(@PathVariable Long deliveryStaffId, @RequestBody int deliveryProcessType) {
+        return ResponseEntity.ok(orderService.findOrdersForDelivery(deliveryStaffId));
+    }
+
+    @GetMapping("/onGoingGettingOrder/{deliveryStaffId}")
+    public ResponseEntity<?> onGoingGettingOrdersForDelivery(@PathVariable Long deliveryStaffId, @RequestBody int deliveryProcessType) {
+        return ResponseEntity.ok(orderService.onGoingGettingOrdersForDelivery(deliveryStaffId, deliveryProcessType));
+    }
+
+    @GetMapping("/searchOrderByTrackingId/{trackingId}")
+    public ResponseEntity<?> getOrderByTrackingId(@PathVariable String trackingId) {
+        return ResponseEntity.ok(orderService.getOrderByTrackingId(trackingId));
     }
 }
