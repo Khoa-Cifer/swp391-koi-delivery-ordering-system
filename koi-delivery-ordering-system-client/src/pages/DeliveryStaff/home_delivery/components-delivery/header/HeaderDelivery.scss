@@ -5,6 +5,7 @@
 
   .logo{
     width: 20vw;
+    margin-left: 1%;
   }
 
   .header-delivery-left {
@@ -12,12 +13,17 @@
     margin-top: 20px;
   }
 
+  .function{
+    width: 60%;
+    margin-left: 3%;
+  }
+
   .function button {
     background-color: transparent;
     color: rgb(48, 70, 170);
     padding: 10px 20px;
     margin-left: 2%;
-    margin-top: 10px;
+    margin-top: 1%;
     width: 10vw;
     border-radius: 20px;
     font-size: 1em;
@@ -29,29 +35,22 @@
     border-radius: 20px;
   }
 
-  .header-delivery-right {
-    display: flex;
-    width: 30%;
-    margin: 12px 30px 0 0;
+  .logout-delivery{
+    margin-top: 0.5%;
   }
 
-  .logout button {
+  .logout-delivery button {
     background-color: #558ac6;
     color: white;
     border-radius: 20px;
-    width: 5vw;
+    width: 6vw;
+    height: 4vh;
+    font-size: 1.2em;
   }
 
-  .logout button:hover {
+  .logout-delivery button:hover {
     background-color: #d5e6fa;
     color: black;
   }
 
-  .logout button {
-    border-radius: 20px;
-    font-size: 1.2em;
-    width: 8vw;
-    height: 3vh;
-    margin-left: 20px;
-  }
 }

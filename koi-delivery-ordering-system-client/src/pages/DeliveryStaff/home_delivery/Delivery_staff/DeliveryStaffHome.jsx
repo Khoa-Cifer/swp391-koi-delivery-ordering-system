@@ -1,6 +1,5 @@
 import BannerDelivery from "../components-delivery/banner/BannerDelivery";
 import HeaderDelivery from "../components-delivery/header/HeaderDelivery";
-import HistoryDelivery from "../components-delivery/history/HistoryDelivery";
 import "./delivery_staff.scss";
 
 function DeliveryStaffHome() {
@@ -10,7 +9,6 @@ function DeliveryStaffHome() {
         <>
           <HeaderDelivery />
           <BannerDelivery />
-          <HistoryDelivery />
         </>
       </div>
     </div>
