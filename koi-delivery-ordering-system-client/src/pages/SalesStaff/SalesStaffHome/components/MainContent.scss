@@ -71,7 +71,11 @@
       color: #888;
     }
 
-    
+    .view-more{
+      display: flex;
+      justify-content: flex-end;
+      font-size: 1em;
+    }
   }
 
   .order-container-sale {
@@ -150,12 +154,10 @@
     }
 
     .view-more{
+      display: flex;
       justify-content: flex-end;
       font-size: 1em;
     }
-    
-    
   }
-
 }
 

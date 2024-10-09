@@ -10,5 +10,5 @@ public interface IPaymentHistoryService {
     public Optional<OrderPaymentHistory> getPaymentHistoryById(Long id);
     public OrderPaymentHistory updatePaymentHistory(Long id);
     public boolean logPaymentHistory(double amount, Long orderId, Long customerId);
-    public boolean confirmPaymentHistory(Long customerId, double amount);
+    public void confirmPaymentHistory(Long customerId, double amount);
 }

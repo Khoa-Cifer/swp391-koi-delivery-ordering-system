@@ -21,8 +21,8 @@ import DeliveryStaffLayout from "./pages/Layout/DeliveryStaffLayout/DeliveryStaf
 import SalesStaffLayout from "./pages/Layout/SalesStaffLayout/SalesStaffLayout";
 import DeliveryOrderAvailable from "./pages/DeliveryStaff/delivery_available_order/DeliveryOrderAvailable";
 import PublicRoute from "./authentication/PublicRoute";
-import SalesOrderDetail from "./pages/SalesStaff/components/sales_order_detail/SalesOrderDetail";
-import SalesFishDetail from "./pages/SalesStaff/components/sales_fish_detail/SalesFishDetail";
+import SalesOrderDetail from "./pages/SalesStaff/components/SalesOrderDetail/SalesOrderDetail";
+import SalesFishDetail from "./pages/SalesStaff/components/SalesFishDetail/SalesFishDetail";
 import BasicLayout from "./pages/Layout/BasicLayout/BasicLayout";
 import CustomerCreateOrder from "./pages/Customer/CustomerCreateOrder/CustomerCreateOrder";
 import CustomerHome from "./pages/Customer/CustomerHome/CustomerHome";
@@ -85,7 +85,7 @@ function App() {
             <Route path="/login-admin" element={<LoginAdmin />} />
 
             <Route element={<ManagerLayout />}>
-              <Route path="/admin" element={<ManagerPrivateRoute element={<Report />} />} />
+              <Route path="/admin/report" element={<ManagerPrivateRoute element={<Report />} />} />
               <Route path="/admin/dashboard" element={<ManagerPrivateRoute element={<Dashboard />} />} />
               <Route path="/admin/storage" element={<ManagerPrivateRoute element={<Storage />} />} />
               <Route path="/admin/customer" element={<ManagerPrivateRoute element={<Customer />} />} />
@@ -105,20 +105,19 @@ function App() {
               <Route path="/delivery-order-available" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderAvailable />} />} />
               <Route path="/delivery-order-list" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderList />} />} />
 
-              <Route path="/delivery-order-detail/:id" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderDetail />} />} >
-                <Route path="delivery-fish-detail/:fishId" element={<DeliveryStaffPrivateRoute element={<DeliveryFishDetail />} />} />
-              </Route>
+              <Route path="/delivery-order-detail/:id" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderDetail />} />} />
+              <Route path="/delivery-order-detail/:id/delivery-fish-detail/:fishId" element={<DeliveryStaffPrivateRoute element={<DeliveryFishDetail />} />} />
             </Route>
 
             <Route element={<SalesStaffLayout />}>
               <Route path="/order-sales-staff" element={<SalesStaffPrivateRoute element={<OrderSalesStaff />} />} />
               <Route path="/sales-staff-home" element={<SalesStaffPrivateRoute element={<SalesStaffHome />} />} />
+              <Route path="/sales-order-detail/:id" element={<AllowedRoute element={<SalesOrderDetail />} />} />
+              <Route path="/sales-order-detail/:id/sales-fish-detail/:fishId" element={<AllowedRoute element={<SalesFishDetail />} />} />
             </Route>
 
             <Route element={<BasicLayout />}>
-              <Route path="/sales-order-detail/:id" element={<AllowedRoute element={<SalesOrderDetail />} />} >
-                <Route path="sales-fish-detail/:fishId" element={<AllowedRoute element={<SalesFishDetail />} />} />
-              </Route>
+
             </Route>
 
             <Route path="/payment-success" element={<AllowedRoute element={<PaymentSuccess />} />} />

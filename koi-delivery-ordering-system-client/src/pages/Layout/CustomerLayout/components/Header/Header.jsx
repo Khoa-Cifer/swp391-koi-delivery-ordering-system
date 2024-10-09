@@ -18,9 +18,12 @@ function Header() {
     const [imagePreview, setImagePreview] = useState(default_avatar);
     
     const token = localStorage.getItem("token");
-    const customerInfo = jwtDecode(token);
-    const customerId = customerInfo.sub.substring(2);
-
+    let customerId;
+    if (token) {
+        const customerInfo = jwtDecode(token);
+        customerId = customerInfo.sub.substring(2);
+    }
+    
     useEffect(() => {
         async function fetchUserData() {
             const customer = await getCustomerById(customerId);

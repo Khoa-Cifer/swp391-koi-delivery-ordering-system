@@ -16,15 +16,18 @@ function Header() {
     const navigate = useNavigate();
     const auth = useAuth();
     const [imagePreview, setImagePreview] = useState(default_avatar);
-    
+
     const token = localStorage.getItem("token");
-    const customerInfo = jwtDecode(token);
-    const customerId = customerInfo.sub.substring(2);
+    let customerId;
+    if (token) {
+        const customerInfo = jwtDecode(token);
+        customerId = customerInfo.sub.substring(2);
+    }
 
     useEffect(() => {
         async function fetchUserData() {
             const customer = await getCustomerById(customerId);
-            if(customer.file) {
+            if (customer.file) {
                 const imageResponse = await getFileByFileId(customer.file.id);;
                 const imgUrl = URL.createObjectURL(imageResponse);
                 setImagePreview(imgUrl);
@@ -42,10 +45,6 @@ function Header() {
         setAnchorEl(null);
     };
 
-    const handleOpenEditProfile = () => {
-        navigate("/customer-edit-profile")
-    }
-
     const handleLogout = () => {
         setAnchorEl(null);
         auth.handleLogout();
@@ -58,7 +57,7 @@ function Header() {
                 <img
                     src={logo}
                     alt="Logo"
-                    style={{ width: "180px"}}
+                    style={{ width: "180px" }}
                 />
             </div>
 
@@ -90,7 +89,7 @@ function Header() {
                             horizontal: 'right',
                         }}
                     >
-                        <MenuItem onClick={handleOpenEditProfile}>Profile</MenuItem>
+                        <MenuItem>Profile</MenuItem>
                         <MenuItem onClick={handleLogout}>Logout</MenuItem>
                     </Menu>
                 </Box>

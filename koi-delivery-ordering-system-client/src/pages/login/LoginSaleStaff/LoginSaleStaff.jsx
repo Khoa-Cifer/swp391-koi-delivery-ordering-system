@@ -3,6 +3,8 @@ import { userLogin } from "../../../utils/axios/customer";
 import { useAuth } from "../../../authentication/AuthProvider";
 import "./LoginSaleStaff.scss"
 import { useState } from "react";
+import ToastUtil from "../../../components/toastContainer";
+import { toast } from "react-toastify";
 
 function LoginSaleStaff() {
   const [email, setEmail] = useState("");
@@ -23,11 +25,15 @@ function LoginSaleStaff() {
     if (data) {
       auth.handleLogin(data);
       navigate("/sales-staff-home");
+      toast("Login successfully");
+    } else {
+      toast("Wrong email or password");
     }
   }
 
   return (
     <div className="login-sale-container">
+      <ToastUtil />
       <div className="card">
         <h3 className="text-center"><strong>Sale Staff Login</strong></h3>
         <div className="form-group">
