@@ -20,7 +20,7 @@ public interface IOrderService {
     public double calculateOrderPrice(Long id);
 
     public List<Order> findOrdersForDelivery(Long id);
-    public List<Order> onGoingGettingOrdersForDelivery(Long id, int deliveryProcessType);
+    public List<Order> onGoingOrdersForDelivery(Long id, int deliveryProcessType);
 
     public boolean updateOrderSalesAction(Long orderId, Long salesId, int action);
     public Optional<Order> getOrderByTrackingId(String trackingId);

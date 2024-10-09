@@ -114,3 +114,12 @@ export async function getOrdersRecommendedForDeliveryStaff(deliveryStaffId) {
         console.log(error);
     }
 }
+
+export async function getOnGoingOrderForDeliveryStaff(deliveryStaffId, deliveryProcessType) {
+    try {
+        const response = await axiosClient.get(`orders/onGoingOrder/${deliveryStaffId}/${deliveryProcessType}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}

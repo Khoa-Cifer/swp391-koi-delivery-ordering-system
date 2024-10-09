@@ -11,11 +11,8 @@ import com.swp391team3.koi_delivery_ordering_system.utils.Utilities;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -236,7 +233,7 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public List<Order> onGoingGettingOrdersForDelivery(Long id, int deliveryProcessType) {
+    public List<Order> onGoingOrdersForDelivery(Long id, int deliveryProcessType) {
         List<Order> gettingOrder = getOrderByStatus(orderStatus.ORDER_GETTING);
         List<Order> onGoingOrder = new ArrayList<>();
         for (int i = 0; i < gettingOrder.size(); i++) {

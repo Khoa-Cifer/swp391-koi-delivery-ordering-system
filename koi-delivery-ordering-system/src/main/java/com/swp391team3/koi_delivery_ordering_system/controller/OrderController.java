@@ -62,11 +62,6 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/getOrderByDeliveryStaffId/{deliveryStaffId}")
-    public ResponseEntity<List<Order>> getOrdersByDeliveryStaff(@PathVariable Long deliveryStaffId) {
-return  null;
-    }
-
     @PostMapping("/filterOrderDistance/{id}")
     public ResponseEntity<?> filterOrder(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.filterOrderToStorage(id).get());
@@ -88,13 +83,13 @@ return  null;
     }
 
     @GetMapping("/recommendOrdersForDelivery/{deliveryStaffId}")
-    public ResponseEntity<?> recommendOrdersForDelivery(@PathVariable Long deliveryStaffId, @RequestBody int deliveryProcessType) {
+    public ResponseEntity<?> recommendOrdersForDelivery(@PathVariable Long deliveryStaffId) {
         return ResponseEntity.ok(orderService.findOrdersForDelivery(deliveryStaffId));
     }
 
-    @GetMapping("/onGoingGettingOrder/{deliveryStaffId}")
-    public ResponseEntity<?> onGoingGettingOrdersForDelivery(@PathVariable Long deliveryStaffId, @RequestBody int deliveryProcessType) {
-        return ResponseEntity.ok(orderService.onGoingGettingOrdersForDelivery(deliveryStaffId, deliveryProcessType));
+    @GetMapping("/onGoingOrder/{deliveryStaffId}/{deliveryProcessType}")
+    public ResponseEntity<?> onGoingOrdersForDelivery(@PathVariable Long deliveryStaffId, @PathVariable int deliveryProcessType) {
+        return ResponseEntity.ok(orderService.onGoingOrdersForDelivery(deliveryStaffId, deliveryProcessType));
     }
 
     @GetMapping("/searchOrderByTrackingId/{trackingId}")
