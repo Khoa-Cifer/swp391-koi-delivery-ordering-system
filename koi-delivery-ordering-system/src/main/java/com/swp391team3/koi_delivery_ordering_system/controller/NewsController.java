@@ -7,14 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/news")
 @RequiredArgsConstructor
 public class NewsController {
     private final INewsService newsService;
-
 
     @GetMapping
     public ResponseEntity<?> getAllNews() {
@@ -30,5 +28,10 @@ public class NewsController {
     @DeleteMapping("/{id}")
     public void deleteNewsById(@PathVariable Long id) {
         newsService.deleteNewsById(id);
+    }
+
+    @PostMapping("/createNews")
+    public ResponseEntity<?> createNews(@RequestBody News news) {
+        return ResponseEntity.ok(newsService.createNews(news));
     }
 }
