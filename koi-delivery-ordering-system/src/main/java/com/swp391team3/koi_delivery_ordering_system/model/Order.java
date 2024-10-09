@@ -44,7 +44,6 @@ public class Order {
     private Customer customer;
 
     @OneToMany(mappedBy = "order")
-    @JsonIgnore
     private Set<OrderDelivering> orderDeliveringSet;
 
     @ManyToOne
