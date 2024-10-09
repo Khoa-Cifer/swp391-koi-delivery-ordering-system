@@ -242,15 +242,6 @@ public class OrderServiceImpl implements IOrderService {
         for (int i = 0; i < gettingOrder.size(); i++) {
             Optional<Order> foundOrder = orderRepository.findOrderByDeliveryStaffId(id, gettingOrder.get(i).getId(), deliveryProcessType);
             foundOrder.ifPresent(onGoingOrder::add);
-
-            //mail sending
-            DeliveryStaff deliveryStaff = deliveryStaffRepository.findById(id).get();
-
-            EmailDetailDTO emailDetail = new EmailDetailDTO();
-            emailDetail.setReceiver((Object) deliveryStaff);
-            emailDetail.setSubject("The Order "+ foundOrder.get().getId()+" Is Getting By "+deliveryStaff.getUsername());
-            emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
-            emailService.sendEmail(emailDetail, 2);
         }
         return onGoingOrder;
     }
@@ -299,4 +290,6 @@ public class OrderServiceImpl implements IOrderService {
         }
         return distancePrice + boxPrice;
     }
+
+
 }
