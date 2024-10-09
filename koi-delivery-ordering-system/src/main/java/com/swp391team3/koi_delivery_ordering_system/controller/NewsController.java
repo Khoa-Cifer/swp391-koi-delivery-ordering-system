@@ -1,8 +1,11 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.News;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.NewsRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.service.IFileService;
 import com.swp391team3.koi_delivery_ordering_system.service.INewsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NewsController {
     private final INewsService newsService;
+    private final IFileService fileService;
 
     @GetMapping
     public ResponseEntity<?> getAllNews() {
@@ -30,8 +34,8 @@ public class NewsController {
         newsService.deleteNewsById(id);
     }
 
-    @PostMapping("/createNews")
-    public ResponseEntity<?> createNews(@RequestBody News news) {
-        return ResponseEntity.ok(newsService.createNews(news));
+    @PostMapping(value = "/createNews")
+    public ResponseEntity<?> createNews(@ModelAttribute NewsRequestDTO newsRequestDTO) {
+        return ResponseEntity.ok(newsService.createNews(newsRequestDTO));
     }
 }
