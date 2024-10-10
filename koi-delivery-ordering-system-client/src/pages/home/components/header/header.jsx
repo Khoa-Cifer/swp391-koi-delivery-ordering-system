@@ -28,6 +28,10 @@ function Header() {
   const token = localStorage.getItem("token");
   const user = token ? jwtDecode(token) : null;
 
+  const handleOrderTracking = () => {
+    navigate("/tracking-order");
+  }
+
   const handleService = () => {
     const userRole = user.userData.roleId;
     if (userRole) {
@@ -71,7 +75,7 @@ function Header() {
         <div className="service navigator" onClick={() => handleService()}>
           SERVICE
         </div>
-        <div className="order-tracking navigator">ORDER TRACKING</div>
+        <div className="order-tracking navigator" onClick={() => handleOrderTracking()}>ORDER TRACKING</div>
         <div className="support navigator">SUPPORT</div>
       </div>
 

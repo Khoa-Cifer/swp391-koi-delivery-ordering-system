@@ -34,6 +34,7 @@ import SalesStaff from "./pages/Manager/SystemData/SalesStaff/SalesStaff";
 import Dashboard from "./pages/Manager/Report/Dashboard";
 import "./App.css"
 import Page404 from "./pages/DefaultError/404";
+import TrackingOrder from "./pages/public/TrackingOrder/TrackingOrder";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -106,18 +107,19 @@ function App() {
               <Route path="/delivery-order-available" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderAvailable />} />} />
 
               <Route path="/delivery-order-detail/:id" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderDetail />} />} />
-              <Route path="/delivery-order-detail/:id/delivery-fish-detail/:fishId" element={<DeliveryStaffPrivateRoute element={<DeliveryFishDetail />} />} />
+              <Route path="/delivery-order-detail/:id/delivery-fish-detail" element={<DeliveryStaffPrivateRoute element={<DeliveryFishDetail />} />} />
             </Route>
 
             <Route element={<SalesStaffLayout />}>
               <Route path="/order-sales-staff" element={<SalesStaffPrivateRoute element={<OrderSalesStaff />} />} />
               <Route path="/sales-staff-home" element={<SalesStaffPrivateRoute element={<SalesStaffHome />} />} />
               <Route path="/sales-order-detail/:id" element={<AllowedRoute element={<SalesOrderDetail />} />} />
-              <Route path="/sales-order-detail/:id/sales-fish-detail/:fishId" element={<AllowedRoute element={<SalesFishDetail />} />} />
+              <Route path="/sales-order-detail/:id/sales-fish-detail" element={<AllowedRoute element={<SalesFishDetail />} />} />
             </Route>
 
             <Route path="/payment-success" element={<AllowedRoute element={<PaymentSuccess />} />} />
-            <Route path="/test" element={<Page404 />} />
+
+            <Route path="/tracking-order" element={<TrackingOrder />} />
           </Routes>
         </Router>
       </main>

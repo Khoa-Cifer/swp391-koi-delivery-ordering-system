@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./MainContent.scss";
 import { Box, Button, Grid, Paper, styled } from "@mui/material";
 import dateTimeConvert from "../../../../components/utils";
@@ -37,23 +37,25 @@ function SalesOrderDetail() {
     lng: 106.6667
   };
 
+  const { id } = useParams();
+
   const userData = JSON.parse(localStorage.getItem("userData"));
   const googleMapStyled = {
     width: "100%",
     height: "50vh",
   }
-  
+
   const token = localStorage.getItem("token");
   let salesId;
   if (token) {
-      const salesInfo = jwtDecode(token);
-      salesId = salesInfo.sub.substring(2);
+    const salesInfo = jwtDecode(token);
+    salesId = salesInfo.sub.substring(2);
   }
 
   const [center, setCenter] = useState(centerDefault);
   const { state } = location;
   const [map, setMap] = useState(null);
-  
+
   const onLoad = useCallback(function callback(map) {
     setMap(map)
   }, [])
@@ -78,13 +80,26 @@ function SalesOrderDetail() {
 
   const cancelledOrderStatus = 8;
   const acceptedOrderStatus = 2;
+  const confirmedOrderStatus = 5;
 
   const acceptSales = 0;
+  const confirmSales = 1;
   const cancelSales = 2;
-  
+
   async function handleAcceptOrder() {
     const response = await updateOrderStatus(state.id, acceptedOrderStatus, salesId);
     const salesUpdateOrderResponse = await updateOrderSalesAction(state.id, salesId, acceptSales);
+    if (response && salesUpdateOrderResponse) {
+      toast("Order accepted");
+      navigate("/sales-staff-home")
+    } else {
+      toast("Unexpected Error has been occurred");
+    }
+  }
+
+  async function handleConfirmOrder() {
+    const response = await updateOrderStatus(state.id, confirmedOrderStatus, salesId);
+    const salesUpdateOrderResponse = await updateOrderSalesAction(state.id, salesId, confirmSales);
     if (response && salesUpdateOrderResponse) {
       toast("Order confirmed");
       navigate("/sales-staff-home")
@@ -102,6 +117,12 @@ function SalesOrderDetail() {
     } else {
       toast("Unexpected Error has been occurred");
     }
+  }
+
+  function handleViewFishDetail() {
+    navigate(`/sales-order-detail/${id}/sales-fish-detail`, {
+      state: state
+    });
   }
 
   return (
@@ -150,7 +171,7 @@ function SalesOrderDetail() {
 
         </div>
         <div className="view-fish">
-          <button className="view-fish-btn">View Fishes</button>
+          <button className="view-fish-btn" onClick={() => handleViewFishDetail()}>View Fishes</button>
         </div>
 
         <GoogleMap
@@ -239,7 +260,7 @@ function SalesOrderDetail() {
                 <SubmitButton variant="contained" onClick={() => handleAcceptOrder()}>Accept</SubmitButton>
               )}
               {state.orderStatus === 4 && (
-                <SubmitButton variant="contained">Confirm</SubmitButton>
+                <SubmitButton variant="contained" onClick={() => handleConfirmOrder()}>Confirm</SubmitButton>
               )}
             </>
           )}

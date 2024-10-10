@@ -1,7 +1,38 @@
+import { useLocation } from "react-router-dom";
 import "./MainContent.scss";
 import { Button, Card, Flex, Typography } from "antd";
+import { useEffect, useState } from "react";
+import { getFileByFileId } from "../../../../utils/axios/file";
 
 const SalesFishDetail = () => {
+  const location = useLocation();
+  const { state } = location;
+  const [imagePreviews, setImagePreviews] = useState();
+
+  console.log(state);
+  useEffect(() => {
+    async function fetchFishImages() {
+      try {
+        // Ensure state.fishes is an array and has content before proceeding
+        if (Array.isArray(state.fishes) && state.fishes.length > 0) {
+          const imagePromises = state.fishes.map(async (fish) => {
+            const fileId = fish.file.id;
+            const imageResponse = await getFileByFileId(fileId);
+            return URL.createObjectURL(imageResponse);
+          });
+
+          // Wait for all promises to resolve (i.e., all image URLs to be fetched)
+          const imageUrls = await Promise.all(imagePromises);
+          setImagePreviews(imageUrls); // Set the image preview to an array of URLs
+        }
+      } catch (error) {
+        console.error("Error fetching fish images:", error);
+      }
+    }
+
+    fetchFishImages();
+  }, []);
+
   const cardStyle = {
     width: 300,
   };
@@ -9,9 +40,9 @@ const SalesFishDetail = () => {
     <div className="main-content">
       {/* Slider Section */}
       <div className="slider-container">
-        <div className="slider-fish-img">
-          <h4>Slider Fish Img</h4>
-        </div>
+        {imagePreviews && imagePreviews.map && imagePreviews.map((image, index) => (
+          <img className="fish-image" src={image} alt="" key={index} />
+        ))}
       </div>
 
       <div className="card-container">

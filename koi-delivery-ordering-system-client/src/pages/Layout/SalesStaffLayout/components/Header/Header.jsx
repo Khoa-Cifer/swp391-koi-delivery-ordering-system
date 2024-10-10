@@ -37,6 +37,10 @@ function Header() {
         fetchUserData();
     }, [])
 
+    const handleHomeBack = () => {
+        navigate("/");
+    }
+
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -55,6 +59,7 @@ function Header() {
         <div className="sales-header-container">
             <div className="logo">
                 <img
+                    onClick={() => handleHomeBack()}
                     src={logo}
                     alt="Logo"
                     style={{ width: "180px" }}

@@ -15,6 +15,7 @@ import {
   useJsApiLoader,
 } from "@react-google-maps/api";
 import { getOrderByTrackingId } from "../../../utils/axios/order"; // Ensure this function is defined to fetch order data
+import { useNavigate } from "react-router-dom";
 
 const containerStyle = {
   width: "100%",
@@ -33,6 +34,8 @@ const TrackingOrder = () => {
   const [trackingId, setTrackingId] = useState("");
   const [orderData, setOrderData] = useState(null);
   const [distance, setDistance] = useState("");
+
+  const navigate = useNavigate();
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
@@ -78,6 +81,10 @@ const TrackingOrder = () => {
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading Maps</div>;
 
+  const handleHomeBack = () => {
+    navigate("/");
+  }
+
   return (
     <div>
       <AppBar position="static" color="default">
@@ -95,6 +102,7 @@ const TrackingOrder = () => {
             }}
           >
             <img
+              onClick={() => handleHomeBack()}
               src="./src/assets/logo.png"
               alt="Logo"
               style={{ height: "40px", width: "auto" }}

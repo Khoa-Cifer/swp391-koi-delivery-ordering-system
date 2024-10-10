@@ -137,35 +137,20 @@ function MainContent() {
               <strong>Waiting For Confirmed Order</strong>
             </div>
             <div className="order-row">
-              <div className="order-card">
-                <h5 className="card-title">Order Name</h5>
-                <p className="card-text">Last Updated Date: 2024-09-26</p>
-                <p className="card-text">Destination Address: ABC Street</p>
-                <div className="button-container">
-                  <button className="status-btn">Order Status</button>
-                  <button className="detail-btn">Detail</button>
-                </div>
-              </div>
-
-              <div className="order-card">
-                <h5 className="card-title">Order Name</h5>
-                <p className="card-text">Last Updated Date: 2024-09-26</p>
-                <p className="card-text">Destination Address: ABC Street</p>
-                <div className="button-container">
-                  <button className="status-btn">Order Status</button>
-                  <button className="detail-btn">Detail</button>
-                </div>
-              </div>
-
-              <div className="order-card">
-                <h5 className="card-title">Order Name</h5>
-                <p className="card-text">Last Updated Date: 2024-09-26</p>
-                <p className="card-text">Destination Address: ABC Street</p>
-                <div className="button-container">
-                  <button className="status-btn">Order Status</button>
-                  <button className="detail-btn">Detail</button>
-                </div>
-              </div>
+              {receivedOrder && receivedOrder.map && receivedOrder.map((order, index) => {
+                // Show all orders if showAll is true, otherwise show only the first 3
+                if (index >= 3) return null;
+                return (
+                  <div className="order-card" key={order.id}>
+                    <h5 className="card-title">Order {order.name}</h5>
+                    <p className="card-text">Created Date: {dateTimeConvert(order.createdDate)}</p>
+                    <p className="card-text">Expected Finish Date: {dateTimeConvert(order.expectedFinishDate)}</p>
+                    <div className="button-container">
+                      <Button variant="contained" onClick={() => handleViewDetail(order)}>Detail</Button>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
             <div className="view-more">
               <a href="#">View more →</a>

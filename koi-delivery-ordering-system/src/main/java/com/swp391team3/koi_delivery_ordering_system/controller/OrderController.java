@@ -1,6 +1,7 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.Order;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.FinishOrderUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderSalesStaffCheckingRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
@@ -95,5 +96,10 @@ public class OrderController {
     @GetMapping("/searchOrderByTrackingId/{trackingId}")
     public ResponseEntity<?> getOrderByTrackingId(@PathVariable String trackingId) {
         return ResponseEntity.ok(orderService.getOrderByTrackingId(trackingId));
+    }
+
+    @PutMapping("/finishOrder")
+    public ResponseEntity<?> finishOrder(@RequestBody FinishOrderUpdateRequestDTO request) {
+        return ResponseEntity.ok(orderService.finishOrder(request));
     }
 }

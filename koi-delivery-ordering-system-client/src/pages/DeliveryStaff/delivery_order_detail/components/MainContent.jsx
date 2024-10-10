@@ -7,7 +7,7 @@
 import { Box, Button, Grid, Paper, styled } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import { useCallback, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { createOrderDeliveringData, updateOrderDeliveringLocation } from "../../../../utils/axios/orderDelivering";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../../components/toastContainer";
@@ -17,6 +17,8 @@ import GreenMarker from "../../../../assets/succeeded.svg"
 import BlueMarker from "../../../../assets/inTransit.svg"
 import RedMarker from "../../../../assets/failed.svg"
 import { updateDeliveryStaffCurrentLocation } from "../../../../utils/axios/deliveryStaff";
+import { finishOrder } from "../../../../utils/axios/order";
+import Spinner from "../../../../components/SpinnerLoading";
 
 //       <div className="order-name-detail">
 //         <strong>Order name</strong>
@@ -91,6 +93,7 @@ function MainContent() {
     lat: 10.75,
     lng: 106.6667
   };
+  const { id } = useParams();
 
   const userData = JSON.parse(localStorage.getItem("userData"));
   const googleMapStyled = {
@@ -110,6 +113,7 @@ function MainContent() {
   const [map, setMap] = useState(null);
   const [currentLocation, setCurrentLocation] = useState({ lat: null, lng: null });
   const [address, setAddress] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const onLoad = useCallback(function callback(map) {
     setMap(map)
@@ -161,23 +165,52 @@ function MainContent() {
     });
   };
 
-  async function handleGetOrder() {
-    let response;
-    if (state.orderDeliveringSet && state.orderDeliveringSet.length > 0) {
-      const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
-        return (prev.id > current.id) ? prev : current;
-      });
-      response = await updateOrderDeliveringLocation(availableOrderDelivering.id, address, currentLocation.lat, currentLocation.lng);
+  async function handleReceiveOrder() {
+    setIsLoading(true);
+    try {
+      const response = await createOrderDeliveringData(deliveryStaffId, state.id);
+
       if (response) {
-        await updateDeliveryStaffCurrentLocation(deliveryStaffId, address, currentLocation.lat, currentLocation.lng);
+        toast("Order information updated");
+      } else {
+        toast("Unexpected error occurred");
       }
-    } else {
-      response = await createOrderDeliveringData(deliveryStaffId, state.id);
+
+      navigate("/delivery-order-home");
+    } catch (error) {
+      console.error("Error while receiving the order:", error);
+      toast("An error occurred while processing request.");
+    } finally {
+      setIsLoading(false); // Hide loading spinner after processing
+    }
+  }
+
+  async function handleUpdateOrderLocation() {
+    const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
+      return (prev.id > current.id) ? prev : current;
+    });
+    const response = await updateOrderDeliveringLocation(availableOrderDelivering.id, address, currentLocation.lat, currentLocation.lng);
+
+    if (response) {
+      await updateDeliveryStaffCurrentLocation(deliveryStaffId, address, currentLocation.lat, currentLocation.lng);
     }
 
     if (response) {
-      toast("Order got");
-      navigate("/delivery-order-home")
+      toast("Order information updated");
+    } else {
+      toast("Unexpected Error has been occurred");
+    }
+  }
+
+  async function handleFinishOrderStep() {
+    const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
+      return (prev.id > current.id) ? prev : current;
+    });
+    const response = await finishOrder(state.id, availableOrderDelivering.id, deliveryStaffId, state.storage.id);
+
+    if (response) {
+      toast("Order Finish");
+      navigate("/delivery-order-home");
     } else {
       toast("Unexpected Error has been occurred");
     }
@@ -187,10 +220,15 @@ function MainContent() {
     navigate("/delivery-order-home");
   }
 
+  function handleViewFishDetail() {
+    navigate(`/delivery-order-detail/${id}/delivery-fish-detail`);
+  }
+
   return (
     <div className="sales-order-details-container">
       {/* Order Details Table */}
       <ToastUtil />
+      {isLoading && <Spinner />} 
       <div className="order-name-detail">
         <strong>{state.name}</strong>
       </div>
@@ -318,7 +356,16 @@ function MainContent() {
           {userData.roleId === 3 && (
             <>
               <SubmitButton variant="contained" style={{ backgroundColor: "#f44336" }} onClick={() => handleCancelOrder()}>Cancel</SubmitButton>
-              <SubmitButton variant="contained" onClick={() => handleGetOrder()}>Get</SubmitButton>
+              {state.orderDeliveringSet && state.orderDeliveringSet.length > 0 ? (
+                <>
+                  <SubmitButton variant="contained" onClick={() => handleUpdateOrderLocation()}>Update Location</SubmitButton>
+                  <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep()}>Mark as Complete</SubmitButton>
+                </>
+              ) : (
+                <>
+                  <SubmitButton variant="contained" onClick={() => handleReceiveOrder()}>Get This Order</SubmitButton>
+                </>
+              )}
             </>
           )}
         </Box>

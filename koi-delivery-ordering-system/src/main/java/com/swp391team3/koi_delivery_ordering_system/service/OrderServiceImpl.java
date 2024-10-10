@@ -6,20 +6,20 @@ import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepositor
 import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderDeliveringRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.EmailDetailDTO;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.*;
 import com.swp391team3.koi_delivery_ordering_system.utils.PriceBoard;
 import com.swp391team3.koi_delivery_ordering_system.utils.Utilities;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class OrderServiceImpl implements IOrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
@@ -30,6 +30,23 @@ public class OrderServiceImpl implements IOrderService {
     private final DeliveryStaffRepository deliveryStaffRepository;
     private final ISalesStaffService salesStaffService;
     private final EmailService emailService;
+    private final IOrderDeliveringService orderDeliveringService;
+    private final IDeliveryStaffService deliveryStaffService;
+
+    @Autowired
+    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, OrderStatus orderStatus, IStorageService storageService, IFishService fishService, PriceBoard priceBoard, DeliveryStaffRepository deliveryStaffRepository, ISalesStaffService salesStaffService, EmailService emailService, @Lazy IOrderDeliveringService orderDeliveringService, IDeliveryStaffService deliveryStaffService) {
+        this.orderRepository = orderRepository;
+        this.customerRepository = customerRepository;
+        this.orderStatus = orderStatus;
+        this.storageService = storageService;
+        this.fishService = fishService;
+        this.priceBoard = priceBoard;
+        this.deliveryStaffRepository = deliveryStaffRepository;
+        this.salesStaffService = salesStaffService;
+        this.emailService = emailService;
+        this.orderDeliveringService = orderDeliveringService;
+        this.deliveryStaffService = deliveryStaffService;
+    }
 
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
         Order newOrder = new Order();
@@ -270,6 +287,47 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public Optional<Order> getOrderByTrackingId(String trackingId) {
         return orderRepository.findByTrackingId(trackingId);
+    }
+
+    @Override
+    public boolean finishOrder(FinishOrderUpdateRequestDTO request) {
+        try {
+            boolean result = false;
+
+            Optional<Storage> foundStorage = storageService.getStorageById(request.getStorageId());
+            Optional<Order> foundOrder = getOrderById(request.getOrderId());
+            Optional<OrderDelivering> foundOrderDelivering = orderDeliveringService.getOrderDeliveringById(request.getOrderDeliveringId());
+            Optional<DeliveryStaff> foundDeliveryStaff = deliveryStaffService.getDeliveryStaffById(request.getDeliveryStaffId());
+
+            boolean updatedOrder = updateOrderStatus(foundOrder.get().getId(), orderStatus.ORDER_RECEIVED);
+            if (updatedOrder) {
+                OrderDeliveringUpdateInfoRequestDTO dto = new OrderDeliveringUpdateInfoRequestDTO();
+                dto.setOrderDeliveringId(foundOrderDelivering.get().getId());
+                dto.setLatitude(foundStorage.get().getLatitude());
+                dto.setLongitude(foundStorage.get().getLongitude());
+                dto.setCurrentAddress(foundStorage.get().getAddress());
+
+                OrderDelivering orderDeliveringResult = orderDeliveringService.updateDeliveringInfo(dto);
+                if (orderDeliveringResult != null) {
+                    DeliveryStaffLocationUpdateRequestDTO deliveryStaffDTO = new DeliveryStaffLocationUpdateRequestDTO();
+                    deliveryStaffDTO.setId(foundDeliveryStaff.get().getId());
+                    deliveryStaffDTO.setAddress(foundStorage.get().getAddress());
+                    deliveryStaffDTO.setLatitude(foundStorage.get().getLatitude());
+                    deliveryStaffDTO.setLongitude(foundStorage.get().getLongitude());
+
+                    boolean updateResult = deliveryStaffService.updateDeliveryStaffLocation(deliveryStaffDTO);
+
+                    if (updateResult) {
+                        orderDeliveringService.finishDelivering(orderDeliveringResult.getId());
+                        result = true;
+                    }
+                }
+            }
+
+            return result;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private double getPrice(List<Fish> fishList, Optional<Order> order, double distance) {
