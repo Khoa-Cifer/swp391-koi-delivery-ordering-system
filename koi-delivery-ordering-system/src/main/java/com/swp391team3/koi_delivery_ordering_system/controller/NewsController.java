@@ -18,23 +18,23 @@ public class NewsController {
     private final INewsService newsService;
     private final IFileService fileService;
 
-    @GetMapping
+    @GetMapping("/getAllNews")
     public ResponseEntity<?> getAllNews() {
         List<News> newsList = newsService.getAllNews();
         return ResponseEntity.ok(newsList);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getNewsById/{id}")
     public ResponseEntity<?> getNewsById(@PathVariable Long id) {
         return ResponseEntity.ok(newsService.getNewsById(id));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteNewsById/{id}")
     public void deleteNewsById(@PathVariable Long id) {
         newsService.deleteNewsById(id);
     }
 
-    @PostMapping(value = "/createNews")
+    @PostMapping("/createNews")
     public ResponseEntity<?> createNews(@ModelAttribute NewsRequestDTO newsRequestDTO) {
         return ResponseEntity.ok(newsService.createNews(newsRequestDTO));
     }
