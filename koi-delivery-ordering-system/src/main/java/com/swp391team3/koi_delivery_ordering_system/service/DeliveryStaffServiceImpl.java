@@ -3,6 +3,7 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
 import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.DeliveryStaffLocationUpdateRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -84,5 +85,16 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
         }
     }
 
-
+    @Override
+    public boolean updateDeliveryStaffLocation(DeliveryStaffLocationUpdateRequestDTO request) {
+        Optional<DeliveryStaff> foundDeliveryStaff = getDeliveryStaffById(request.getId());
+        if (foundDeliveryStaff.isPresent()) {
+            foundDeliveryStaff.get().setAddress(request.getAddress());
+            foundDeliveryStaff.get().setLatitude(request.getLatitude());
+            foundDeliveryStaff.get().setLongitude(request.getLongitude());
+            deliveryStaffRepository.save(foundDeliveryStaff.get());
+            return true;
+        }
+        return false;
+    }
 }

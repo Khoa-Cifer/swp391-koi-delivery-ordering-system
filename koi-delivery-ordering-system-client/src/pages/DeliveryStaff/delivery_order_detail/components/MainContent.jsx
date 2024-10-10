@@ -6,9 +6,9 @@
 
 import { Box, Button, Grid, Paper, styled } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { createOrderDeliveringData } from "../../../../utils/axios/orderDelivering";
+import { createOrderDeliveringData, updateOrderDeliveringLocation } from "../../../../utils/axios/orderDelivering";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../../components/toastContainer";
 import dateTimeConvert from "../../../../components/utils";
@@ -16,6 +16,7 @@ import { GoogleMap, Marker, Polyline } from "@react-google-maps/api";
 import GreenMarker from "../../../../assets/succeeded.svg"
 import BlueMarker from "../../../../assets/inTransit.svg"
 import RedMarker from "../../../../assets/failed.svg"
+import { updateDeliveryStaffCurrentLocation } from "../../../../utils/axios/deliveryStaff";
 
 //       <div className="order-name-detail">
 //         <strong>Order name</strong>
@@ -107,6 +108,8 @@ function MainContent() {
   const [center, setCenter] = useState(centerDefault);
   const { state } = location;
   const [map, setMap] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState({ lat: null, lng: null });
+  const [address, setAddress] = useState('');
 
   const onLoad = useCallback(function callback(map) {
     setMap(map)
@@ -130,9 +133,48 @@ function MainContent() {
     lng: parseFloat(state.storage.longitude),
   }
 
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setCurrentLocation({ lat: latitude, lng: longitude });
+          getAddressFromCoordinates(latitude, longitude);
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+        }
+      );
+    }
+  }, []);
+
+  // Function to reverse geocode lat, lng to an address
+  const getAddressFromCoordinates = (lat, lng) => {
+    const geocoder = new window.google.maps.Geocoder();
+    const latlng = { lat, lng };
+    geocoder.geocode({ location: latlng }, (results, status) => {
+      if (status === "OK" && results[0]) {
+        setAddress(results[0].formatted_address);
+      } else {
+        console.error("Geocoder failed due to: ", status);
+      }
+    });
+  };
 
   async function handleGetOrder() {
-    const response = await createOrderDeliveringData(deliveryStaffId, state.id);
+    let response;
+    if (state.orderDeliveringSet && state.orderDeliveringSet.length > 0) {
+      const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
+        return (prev.id > current.id) ? prev : current;
+      });
+      response = await updateOrderDeliveringLocation(availableOrderDelivering.id, address, currentLocation.lat, currentLocation.lng);
+      if (response) {
+        await updateDeliveryStaffCurrentLocation(deliveryStaffId, address, currentLocation.lat, currentLocation.lng);
+      }
+    } else {
+      response = await createOrderDeliveringData(deliveryStaffId, state.id);
+    }
+
     if (response) {
       toast("Order got");
       navigate("/delivery-order-home")

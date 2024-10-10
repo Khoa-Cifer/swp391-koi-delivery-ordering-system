@@ -1,10 +1,12 @@
 package com.swp391team3.koi_delivery_ordering_system.service;
 
+import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailService;
 import com.swp391team3.koi_delivery_ordering_system.model.*;
 import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderDeliveringRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.EmailDetailDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.utils.PriceBoard;
 import com.swp391team3.koi_delivery_ordering_system.utils.Utilities;
@@ -27,6 +29,7 @@ public class OrderServiceImpl implements IOrderService {
     private final PriceBoard priceBoard;
     private final DeliveryStaffRepository deliveryStaffRepository;
     private final ISalesStaffService salesStaffService;
+    private final EmailService emailService;
 
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
         Order newOrder = new Order();
@@ -240,7 +243,7 @@ public class OrderServiceImpl implements IOrderService {
             Optional<Order> foundOrder = orderRepository.findOrderByDeliveryStaffId(id, gettingOrder.get(i).getId(), deliveryProcessType);
             foundOrder.ifPresent(onGoingOrder::add);
         }
-        return  onGoingOrder;
+        return onGoingOrder;
     }
 
     @Override
@@ -287,4 +290,6 @@ public class OrderServiceImpl implements IOrderService {
         }
         return distancePrice + boxPrice;
     }
+
+
 }

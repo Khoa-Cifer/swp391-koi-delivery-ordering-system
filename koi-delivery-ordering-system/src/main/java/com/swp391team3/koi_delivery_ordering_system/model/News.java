@@ -26,4 +26,8 @@ public class News {
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private SalesStaff createdBy;
+
+    @OneToOne
+    @JoinColumn(name = "news_image_id", referencedColumnName = "id")
+    private File file;
 }

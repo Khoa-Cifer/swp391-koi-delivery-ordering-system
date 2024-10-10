@@ -24,3 +24,18 @@ export async function createDeliveryStaff(email, username) {
         console.log(error);
     }
 }
+
+export async function updateDeliveryStaffCurrentLocation(
+    id,
+    address,
+    latitude,
+    longitude) {
+    try {
+        const response = await axiosClient.put(prefixAdminDeliveryStaff + "updateDeliveryStaffLocation", {
+            id, address, latitude, longitude
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}

@@ -25,15 +25,32 @@ function Header() {
     window.location.reload();
   };
 
+  const token = localStorage.getItem("token");
+  const user = token ? jwtDecode(token) : null;
+
   const handleService = () => {
-    if (localStorage.getItem("token")) {
-      navigate("/customer-home");
+    const userRole = user.userData.roleId;
+    if (userRole) {
+      switch (userRole) {
+        case 1:
+          navigate("/customer-home");
+          break;
+        case 2:
+          navigate("/sales-staff-home");
+          break;
+        case 3:
+          navigate("/delivery-staff-home");
+          break;
+        case 4:
+          navigate("/admin/report");
+          break;
+        default:
+          navigate("/");
+      }
     }
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const user = token ? jwtDecode(token) : null;
     if (user) {
       setCustomerUsername(user.userData.username);
     }
@@ -51,7 +68,7 @@ function Header() {
       </div>
 
       <div className="dashboard">
-        <div className="service navigator" onClick={handleService}>
+        <div className="service navigator" onClick={() => handleService()}>
           SERVICE
         </div>
         <div className="order-tracking navigator">ORDER TRACKING</div>
