@@ -80,13 +80,26 @@ function SalesOrderDetail() {
 
   const cancelledOrderStatus = 8;
   const acceptedOrderStatus = 2;
+  const confirmedOrderStatus = 5;
 
   const acceptSales = 0;
+  const confirmSales = 1;
   const cancelSales = 2;
 
   async function handleAcceptOrder() {
     const response = await updateOrderStatus(state.id, acceptedOrderStatus, salesId);
     const salesUpdateOrderResponse = await updateOrderSalesAction(state.id, salesId, acceptSales);
+    if (response && salesUpdateOrderResponse) {
+      toast("Order accepted");
+      navigate("/sales-staff-home")
+    } else {
+      toast("Unexpected Error has been occurred");
+    }
+  }
+
+  async function handleConfirmOrder() {
+    const response = await updateOrderStatus(state.id, confirmedOrderStatus, salesId);
+    const salesUpdateOrderResponse = await updateOrderSalesAction(state.id, salesId, confirmSales);
     if (response && salesUpdateOrderResponse) {
       toast("Order confirmed");
       navigate("/sales-staff-home")
@@ -247,7 +260,7 @@ function SalesOrderDetail() {
                 <SubmitButton variant="contained" onClick={() => handleAcceptOrder()}>Accept</SubmitButton>
               )}
               {state.orderStatus === 4 && (
-                <SubmitButton variant="contained">Confirm</SubmitButton>
+                <SubmitButton variant="contained" onClick={() => handleConfirmOrder()}>Confirm</SubmitButton>
               )}
             </>
           )}

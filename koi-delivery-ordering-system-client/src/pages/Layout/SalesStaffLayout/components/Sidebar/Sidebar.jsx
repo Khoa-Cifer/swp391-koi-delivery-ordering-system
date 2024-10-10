@@ -34,11 +34,6 @@ function Sidebar() {
           </ListItem>
           <ListItem className="button">
             <ListItemText
-              primary="Assign Order"
-            />
-          </ListItem>
-          <ListItem className="button">
-            <ListItemText
               primary="Posted Order"
             />
           </ListItem>

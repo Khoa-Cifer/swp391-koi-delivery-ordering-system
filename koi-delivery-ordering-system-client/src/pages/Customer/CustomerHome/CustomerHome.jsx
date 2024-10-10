@@ -4,6 +4,9 @@ import { useState } from "react";
 import PostedOrder from "./pages/PostedOrder";
 import "./customer_home.scss"
 import DraftOrder from "./pages/DraftOrder";
+import GettingOrder from "./pages/GettingOrder";
+import DeliveringOrder from "./pages/DeliveringOrder";
+import CompletedOrder from "./pages/CompletedOrder";
 
 const CustomTab = styled(Tab)(() => ({
     maxWidth: "20%"
@@ -65,13 +68,13 @@ function CustomerHome() {
                     <DraftOrder />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
-                    Item Three
+                    <GettingOrder />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={3}>
-                    Item Four
+                    <DeliveringOrder />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={4}>
-                    Item Five
+                    <CompletedOrder />
                 </CustomTabPanel>
             </Box>
         </div>
