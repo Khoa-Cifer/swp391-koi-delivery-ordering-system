@@ -7,7 +7,7 @@
 import { Box, Button, Grid, Paper, styled } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import { useCallback, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { createOrderDeliveringData, updateOrderDeliveringLocation } from "../../../../utils/axios/orderDelivering";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../../components/toastContainer";
@@ -18,6 +18,7 @@ import BlueMarker from "../../../../assets/inTransit.svg"
 import RedMarker from "../../../../assets/failed.svg"
 import { updateDeliveryStaffCurrentLocation } from "../../../../utils/axios/deliveryStaff";
 import { finishOrder } from "../../../../utils/axios/order";
+import Spinner from "../../../../components/SpinnerLoading";
 
 //       <div className="order-name-detail">
 //         <strong>Order name</strong>
@@ -92,6 +93,7 @@ function MainContent() {
     lat: 10.75,
     lng: 106.6667
   };
+  const { id } = useParams();
 
   const userData = JSON.parse(localStorage.getItem("userData"));
   const googleMapStyled = {
@@ -111,6 +113,7 @@ function MainContent() {
   const [map, setMap] = useState(null);
   const [currentLocation, setCurrentLocation] = useState({ lat: null, lng: null });
   const [address, setAddress] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const onLoad = useCallback(function callback(map) {
     setMap(map)
@@ -163,24 +166,22 @@ function MainContent() {
   };
 
   async function handleReceiveOrder() {
-    let response;
-    if (state.orderDeliveringSet && state.orderDeliveringSet.length > 0) {
-      const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
-        return (prev.id > current.id) ? prev : current;
-      });
-      response = await updateOrderDeliveringLocation(availableOrderDelivering.id, address, currentLocation.lat, currentLocation.lng);
-      if (response) {
-        await updateDeliveryStaffCurrentLocation(deliveryStaffId, address, currentLocation.lat, currentLocation.lng);
-      }
-    } else {
-      response = await createOrderDeliveringData(deliveryStaffId, state.id);
-      navigate("/delivery-order-home");
-    }
+    setIsLoading(true);
+    try {
+      const response = await createOrderDeliveringData(deliveryStaffId, state.id);
 
-    if (response) {
-      toast("Order information updated");
-    } else {
-      toast("Unexpected Error has been occurred");
+      if (response) {
+        toast("Order information updated");
+      } else {
+        toast("Unexpected error occurred");
+      }
+
+      navigate("/delivery-order-home");
+    } catch (error) {
+      console.error("Error while receiving the order:", error);
+      toast("An error occurred while processing request.");
+    } finally {
+      setIsLoading(false); // Hide loading spinner after processing
     }
   }
 
@@ -189,6 +190,7 @@ function MainContent() {
       return (prev.id > current.id) ? prev : current;
     });
     const response = await updateOrderDeliveringLocation(availableOrderDelivering.id, address, currentLocation.lat, currentLocation.lng);
+
     if (response) {
       await updateDeliveryStaffCurrentLocation(deliveryStaffId, address, currentLocation.lat, currentLocation.lng);
     }
@@ -218,10 +220,15 @@ function MainContent() {
     navigate("/delivery-order-home");
   }
 
+  function handleViewFishDetail() {
+    navigate(`/delivery-order-detail/${id}/delivery-fish-detail`);
+  }
+
   return (
     <div className="sales-order-details-container">
       {/* Order Details Table */}
       <ToastUtil />
+      {isLoading && <Spinner />} 
       <div className="order-name-detail">
         <strong>{state.name}</strong>
       </div>

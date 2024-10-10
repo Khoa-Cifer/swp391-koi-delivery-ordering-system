@@ -16,18 +16,18 @@ function Header() {
     const navigate = useNavigate();
     const auth = useAuth();
     const [imagePreview, setImagePreview] = useState(default_avatar);
-    
+
     const token = localStorage.getItem("token");
     let customerId;
     if (token) {
         const customerInfo = jwtDecode(token);
         customerId = customerInfo.sub.substring(2);
     }
-    
+
     useEffect(() => {
         async function fetchUserData() {
             const customer = await getCustomerById(customerId);
-            if(customer.file) {
+            if (customer.file) {
                 const imageResponse = await getFileByFileId(customer.file.id);;
                 const imgUrl = URL.createObjectURL(imageResponse);
                 setImagePreview(imgUrl);
@@ -55,13 +55,18 @@ function Header() {
         navigate("/");
     }
 
+    const handleHomeBack = () => {
+        navigate("/");
+    }
+
     return (
         <div className="customer-header-container">
             <div className="logo">
                 <img
+                    onClick={() => handleHomeBack()}
                     src={logo}
                     alt="Logo"
-                    style={{ width: "180px"}}
+                    style={{ width: "180px" }}
                 />
             </div>
 

@@ -6,7 +6,6 @@ import { postOrder } from "../../../../utils/axios/order";
 import { toast } from "react-toastify";
 import { getFileByFileId } from "../../../../utils/axios/file";
 import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router-dom";
 import { logPaymentHistory, paymentOpenGateway } from "../../../../utils/axios/payment";
 import ToastUtil from "../../../../components/toastContainer";
 
@@ -19,8 +18,6 @@ function OrderFinalInfo({ orderId }) {
     const [postedData, setPostedData] = useState();
     const [fishOrderData, setFishOrderData] = useState([]);
     const [fishFiles, setFishFiles] = useState([]);
-
-    const navigate = useNavigate();
 
     const token = localStorage.getItem("token");
     let customerId;
