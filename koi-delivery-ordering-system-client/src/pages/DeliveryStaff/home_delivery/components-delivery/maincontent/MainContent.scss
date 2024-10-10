@@ -1,0 +1,11 @@
+.orders-container{
+    display: flex;
+
+    .orders-accepted, .orders-confirmed 
+    {
+    }
+    
+    h2{
+        color: rgb(25, 25, 165);
+    }
+}
