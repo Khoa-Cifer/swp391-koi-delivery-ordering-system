@@ -1,12 +1,15 @@
 package com.swp391team3.koi_delivery_ordering_system.service;
 
+import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailService;
 import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
 import com.swp391team3.koi_delivery_ordering_system.model.Order;
 import com.swp391team3.koi_delivery_ordering_system.model.OrderDelivering;
 import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderDeliveringRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.EmailDetailDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderDeliveringInfoRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderDeliveringUpdateInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import com.swp391team3.koi_delivery_ordering_system.utils.ProcessType;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,7 @@ public class OrderDeliveringServiceImpl implements IOrderDeliveringService {
     private final ProcessType processType;
     private final OrderStatus orderStatus;
     private final IOrderService orderService;
+    private final EmailService emailService;
 
     @Override
     public void generateOrderGetting(Order order, DeliveryStaff deliveryStaff) {
@@ -42,7 +46,6 @@ public class OrderDeliveringServiceImpl implements IOrderDeliveringService {
         orderDelivering.setLatitude(order.getSenderLatitude());
         orderDelivering.setDeliveryProcessType(processType.GETTING);
 
-
         orderDeliveringRepository.save(orderDelivering);
     }
 
@@ -55,8 +58,24 @@ public class OrderDeliveringServiceImpl implements IOrderDeliveringService {
             orderService.updateOrderStatus(orderId, orderStatus.ORDER_GETTING);
             DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
             generateOrderGetting(order, deliveryStaff);
+
+            //send mail
+            EmailDetailDTO emailDetail = new EmailDetailDTO();
+            emailDetail.setReceiver((Object) deliveryStaff);
+            emailDetail.setSubject("The Order "+ orderId +" Is Getting By "+ deliveryStaff.getUsername());
+            emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
+            emailService.sendEmail(emailDetail, 2);
             return true;
         }
         return false;
+    }
+
+    @Override
+    public OrderDelivering updateDeliveringInfo(OrderDeliveringUpdateInfoRequestDTO request) {
+        Optional<OrderDelivering> foundOrderDelivering = orderDeliveringRepository.findById(request.getOrderDeliveringId());
+        foundOrderDelivering.get().setLongitude(request.getLongitude());
+        foundOrderDelivering.get().setLatitude(request.getLatitude());
+        foundOrderDelivering.get().setCurrentAddress(request.getCurrentAddress());
+        return orderDeliveringRepository.save(foundOrderDelivering.get());
     }
 }

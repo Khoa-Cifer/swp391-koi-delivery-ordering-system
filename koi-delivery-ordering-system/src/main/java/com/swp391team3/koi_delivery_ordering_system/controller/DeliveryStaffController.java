@@ -1,6 +1,7 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.DeliveryStaffLocationUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestCreationDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IDeliveryStaffService;
 import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
@@ -38,14 +39,14 @@ public class DeliveryStaffController {
 
     //Delete Delivery Staff
     //PASSED
-    @DeleteMapping("/updateDeliveryStaffById/{id}")
+    @DeleteMapping("/deleteDeliveryStaffById/{id}")
     public void deleteDeliveryStaff(@PathVariable Long id) {
         deliveryStaffService.deleteDeliveryStaffById(id);
     }
 
     //Update Delivery Staff
     //PASSED
-    @PutMapping("/deleteDeliveryStaffById/{id}")
+    @PutMapping("/updateDeliveryStaffById/{id}")
     public ResponseEntity<?> updateDeliveryStaff(@PathVariable Long id, @RequestBody DeliveryStaff deliveryStaff) {
         return ResponseEntity.ok(deliveryStaffService.updateDeliveryStaffById(id, deliveryStaff.getEmail(), deliveryStaff.getPhoneNumber()));
     }
@@ -58,5 +59,8 @@ public class DeliveryStaffController {
 //    }
 //
 
-
+    @PutMapping("/updateDeliveryStaffLocation")
+    public ResponseEntity<?> updateDeliveryStaffLocation(@RequestBody DeliveryStaffLocationUpdateRequestDTO request) {
+        return ResponseEntity.ok(deliveryStaffService.updateDeliveryStaffLocation(request));
+    }
 }
