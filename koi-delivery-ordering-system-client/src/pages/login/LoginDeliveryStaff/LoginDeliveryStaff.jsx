@@ -24,7 +24,7 @@ function LoginDelivery() {
     const data = await userLogin(email, password, roleId);
     if (data) {
       auth.handleLogin(data);
-      navigate("/delivery-order-home");
+      navigate("/delivery-staff-home");
       toast("Login successfully");
     } else {
       toast("Wrong email or password");
