@@ -22,7 +22,7 @@ import DeliveryOrderAvailable from "./pages/DeliveryStaff/delivery_available_ord
 import PublicRoute from "./authentication/PublicRoute";
 import SalesOrderDetail from "./pages/SalesStaff/components/SalesOrderDetail/SalesOrderDetail";
 import SalesFishDetail from "./pages/SalesStaff/components/SalesFishDetail/SalesFishDetail";
-import BasicLayout from "./pages/Layout/BasicLayout/BasicLayout";
+// import BasicLayout from "./pages/Layout/BasicLayout/BasicLayout";
 import CustomerCreateOrder from "./pages/Customer/CustomerCreateOrder/CustomerCreateOrder";
 import CustomerHome from "./pages/Customer/CustomerHome/CustomerHome";
 import Report from "./pages/Manager/Report/Report";
@@ -99,8 +99,9 @@ function App() {
               <Route path="/customer-edit-profile" element={<CustomerPrivateRoute element={<CustomerEditProfile />} />} />
             </Route>
 
+            <Route path="/delivery-staff-home" element={<DeliveryStaffPrivateRoute element={<DeliveryStaffHome />} />} />
+
             <Route element={<DeliveryStaffLayout />}>
-              <Route path="/delivery-staff-home" element={<DeliveryStaffPrivateRoute element={<DeliveryStaffHome />} />} />
               <Route path="/delivery-order-home" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderHome />} />} />
               <Route path="/delivery-order-available" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderAvailable />} />} />
 

@@ -1,25 +1,34 @@
 import { Image } from "antd";
 import "./HeaderDelivery.scss";
+import { useNavigate } from "react-router-dom";
 
 function HeaderDelivery() {
+  const navigate = useNavigate();
+
+  const handleHomeNavigate = () => {
+    navigate("/");
+  }
+
+  const handleOrderListNavigate = () => {
+    navigate("/delivery-order-available");
+  }
+
+  const handleOrderHomePage = () => {
+    navigate("/delivery-order-home");
+  }
+
   return (
     <div className="header-delivery">
       <div className="logo">
-        <Image src="./src/assets/logo.png" />
+        <Image onClick={() => handleHomeNavigate()} src="./src/assets/logo.png" />
       </div>
 
       <div className="function">
         <button>
-          <strong>Order List Page</strong>
+          <strong onClick={() => handleOrderListNavigate()}>Order List Page</strong>
         </button>
         <button>
-          <strong>Available Order Page</strong>
-        </button>
-        <button>
-          <strong>Update Order Info</strong>
-        </button>
-        <button>
-          <strong>User Page</strong>
+          <strong onClick={() => handleOrderHomePage()}>Delivery Staff Order Page</strong>
         </button>
       </div>
 

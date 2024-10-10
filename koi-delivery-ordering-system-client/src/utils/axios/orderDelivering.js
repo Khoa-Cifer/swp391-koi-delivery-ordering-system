@@ -11,3 +11,21 @@ export async function createOrderDeliveringData(deliveryStaffId, orderId) {
         console.log(error);
     }
 }
+
+export async function updateOrderDeliveringLocation(
+    orderDeliveringId,
+    currentAddress,
+    latitude,
+    longitude) {
+    try {
+        const response = await axiosClient.put(`order-delivering/updateOrderDeliveringLocation`, {
+            orderDeliveringId,
+            currentAddress,
+            latitude,
+            longitude
+        })
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}

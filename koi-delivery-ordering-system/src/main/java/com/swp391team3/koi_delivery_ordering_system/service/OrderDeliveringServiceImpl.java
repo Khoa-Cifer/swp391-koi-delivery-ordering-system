@@ -9,6 +9,7 @@ import com.swp391team3.koi_delivery_ordering_system.repository.OrderDeliveringRe
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.EmailDetailDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderDeliveringInfoRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderDeliveringUpdateInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import com.swp391team3.koi_delivery_ordering_system.utils.ProcessType;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,6 @@ public class OrderDeliveringServiceImpl implements IOrderDeliveringService {
         orderDelivering.setLatitude(order.getSenderLatitude());
         orderDelivering.setDeliveryProcessType(processType.GETTING);
 
-
         orderDeliveringRepository.save(orderDelivering);
     }
 
@@ -68,5 +68,14 @@ public class OrderDeliveringServiceImpl implements IOrderDeliveringService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public OrderDelivering updateDeliveringInfo(OrderDeliveringUpdateInfoRequestDTO request) {
+        Optional<OrderDelivering> foundOrderDelivering = orderDeliveringRepository.findById(request.getOrderDeliveringId());
+        foundOrderDelivering.get().setLongitude(request.getLongitude());
+        foundOrderDelivering.get().setLatitude(request.getLatitude());
+        foundOrderDelivering.get().setCurrentAddress(request.getCurrentAddress());
+        return orderDeliveringRepository.save(foundOrderDelivering.get());
     }
 }
