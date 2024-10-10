@@ -78,4 +78,20 @@ public class OrderDeliveringServiceImpl implements IOrderDeliveringService {
         foundOrderDelivering.get().setCurrentAddress(request.getCurrentAddress());
         return orderDeliveringRepository.save(foundOrderDelivering.get());
     }
+
+    @Override
+    public Optional<OrderDelivering> getOrderDeliveringById(Long id) {
+        return orderDeliveringRepository.findById(id);
+    }
+
+    @Override
+    public boolean finishDelivering(Long id) {
+        Optional<OrderDelivering> foundOrderDelivering = getOrderDeliveringById(id);
+        if (foundOrderDelivering.isPresent()) {
+            foundOrderDelivering.get().setFinishDate(new Date());
+            orderDeliveringRepository.save(foundOrderDelivering.get());
+            return true;
+        }
+        return false;
+    }
 }

@@ -136,9 +136,28 @@ export async function getOrderByTrackingId(trackingId) {
 
 export async function getOnGoingOrderForDeliveryStaff(deliveryStaffId, deliveryProcessType) {
   try {
-      const response = await axiosClient.get(`orders/onGoingOrder/${deliveryStaffId}/${deliveryProcessType}`);
-      return response.data;
+    const response = await axiosClient.get(`orders/onGoingOrder/${deliveryStaffId}/${deliveryProcessType}`);
+    return response.data;
   } catch (error) {
-      console.log(error);
+    console.log(error);
+  }
+}
+
+export async function finishOrder(
+  orderId,
+  orderDeliveringId,
+  deliveryStaffId,
+  storageId
+) {
+  try {
+    const response = await axiosClient.put(`orders/finishOrder`, {
+      orderId,
+      orderDeliveringId,
+      deliveryStaffId,
+      storageId
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
   }
 }

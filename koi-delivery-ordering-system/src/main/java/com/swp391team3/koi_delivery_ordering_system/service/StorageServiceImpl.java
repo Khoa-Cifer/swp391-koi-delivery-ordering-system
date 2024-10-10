@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,5 +38,10 @@ public class StorageServiceImpl implements IStorageService {
     @Override
     public List<Storage> getAllStorages() {
         return storageRepository.findAll();
+    }
+
+    @Override
+    public Optional<Storage> getStorageById(Long id) {
+        return storageRepository.findById(id);
     }
 }

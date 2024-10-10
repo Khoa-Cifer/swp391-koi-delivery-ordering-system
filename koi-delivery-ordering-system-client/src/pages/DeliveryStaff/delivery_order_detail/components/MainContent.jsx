@@ -17,6 +17,7 @@ import GreenMarker from "../../../../assets/succeeded.svg"
 import BlueMarker from "../../../../assets/inTransit.svg"
 import RedMarker from "../../../../assets/failed.svg"
 import { updateDeliveryStaffCurrentLocation } from "../../../../utils/axios/deliveryStaff";
+import { finishOrder } from "../../../../utils/axios/order";
 
 //       <div className="order-name-detail">
 //         <strong>Order name</strong>
@@ -161,7 +162,7 @@ function MainContent() {
     });
   };
 
-  async function handleGetOrder() {
+  async function handleReceiveOrder() {
     let response;
     if (state.orderDeliveringSet && state.orderDeliveringSet.length > 0) {
       const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
@@ -173,11 +174,41 @@ function MainContent() {
       }
     } else {
       response = await createOrderDeliveringData(deliveryStaffId, state.id);
+      navigate("/delivery-order-home");
     }
 
     if (response) {
-      toast("Order got");
-      navigate("/delivery-order-home")
+      toast("Order information updated");
+    } else {
+      toast("Unexpected Error has been occurred");
+    }
+  }
+
+  async function handleUpdateOrderLocation() {
+    const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
+      return (prev.id > current.id) ? prev : current;
+    });
+    const response = await updateOrderDeliveringLocation(availableOrderDelivering.id, address, currentLocation.lat, currentLocation.lng);
+    if (response) {
+      await updateDeliveryStaffCurrentLocation(deliveryStaffId, address, currentLocation.lat, currentLocation.lng);
+    }
+
+    if (response) {
+      toast("Order information updated");
+    } else {
+      toast("Unexpected Error has been occurred");
+    }
+  }
+
+  async function handleFinishOrderStep() {
+    const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
+      return (prev.id > current.id) ? prev : current;
+    });
+    const response = await finishOrder(state.id, availableOrderDelivering.id, deliveryStaffId, state.storage.id);
+
+    if (response) {
+      toast("Order Finish");
+      navigate("/delivery-order-home");
     } else {
       toast("Unexpected Error has been occurred");
     }
@@ -318,7 +349,16 @@ function MainContent() {
           {userData.roleId === 3 && (
             <>
               <SubmitButton variant="contained" style={{ backgroundColor: "#f44336" }} onClick={() => handleCancelOrder()}>Cancel</SubmitButton>
-              <SubmitButton variant="contained" onClick={() => handleGetOrder()}>Get</SubmitButton>
+              {state.orderDeliveringSet && state.orderDeliveringSet.length > 0 ? (
+                <>
+                  <SubmitButton variant="contained" onClick={() => handleUpdateOrderLocation()}>Update Location</SubmitButton>
+                  <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep()}>Mark as Complete</SubmitButton>
+                </>
+              ) : (
+                <>
+                  <SubmitButton variant="contained" onClick={() => handleReceiveOrder()}>Get This Order</SubmitButton>
+                </>
+              )}
             </>
           )}
         </Box>
