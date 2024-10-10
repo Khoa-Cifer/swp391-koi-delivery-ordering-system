@@ -1,163 +1,59 @@
-.main-content-container{
-  .news-container-sale {
-    margin-top: 3%;
-
-    .New{
-      font-size: 1.2em;
-      color: rgb(5, 10, 176);
-      margin-left: 4%;
-    }
-
-    .news-grid {
-      display: flex;
-      justify-content: center;
-      gap: 25px;
-      height: auto;
-      margin: 2% 5% 2% 5%;
-
-    }
-
-    .news-item {
-      background: #fff;
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease;
-      max-width: 30%;
-      flex: 1;
-    }
-
-    .news-item:hover {
-      transform: translateY(-20px);
-    }
-
-    .news-image {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
-
-    .news-content {
-      padding: 20px;
-    }
-
-    .news-category {
-      display: inline-block;
-      padding: 5px 10px;
-      background-color: #c7f664;
-      border-radius: 15px;
-      font-size: 12px;
-      font-weight: bold;
-      color: #000;
-      margin-bottom: 10px;
-    }
-
-    .news-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .news-description {
-      font-size: 14px;
-      color: #110f0f;
-      margin-bottom: 20px;
-    }
-
-    .news-footer {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: #888;
-    }
-
-    .view-more{
-      display: flex;
-      justify-content: flex-end;
-      font-size: 1em;
-    }
-  }
-
-  .order-container-sale {
-    height: 80%;
-    padding: 20px;
-    margin: 3%;
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-
-    .order{
-      font-size: 1.2em;
-      color: rgb(5, 10, 176);
-    }
-  
-    /* Các thẻ đơn hàng */
-    .order-row {
-      display: flex;
-      flex-grow: 3;
-      flex-wrap: wrap; /* Đảm bảo các thẻ sẽ xuống hàng nếu không đủ chỗ */
-      gap: 30px;
-      margin-top: 3%;
-    }
-  
-    /* Mỗi thẻ đơn hàng sẽ chiếm 48% chiều rộng */
-    .order-card {
-      flex: 0 0 25%; /* 48% width để vừa 2 thẻ trong 1 hàng */
-      padding: 20px;
-      background-color: #e4e2e2;
-      border-radius: 10px;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-      margin-bottom: 7%;
-      gap: 5%;
-    }
-  
-    .card-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 4%;
-    }
-  
-    .card-text {
-      font-size: 14px;
-      margin-bottom: 4%;
-    }
-  
-    .button-container {
-      display: flex;
-      justify-content: space-between;
-  
-      button {
-        width: 100%;
-        font-size: 13px;
-        margin-bottom: 20px;
-      }
-
-      column-gap: 5%;
-    }
-  
-    .btn {
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-  
-    .status-btn {
-      background-color: rgb(17, 17, 162);
-      color: white;
-    }
-  
-    .detail-btn {
-      background-color: green;
-      color: white;
-    }
-
-    .view-more{
-      display: flex;
-      justify-content: flex-end;
-      font-size: 1em;
-    }
-  }
+.file-upload-container {
+  width: 50%;
+  margin: -4% 0 10% 13%;
+  padding: 20px;
+  border-radius: 8px;
 }
 
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.upload-button {
+  width: 15%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  justify-self: center;
+}
+
+.upload-button:hover {
+  background-color: #0056b3;
+}
+.image-preview {
+  margin-top: 10px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.preview-image {
+  width: 90%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 3%;
+}
+.news-button {
+  display: flex;
+  justify-content: center;
+}
