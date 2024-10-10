@@ -18,4 +18,9 @@ public class PaymentHistoryController {
     public ResponseEntity<?> logTransaction(@RequestBody PaymentRequestDTO request) {
         return ResponseEntity.ok(paymentHistoryService.logPaymentHistory(request.getAmount(), request.getOrderId(), request.getCustomerId()));
     }
+
+    @GetMapping("/get-payment-history/{id}")
+    public ResponseEntity<?> checkTransaction(@PathVariable Long id) {
+        return ResponseEntity.ok(paymentHistoryService.getPaymentHistoryById(id).get());
+    }
 }

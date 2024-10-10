@@ -1,6 +1,5 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
-import com.swp391team3.koi_delivery_ordering_system.model.OrderPaymentHistory;
 import com.swp391team3.koi_delivery_ordering_system.service.IPaymentHistoryService;
 import com.swp391team3.koi_delivery_ordering_system.service.IPaymentService;
 import com.swp391team3.koi_delivery_ordering_system.service.ITransactionService;
@@ -9,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.text.ParseException;

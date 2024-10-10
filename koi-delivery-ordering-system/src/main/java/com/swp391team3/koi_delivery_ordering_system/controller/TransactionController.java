@@ -21,11 +21,4 @@ public class TransactionController {
     // ) {
     //     return ResponseEntity.ok(transactionService.createTransaction(id, createdDate, amount));
     // }
-
-    @GetMapping("/check-transaction/{id}")
-    public ResponseEntity<?> checkExistTransaction(
-        @PathVariable("id") Long id
-    ) {
-        return null;
-    }
 }
