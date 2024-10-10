@@ -33,7 +33,6 @@ import DeliveryStaff from "./pages/Manager/SystemData/DeliveryStaff/DeliveryStaf
 import SalesStaff from "./pages/Manager/SystemData/SalesStaff/SalesStaff";
 import Dashboard from "./pages/Manager/Report/Dashboard";
 import "./App.css"
-import Page404 from "./pages/DefaultError/404";
 import TrackingOrder from "./pages/public/TrackingOrder/TrackingOrder";
 
 function App() {

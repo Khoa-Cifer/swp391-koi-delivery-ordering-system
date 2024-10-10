@@ -50,7 +50,7 @@ public class Customer implements UserDetails {
 
     @OneToMany(mappedBy = "customer")
     @JsonIgnore
-    private Set<OrderPaymentHistory> orderPaymentHistorySet;
+    private Set<PaymentHistory> paymentHistorySet;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

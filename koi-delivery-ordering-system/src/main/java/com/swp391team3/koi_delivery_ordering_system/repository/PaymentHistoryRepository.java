@@ -1,14 +1,17 @@
 package com.swp391team3.koi_delivery_ordering_system.repository;
 
-import com.swp391team3.koi_delivery_ordering_system.model.OrderPaymentHistory;
+import com.swp391team3.koi_delivery_ordering_system.model.PaymentHistory;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
-public interface PaymentHistoryRepository extends JpaRepository<OrderPaymentHistory, Long> {
-    @Query("SELECT oph FROM OrderPaymentHistory oph WHERE oph.customer.id = :customerId AND oph.amount = :amount ORDER BY oph.id DESC")
-    List<OrderPaymentHistory> findPaymentHistoriesByCustomerIdAndAmount(Long customerId, double amount);
+public interface PaymentHistoryRepository extends JpaRepository<PaymentHistory, Long> {
+    @Query("SELECT ph FROM PaymentHistory ph WHERE ph.customer.id = :customerId AND ph.amount = :amount ORDER BY ph.id DESC")
+    List<PaymentHistory> findPaymentHistoriesByCustomerIdAndAmount(Long customerId, double amount);
+
+    @Query("SELECT ph FROM PaymentHistory ph WHERE ph.order.id = :orderId")
+    Optional<PaymentHistory> checkExistPaymentHistory(Long orderId);
 }

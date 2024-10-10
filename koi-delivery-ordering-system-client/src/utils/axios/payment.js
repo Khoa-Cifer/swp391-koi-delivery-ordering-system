@@ -26,3 +26,12 @@ export async function logPaymentHistory(customerId, orderId, amount) {
         console.log(error);
     }
 }
+
+export async function getPaymentHistory(paymentId) {
+    try {
+        const response = await axiosClient.get(`payment-history/get-payment-history/${paymentId}`)
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}

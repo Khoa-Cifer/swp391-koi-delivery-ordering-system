@@ -6,8 +6,9 @@ import { postOrder } from "../../../../utils/axios/order";
 import { toast } from "react-toastify";
 import { getFileByFileId } from "../../../../utils/axios/file";
 import { jwtDecode } from "jwt-decode";
-import { logPaymentHistory, paymentOpenGateway } from "../../../../utils/axios/payment";
+import { getPaymentHistory, logPaymentHistory, paymentOpenGateway } from "../../../../utils/axios/payment";
 import ToastUtil from "../../../../components/toastContainer";
+import { useNavigate } from "react-router-dom";
 
 const SubmitButton = styled(Button)(() => ({
     padding: "10px 80px"
@@ -15,6 +16,7 @@ const SubmitButton = styled(Button)(() => ({
 
 // eslint-disable-next-line react/prop-types
 function OrderFinalInfo({ orderId }) {
+    const navigate = useNavigate();
     const [postedData, setPostedData] = useState();
     const [fishOrderData, setFishOrderData] = useState([]);
     const [fishFiles, setFishFiles] = useState([]);
@@ -60,11 +62,15 @@ function OrderFinalInfo({ orderId }) {
                 if (paymentWindow.closed) {
                     clearInterval(checkWindowClosed);
                     if (paymentResponse) {
-                        const response = await postOrder(orderId);
-                        if (response) {
-                            toast("Order posted successfully");
-                        } else {
-                            toast("Unexpected error has been occurred");
+                        const paymentCheck = await getPaymentHistory(paymentResponse.id);
+                        if (paymentCheck.paymentStatus) {
+                            const response = await postOrder(orderId);
+                            if (response) {
+                                toast("Order posted successfully");
+                                navigate("/customer-home");
+                            } else {
+                                toast("Unexpected error has been occurred");
+                            }
                         }
                     } else {
                         toast("Unexpected error has been occurred");

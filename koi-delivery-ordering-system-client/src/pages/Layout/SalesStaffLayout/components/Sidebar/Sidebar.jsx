@@ -1,10 +1,26 @@
-import { Avatar, ListItem, ListItemText } from "@mui/material";
+import { Avatar, ListItem, ListItemText, styled, Typography } from "@mui/material";
 import { List } from "antd";
 import "./sales_sidebar.scss";
 import { useState } from "react";
 import default_avatar from "../../../../../assets/default-avatar.jpg";
+import { jwtDecode } from "jwt-decode";
+
+const InfoHeader = styled(Typography)(() => ({
+  margin: "0px",
+  color: "#252c6d",
+  fontSize: "12px",
+}));
+
 function Sidebar() {
   const [imagePreview, setImagePreview] = useState(default_avatar);
+
+  const token = localStorage.getItem("token");
+  let salesStaffId;
+  let salesStaffInfo
+  if (token) {
+    salesStaffInfo = jwtDecode(token);
+    salesStaffId = salesStaffInfo.sub.substring(2);
+  }
 
   return (
     <div className="sidebar-body-sales">
@@ -12,14 +28,15 @@ function Sidebar() {
         <Avatar
           src={imagePreview}
           alt="avatar"
-          style={{ width: "7vw", height: "14vh"}}
+          style={{ width: "7vw", height: "14vh" }}
         />
       </div>
 
       <div className="profile">
-        <div>User Name:</div>
-        <div>Phone Number:</div>
-        <div>Email:</div>
+        <InfoHeader>Username</InfoHeader>
+        <Typography>{salesStaffInfo.userData.username}</Typography>
+        <InfoHeader>Email</InfoHeader>
+        <Typography>{salesStaffInfo.userData.email}</Typography>
       </div>
 
       <div className="list-function">

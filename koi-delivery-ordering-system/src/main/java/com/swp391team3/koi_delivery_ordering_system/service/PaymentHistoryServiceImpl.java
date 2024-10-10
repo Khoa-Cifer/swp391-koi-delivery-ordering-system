@@ -2,7 +2,7 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.model.Order;
-import com.swp391team3.koi_delivery_ordering_system.model.OrderPaymentHistory;
+import com.swp391team3.koi_delivery_ordering_system.model.PaymentHistory;
 import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.PaymentHistoryRepository;
@@ -20,45 +20,38 @@ public class PaymentHistoryServiceImpl implements IPaymentHistoryService {
     private final CustomerRepository customerRepository;
 
     @Override
-    public List<OrderPaymentHistory> getAllPaymentHistory() {
+    public List<PaymentHistory> getAllPaymentHistory() {
         return paymentHistoryRepository.findAll();
     }
 
     @Override
-    public Optional<OrderPaymentHistory> getPaymentHistoryById(Long id) {
+    public Optional<PaymentHistory> getPaymentHistoryById(Long id) {
         return paymentHistoryRepository.findById(id);
     }
 
     @Override
-    public OrderPaymentHistory updatePaymentHistory(Long id) {
-        // OrderPaymentHistory orderPaymentHistory =
-        // paymentHistoryRepository.findById(id).get();
-        // if(orderPaymentHistory != null) {
-        // orderPaymentHistory.setDescription(description);
-        // return paymentHistoryRepository.save(orderPaymentHistory);
-        // }
-        return null;
-    }
-
-    @Override
-    public boolean logPaymentHistory(double amount, Long orderId, Long customerId) {
-        OrderPaymentHistory paymentHistory = new OrderPaymentHistory();
+    public PaymentHistory logPaymentHistory(double amount, Long orderId, Long customerId) {
+        Optional<Order> order = orderRepository.findById(orderId);
+        Optional<PaymentHistory> checkPaymentExist = paymentHistoryRepository.checkExistPaymentHistory(order.get().getId());
+        if (checkPaymentExist.isPresent()) {
+            return checkPaymentExist.get(); //return if exist to avoid error;
+        }
+        PaymentHistory paymentHistory = new PaymentHistory();
         paymentHistory.setAmount(amount);
         Optional<Customer> customer = customerRepository.findById(customerId);
-        Optional<Order> order = orderRepository.findById(orderId);
         paymentHistory.setCustomer(customer.get());
         paymentHistory.setOrder(order.get());
         paymentHistory.setPaymentStatus(false);
         paymentHistoryRepository.save(paymentHistory);
-        return true;
+        return paymentHistory;
     }
 
     @Override
     public void confirmPaymentHistory(Long customerId, double amount) {
-        List<OrderPaymentHistory> orderPaymentHistories = paymentHistoryRepository
+        List<PaymentHistory> orderPaymentHistories = paymentHistoryRepository
                 .findPaymentHistoriesByCustomerIdAndAmount(
                         customerId, amount);
-        OrderPaymentHistory foundPaymentHistory = orderPaymentHistories.get(0);
+        PaymentHistory foundPaymentHistory = orderPaymentHistories.get(0);
         foundPaymentHistory.setPaymentStatus(true);
         paymentHistoryRepository.save(foundPaymentHistory);
     }

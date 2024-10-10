@@ -1,4 +1,4 @@
-import { Avatar, ListItem, ListItemText } from "@mui/material";
+import { Avatar, ListItem, ListItemText, styled, Typography } from "@mui/material";
 import { List } from "antd";
 import "./delivery_staff_sidebar.scss";
 import { useNavigate } from "react-router-dom";
@@ -8,24 +8,31 @@ import { getCustomerById } from "../../../../../utils/axios/customer";
 import { jwtDecode } from "jwt-decode";
 import { getFileByFileId } from "../../../../../utils/axios/file";
 
+const InfoHeader = styled(Typography)(() => ({
+  margin: "0px",
+  color: "#252c6d",
+  fontSize: "12px",
+}));
+
 function Sidebar() {
   const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState(default_avatar);
 
   const handleOpenEditProfile = () => {
-    navigate("/customer-edit-profile")
+    // navigate("/customer-edit-profile")
   }
 
   const token = localStorage.getItem("token");
-  let customerId;
+  let deliveryStaffId;
+  let deliveryStaffInfo;
   if (token) {
-    const customerInfo = jwtDecode(token);
-    customerId = customerInfo.sub.substring(2);
+    deliveryStaffInfo = jwtDecode(token);
+    deliveryStaffId = deliveryStaffInfo.sub.substring(2);
   }
 
   useEffect(() => {
     async function fetchUserData() {
-      const customer = await getCustomerById(customerId);
+      const customer = await getCustomerById(deliveryStaffId);
       if (customer.file) {
         const imageResponse = await getFileByFileId(customer.file.id);;
         const imgUrl = URL.createObjectURL(imageResponse);
@@ -35,11 +42,6 @@ function Sidebar() {
     }
     fetchUserData();
   }, [])
-
-
-  const handleOpenCreateOrder = () => {
-    navigate("customer-home");
-  }
 
   return (
     <div className="sidebar-body-delivery-staff">
@@ -52,9 +54,10 @@ function Sidebar() {
       </div>
 
       <div className="profile">
-        <div>User Name:</div>
-        <div>Phone Number:</div>
-        <div>Email:</div>
+        <InfoHeader>Username</InfoHeader>
+        <Typography>{deliveryStaffInfo.userData.username}</Typography>
+        <InfoHeader>Email</InfoHeader>
+        <Typography>{deliveryStaffInfo.userData.email}</Typography>
       </div>
 
       <div className="list-function">
@@ -70,15 +73,18 @@ function Sidebar() {
           </ListItem>
           <ListItem className="button">
             <ListItemText
-              primary="Create Order"
-              onClick={handleOpenCreateOrder}
+              primary="Getting Order"
             />
           </ListItem>
           <ListItem className="button">
-            <ListItemText primary="Navigate To Wallet Page" />
+            <ListItemText
+              primary="Delivering Order"
+            />
           </ListItem>
           <ListItem className="button">
-            <ListItemText primary="Contact Support" />
+            <ListItemText
+              primary="Working Order"
+            />
           </ListItem>
         </List>
       </div>
