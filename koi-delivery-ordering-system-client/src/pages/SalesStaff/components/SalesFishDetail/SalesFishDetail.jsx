@@ -9,7 +9,6 @@ const SalesFishDetail = () => {
   const { state } = location;
   const [imagePreviews, setImagePreviews] = useState();
 
-  console.log(state);
   useEffect(() => {
     async function fetchFishImages() {
       try {

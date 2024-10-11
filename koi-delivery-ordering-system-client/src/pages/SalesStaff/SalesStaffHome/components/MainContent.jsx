@@ -1,4 +1,4 @@
-import "./Maincontent.scss";
+import "./MainContent.scss";
 import { useEffect, useState } from "react";
 import { getOrdersByStatus } from "../../../../utils/axios/order";
 import dateTimeConvert from "../../../../components/utils";

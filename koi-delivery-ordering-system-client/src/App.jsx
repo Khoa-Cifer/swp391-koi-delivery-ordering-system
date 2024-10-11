@@ -10,7 +10,7 @@ import LoginSaleStaff from "./pages/login/LoginSaleStaff/LoginSaleStaff";
 import LoginDeliveryStaff from "./pages/login/LoginDeliveryStaff/LoginDeliveryStaff";
 import DeliveryOrderDetail from "./pages/DeliveryStaff/delivery_order_detail/DeliveryOrderDetail";
 import DeliveryFishDetail from "./pages/DeliveryStaff/delivery_fish_detail/DeliveryFishDetail";
-import LoginAdmin from "./pages/login/Loginadmin/LoginAdmin";
+import LoginAdmin from "./pages/login/LoginAdmin/LoginAdmin";
 import OrderSalesStaff from "./pages/SalesStaff/OrderSalesStaff/OrderSalesStaff";
 import CustomerLayout from "./pages/Layout/CustomerLayout/CustomerLayout";
 import CustomerEditProfile from "./pages/Customer/CustomerEditProfile/CustomerEditProfile";
@@ -32,8 +32,8 @@ import Customer from "./pages/Manager/SystemData/Customer/Customer";
 import DeliveryStaff from "./pages/Manager/SystemData/DeliveryStaff/DeliveryStaff";
 import SalesStaff from "./pages/Manager/SystemData/SalesStaff/SalesStaff";
 import Dashboard from "./pages/Manager/Report/Dashboard";
-import "./App.css"
 import TrackingOrder from "./pages/public/TrackingOrder/TrackingOrder";
+import "./App.css"
 
 function App() {
   // eslint-disable-next-line react/prop-types
