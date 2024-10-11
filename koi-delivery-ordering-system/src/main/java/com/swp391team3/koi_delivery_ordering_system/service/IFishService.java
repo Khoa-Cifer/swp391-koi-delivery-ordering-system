@@ -13,4 +13,6 @@ public interface IFishService {
     void deleteFishById(Long id);
     Long createFishByOrderId(OrderFishInfoRequestDTO request) throws IOException;
     List<Fish> getFishesByOrderId(Long orderId);
+
+    Fish updateFish(Long fishId, String name, int age, double size, double weight, int status, double price);
 }

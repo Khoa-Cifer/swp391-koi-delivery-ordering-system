@@ -3,11 +3,13 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 import com.swp391team3.koi_delivery_ordering_system.model.File;
 import com.swp391team3.koi_delivery_ordering_system.model.Fish;
 import com.swp391team3.koi_delivery_ordering_system.model.Order;
-import com.swp391team3.koi_delivery_ordering_system.repository.FileRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.FishRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderFishInfoRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -65,5 +67,19 @@ public class FishServiceImpl implements IFishService {
         } catch (Exception e) {
             return null;
         }
+    }
+    @Override
+    public Fish updateFish(Long fishId, String name, int age, double size, double weight, int status, double price) {
+
+        Fish fish = fishRepository.findById(fishId)
+                .orElseThrow(() -> new RuntimeException("Fish not found"));
+        fish.setName(name);
+        fish.setAge(age);
+        fish.setSize(size);
+        fish.setWeight(weight);
+        fish.setStatus(status);
+        fish.setPrice(price);
+
+        return fishRepository.save(fish);
     }
 }
