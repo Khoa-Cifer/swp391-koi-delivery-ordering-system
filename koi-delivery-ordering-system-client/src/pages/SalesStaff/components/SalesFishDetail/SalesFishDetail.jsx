@@ -3,11 +3,12 @@ import "./MainContent.scss";
 import { Button, Card, Flex, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { getFileByFileId } from "../../../../utils/axios/file";
+import ImageSlider from "../../../../components/ImageSlider";
 
 const SalesFishDetail = () => {
   const location = useLocation();
   const { state } = location;
-  const [imagePreviews, setImagePreviews] = useState();
+  const [imagePreviews, setImagePreviews] = useState([]);
 
   useEffect(() => {
     async function fetchFishImages() {
@@ -17,7 +18,7 @@ const SalesFishDetail = () => {
           const imagePromises = state.fishes.map(async (fish) => {
             const fileId = fish.file.id;
             const imageResponse = await getFileByFileId(fileId);
-            return URL.createObjectURL(imageResponse);
+            return URL.createObjectURL(new Blob([imageResponse], { type: "image/jpeg" }));
           });
 
           // Wait for all promises to resolve (i.e., all image URLs to be fetched)
@@ -30,18 +31,17 @@ const SalesFishDetail = () => {
     }
 
     fetchFishImages();
-  }, []);
+  }, [state.fishes]);
 
   const cardStyle = {
     width: 300,
   };
-  return (
+
+  console.log(imagePreviews);
+  return imagePreviews && (
     <div className="main-content">
-      {/* Slider Section */}
       <div className="slider-container">
-        {imagePreviews && imagePreviews.map && imagePreviews.map((image, index) => (
-          <img className="fish-image" src={image} alt="" key={index} />
-        ))}
+        <ImageSlider images={imagePreviews} />
       </div>
 
       <div className="card-container">
