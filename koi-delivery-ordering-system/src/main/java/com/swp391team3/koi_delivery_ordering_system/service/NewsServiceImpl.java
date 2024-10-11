@@ -36,21 +36,21 @@ public class NewsServiceImpl implements INewsService {
     }
 
     @Override
-    public News createNews(NewsRequestDTO newsRequestDTO){
+    public News createNews(String title, String description, String type, Long salesStaffId, MultipartFile file) {
         File uploadedFile = null;
         try {
-            uploadedFile = fileService.uploadFileToFileSystem(newsRequestDTO.getFile());
+            uploadedFile = fileService.uploadFileToFileSystem(file);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         News news = new News();
         news.setCreatedDate(new java.util.Date());
-        news.setTitle(newsRequestDTO.getTitle());
-        news.setDescription(newsRequestDTO.getDescription());
-        news.setType(newsRequestDTO.getType());
+        news.setTitle(title);
+        news.setDescription(description);
+        news.setType(type);
 
-        news.setCreatedBy(salesStaffRepository.findById(newsRequestDTO.getSalesStaffId()).get());
+        news.setCreatedBy(salesStaffRepository.findById(salesStaffId).get());
         news.setFile(uploadedFile);
 
         return newsRepository.save(news);
