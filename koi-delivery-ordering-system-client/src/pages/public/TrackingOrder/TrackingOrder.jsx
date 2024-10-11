@@ -44,7 +44,7 @@ const TrackingOrder = () => {
   const handleSearch = async () => {
     if (trackingId) {
       try {
-        const order = await getOrderByTrackingId(trackingId);
+          const order = await getOrderByTrackingId(trackingId);
         console.log("Order data:", order);
         setOrderData(order);
         setOrigin(order.senderAddress);
