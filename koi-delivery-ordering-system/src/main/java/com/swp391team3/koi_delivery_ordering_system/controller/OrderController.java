@@ -4,12 +4,16 @@ import com.swp391team3.koi_delivery_ordering_system.model.Order;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.FinishOrderUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderSalesStaffCheckingRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderUpdateDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
+import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OrderController {
     private final IOrderService orderService;
+    private final OrderStatus orderStatus;
 
     //Create Order
     //PASS
@@ -102,4 +107,35 @@ public class OrderController {
     public ResponseEntity<?> finishOrder(@RequestBody FinishOrderUpdateRequestDTO request) {
         return ResponseEntity.ok(orderService.finishOrder(request));
     }
+    @PostMapping(value = "/editOrder/{id}")
+    public ResponseEntity<?> editOrder(@PathVariable("id") Long orderId,
+                                       @RequestParam(name = "name") String name,
+                                       @RequestParam(name = "description") String description,
+                                       @RequestParam(name = "expectedFinishDate")@DateTimeFormat(pattern = "yyyy-MM-dd") Date expectedFinishDate,
+                                       @RequestParam(name = "destinationAddress") String destinationAddress,
+                                       @RequestParam(name = "destinationLongitude") String destinationLongitude,
+                                       @RequestParam(name = "destinationLatitude") String destinationLatitude,
+                                       @RequestParam(name = "senderAddress") String senderAddress,
+                                       @RequestParam(name = "senderLongitude") String senderLongitude,
+                                       @RequestParam(name = "senderLatitude") String senderLatitude) {
+
+        Optional<Order> optionalOrder = orderService.getOrderById(orderId);
+
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+
+            if (order.getOrderStatus() == orderStatus.DRAFT || order.getOrderStatus() == orderStatus.POSTED) {
+
+                Order updatedOrder = orderService.updateOrder(orderId, name, description, expectedFinishDate, destinationAddress, destinationLongitude
+                , destinationLatitude, senderAddress, senderLongitude, senderLatitude);
+                return ResponseEntity.ok(updatedOrder);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot edit order with status other than DRAFT or POSTED");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The order does not exist");
+        }
+    }
+
+
 }
