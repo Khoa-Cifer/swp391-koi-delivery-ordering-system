@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ILicenseService {
-    public List<License> getAllLicenses();
-    public Optional<License> getLicenseById(Long id);
-    public void deleteLicenseById(Long id);
-    public Long createLicenseRelatedToFishId(FishLicenseRequestDTO request) throws IOException;
-    public boolean createFilesBasedOnLicenseId(LicenseFileRequestDTO request) throws IOException;
+    List<License> getAllLicenses();
+    Optional<License> getLicenseById(Long id);
+    void deleteLicenseById(Long id);
+    Long createLicenseRelatedToFishId(FishLicenseRequestDTO request) throws IOException;
+    boolean createFilesBasedOnLicenseId(LicenseFileRequestDTO request) throws IOException;
 }

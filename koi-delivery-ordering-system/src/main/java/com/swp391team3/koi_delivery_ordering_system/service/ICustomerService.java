@@ -9,16 +9,16 @@ import com.swp391team3.koi_delivery_ordering_system.requestDto.CustomerUpdateReq
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ICustomerService {
-    public String customerRegister(String email, String password, String username, String phoneNumber);
-    public boolean customerLogin(String email, String password);
-    public Customer getCustomerByEmail(String email);
+    String customerRegister(String email, String password, String username, String phoneNumber);
+    boolean customerLogin(String email, String password);
+    Customer getCustomerByEmail(String email);
     
-    public List<Customer> getAllCustomer();
-    public Optional<Customer> getCustomerById(Long id);
-    public Customer updateCustomerById(Long id, String email, String phoneNumber);
-    public void deleteCustomerById(Long id);
+    List<Customer> getAllCustomer();
+    Optional<Customer> getCustomerById(Long id);
+    Customer updateCustomerById(Long id, String email, String phoneNumber);
+    void deleteCustomerById(Long id);
 
-    public String customerUpdateProfile(CustomerUpdateRequestDTO request);
-    public String customerUpdateAvatar(Long id, MultipartFile file) throws IOException;
+    String customerUpdateProfile(CustomerUpdateRequestDTO request);
+    String customerUpdateAvatar(Long id, MultipartFile file) throws IOException;
 }
 

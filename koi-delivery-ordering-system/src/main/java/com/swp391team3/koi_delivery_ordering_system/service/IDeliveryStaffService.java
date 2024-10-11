@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IDeliveryStaffService {
-    public String createDeliveryStaff(String email, String username);
-    public boolean deliveryStaffLogin(String email, String password);
-    public DeliveryStaff getDeliveryStaffByEmail(String email);
+    String createDeliveryStaff(String email, String username);
+    boolean deliveryStaffLogin(String email, String password);
+    DeliveryStaff getDeliveryStaffByEmail(String email);
 
-    public List<DeliveryStaff> getAllDeliveryStaffs();
-    public Optional<DeliveryStaff> getDeliveryStaffById(Long id);
-    public void deleteDeliveryStaffById(Long id);
-    public DeliveryStaff updateDeliveryStaffById(Long id, String email, String phoneNumber);
+    List<DeliveryStaff> getAllDeliveryStaffs();
+    Optional<DeliveryStaff> getDeliveryStaffById(Long id);
+    void deleteDeliveryStaffById(Long id);
+    DeliveryStaff updateDeliveryStaffById(Long id, String email, String phoneNumber);
 
-    public boolean updateDeliveryStaffLocation(DeliveryStaffLocationUpdateRequestDTO request);
+    boolean updateDeliveryStaffLocation(DeliveryStaffLocationUpdateRequestDTO request);
 }

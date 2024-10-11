@@ -9,9 +9,9 @@ import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderDeliveringUp
 import java.util.Optional;
 
 public interface IOrderDeliveringService {
-    public void generateOrderGetting(Order order, DeliveryStaff deliveryStaff);
-    public boolean startGetting(Long id, Long driverId);
-    public OrderDelivering updateDeliveringInfo(OrderDeliveringUpdateInfoRequestDTO request);
-    public Optional<OrderDelivering> getOrderDeliveringById(Long id);
-    public boolean finishDelivering(Long id);
+    void generateOrderGetting(Order order, DeliveryStaff deliveryStaff);
+    boolean startGetting(Long id, Long driverId);
+    OrderDelivering updateDeliveringInfo(OrderDeliveringUpdateInfoRequestDTO request);
+    Optional<OrderDelivering> getOrderDeliveringById(Long id);
+    boolean finishDelivering(Long id);
 }

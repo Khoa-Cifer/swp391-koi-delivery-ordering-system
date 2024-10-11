@@ -8,23 +8,23 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IOrderService {
-    public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto);
-    public List<Order> getAllOrders();
-    public Optional<Order> getOrderById(Long id);
-    public void deleteOrderById(Long id);
-    public Optional<Order> filterOrderToStorage(Long id);
-    public boolean postOrder(Long id);
+    Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto);
+    List<Order> getAllOrders();
+    Optional<Order> getOrderById(Long id);
+    void deleteOrderById(Long id);
+    Optional<Order> filterOrderToStorage(Long id);
+    boolean postOrder(Long id);
 
-    public boolean updateOrderStatus(Long id, int status);
-    public List<Order> getOrderByStatus(int status);
+    boolean updateOrderStatus(Long id, int status);
+    List<Order> getOrderByStatus(int status);
 
-    public double calculateOrderPrice(Long id);
+    double calculateOrderPrice(Long id);
 
-    public List<Order> findOrdersForDelivery(Long id);
-    public List<Order> onGoingOrdersForDelivery(Long id, int deliveryProcessType);
+    List<Order> findOrdersForDelivery(Long id);
+    List<Order> onGoingOrdersForDelivery(Long id, int deliveryProcessType);
 
-    public boolean updateOrderSalesAction(Long orderId, Long salesId, int action);
-    public Optional<Order> getOrderByTrackingId(String trackingId);
+    boolean updateOrderSalesAction(Long orderId, Long salesId, int action);
+    Optional<Order> getOrderByTrackingId(String trackingId);
 
-    public boolean finishOrder(FinishOrderUpdateRequestDTO request);
+    boolean finishOrder(FinishOrderUpdateRequestDTO request);
 }
