@@ -13,12 +13,12 @@ import java.util.List;
 public class PaymentServiceController {
     private final IPaymentRateService paymentRateService;
 
-    @GetMapping("get-all-payment-info")
+    @GetMapping("/get-all-payment-info")
     public List<PaymentService> getALlPaymentRate() {
         return paymentRateService.getAllPaymentInfo();
     }
 
-    @PutMapping("update-payment-info")
+    @PutMapping("/update-payment-info")
     public boolean updatePaymentServiceRate(@RequestParam Long id, @RequestParam double rate) {
         return paymentRateService.updatePaymentServiceRate(id, rate);
     }

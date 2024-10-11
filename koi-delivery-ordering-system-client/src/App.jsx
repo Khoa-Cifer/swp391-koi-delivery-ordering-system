@@ -34,6 +34,7 @@ import SalesStaff from "./pages/Manager/SystemData/SalesStaff/SalesStaff";
 import Dashboard from "./pages/Manager/Report/Dashboard";
 import TrackingOrder from "./pages/public/TrackingOrder/TrackingOrder";
 import "./App.css"
+import PaymentRate from "./pages/Manager/SystemData/PaymentRate/PaymentRate";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -91,6 +92,7 @@ function App() {
               <Route path="/admin/customer" element={<ManagerPrivateRoute element={<Customer />} />} />
               <Route path="/admin/delivery-staff" element={<ManagerPrivateRoute element={<DeliveryStaff />} />} />
               <Route path="/admin/sales-staff" element={<ManagerPrivateRoute element={<SalesStaff />} />} />
+              <Route path="/admin/payment-rate" element={<ManagerPrivateRoute element={<PaymentRate />} />} />
             </Route>
 
             <Route element={<CustomerLayout />}>
