@@ -43,7 +43,7 @@ function a11yProps(index) {
 
 
 function CustomerHome() {
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(1);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -54,18 +54,18 @@ function CustomerHome() {
             <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange}>
-                        <Tab label="Posted Order" {...a11yProps(0)} />
-                        <Tab label="Draft Order" {...a11yProps(1)} />
+                        <Tab label="Draft Order" {...a11yProps(0)} />
+                        <Tab label="Posted Order" {...a11yProps(1)} />
                         <Tab label="Getting Order" {...a11yProps(2)} />
                         <Tab label="Delivering Order" {...a11yProps(3)} />
                         <Tab label="Complete" {...a11yProps(4)} />
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
-                    <PostedOrder />
+                    <DraftOrder />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
-                    <DraftOrder />
+                    <PostedOrder />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
                     <GettingOrder />

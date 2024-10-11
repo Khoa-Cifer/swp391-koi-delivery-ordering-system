@@ -106,30 +106,25 @@ function LoginCustomer() {
           <h3 className="text-center">
             <strong>Login</strong>
           </h3>
+          
           <input
             type="email"
             placeholder="Email"
             onChange={(e) => handleEmailChange(e)}
           />
+
           <input
             type="password"
             placeholder="Password"
             onChange={(e) => handlePasswordChange(e)}
           />
 
-          <div className="one__line">
-            <div className="line"></div>
-            <span style={{ color: "black" }}>
-              <strong>Login as</strong>
-            </span>
-            <div className="line"></div>
-          </div>
-
           <div className="role__form">
-            <Button className="customer-login-btn" onClick={() => handleLogin(1)} variant="contained" style={{ maxWidth: "70%", margin: "auto" }}>
-              Customer
+            <Button className="customer-login-btn" onClick={() => handleLogin(1)} variant="contained" style={{ maxWidth: "100%", margin: "auto" }}>
+              Login
             </Button>
           </div>
+
           <div className="form__bottom">
             <Typography><Link to={"/register"}>Sign up here</Link></Typography>
             <Typography onClick={handleOpen}>Are you with us ?</Typography>

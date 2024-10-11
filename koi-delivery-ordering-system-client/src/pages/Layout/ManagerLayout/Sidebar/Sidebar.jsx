@@ -29,7 +29,7 @@ function Sidebar() {
         // "Payment History",
         // "Delivery Type",
         "Storage",
-        "Payment Rate"
+        "Payment Rate",
     ];
 
     const dashboardItemList = ["Dashboard", "Report"];

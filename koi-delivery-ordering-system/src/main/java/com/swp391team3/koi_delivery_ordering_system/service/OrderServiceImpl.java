@@ -32,9 +32,17 @@ public class OrderServiceImpl implements IOrderService {
     private final EmailService emailService;
     private final IOrderDeliveringService orderDeliveringService;
     private final IDeliveryStaffService deliveryStaffService;
+    private final IPaymentRateService paymentRateService;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, OrderStatus orderStatus, IStorageService storageService, IFishService fishService, PriceBoard priceBoard, DeliveryStaffRepository deliveryStaffRepository, ISalesStaffService salesStaffService, EmailService emailService, @Lazy IOrderDeliveringService orderDeliveringService, IDeliveryStaffService deliveryStaffService) {
+    public OrderServiceImpl
+            (OrderRepository orderRepository,
+             CustomerRepository customerRepository,
+             OrderStatus orderStatus, IStorageService storageService,
+             IFishService fishService, PriceBoard priceBoard, DeliveryStaffRepository deliveryStaffRepository,
+             ISalesStaffService salesStaffService, EmailService emailService,
+             @Lazy IOrderDeliveringService orderDeliveringService,
+             IDeliveryStaffService deliveryStaffService, IPaymentRateService paymentRateService) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.orderStatus = orderStatus;
@@ -46,6 +54,7 @@ public class OrderServiceImpl implements IOrderService {
         this.emailService = emailService;
         this.orderDeliveringService = orderDeliveringService;
         this.deliveryStaffService = deliveryStaffService;
+        this.paymentRateService = paymentRateService;
     }
 
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
@@ -331,23 +340,23 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     private double getPrice(List<Fish> fishList, Optional<Order> order, double distance) {
-        int numberOfBoxes = (int) Math.ceil(fishList.size() / 2.0);
         String[] senderAddress = order.get().getSenderAddress().split(",");
         String[] receiverAddress = order.get().getDestinationAddress().split(",");
         String senderCountry = senderAddress[senderAddress.length - 1].trim();
         String receiverCountry = receiverAddress[receiverAddress.length - 1].trim();
         boolean distanceCheck = Utilities.compareCountry(senderCountry, receiverCountry);
-
-        double distancePrice = priceBoard.PRICE_BASE * distance;
-        double boxPrice = priceBoard.BOX_PRICE * numberOfBoxes;
+//        double distancePrice = priceBoard.PRICE_BASE * distance;
+        double distancePrice = paymentRateService.getPaymentServiceById(priceBoard.PRICE_BASE_ID).get().getRate();
+//        double koiPrice = priceBoard.BOX_PRICE * numberOfBoxes;
+        double koiPrice = paymentRateService.getPaymentServiceById(priceBoard.PRICE_RATE_KOI).get().getRate() * fishList.size();
 
         if (distanceCheck) {
-            distancePrice = distancePrice * priceBoard.PRICE_RATE_DOMESTIC;
+//            distancePrice = distancePrice * priceBoard.PRICE_RATE_DOMESTIC;
+            distancePrice = distancePrice * paymentRateService.getPaymentServiceById(priceBoard.PRICE_RATE_DOMESTIC_ID).get().getRate();
         } else {
-            distancePrice = distancePrice * priceBoard.PRICE_RATE_FOREIGN;
+//            distancePrice = distancePrice * priceBoard.PRICE_RATE_FOREIGN;
+            distancePrice = distancePrice * paymentRateService.getPaymentServiceById(priceBoard.PRICE_RATE_FOREIGN_ID).get().getRate();
         }
-        return distancePrice + boxPrice;
+        return distancePrice + koiPrice;
     }
-
-
 }

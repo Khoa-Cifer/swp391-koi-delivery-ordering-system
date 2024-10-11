@@ -104,23 +104,6 @@ input {
 //   color: black;
 // }
 
-.one__line {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.line {
-  width: 100%;
-  height: 1px;
-  background-color: rgb(37, 12, 199);
-  margin: 0 10px;
-}
-
-.one__line span {
-  white-space: nowrap;
-}
-
 .role__form {
   display: flex;
 }

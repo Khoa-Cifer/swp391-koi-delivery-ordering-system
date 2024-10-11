@@ -67,7 +67,6 @@ function OrderFinalInfo({ orderId }) {
                             const response = await postOrder(orderId);
                             if (response) {
                                 toast("Order posted successfully");
-                                navigate("/customer-home");
                             } else {
                                 toast("Unexpected error has been occurred");
                             }
