@@ -16,10 +16,11 @@ const SubmitButton = styled(Button)(() => ({
 
 // eslint-disable-next-line react/prop-types
 function OrderFinalInfo({ orderId }) {
-    const navigate = useNavigate();
     const [postedData, setPostedData] = useState();
     const [fishOrderData, setFishOrderData] = useState([]);
     const [fishFiles, setFishFiles] = useState([]);
+    const [paymentSuccess, setPaymentSuccess] = useState(false);
+    const navigate = useNavigate();
 
     const token = localStorage.getItem("token");
     let customerId;
@@ -67,6 +68,7 @@ function OrderFinalInfo({ orderId }) {
                             const response = await postOrder(orderId);
                             if (response) {
                                 toast("Order posted successfully");
+                                setPaymentSuccess(true);
                             } else {
                                 toast("Unexpected error has been occurred");
                             }
@@ -160,7 +162,7 @@ function OrderFinalInfo({ orderId }) {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
-                                label="Tracking Id"
+                                label="Description"
                                 value={postedData.description}
                                 InputProps={{
                                     readOnly: true,
@@ -171,7 +173,7 @@ function OrderFinalInfo({ orderId }) {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
-                                label="Tracking Id"
+                                label="Price"
                                 value={`${Math.floor(postedData.price)} VND`}
                                 InputProps={{
                                     readOnly: true,
@@ -207,7 +209,11 @@ function OrderFinalInfo({ orderId }) {
                             justifyContent: 'center',
                             marginTop: "30px"
                         }}>
-                        <SubmitButton variant="contained" onClick={handlePostOrder}>Post as Order</SubmitButton>
+                        {paymentSuccess ? (
+                            <SubmitButton variant="contained" onClick={() => navigate("/customer-home")}>Back to Home Page</SubmitButton>
+                        ) : (
+                            <SubmitButton variant="contained" onClick={handlePostOrder}>Post as Order</SubmitButton>
+                        )}
                     </Box>
                 </Box>
             )}

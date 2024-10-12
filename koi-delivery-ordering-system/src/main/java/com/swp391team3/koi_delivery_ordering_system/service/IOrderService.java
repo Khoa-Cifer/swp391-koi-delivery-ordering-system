@@ -13,7 +13,7 @@ public interface IOrderService {
     List<Order> getAllOrders();
     Optional<Order> getOrderById(Long id);
     void deleteOrderById(Long id);
-    Optional<Order> filterOrderToStorage(Long id);
+    Storage filterOrderToStorage(String senderLatitude, String senderLongitude, String senderAddress);
     boolean postOrder(Long id);
 
     boolean updateOrderStatus(Long id, int status);

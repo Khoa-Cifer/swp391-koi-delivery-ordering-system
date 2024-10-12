@@ -67,11 +67,6 @@ public class OrderController {
         }
     }
 
-    @PostMapping("/filterOrderDistance/{id}")
-    public ResponseEntity<?> filterOrder(@PathVariable Long id) {
-        return ResponseEntity.ok(orderService.filterOrderToStorage(id).get());
-    }
-
     @PostMapping("/calculatePrice/{id}")
     public ResponseEntity<?> calculateOrderPrice(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.calculateOrderPrice(id));

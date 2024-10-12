@@ -47,18 +47,6 @@ export async function postOrder(orderId) {
   }
 }
 
-export async function filterOrder(orderId) {
-  try {
-    const response = await axiosClient.post(
-      `orders/filterOrderDistance/${orderId}`
-    );
-    console.log(response.data);
-    return response.data;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 export async function getOrderById(orderId) {
   try {
     const response = await axiosClient.get(`orders/getOrderById/${orderId}`);

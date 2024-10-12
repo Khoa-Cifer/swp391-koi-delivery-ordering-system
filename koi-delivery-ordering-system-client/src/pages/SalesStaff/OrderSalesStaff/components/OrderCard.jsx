@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 // eslint-disable-next-line react/prop-types
 const OrderCard = ({ orders }) => {
   const navigate = useNavigate();
-  
+
   const handleViewDetail = (order) => {
     navigate(`/sales-order-detail/${order.id}`, {
       state: order
@@ -30,10 +30,6 @@ const OrderCard = ({ orders }) => {
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="view-more">
-          <a href="#">View more →</a>
         </div>
       </div>
     </div>
