@@ -165,3 +165,12 @@ export async function getAllOrders() {
     console.log(error);
   }
 }
+
+// export async function deleteOrderById(id, orderStatus) {
+//   try {
+//     const response = await axiosClient.delete(`orders/deleteOrderById/${id}/${orderStatus}`);
+//     return response.data;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }

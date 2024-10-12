@@ -14,4 +14,5 @@ public class OrderStatus {
     public final int DELIVERING = 6;
     public final int COMPLETE = 7;
     public final int FAILED = 8;
+    public final int ABORTED_BY_CUSTOMER = 9;
 }

@@ -36,6 +36,7 @@ import TrackingOrder from "./pages/public/TrackingOrder/TrackingOrder";
 import "./App.css"
 import PaymentRate from "./pages/Manager/SystemData/PaymentRate/PaymentRate";
 import ReceivedOrderSalesStaff from "./pages/SalesStaff/OrderSalesStaff/ReceivedOrderSalesStaff";
+import CustomerEditOrder from "./pages/Customer/CustomerEditOrder/CustomerEditOrder";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -100,6 +101,7 @@ function App() {
               <Route path="/customer-home" element={<CustomerPrivateRoute element={<CustomerHome />} />} />
               <Route path="/customer-create-order" element={<CustomerPrivateRoute element={<CustomerCreateOrder />} />} />
               <Route path="/customer-edit-profile" element={<CustomerPrivateRoute element={<CustomerEditProfile />} />} />
+              <Route path="/customer-edit-order/:id" element={<CustomerPrivateRoute element={<CustomerEditOrder />} />} />
             </Route>
 
             <Route path="/delivery-staff-home" element={<DeliveryStaffPrivateRoute element={<DeliveryStaffHome />} />} />

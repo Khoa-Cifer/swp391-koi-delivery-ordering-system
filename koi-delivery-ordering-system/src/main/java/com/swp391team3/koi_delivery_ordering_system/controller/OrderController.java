@@ -50,11 +50,12 @@ public class OrderController {
         return order.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/deleteOrderById/{id}")
-    public ResponseEntity<Void> deleteOrderById(@PathVariable Long id) {
-        orderService.deleteOrderById(id);
-        return ResponseEntity.noContent().build();
-    }
+//    @DeleteMapping("/deleteOrderById/{id}/{orderStatus}")
+//    public ResponseEntity<?> deleteOrderById(@PathVariable Long id, @PathVariable int orderStatus) {
+////        orderService.deleteOrderById(id);
+////        return ResponseEntity.noContent().build();
+//        return ResponseEntity.ok(orderService.updateOrderStatus(id, orderStatus));
+//    }
 
     @GetMapping("/getOrderByStatus/{status}")
     public ResponseEntity<List<Order>> getOrdersByStatus(@PathVariable int status) {
