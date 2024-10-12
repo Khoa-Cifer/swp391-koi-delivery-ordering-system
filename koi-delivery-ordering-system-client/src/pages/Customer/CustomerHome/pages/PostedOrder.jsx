@@ -1,4 +1,4 @@
-import { Box, Paper, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Box, Input, Paper, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getOrdersByStatus } from "../../../../utils/axios/order";
 import ToastUtil from "../../../../components/toastContainer";
@@ -21,9 +21,18 @@ const OrderInfoHeader = styled(Typography)(() => ({
     fontSize: "12px",
 }));
 
+const SearchBox = styled(Box)(() => ({
+    display: "flex",
+    gap: "30px"
+}));
+
+
 function PostedOrder() {
     const [orders, setOrders] = useState();
+    const [filteredOrders, setFilteredOrders] = useState([]); // Filtered orders for display
     const [expandedOrderId, setExpandedOrderId] = useState(null); // To track expanded orders
+    const [searchTrackingId, setSearchTrackingId] = useState(""); // For search by order ID
+    const [searchOrderName, setSearchOrderName] = useState(""); // For search by customer name
 
     const handleClick = (orderId) => {
         // Toggle the visibility of the order table by setting the orderId
@@ -36,16 +45,73 @@ function PostedOrder() {
             const response = await getOrdersByStatus(postedOrderStatus);
             if (response) {
                 setOrders(response);
+                setFilteredOrders(response);
             }
         }
 
         fetchPostedOrder();
     }, []);
 
+    const handleFilter = () => {
+        let filtered = orders;
+
+        if (searchTrackingId !== "") {
+          // Filter by order ID
+          filtered = filtered.filter((order) =>
+            order.trackingId.includes(searchTrackingId.toUpperCase())
+          );
+        }
+    
+        if (searchOrderName !== "") {
+          // Filter by customer name
+          filtered = filtered.filter((order) =>
+            order.name
+              .toLowerCase()
+              .includes(searchOrderName.toLowerCase())
+          );
+        }
+    
+        setFilteredOrders(filtered);
+    };
+
+    useEffect(() => {
+        handleFilter();
+    }, [searchTrackingId, searchOrderName]);
+
     return (
         <div className="customer-home-order-list">
             <ToastUtil />
-            {orders && orders.map && orders.map((order) => (
+            <SearchBox>
+                <div className="form-group">
+                    <input
+                        style={{
+                            boxSizing: "border-box"
+                        }}
+                        placeholder="Tracking ID"
+                        type="text"
+                        name="text"
+                        value={searchTrackingId}
+                        onChange={(e) => setSearchTrackingId(e.target.value)}
+                        className="form-input"
+                    />
+                </div>
+
+                <div className="form-group">
+                    <input
+                        style={{
+                            boxSizing: "border-box"
+                        }}
+                        placeholder="Name"
+                        type="text"
+                        name="text"
+                        value={searchOrderName}
+                        onChange={(e) => setSearchOrderName(e.target.value)}
+                        className="form-input"
+                    />
+                </div>
+            </SearchBox>
+
+            {filteredOrders && filteredOrders.map && filteredOrders.map((order) => (
                 <>
                     <Box sx={{ ...commonStyles, borderRadius: '16px' }} className="order-box" key={order.id}>
                         <div className="order-main-info">
