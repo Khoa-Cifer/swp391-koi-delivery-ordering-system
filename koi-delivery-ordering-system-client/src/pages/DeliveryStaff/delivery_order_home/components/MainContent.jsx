@@ -67,24 +67,8 @@ const MainContent = () => {
       <div className="map-container">
         <p>Google Map</p>
       </div>
-      {/* <div className="card-container">
-        {acceptedOrders.map((card) => (
-          <div key={card.id} className="card">
-            <p>Name: {card.name}</p>
-            <p>Last Updated Date: {card.expectedFinishDate}</p>
-            <p>Destination Address: {card.destinationAddress}</p>
-            <div className="button-container">
-              <button className="status-button">Order Status</button>
-              <button className="detail-button">Detail</button>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="view-more-container">
-        <button className="view-more-button">View More >>></button>
-      </div> */}
 
-      <div className="order-container-sale">
+      <div className="order-container-delivery">
         {ongoingGettingOrders && ongoingGettingOrders.length > 0 && (
           <div>
             <div className="order">
@@ -145,13 +129,13 @@ const MainContent = () => {
           </div>
         )}
 
-        {confirmedOrderStatus && confirmedOrderStatus.length > 0 && (
+        {confirmedOrders && confirmedOrders.length > 0 && (
           <div>
             <div className="order">
               <strong>Waiting For Delivered Order</strong>
             </div>
             <div className="order-row">
-              {confirmedOrderStatus && confirmedOrderStatus.map && confirmedOrderStatus.map((order, index) => {
+              {confirmedOrders && confirmedOrders.map && confirmedOrders.map((order, index) => {
                 // Show all orders if showAll is true, otherwise show only the first 3
                 if (index >= 3) return null;
                 return (
@@ -160,7 +144,7 @@ const MainContent = () => {
                     <p className="card-text">Created Date: {dateTimeConvert(order.createdDate)}</p>
                     <p className="card-text">Expected Finish Date: {dateTimeConvert(order.expectedFinishDate)}</p>
                     <div className="button-container">
-                      <Button variant="contained">Detail</Button>
+                      <Button variant="contained" onClick={() => handleViewDetail(order)}>Detail</Button>
                     </div>
                   </div>
                 );

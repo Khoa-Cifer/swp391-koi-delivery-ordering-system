@@ -9,7 +9,7 @@ function ReceivedOrderSalesStaff() {
   const [searchOrderName, setSearchOrderName] = useState(""); // For search by customer name
 
   useEffect(() => {
-    const receivedOrderStatus = 1;
+    const receivedOrderStatus = 4;
     async function fetchPostedOrder() {
       const response = await getOrdersByStatus(receivedOrderStatus);
       if (response) {
