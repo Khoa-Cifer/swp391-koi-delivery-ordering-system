@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./MainContent.scss";
 import { Button, Card, Flex, Typography } from "antd";
 import { useEffect, useState } from "react";
@@ -27,7 +27,7 @@ const SalesFishDetail = () => {
   const [fish, setFish] = useState();
   const [selectedFishLicenses, setSelectedFishLicenses] = useState([]);
   const [open, setOpen] = useState(false);
-
+  
   function handleSlider(e) {
     setFish(e);
   }
@@ -78,11 +78,14 @@ const SalesFishDetail = () => {
 
   useEffect(() => {
     if (fish) {
-      if (fish.licenses) {
+      console.log(fish.licenses);
+      if (fish.licenses && fish.licenses.length > 0) {
         if (Array.isArray(fish.licenses) && fish.licenses.length > 0) {
           setSelectedFishLicenses(fish.licenses);
           console.log(fish.licenses);
         }
+      } else {
+        setSelectedFishLicenses([]);
       }
     }
 
@@ -97,6 +100,8 @@ const SalesFishDetail = () => {
       <div className="slider-container">
         <ImageSlider fishInfo={state.fishes} images={imagePreviews} onImageChange={e => handleSlider(e)} />
       </div>
+
+      <Link className="link" to={`/sales-staff-home`}>Go back</Link>
 
       <Modal
         open={open}
@@ -164,6 +169,7 @@ const SalesFishDetail = () => {
         })}
 
       </div>
+
     </div>
   );
 };
