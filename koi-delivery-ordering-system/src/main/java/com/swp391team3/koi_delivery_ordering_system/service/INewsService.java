@@ -12,5 +12,5 @@ public interface INewsService {
     List<News> getAllNews();
     Optional<News> getNewsById(Long id);
     void deleteNewsById(Long id);
-    News createNews(NewsRequestDTO newsRequestDTO);
+    public News createNews(String title, String description, String type, Long salesStaffId, MultipartFile file);
 }

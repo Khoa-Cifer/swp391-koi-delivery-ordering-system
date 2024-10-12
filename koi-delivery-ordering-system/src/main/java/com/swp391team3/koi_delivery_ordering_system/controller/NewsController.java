@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -34,8 +35,15 @@ public class NewsController {
         newsService.deleteNewsById(id);
     }
 
-    @PostMapping("/createNews")
-    public ResponseEntity<?> createNews(@ModelAttribute NewsRequestDTO newsRequestDTO) {
-        return ResponseEntity.ok(newsService.createNews(newsRequestDTO));
+    @PostMapping(value = "/createNews")
+    public ResponseEntity<?> createNews(@RequestParam(name = "title") String title,
+                                        @RequestParam(name = "description") String description,
+                                        @RequestParam(name = "type") String type,
+                                        @RequestParam(name = "salesStaffId") Long salesStaffId,
+                                        @RequestParam(name = "image") MultipartFile file)
+    {
+        News news = newsService.createNews(title, description, type, salesStaffId, file);
+
+        return ResponseEntity.ok(news);
     }
 }

@@ -4,14 +4,12 @@ import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailServi
 import com.swp391team3.koi_delivery_ordering_system.model.*;
 import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
-import com.swp391team3.koi_delivery_ordering_system.repository.OrderDeliveringRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.*;
 import com.swp391team3.koi_delivery_ordering_system.utils.PriceBoard;
 import com.swp391team3.koi_delivery_ordering_system.utils.Utilities;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -339,6 +337,30 @@ public class OrderServiceImpl implements IOrderService {
         }
     }
 
+    @Override
+    public Order updateOrder(Long orderId, String name, String description, Date expectedFinishDate,
+                             String destinationAddress, String destinationLongitude, String destinationLatitude,
+                             String senderAddress, String senderLongitude, String senderLatitude) {
+
+        Order order = orderRepository.findById(orderId).orElseThrow(() ->
+                new RuntimeException("Order not found")
+        );
+
+        order.setName(name);
+        order.setDescription(description);
+        order.setCreatedDate(new Date());
+        order.setExpectedFinishDate(expectedFinishDate);
+        order.setDestinationAddress(destinationAddress);
+        order.setDestinationLongitude(destinationLongitude);
+        order.setDestinationLatitude(destinationLatitude);
+        order.setSenderAddress(senderAddress);
+        order.setSenderLongitude(senderLongitude);
+        order.setSenderLatitude(senderLatitude);
+
+        return orderRepository.save(order);
+    }
+
+
     private double getPrice(List<Fish> fishList, Optional<Order> order, double distance) {
         String[] senderAddress = order.get().getSenderAddress().split(",");
         String[] receiverAddress = order.get().getDestinationAddress().split(",");
@@ -359,4 +381,5 @@ public class OrderServiceImpl implements IOrderService {
         }
         return distancePrice + koiPrice;
     }
+
 }

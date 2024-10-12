@@ -3,7 +3,9 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 import com.swp391team3.koi_delivery_ordering_system.model.*;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.FinishOrderUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderUpdateDTO;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,4 +29,8 @@ public interface IOrderService {
     Optional<Order> getOrderByTrackingId(String trackingId);
 
     boolean finishOrder(FinishOrderUpdateRequestDTO request);
+
+    Order updateOrder(Long orderId, String name, String description, Date expectedFinishDate,
+                      String destinationAddress, String destinationLongitude, String destinationLatitude,
+                      String senderAddress, String senderLongitude, String senderLatitude);
 }
