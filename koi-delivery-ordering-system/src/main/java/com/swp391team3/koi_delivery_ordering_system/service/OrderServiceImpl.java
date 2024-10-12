@@ -348,7 +348,6 @@ public class OrderServiceImpl implements IOrderService {
 
         order.setName(name);
         order.setDescription(description);
-        order.setCreatedDate(new Date());
         order.setExpectedFinishDate(expectedFinishDate);
         order.setDestinationAddress(destinationAddress);
         order.setDestinationLongitude(destinationLongitude);
