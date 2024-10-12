@@ -4,6 +4,7 @@ import "./sales_sidebar.scss";
 import { useState } from "react";
 import default_avatar from "../../../../../assets/default-avatar.jpg";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const InfoHeader = styled(Typography)(() => ({
   margin: "0px",
@@ -13,13 +14,13 @@ const InfoHeader = styled(Typography)(() => ({
 
 function Sidebar() {
   const [imagePreview, setImagePreview] = useState(default_avatar);
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
-  let salesStaffId;
   let salesStaffInfo
   if (token) {
     salesStaffInfo = jwtDecode(token);
-    salesStaffId = salesStaffInfo.sub.substring(2);
+    // salesStaffId = salesStaffInfo.sub.substring(2);
   }
 
   return (
@@ -42,7 +43,10 @@ function Sidebar() {
       <div className="list-function">
         <List>
           <ListItem className="button">
-            <ListItemText primary="Home" />
+            <ListItemText
+              primary="Home"
+              onClick={() => navigate('/sales-staff-home')}
+            />
           </ListItem>
           <ListItem className="button">
             <ListItemText
@@ -52,11 +56,13 @@ function Sidebar() {
           <ListItem className="button">
             <ListItemText
               primary="Posted Order"
+              onClick={() => navigate('/posted-order-sales-staff')}
             />
           </ListItem>
           <ListItem className="button">
             <ListItemText
               primary="Received Order"
+              onClick={() => navigate('/received-order-sales-staff')}
             />
           </ListItem>
           <ListItem className="button">

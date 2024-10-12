@@ -11,7 +11,7 @@ import LoginDeliveryStaff from "./pages/login/LoginDeliveryStaff/LoginDeliverySt
 import DeliveryOrderDetail from "./pages/DeliveryStaff/delivery_order_detail/DeliveryOrderDetail";
 import DeliveryFishDetail from "./pages/DeliveryStaff/delivery_fish_detail/DeliveryFishDetail";
 import LoginAdmin from "./pages/login/LoginAdmin/LoginAdmin";
-import OrderSalesStaff from "./pages/SalesStaff/OrderSalesStaff/OrderSalesStaff";
+import PostedOrderSalesStaff from "./pages/SalesStaff/OrderSalesStaff/PostedOrderSalesStaff";
 import CustomerLayout from "./pages/Layout/CustomerLayout/CustomerLayout";
 import CustomerEditProfile from "./pages/Customer/CustomerEditProfile/CustomerEditProfile";
 import SalesStaffHome from "./pages/SalesStaff/SalesStaffHome/SalesStaffHome";
@@ -35,6 +35,7 @@ import Dashboard from "./pages/Manager/Report/Dashboard";
 import TrackingOrder from "./pages/public/TrackingOrder/TrackingOrder";
 import "./App.css"
 import PaymentRate from "./pages/Manager/SystemData/PaymentRate/PaymentRate";
+import ReceivedOrderSalesStaff from "./pages/SalesStaff/OrderSalesStaff/ReceivedOrderSalesStaff";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -112,7 +113,8 @@ function App() {
             </Route>
 
             <Route element={<SalesStaffLayout />}>
-              <Route path="/posted-order-sales-staff" element={<SalesStaffPrivateRoute element={<OrderSalesStaff />} />} />
+              <Route path="/posted-order-sales-staff" element={<SalesStaffPrivateRoute element={<PostedOrderSalesStaff />} />} />
+              <Route path="/received-order-sales-staff" element={<SalesStaffPrivateRoute element={<ReceivedOrderSalesStaff />} />} />
               <Route path="/sales-staff-home" element={<SalesStaffPrivateRoute element={<SalesStaffHome />} />} />
               <Route path="/sales-order-detail/:id" element={<AllowedRoute element={<SalesOrderDetail />} />} />
               <Route path="/sales-order-detail/:id/sales-fish-detail" element={<AllowedRoute element={<SalesFishDetail />} />} />
