@@ -12,6 +12,7 @@ const MainContent = () => {
   const [confirmedOrders, setConfirmedOrders] = useState();
   const [recommendedOrders, setRecommendedOrders] = useState();
   const [ongoingGettingOrders, setOngoingGettingOrders] = useState();
+  const [onGoingDeliveringOrders, setOngoingDeliveringOrders] = useState();
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
@@ -35,6 +36,8 @@ const MainContent = () => {
   // };
   const acceptedOrderStatus = 2;
   const confirmedOrderStatus = 5;
+  const gettingOrderStatus = 3;
+  const deliveringOrderStatus = 6;
 
   // Sử dụng useEffect để gọi API khi component được render
   useEffect(() => {
@@ -42,7 +45,10 @@ const MainContent = () => {
       const acceptedOrderResponse = await getOrdersByStatus(acceptedOrderStatus);
       const confirmedOrderResponse = await getOrdersByStatus(confirmedOrderStatus);
       const recommendedOrderResponse = await getOrdersRecommendedForDeliveryStaff(deliveryStaffId);
-      const ongoingGettingOrderResponse = await getOnGoingOrderForDeliveryStaff(deliveryStaffId, 0);
+      const ongoingGettingOrderResponse = await getOnGoingOrderForDeliveryStaff(deliveryStaffId, 0, gettingOrderStatus);
+      const ongoingDeliveringOrderResponse = await getOnGoingOrderForDeliveryStaff(deliveryStaffId, 1, deliveringOrderStatus);
+      console.log(ongoingDeliveringOrderResponse);
+      setOngoingDeliveringOrders(ongoingDeliveringOrderResponse);
       setAcceptedOrders(acceptedOrderResponse);
       setConfirmedOrders(confirmedOrderResponse);
       setRecommendedOrders(recommendedOrderResponse);
@@ -69,10 +75,40 @@ const MainContent = () => {
       </div>
 
       <div className="order-container-delivery">
+        {onGoingDeliveringOrders && onGoingDeliveringOrders.length > 0 && (
+          <div>
+            <div className="order">
+              <strong>Your Delivering Order</strong>
+            </div>
+            <div className="order-row">
+              {onGoingDeliveringOrders && onGoingDeliveringOrders.map && onGoingDeliveringOrders.map((order, index) => {
+                // Show all orders if showAll is true, otherwise show only the first 3
+                if (index >= 3) return null;
+                return (
+                  <div className="order-card" key={order.id}>
+                    <h5 className="card-title">Order {order.name}</h5>
+                    <p className="card-text">Created Date: {dateTimeConvert(order.createdDate)}</p>
+                    <p className="card-text">Expected Finish Date: {dateTimeConvert(order.expectedFinishDate)}</p>
+                    <div className="button-container">
+                      <Button variant="contained" onClick={() => handleViewDetail(order)}>Detail</Button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {onGoingDeliveringOrders.length > 3 && (
+              <div className="view-more">
+                <a href="#">View more →</a>
+              </div>
+            )}
+          </div>
+        )}
+
         {ongoingGettingOrders && ongoingGettingOrders.length > 0 && (
           <div>
             <div className="order">
-              <strong>Your Working Order</strong>
+              <strong>Your Getting Order</strong>
             </div>
             <div className="order-row">
               {ongoingGettingOrders && ongoingGettingOrders.map && ongoingGettingOrders.map((order, index) => {

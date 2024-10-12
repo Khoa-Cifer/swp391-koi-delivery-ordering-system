@@ -10,8 +10,10 @@ import java.util.Optional;
 
 public interface IOrderDeliveringService {
     void generateOrderGetting(Order order, DeliveryStaff deliveryStaff);
+    void generateOrderDelivering(Order order, DeliveryStaff deliveryStaff);
     boolean startGetting(Long id, Long driverId);
     OrderDelivering updateDeliveringInfo(OrderDeliveringUpdateInfoRequestDTO request);
     Optional<OrderDelivering> getOrderDeliveringById(Long id);
     boolean finishDelivering(Long id);
+    boolean startDelivering(Long orderId, Long deliveryStaffId);
 }

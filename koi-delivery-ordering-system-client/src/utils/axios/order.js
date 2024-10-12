@@ -127,9 +127,9 @@ export async function getOrderByTrackingId(trackingId) {
   }
 }
 
-export async function getOnGoingOrderForDeliveryStaff(deliveryStaffId, deliveryProcessType) {
+export async function getOnGoingOrderForDeliveryStaff(deliveryStaffId, deliveryProcessType, orderStatus) {
   try {
-    const response = await axiosClient.get(`orders/onGoingOrder/${deliveryStaffId}/${deliveryProcessType}`);
+    const response = await axiosClient.get(`orders/onGoingOrder/${deliveryStaffId}/${deliveryProcessType}/${orderStatus}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -140,14 +140,16 @@ export async function finishOrder(
   orderId,
   orderDeliveringId,
   deliveryStaffId,
-  storageId
+  storageId,
+  processType
 ) {
   try {
     const response = await axiosClient.put(`orders/finishOrder`, {
       orderId,
       orderDeliveringId,
       deliveryStaffId,
-      storageId
+      storageId,
+      processType
     });
     return response.data;
   } catch (error) {

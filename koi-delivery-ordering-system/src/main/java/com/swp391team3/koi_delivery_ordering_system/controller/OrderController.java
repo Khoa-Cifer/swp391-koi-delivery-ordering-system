@@ -87,9 +87,9 @@ public class OrderController {
         return ResponseEntity.ok(orderService.findOrdersForDelivery(deliveryStaffId));
     }
 
-    @GetMapping("/onGoingOrder/{deliveryStaffId}/{deliveryProcessType}")
-    public ResponseEntity<?> onGoingOrdersForDelivery(@PathVariable Long deliveryStaffId, @PathVariable int deliveryProcessType) {
-        return ResponseEntity.ok(orderService.onGoingOrdersForDelivery(deliveryStaffId, deliveryProcessType));
+    @GetMapping("/onGoingOrder/{deliveryStaffId}/{deliveryProcessType}/{orderStatus}")
+    public ResponseEntity<?> onGoingOrdersForDelivery(@PathVariable Long deliveryStaffId, @PathVariable int deliveryProcessType, @PathVariable int orderStatus) {
+        return ResponseEntity.ok(orderService.onGoingOrdersForDelivery(deliveryStaffId, deliveryProcessType, orderStatus));
     }
 
     @GetMapping("/searchOrderByTrackingId/{trackingId}")

@@ -262,8 +262,8 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public List<Order> onGoingOrdersForDelivery(Long id, int deliveryProcessType) {
-        List<Order> gettingOrder = getOrderByStatus(orderStatus.ORDER_GETTING);
+    public List<Order> onGoingOrdersForDelivery(Long id, int deliveryProcessType, int orderStatus) {
+        List<Order> gettingOrder = getOrderByStatus(orderStatus);
         List<Order> onGoingOrder = new ArrayList<>();
         for (int i = 0; i < gettingOrder.size(); i++) {
             Optional<Order> foundOrder = orderRepository.findOrderByDeliveryStaffId(id, gettingOrder.get(i).getId(), deliveryProcessType);
@@ -308,7 +308,14 @@ public class OrderServiceImpl implements IOrderService {
             Optional<OrderDelivering> foundOrderDelivering = orderDeliveringService.getOrderDeliveringById(request.getOrderDeliveringId());
             Optional<DeliveryStaff> foundDeliveryStaff = deliveryStaffService.getDeliveryStaffById(request.getDeliveryStaffId());
 
-            boolean updatedOrder = updateOrderStatus(foundOrder.get().getId(), orderStatus.ORDER_RECEIVED);
+            boolean updatedOrder = false;
+
+            if (request.getProcessType() == 0) {
+                updatedOrder = updateOrderStatus(foundOrder.get().getId(), orderStatus.ORDER_RECEIVED);;
+            } else if (request.getProcessType() == 1) {
+                updatedOrder = updateOrderStatus(foundOrder.get().getId(), orderStatus.COMPLETE);
+            }
+
             if (updatedOrder) {
                 OrderDeliveringUpdateInfoRequestDTO dto = new OrderDeliveringUpdateInfoRequestDTO();
                 dto.setOrderDeliveringId(foundOrderDelivering.get().getId());

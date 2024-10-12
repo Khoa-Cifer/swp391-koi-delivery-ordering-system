@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 public class OrderDeliveringController {
     private final IOrderDeliveringService orderDeliveringService;
 
-    @PostMapping("/createOrderDelivering")
-    public ResponseEntity<?> createOrderDeliveringInfo(@RequestBody OrderDeliveringInfoRequestDTO request) {
+    @PostMapping("/start-getting")
+    public ResponseEntity<?> startGetting(@RequestBody OrderDeliveringInfoRequestDTO request) {
         boolean createOrderDelivering = orderDeliveringService.startGetting(request.getOrderId(), request.getDeliveryStaffId());
         return ResponseEntity.ok(createOrderDelivering);
     }
@@ -23,5 +23,11 @@ public class OrderDeliveringController {
     @PutMapping("/updateOrderDeliveringLocation")
     public ResponseEntity<?> updateOrderDeliveringLocation(@RequestBody OrderDeliveringUpdateInfoRequestDTO request) {
         return ResponseEntity.ok(orderDeliveringService.updateDeliveringInfo(request));
+    }
+
+    @PostMapping("/start-delivering")
+    public ResponseEntity<?> startDelivering(@RequestBody OrderDeliveringInfoRequestDTO request) {
+        boolean createOrderDelivering = orderDeliveringService.startDelivering(request.getOrderId(), request.getDeliveryStaffId());
+        return ResponseEntity.ok(createOrderDelivering);
     }
 }

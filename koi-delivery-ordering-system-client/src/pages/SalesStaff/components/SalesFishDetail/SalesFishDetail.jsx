@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./MainContent.scss";
 import { Button, Card, Flex, Typography } from "antd";
 import { useEffect, useState } from "react";
@@ -167,9 +167,7 @@ const SalesFishDetail = () => {
             </Card>
           )
         })}
-
       </div>
-
     </div>
   );
 };

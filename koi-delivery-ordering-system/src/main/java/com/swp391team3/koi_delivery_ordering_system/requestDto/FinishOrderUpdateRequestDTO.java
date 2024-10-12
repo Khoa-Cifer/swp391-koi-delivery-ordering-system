@@ -8,4 +8,5 @@ public class FinishOrderUpdateRequestDTO {
     private Long orderDeliveringId;
     private Long deliveryStaffId;
     private Long storageId;
+    private int processType;
 }

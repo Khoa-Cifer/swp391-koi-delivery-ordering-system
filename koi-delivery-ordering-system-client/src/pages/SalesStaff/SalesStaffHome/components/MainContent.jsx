@@ -2,7 +2,7 @@ import "./MainContent.scss";
 import { useEffect, useState } from "react";
 import { getOrdersByStatus } from "../../../../utils/axios/order";
 import dateTimeConvert from "../../../../components/utils";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 
 function MainContent() {
@@ -124,7 +124,7 @@ function MainContent() {
             </div>
 
             <div className="view-more">
-              <a href="#">View more →</a>
+              <Link to={"/posted-order-sales-staff"}>View more →</Link>
             </div>
           </div>
         )}
