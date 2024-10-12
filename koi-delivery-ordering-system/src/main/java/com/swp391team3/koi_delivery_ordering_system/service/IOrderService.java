@@ -3,7 +3,6 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 import com.swp391team3.koi_delivery_ordering_system.model.*;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.FinishOrderUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderUpdateDTO;
 
 import java.util.Date;
 import java.util.List;

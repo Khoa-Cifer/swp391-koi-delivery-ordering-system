@@ -112,7 +112,7 @@ function App() {
             </Route>
 
             <Route element={<SalesStaffLayout />}>
-              <Route path="/order-sales-staff" element={<SalesStaffPrivateRoute element={<OrderSalesStaff />} />} />
+              <Route path="/posted-order-sales-staff" element={<SalesStaffPrivateRoute element={<OrderSalesStaff />} />} />
               <Route path="/sales-staff-home" element={<SalesStaffPrivateRoute element={<SalesStaffHome />} />} />
               <Route path="/sales-order-detail/:id" element={<AllowedRoute element={<SalesOrderDetail />} />} />
               <Route path="/sales-order-detail/:id/sales-fish-detail" element={<AllowedRoute element={<SalesFishDetail />} />} />
