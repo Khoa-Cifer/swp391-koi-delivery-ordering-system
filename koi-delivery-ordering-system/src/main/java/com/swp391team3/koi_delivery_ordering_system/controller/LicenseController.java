@@ -1,14 +1,20 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
+import com.swp391team3.koi_delivery_ordering_system.model.License;
+import com.swp391team3.koi_delivery_ordering_system.model.LicenseFile;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.FishLicenseRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.LicenseFileRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.ILicenseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/licenses")
@@ -50,4 +56,35 @@ public class LicenseController {
         licenseService.deleteLicenseById(id);
         return ResponseEntity.ok("License deleted successfully");
     }
+    @PostMapping(value = "/editLicense/{id}")
+    public ResponseEntity<?> editLicense(
+            @PathVariable("id") Long licenseId,
+            @RequestParam(name = "name") String name,
+            @RequestParam(name = "description") String description,
+            @RequestParam(name = "dateOfIssue") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateOfIssue) {
+
+            Optional<License> optionalLicense = licenseService.getLicenseById(licenseId);
+
+            if (optionalLicense.isPresent()) {
+                License updatedLicense = licenseService.updateLicense(licenseId, name, description, dateOfIssue);
+                return ResponseEntity.ok(updatedLicense);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The license does not exist");
+            }
+    }
+    @PostMapping("/updateLicenseFile")
+    public ResponseEntity<?> updateLicenseFile(
+            @RequestParam("licenseId") Long licenseId,
+            @RequestParam("fileId") Long fileId,
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+
+        try {
+            LicenseFile updatedFile = licenseService.updateLicenseFile(licenseId, fileId, file);
+            return ResponseEntity.ok(updatedFile);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
 }
