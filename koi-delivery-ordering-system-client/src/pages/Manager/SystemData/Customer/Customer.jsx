@@ -1,4 +1,4 @@
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getAllCustomers } from "../../../../utils/axios/customer";
 
@@ -19,9 +19,6 @@ function Customer() {
         <div>
              <div className="dashboard-info">
                 <h2 style={{ marginTop: "0" }}>Customer</h2>
-            </div>
-            <div style={{ display: "flex", justifyContent: "flex-end", marginRight: "30px" }}>
-                <Button variant="contained" style={{ maxWidth: "30%" }}>Create New Customer</Button>
             </div>
 
             <TableContainer component={Paper} style={{ marginTop: "25px" }}>

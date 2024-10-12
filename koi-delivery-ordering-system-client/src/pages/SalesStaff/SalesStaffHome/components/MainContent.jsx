@@ -1,8 +1,8 @@
-import "./Maincontent.scss";
+import "./MainContent.scss";
 import { useEffect, useState } from "react";
 import { getOrdersByStatus } from "../../../../utils/axios/order";
 import dateTimeConvert from "../../../../components/utils";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 
 function MainContent() {
@@ -101,64 +101,69 @@ function MainContent() {
       <div className="order-container-sale">
         {/* Waiting for accepted order */}
         {postedOrder && postedOrder.length > 0 && (
-          <div>
+          <div className="order-container">
             <div className="order">
               <strong>Waiting For Accepted Order</strong>
             </div>
-            <div className="order-row">
+            <div className="order-card">
               {postedOrder && postedOrder.map && postedOrder.map((order, index) => {
-                // Show all orders if showAll is true, otherwise show only the first 3
                 if (index >= 3) return null;
                 return (
-                  <div className="order-card" key={order.id}>
-                    <h5 className="card-title">Order {order.name}</h5>
-                    <p className="card-text">Created Date: {dateTimeConvert(order.createdDate)}</p>
-                    <p className="card-text">Expected Finish Date: {dateTimeConvert(order.expectedFinishDate)}</p>
-                    <div className="button-container">
-                      <Button variant="contained" onClick={() => handleViewDetail(order)}>Detail</Button>
+                  <div key={order.id} className="order-item">
+                    <div className="order-content">
+                      <h3 className="order-title">{order.name}</h3>
+                      <p className="order-description">Created Date: {dateTimeConvert(order.createdDate)}</p>
+                      <p className="order-description">Expected Finish Date: {dateTimeConvert(order.expectedFinishDate)}</p>
+                      <div className="order-footer">
+                        <Button variant="contained" onClick={() => handleViewDetail(order)}>Detail</Button>
+                      </div>
                     </div>
                   </div>
                 );
               })}
             </div>
 
-            {postedOrder.length > 3 && (
-              <div className="view-more">
-                <a href="#">View more →</a>
-              </div>
-            )}
+            <div className="view-more">
+              <Link to={"/posted-order-sales-staff"}>View more →</Link>
+            </div>
           </div>
         )}
 
+        <div className="gap">
+
+        </div>
+
         {/* Waiting for confirm to delivery order */}
         {receivedOrder && receivedOrder.length > 0 && (
-          <div>
+          <div className="order-container">
             <div className="order">
-              <strong>Waiting For Confirmed Order</strong>
+              <strong>Waiting For Confirm Order</strong>
             </div>
-            <div className="order-row">
+            <div className="order-card">
               {receivedOrder && receivedOrder.map && receivedOrder.map((order, index) => {
-                // Show all orders if showAll is true, otherwise show only the first 3
                 if (index >= 3) return null;
                 return (
-                  <div className="order-card" key={order.id}>
-                    <h5 className="card-title">Order {order.name}</h5>
-                    <p className="card-text">Created Date: {dateTimeConvert(order.createdDate)}</p>
-                    <p className="card-text">Expected Finish Date: {dateTimeConvert(order.expectedFinishDate)}</p>
-                    <div className="button-container">
-                      <Button variant="contained" onClick={() => handleViewDetail(order)}>Detail</Button>
+                  <div key={order.id} className="order-item">
+                    <div className="order-content">
+                      <h3 className="order-title">{order.name}</h3>
+                      <p className="order-description">Created Date: {dateTimeConvert(order.createdDate)}</p>
+                      <p className="order-description">Expected Finish Date: {dateTimeConvert(order.expectedFinishDate)}</p>
+                      <div className="order-footer">
+                        <Button variant="contained" onClick={() => handleViewDetail(order)}>Detail</Button>
+                      </div>
                     </div>
                   </div>
                 );
               })}
             </div>
+
             <div className="view-more">
               <a href="#">View more →</a>
             </div>
           </div>
         )}
       </div>
-    </div>
+    </div >
   );
 }
 

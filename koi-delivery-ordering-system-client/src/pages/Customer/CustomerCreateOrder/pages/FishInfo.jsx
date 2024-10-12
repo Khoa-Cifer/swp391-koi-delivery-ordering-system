@@ -43,6 +43,7 @@ function FishInfo({ orderId, formStepData }) {
 
     const handleLicenseDateChange = (e, index) => {
         const newFormData = { ...submittedLicense, [index]: { ...submittedLicense[index], 'date': e } };
+        console.log(newFormData);
         setSubmittedLicense(newFormData);
     }
 
@@ -111,11 +112,12 @@ function FishInfo({ orderId, formStepData }) {
                         new Date(submittedLicenseArray[i].date).toISOString(),
                         fishData
                     )
+                    console.log(new Date(submittedLicenseArray[i].date).toISOString());
                     const fileList = Object.keys(submittedLicenseArray[i])
                         .filter(key => key.startsWith("file-"))  // Filter keys that start with "file-"
                         .map(key => submittedLicenseArray[i][key]);  // Map them to their respective values
                     try {
-                        const licenseFiles = await createLicenseFiles(
+                        await createLicenseFiles(
                             licenseData,
                             fileList
                         )

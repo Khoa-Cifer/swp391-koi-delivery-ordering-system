@@ -4,14 +4,12 @@ import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailServi
 import com.swp391team3.koi_delivery_ordering_system.model.*;
 import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
-import com.swp391team3.koi_delivery_ordering_system.repository.OrderDeliveringRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.*;
 import com.swp391team3.koi_delivery_ordering_system.utils.PriceBoard;
 import com.swp391team3.koi_delivery_ordering_system.utils.Utilities;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -32,9 +30,17 @@ public class OrderServiceImpl implements IOrderService {
     private final EmailService emailService;
     private final IOrderDeliveringService orderDeliveringService;
     private final IDeliveryStaffService deliveryStaffService;
+    private final IPaymentRateService paymentRateService;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, OrderStatus orderStatus, IStorageService storageService, IFishService fishService, PriceBoard priceBoard, DeliveryStaffRepository deliveryStaffRepository, ISalesStaffService salesStaffService, EmailService emailService, @Lazy IOrderDeliveringService orderDeliveringService, IDeliveryStaffService deliveryStaffService) {
+    public OrderServiceImpl
+            (OrderRepository orderRepository,
+             CustomerRepository customerRepository,
+             OrderStatus orderStatus, IStorageService storageService,
+             IFishService fishService, PriceBoard priceBoard, DeliveryStaffRepository deliveryStaffRepository,
+             ISalesStaffService salesStaffService, EmailService emailService,
+             @Lazy IOrderDeliveringService orderDeliveringService,
+             IDeliveryStaffService deliveryStaffService, IPaymentRateService paymentRateService) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.orderStatus = orderStatus;
@@ -46,36 +52,42 @@ public class OrderServiceImpl implements IOrderService {
         this.emailService = emailService;
         this.orderDeliveringService = orderDeliveringService;
         this.deliveryStaffService = deliveryStaffService;
+        this.paymentRateService = paymentRateService;
     }
 
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
-        Order newOrder = new Order();
-        Optional<Customer> orderCreator = customerRepository.findById(dto.getCustomerId());
-        newOrder.setCustomer(orderCreator.get());
+        Storage nearestStorage = filterOrderToStorage(dto.getSenderLatitude(), dto.getSenderLongitude(), dto.getSenderAddress());
+        if (nearestStorage != null) {
+            Order newOrder = new Order();
+            Optional<Customer> orderCreator = customerRepository.findById(dto.getCustomerId());
+            newOrder.setCustomer(orderCreator.get());
 
-        newOrder.setName(dto.getName());
-        newOrder.setDescription(dto.getDescription());
+            newOrder.setName(dto.getName());
+            newOrder.setDescription(dto.getDescription());
 
-        newOrder.setDestinationAddress(dto.getDestinationAddress());
-        newOrder.setDestinationLatitude(dto.getDestinationLatitude());
-        newOrder.setDestinationLongitude(dto.getDestinationLongitude());
+            newOrder.setDestinationAddress(dto.getDestinationAddress());
+            newOrder.setDestinationLatitude(dto.getDestinationLatitude());
+            newOrder.setDestinationLongitude(dto.getDestinationLongitude());
 
-        newOrder.setSenderAddress(dto.getSenderAddress());
-        newOrder.setSenderLatitude(dto.getSenderLatitude());
-        newOrder.setSenderLongitude(dto.getSenderLongitude());
+            newOrder.setSenderAddress(dto.getSenderAddress());
+            newOrder.setSenderLatitude(dto.getSenderLatitude());
+            newOrder.setSenderLongitude(dto.getSenderLongitude());
 
-        newOrder.setExpectedFinishDate(dto.getExpectedFinishDate());
+            newOrder.setExpectedFinishDate(dto.getExpectedFinishDate());
 
-        newOrder.setOrderStatus(orderStatus.DRAFT); //0 is not used, 1 is completed
-        //Created date
-        newOrder.setCreatedDate(new Date());
-        Order savedOrder = orderRepository.save(newOrder);
-        //Based on the order's id, generate the tracking code
-        String trackingCode = Utilities.generateOrderCode("OD", savedOrder.getId());
-        savedOrder.setTrackingId(trackingCode);
-        orderRepository.save(newOrder);
-        //return order's id for next step
-        return savedOrder.getId();
+            newOrder.setOrderStatus(orderStatus.DRAFT); //0 is not used, 1 is completed
+            //Created date
+            newOrder.setCreatedDate(new Date());
+            Order savedOrder = orderRepository.save(newOrder);
+            //Based on the order's id, generate the tracking code
+            String trackingCode = Utilities.generateOrderCode("OD", savedOrder.getId());
+            savedOrder.setTrackingId(trackingCode);
+            savedOrder.setStorage(nearestStorage);
+            orderRepository.save(newOrder);
+            //return order's id for next step
+            return savedOrder.getId();
+        }
+        return null;
     }
 
     @Override
@@ -94,23 +106,22 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public Optional<Order> filterOrderToStorage(Long id) {
-        Optional<Order> foundedOrder = getOrderById(id);
+    public Storage filterOrderToStorage(String senderLatitude, String senderLongitude, String senderAddress) {
         List<Storage> allStorages = storageService.getAllStorages();
 
         double minDistance = Double.MAX_VALUE;
         Storage nearestStorage = null;
 
         for (int index = 0; index < allStorages.size(); index++) {
-            double orderLat = Double.parseDouble(foundedOrder.get().getSenderLatitude());
-            double orderLong = Double.parseDouble(foundedOrder.get().getSenderLongitude());
+            double orderLat = Double.parseDouble(senderLatitude);
+            double orderLong = Double.parseDouble(senderLongitude);
             double storageLat = Double.parseDouble(allStorages.get(index).getLatitude());
             double storageLong = Double.parseDouble(allStorages.get(index).getLongitude());
             double distance = Utilities.calculateDistance(
                     orderLat, orderLong, storageLat, storageLong);
-            String[] senderAddress = foundedOrder.get().getSenderAddress().split(",");
+            String[] senderAddressArr = senderAddress.split(",");
             String[] storageAddress = allStorages.get(index).getAddress().split(",");
-            String senderCountry = senderAddress[senderAddress.length - 1].trim();
+            String senderCountry = senderAddressArr[senderAddressArr.length - 1].trim();
             String storageCountry = storageAddress[storageAddress.length - 1].trim();
             boolean distanceResult = Utilities.compareCountry(senderCountry, storageCountry);
             if (distance <= 50 && distanceResult) {
@@ -122,12 +133,10 @@ public class OrderServiceImpl implements IOrderService {
         }
 
         if (nearestStorage != null) {
-            foundedOrder.get().setStorage(nearestStorage);
-            nearestStorage.setOrderAmount(nearestStorage.getOrderAmount() + 1);
-            orderRepository.save(foundedOrder.get());
+            return nearestStorage;
         }
 
-        return foundedOrder;
+        return null;
     }
 
     @Override
@@ -253,8 +262,8 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public List<Order> onGoingOrdersForDelivery(Long id, int deliveryProcessType) {
-        List<Order> gettingOrder = getOrderByStatus(orderStatus.ORDER_GETTING);
+    public List<Order> onGoingOrdersForDelivery(Long id, int deliveryProcessType, int orderStatus) {
+        List<Order> gettingOrder = getOrderByStatus(orderStatus);
         List<Order> onGoingOrder = new ArrayList<>();
         for (int i = 0; i < gettingOrder.size(); i++) {
             Optional<Order> foundOrder = orderRepository.findOrderByDeliveryStaffId(id, gettingOrder.get(i).getId(), deliveryProcessType);
@@ -299,7 +308,14 @@ public class OrderServiceImpl implements IOrderService {
             Optional<OrderDelivering> foundOrderDelivering = orderDeliveringService.getOrderDeliveringById(request.getOrderDeliveringId());
             Optional<DeliveryStaff> foundDeliveryStaff = deliveryStaffService.getDeliveryStaffById(request.getDeliveryStaffId());
 
-            boolean updatedOrder = updateOrderStatus(foundOrder.get().getId(), orderStatus.ORDER_RECEIVED);
+            boolean updatedOrder = false;
+
+            if (request.getProcessType() == 0) {
+                updatedOrder = updateOrderStatus(foundOrder.get().getId(), orderStatus.ORDER_RECEIVED);;
+            } else if (request.getProcessType() == 1) {
+                updatedOrder = updateOrderStatus(foundOrder.get().getId(), orderStatus.COMPLETE);
+            }
+
             if (updatedOrder) {
                 OrderDeliveringUpdateInfoRequestDTO dto = new OrderDeliveringUpdateInfoRequestDTO();
                 dto.setOrderDeliveringId(foundOrderDelivering.get().getId());
@@ -330,24 +346,48 @@ public class OrderServiceImpl implements IOrderService {
         }
     }
 
+    @Override
+    public Order updateOrder(Long orderId, String name, String description, Date expectedFinishDate,
+                             String destinationAddress, String destinationLongitude, String destinationLatitude,
+                             String senderAddress, String senderLongitude, String senderLatitude) {
+
+        Order order = orderRepository.findById(orderId).orElseThrow(() ->
+                new RuntimeException("Order not found")
+        );
+
+        order.setName(name);
+        order.setDescription(description);
+        order.setExpectedFinishDate(expectedFinishDate);
+        order.setDestinationAddress(destinationAddress);
+        order.setDestinationLongitude(destinationLongitude);
+        order.setDestinationLatitude(destinationLatitude);
+        order.setSenderAddress(senderAddress);
+        order.setSenderLongitude(senderLongitude);
+        order.setSenderLatitude(senderLatitude);
+
+        return orderRepository.save(order);
+    }
+
+
     private double getPrice(List<Fish> fishList, Optional<Order> order, double distance) {
-        int numberOfBoxes = (int) Math.ceil(fishList.size() / 2.0);
         String[] senderAddress = order.get().getSenderAddress().split(",");
         String[] receiverAddress = order.get().getDestinationAddress().split(",");
         String senderCountry = senderAddress[senderAddress.length - 1].trim();
         String receiverCountry = receiverAddress[receiverAddress.length - 1].trim();
         boolean distanceCheck = Utilities.compareCountry(senderCountry, receiverCountry);
-
-        double distancePrice = priceBoard.PRICE_BASE * distance;
-        double boxPrice = priceBoard.BOX_PRICE * numberOfBoxes;
+//        double distancePrice = priceBoard.PRICE_BASE * distance;
+        double distancePrice = paymentRateService.getPaymentServiceById(priceBoard.PRICE_BASE_ID).get().getRate() * distance;
+//        double koiPrice = priceBoard.BOX_PRICE * numberOfBoxes;
+        double koiPrice = paymentRateService.getPaymentServiceById(priceBoard.PRICE_RATE_KOI).get().getRate() * fishList.size();
 
         if (distanceCheck) {
-            distancePrice = distancePrice * priceBoard.PRICE_RATE_DOMESTIC;
+//            distancePrice = distancePrice * priceBoard.PRICE_RATE_DOMESTIC;
+            distancePrice = distancePrice * paymentRateService.getPaymentServiceById(priceBoard.PRICE_RATE_DOMESTIC_ID).get().getRate();
         } else {
-            distancePrice = distancePrice * priceBoard.PRICE_RATE_FOREIGN;
+//            distancePrice = distancePrice * priceBoard.PRICE_RATE_FOREIGN;
+            distancePrice = distancePrice * paymentRateService.getPaymentServiceById(priceBoard.PRICE_RATE_FOREIGN_ID).get().getRate();
         }
-        return distancePrice + boxPrice;
+        return distancePrice + koiPrice;
     }
-
 
 }

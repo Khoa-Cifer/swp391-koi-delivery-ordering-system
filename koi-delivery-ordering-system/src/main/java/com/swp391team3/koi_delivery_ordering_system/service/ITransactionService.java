@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface ITransactionService {
-    public boolean createTransaction(Long customerId, Date createdDate, double amount);
-    public List<Transaction> getAllTransactionsHistory();
-    public List<Transaction> getTransactionsByCustomerId();
+    boolean createTransaction(Long customerId, Date createdDate, double amount);
+    List<Transaction> getAllTransactionsHistory();
+    List<Transaction> getTransactionsByCustomerId();
 }

@@ -1,8 +1,8 @@
 import axiosClient from "../axios";
 
-export async function createOrderDeliveringData(deliveryStaffId, orderId) {
+export async function startGettingOrder(deliveryStaffId, orderId) {
     try {
-        const response = await axiosClient.post(`order-delivering/createOrderDelivering`, {
+        const response = await axiosClient.post(`order-delivering/start-getting`, {
             deliveryStaffId,
             orderId
         })
@@ -23,6 +23,18 @@ export async function updateOrderDeliveringLocation(
             currentAddress,
             latitude,
             longitude
+        })
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function startDeliveringOrder(deliveryStaffId, orderId) {
+    try {
+        const response = await axiosClient.post(`order-delivering/start-delivering`, {
+            deliveryStaffId,
+            orderId
         })
         return response.data;
     } catch (error) {

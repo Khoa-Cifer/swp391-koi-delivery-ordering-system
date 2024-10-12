@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface INewsService {
-    public List<News> getAllNews();
-    public Optional<News> getNewsById(Long id);
-    public void deleteNewsById(Long id);
-    public News createNews(NewsRequestDTO newsRequestDTO);
+    List<News> getAllNews();
+    Optional<News> getNewsById(Long id);
+    void deleteNewsById(Long id);
+    public News createNews(String title, String description, String type, Long salesStaffId, MultipartFile file);
 }

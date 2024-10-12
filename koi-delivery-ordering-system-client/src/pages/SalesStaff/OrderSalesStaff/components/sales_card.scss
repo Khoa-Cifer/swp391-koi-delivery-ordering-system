@@ -1,67 +1,80 @@
-.content-container {
-  display: flex;
-  width: 70%;
-  height: 80%;
-  padding: 20px;
-  margin: 3%;
+.order-container-sale {
+  margin-top: 3%;
 
-  /* Các thẻ đơn hàng */
-  .order-row {
-    display: flex;
-    flex-grow: 3;
-    flex-wrap: wrap; /* Đảm bảo các thẻ sẽ xuống hàng nếu không đủ chỗ */
-    justify-content: space-around; /* Căn đều các thẻ trong hàng */
-    gap: 5%;
+  .order {
+    font-size: 1.2em;
+    color: rgb(5, 10, 176);
+    margin-left: 4%;
   }
 
-  /* Mỗi thẻ đơn hàng sẽ chiếm 48% chiều rộng */
   .order-card {
-    flex: 0 0 30%; /* 48% width để vừa 2 thẻ trong 1 hàng */
-    padding: 20px;
-    background-color: #e4e2e2;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 7%;
-    gap: 5%;
-  }
-
-  .card-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 4%;
-  }
-
-  .card-text {
-    font-size: 14px;
-    margin-bottom: 4%;
-  }
-
-  .button-container {
     display: flex;
     justify-content: space-between;
-
-    button {
-      width: 100%;
-      font-size: 13px;
-    }
-    column-gap: 5%;
+    flex-wrap: wrap; /* Enable wrapping */
+    margin: 40px;
   }
 
-  .btn {
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  .order-grid {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    height: auto;
+    margin: 2% 5% 2% 5%;
+  }
+
+  .order-item {
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    max-width: 30%; /* Ensure the width is less than 33% */
+    flex: 1 1 30%;  /* Allow items to grow and shrink and wrap at 30% */
+    margin-bottom: 20px; /* Add some space between rows */
+  }
+
+  .order-item:hover {
+    transform: translateY(-20px);
+  }
+
+  .order-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .gap {
+    margin: 60px;
+  }
+
+  .order-content {
+    padding: 20px;
+  }
+
+  .order-category {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #c7f664;
+    border-radius: 15px;
     font-size: 12px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 10px;
   }
 
-  .status-btn {
-    background-color: rgb(17, 17, 162);
-    color: white;
+  .order-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
   }
 
-  .detail-btn {
-    background-color: green;
-    color: white;
+  .order-description {
+    font-size: 14px;
+    color: #110f0f;
+    margin-bottom: 20px;
+  }
+
+  .order-footer {
+    width: 100%;
   }
 }

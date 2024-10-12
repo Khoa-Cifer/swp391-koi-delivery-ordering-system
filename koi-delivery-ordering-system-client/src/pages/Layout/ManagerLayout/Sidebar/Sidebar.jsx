@@ -28,7 +28,8 @@ function Sidebar() {
         "Sales Staff",
         // "Payment History",
         // "Delivery Type",
-        "Storage"
+        "Storage",
+        "Payment Rate",
     ];
 
     const dashboardItemList = ["Dashboard", "Report"];

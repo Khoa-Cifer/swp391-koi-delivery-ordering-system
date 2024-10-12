@@ -8,7 +8,7 @@ import { Box, Button, Grid, Paper, styled } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { createOrderDeliveringData, updateOrderDeliveringLocation } from "../../../../utils/axios/orderDelivering";
+import { startDeliveringOrder, startGettingOrder, updateOrderDeliveringLocation } from "../../../../utils/axios/orderDelivering";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../../components/toastContainer";
 import dateTimeConvert from "../../../../components/utils";
@@ -16,6 +16,7 @@ import { GoogleMap, Marker, Polyline } from "@react-google-maps/api";
 import GreenMarker from "../../../../assets/succeeded.svg"
 import BlueMarker from "../../../../assets/inTransit.svg"
 import RedMarker from "../../../../assets/failed.svg"
+import CurrentPosition from "../../../../assets/delivery-current.svg"
 import { updateDeliveryStaffCurrentLocation } from "../../../../utils/axios/deliveryStaff";
 import { finishOrder } from "../../../../utils/axios/order";
 import Spinner from "../../../../components/SpinnerLoading";
@@ -165,18 +166,18 @@ function MainContent() {
     });
   };
 
-  async function handleReceiveOrder() {
+  async function handleDeliveryOrder() {
     setIsLoading(true);
     try {
-      const response = await createOrderDeliveringData(deliveryStaffId, state.id);
+      const response = await startDeliveringOrder(deliveryStaffId, state.id);
 
       if (response) {
         toast("Order information updated");
+        navigate("/delivery-order-home")
       } else {
         toast("Unexpected error occurred");
       }
 
-      navigate("/delivery-order-home");
     } catch (error) {
       console.error("Error while receiving the order:", error);
       toast("An error occurred while processing request.");
@@ -185,10 +186,31 @@ function MainContent() {
     }
   }
 
+  async function handleReceiveOrder() {
+    setIsLoading(true);
+    try {
+      const response = await startGettingOrder(deliveryStaffId, state.id);
+
+      if (response) {
+        toast("Order information updated");
+        navigate("/delivery-order-home")
+      } else {
+        toast("Unexpected error occurred");
+      }
+
+    } catch (error) {
+      console.error("Error while receiving the order:", error);
+      toast("An error occurred while processing request.");
+    } finally {
+      setIsLoading(false); // Hide loading spinner after processing
+    }
+  }
+
+  const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
+    return (prev.id > current.id) ? prev : current;
+  });
+  
   async function handleUpdateOrderLocation() {
-    const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
-      return (prev.id > current.id) ? prev : current;
-    });
     const response = await updateOrderDeliveringLocation(availableOrderDelivering.id, address, currentLocation.lat, currentLocation.lng);
 
     if (response) {
@@ -202,12 +224,8 @@ function MainContent() {
     }
   }
 
-  async function handleFinishOrderStep() {
-    const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
-      return (prev.id > current.id) ? prev : current;
-    });
-    const response = await finishOrder(state.id, availableOrderDelivering.id, deliveryStaffId, state.storage.id);
-
+  async function handleFinishOrderStep(processType) {
+    const response = await finishOrder(state.id, availableOrderDelivering.id, deliveryStaffId, state.storage.id, processType);
     if (response) {
       toast("Order Finish");
       navigate("/delivery-order-home");
@@ -221,33 +239,22 @@ function MainContent() {
   }
 
   function handleViewFishDetail() {
-    navigate(`/delivery-order-detail/${id}/delivery-fish-detail`);
+    navigate(`/delivery-order-detail/${id}/delivery-fish-detail`, {
+      state: state
+    });
   }
 
   return (
     <div className="sales-order-details-container">
       {/* Order Details Table */}
       <ToastUtil />
-      {isLoading && <Spinner />} 
+      {isLoading && <Spinner />}
       <div className="order-name-detail">
         <strong>{state.name}</strong>
       </div>
 
       <div className="order-details">
         <div className="details-row">
-          {/* <div className="details-column">
-            <p>Tracking Id</p>
-            <p>Receiver Address</p>
-            <p>Sender Address</p>
-          </div>
-          <div className="details-column">
-            <p>Name</p>
-            <p>Price</p>
-          </div>
-          <div className="details-column">
-            <p>Created Date</p>
-            <p>Last Updated Date / Finish Date</p>
-          </div> */}
           <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             <Grid item xs={6}>
               <Item>Create Date: {dateTimeConvert(state.createdDate)}</Item>
@@ -271,7 +278,7 @@ function MainContent() {
 
         </div>
         <div className="view-fish">
-          <button className="view-fish-btn">View Fishes</button>
+          <button className="view-fish-btn" onClick={() => handleViewFishDetail()}>View Fishes</button>
         </div>
 
         <GoogleMap
@@ -317,6 +324,15 @@ function MainContent() {
             }}
           />
 
+
+          <Marker
+            position={currentLocation}
+            icon={{
+              url: CurrentPosition,
+            }}
+          >
+          </Marker>
+
           <Marker
             position={senderPosition}
             icon={{
@@ -356,15 +372,42 @@ function MainContent() {
           {userData.roleId === 3 && (
             <>
               <SubmitButton variant="contained" style={{ backgroundColor: "#f44336" }} onClick={() => handleCancelOrder()}>Cancel</SubmitButton>
-              {state.orderDeliveringSet && state.orderDeliveringSet.length > 0 ? (
-                <>
-                  <SubmitButton variant="contained" onClick={() => handleUpdateOrderLocation()}>Update Location</SubmitButton>
-                  <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep()}>Mark as Complete</SubmitButton>
-                </>
-              ) : (
-                <>
-                  <SubmitButton variant="contained" onClick={() => handleReceiveOrder()}>Get This Order</SubmitButton>
-                </>
+              {state.orderStatus === 3 && (
+                state.orderDeliveringSet && state.orderDeliveringSet.length > 0 && (
+                  <>
+                    <SubmitButton variant="contained" onClick={() => handleUpdateOrderLocation()}>
+                      Update Location
+                    </SubmitButton>
+                    <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep(0)}>
+                      Getting Complete
+                    </SubmitButton>
+                  </>
+                )
+              )}
+
+              {state.orderStatus === 6 && (
+                state.orderDeliveringSet && state.orderDeliveringSet.length > 0 && (
+                  <>
+                    <SubmitButton variant="contained" onClick={() => handleUpdateOrderLocation()}>
+                      Update Location
+                    </SubmitButton>
+                    <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep(1)}>
+                      Delivering Complete
+                    </SubmitButton>
+                  </>
+                )
+              )}
+
+              {state.orderStatus === 2 && (
+                <SubmitButton variant="contained" onClick={() => handleReceiveOrder()}>
+                  Get This Order to get
+                </SubmitButton>
+              )}
+
+              {state.orderStatus === 5 && (
+                <SubmitButton variant="contained" onClick={() => handleDeliveryOrder()}>
+                  Get This Order to delivery
+                </SubmitButton>
               )}
             </>
           )}

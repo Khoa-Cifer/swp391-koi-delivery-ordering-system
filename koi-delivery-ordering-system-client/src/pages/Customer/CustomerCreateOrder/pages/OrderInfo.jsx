@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { Calendar } from "react-date-range";
 import { GoogleMap } from "@react-google-maps/api";
 import { Button, Flex } from "antd";
-import { createGeneralOrderInfo, filterOrder } from "../../../../utils/axios/order";
+import { createGeneralOrderInfo } from "../../../../utils/axios/order";
 import ToastUtil from "../../../../components/toastContainer";
 
 const CustomBoxContainer = styled(Box)(() => ({
@@ -188,10 +188,10 @@ function OrderInfo({ orderId, formStepData }) {
                 senderCoordinates.lat,
                 new Date(expectedFinishDate).toISOString()
             )
-            const filter = await filterOrder(response);
-            toast("Create successfully");
-            if (filter.storage) {
-                orderId(filter.id);
+            // const filter = await filterOrder(response);
+            if (response) {
+                toast("Create successfully");
+                orderId(response);
                 formStepData(1);
             } else {
                 toast("Unsupported Area");

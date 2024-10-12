@@ -10,8 +10,8 @@ import LoginSaleStaff from "./pages/login/LoginSaleStaff/LoginSaleStaff";
 import LoginDeliveryStaff from "./pages/login/LoginDeliveryStaff/LoginDeliveryStaff";
 import DeliveryOrderDetail from "./pages/DeliveryStaff/delivery_order_detail/DeliveryOrderDetail";
 import DeliveryFishDetail from "./pages/DeliveryStaff/delivery_fish_detail/DeliveryFishDetail";
-import LoginAdmin from "./pages/login/Loginadmin/LoginAdmin";
-import OrderSalesStaff from "./pages/SalesStaff/OrderSalesStaff/OrderSalesStaff";
+import LoginAdmin from "./pages/login/LoginAdmin/LoginAdmin";
+import PostedOrderSalesStaff from "./pages/SalesStaff/OrderSalesStaff/PostedOrderSalesStaff";
 import CustomerLayout from "./pages/Layout/CustomerLayout/CustomerLayout";
 import CustomerEditProfile from "./pages/Customer/CustomerEditProfile/CustomerEditProfile";
 import SalesStaffHome from "./pages/SalesStaff/SalesStaffHome/SalesStaffHome";
@@ -32,8 +32,10 @@ import Customer from "./pages/Manager/SystemData/Customer/Customer";
 import DeliveryStaff from "./pages/Manager/SystemData/DeliveryStaff/DeliveryStaff";
 import SalesStaff from "./pages/Manager/SystemData/SalesStaff/SalesStaff";
 import Dashboard from "./pages/Manager/Report/Dashboard";
-import "./App.css"
 import TrackingOrder from "./pages/public/TrackingOrder/TrackingOrder";
+import "./App.css"
+import PaymentRate from "./pages/Manager/SystemData/PaymentRate/PaymentRate";
+import ReceivedOrderSalesStaff from "./pages/SalesStaff/OrderSalesStaff/ReceivedOrderSalesStaff";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -91,6 +93,7 @@ function App() {
               <Route path="/admin/customer" element={<ManagerPrivateRoute element={<Customer />} />} />
               <Route path="/admin/delivery-staff" element={<ManagerPrivateRoute element={<DeliveryStaff />} />} />
               <Route path="/admin/sales-staff" element={<ManagerPrivateRoute element={<SalesStaff />} />} />
+              <Route path="/admin/payment-rate" element={<ManagerPrivateRoute element={<PaymentRate />} />} />
             </Route>
 
             <Route element={<CustomerLayout />}>
@@ -110,7 +113,8 @@ function App() {
             </Route>
 
             <Route element={<SalesStaffLayout />}>
-              <Route path="/order-sales-staff" element={<SalesStaffPrivateRoute element={<OrderSalesStaff />} />} />
+              <Route path="/posted-order-sales-staff" element={<SalesStaffPrivateRoute element={<PostedOrderSalesStaff />} />} />
+              <Route path="/received-order-sales-staff" element={<SalesStaffPrivateRoute element={<ReceivedOrderSalesStaff />} />} />
               <Route path="/sales-staff-home" element={<SalesStaffPrivateRoute element={<SalesStaffHome />} />} />
               <Route path="/sales-order-detail/:id" element={<AllowedRoute element={<SalesOrderDetail />} />} />
               <Route path="/sales-order-detail/:id/sales-fish-detail" element={<AllowedRoute element={<SalesFishDetail />} />} />

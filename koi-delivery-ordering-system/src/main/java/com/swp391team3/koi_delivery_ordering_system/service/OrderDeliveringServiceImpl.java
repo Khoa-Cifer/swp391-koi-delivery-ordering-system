@@ -50,9 +50,27 @@ public class OrderDeliveringServiceImpl implements IOrderDeliveringService {
     }
 
     @Override
-    public boolean startGetting(Long orderId, Long driverId) {
+    public void generateOrderDelivering(Order order, DeliveryStaff deliveryStaff) {
+        OrderDelivering orderDelivering = new OrderDelivering();
+
+        orderDelivering.setCreatedDate(new Date());
+        orderDelivering.setLastUpdatedDate(new Date());
+
+        orderDelivering.setOrder(order);
+        orderDelivering.setDriver(deliveryStaff);
+
+        orderDelivering.setCurrentAddress(order.getSenderAddress());
+        orderDelivering.setLongitude(order.getSenderLongitude());
+        orderDelivering.setLatitude(order.getSenderLatitude());
+        orderDelivering.setDeliveryProcessType(processType.DELIVERING);
+
+        orderDeliveringRepository.save(orderDelivering);
+    }
+
+    @Override
+    public boolean startGetting(Long orderId, Long deliveryStaffId) {
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
-        Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(driverId);
+        Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(deliveryStaffId);
         if (optionalOrder.isPresent() && optionalDeliveryStaff.isPresent()) {
             Order order = optionalOrder.get();
             orderService.updateOrderStatus(orderId, orderStatus.ORDER_GETTING);
@@ -90,6 +108,27 @@ public class OrderDeliveringServiceImpl implements IOrderDeliveringService {
         if (foundOrderDelivering.isPresent()) {
             foundOrderDelivering.get().setFinishDate(new Date());
             orderDeliveringRepository.save(foundOrderDelivering.get());
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean startDelivering(Long orderId, Long deliveryStaffId) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(deliveryStaffId);
+        if (optionalOrder.isPresent() && optionalDeliveryStaff.isPresent()) {
+            Order order = optionalOrder.get();
+            orderService.updateOrderStatus(orderId, orderStatus.DELIVERING);
+            DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
+            generateOrderDelivering(order, deliveryStaff);
+
+            //send mail
+            EmailDetailDTO emailDetail = new EmailDetailDTO();
+            emailDetail.setReceiver((Object) deliveryStaff);
+            emailDetail.setSubject("The Order "+ orderId +" Is Delivering By "+ deliveryStaff.getUsername());
+            emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
+            emailService.sendEmail(emailDetail, 2);
             return true;
         }
         return false;

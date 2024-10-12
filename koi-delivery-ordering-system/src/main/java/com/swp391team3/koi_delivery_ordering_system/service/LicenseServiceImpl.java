@@ -8,6 +8,7 @@ import com.swp391team3.koi_delivery_ordering_system.requestDto.FishLicenseReques
 import com.swp391team3.koi_delivery_ordering_system.requestDto.LicenseFileRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
@@ -44,7 +45,8 @@ public class LicenseServiceImpl implements ILicenseService{
         newLicense.setDescription(request.getLicenseDescription());
         Optional<Fish> foundedFish = fishRepository.findById(request.getFishId());
         newLicense.setFish(foundedFish.get());
-        newLicense.setDateOfIssue(request.getLicenseDateOfIssue());
+        System.out.println("Date is " + request.getLicenseDate());
+        newLicense.setDateOfIssue(request.getLicenseDate());
         licenseRepository.save(newLicense);
         return newLicense.getId();
     }
@@ -62,6 +64,37 @@ public class LicenseServiceImpl implements ILicenseService{
         } catch (Exception e) {
             System.out.println(e);
             return false;
+        }
+    }
+    @Override
+    public License updateLicense(Long licenseId, String name, String description, Date dateOfIssue) {
+        License license = licenseRepository.findById(licenseId)
+                .orElseThrow(() -> new RuntimeException("License not found"));
+
+        license.setName(name);
+        license.setDescription(description);
+        license.setDateOfIssue(dateOfIssue);
+
+        return licenseRepository.save(license);
+    }
+    @Override
+    public LicenseFile updateLicenseFile(Long licenceId, Long fileId, MultipartFile file) throws IOException {
+        Optional<License> optionalLicense = licenseRepository.findById(licenceId);
+
+        if (optionalLicense.isPresent()) {
+
+            LicenseFile licenseFile = licenseFileRepository.findAll().stream()
+                    .filter(licenseFile1 -> licenseFile1.getLicense().getId().equals(licenceId)
+                    && licenseFile1.getFile().getId().equals(fileId))
+                    .findFirst().orElseThrow(() -> new RuntimeException("File does not belong to the specified license"));
+
+            File updatedFile = fileService.uploadFileToFileSystem(file);
+
+            licenseFile.setFile(updatedFile);
+
+            return licenseFileRepository.save(licenseFile);
+        } else {
+            throw new RuntimeException("File not found");
         }
     }
 }

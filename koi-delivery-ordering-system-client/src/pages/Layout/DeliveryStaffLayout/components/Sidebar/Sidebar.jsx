@@ -83,7 +83,12 @@ function Sidebar() {
           </ListItem>
           <ListItem className="button">
             <ListItemText
-              primary="Working Order"
+              primary="Available to Get"
+            />
+          </ListItem>
+          <ListItem className="button">
+            <ListItemText
+              primary="Available to Delivery"
             />
           </ListItem>
         </List>

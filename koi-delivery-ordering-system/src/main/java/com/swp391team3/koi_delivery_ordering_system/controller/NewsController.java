@@ -1,13 +1,11 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.News;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.NewsRequestDTO;
-import com.swp391team3.koi_delivery_ordering_system.service.IFileService;
 import com.swp391team3.koi_delivery_ordering_system.service.INewsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,7 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NewsController {
     private final INewsService newsService;
-    private final IFileService fileService;
 
     @GetMapping("/getAllNews")
     public ResponseEntity<?> getAllNews() {
@@ -34,8 +31,15 @@ public class NewsController {
         newsService.deleteNewsById(id);
     }
 
-    @PostMapping("/createNews")
-    public ResponseEntity<?> createNews(@ModelAttribute NewsRequestDTO newsRequestDTO) {
-        return ResponseEntity.ok(newsService.createNews(newsRequestDTO));
+    @PostMapping(value = "/createNews")
+    public ResponseEntity<?> createNews(@RequestParam(name = "title") String title,
+                                        @RequestParam(name = "description") String description,
+                                        @RequestParam(name = "type") String type,
+                                        @RequestParam(name = "salesStaffId") Long salesStaffId,
+                                        @RequestParam(name = "image") MultipartFile file)
+    {
+        News news = newsService.createNews(title, description, type, salesStaffId, file);
+
+        return ResponseEntity.ok(news);
     }
 }

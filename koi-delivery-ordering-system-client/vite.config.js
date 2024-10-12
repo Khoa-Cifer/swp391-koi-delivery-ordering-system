@@ -7,6 +7,11 @@ export default defineConfig({
     react(),
     svgr(),
   ],
+  resolve: {
+    alias: {
+      '@': '/src',
+    },
+  },
   server: {
     watch: {
       usePolling: true,

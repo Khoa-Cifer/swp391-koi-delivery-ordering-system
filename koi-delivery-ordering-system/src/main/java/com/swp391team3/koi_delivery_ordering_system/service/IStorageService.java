@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IStorageService {
-    public Storage createStorage(StorageRequestCreationDTO request);
-    public Storage updateStorage(StorageRequestCreationDTO request, Long storageId);
-    public boolean deleteStorage(StorageRequestCreationDTO request);
-    public List<Storage> getAllStorages();
+    Storage createStorage(StorageRequestCreationDTO request);
+    Storage updateStorage(StorageRequestCreationDTO request, Long storageId);
+    boolean deleteStorage(StorageRequestCreationDTO request);
+    List<Storage> getAllStorages();
 
-    public Optional<Storage> getStorageById(Long id);
+    Optional<Storage> getStorageById(Long id);
 }

@@ -47,18 +47,6 @@ export async function postOrder(orderId) {
   }
 }
 
-export async function filterOrder(orderId) {
-  try {
-    const response = await axiosClient.post(
-      `orders/filterOrderDistance/${orderId}`
-    );
-    console.log(response.data);
-    return response.data;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 export async function getOrderById(orderId) {
   try {
     const response = await axiosClient.get(`orders/getOrderById/${orderId}`);
@@ -80,12 +68,11 @@ export async function calculateOrderPrice(orderId) {
 export async function getOrdersByStatus(orderStatus) {
   try {
     const response = await axiosClient.get(
-      `orders/getOrderByStatus/${orderStatus}`,
-      {
+      `orders/getOrderByStatus/${orderStatus}`,{
         headers: {
           Authorization: `Bearer your-token-here`,
-          "Content-Type": "application/json",
-        },
+          'Content-Type': 'application/json'
+        }
       }
     );
     return response.data;
@@ -140,14 +127,9 @@ export async function getOrderByTrackingId(trackingId) {
   }
 }
 
-export async function getOnGoingOrderForDeliveryStaff(
-  deliveryStaffId,
-  deliveryProcessType
-) {
+export async function getOnGoingOrderForDeliveryStaff(deliveryStaffId, deliveryProcessType, orderStatus) {
   try {
-    const response = await axiosClient.get(
-      `orders/onGoingOrder/${deliveryStaffId}/${deliveryProcessType}`
-    );
+    const response = await axiosClient.get(`orders/onGoingOrder/${deliveryStaffId}/${deliveryProcessType}/${orderStatus}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -158,7 +140,8 @@ export async function finishOrder(
   orderId,
   orderDeliveringId,
   deliveryStaffId,
-  storageId
+  storageId,
+  processType
 ) {
   try {
     const response = await axiosClient.put(`orders/finishOrder`, {
@@ -166,16 +149,8 @@ export async function finishOrder(
       orderDeliveringId,
       deliveryStaffId,
       storageId,
+      processType
     });
-    return response.data;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-export async function getAllOrders() {
-  try {
-    const response = await axiosClient.get(`orders/getAllOrders`);
     return response.data;
   } catch (error) {
     console.log(error);
