@@ -1,4 +1,4 @@
-import "./Maincontent.scss";
+import "./MainContent.scss";
 import { Table } from "antd";
 import { useEffect, useState } from "react";
 import { getOrdersByStatus } from "../../../../../utils/axios/order";

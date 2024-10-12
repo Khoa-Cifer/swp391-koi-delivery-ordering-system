@@ -68,12 +68,12 @@ export async function calculateOrderPrice(orderId) {
 export async function getOrdersByStatus(orderStatus) {
   try {
     const response = await axiosClient.get(
-      `orders/getOrderByStatus/${orderStatus}`,{
-        headers: {
-          Authorization: `Bearer your-token-here`,
-          'Content-Type': 'application/json'
-        }
+      `orders/getOrderByStatus/${orderStatus}`, {
+      headers: {
+        Authorization: `Bearer your-token-here`,
+        'Content-Type': 'application/json'
       }
+    }
     );
     return response.data;
   } catch (error) {
@@ -151,6 +151,15 @@ export async function finishOrder(
       storageId,
       processType
     });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getAllOrders() {
+  try {
+    const response = await axiosClient.get('orders/getAllOrders');
     return response.data;
   } catch (error) {
     console.log(error);
