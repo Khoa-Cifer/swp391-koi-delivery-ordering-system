@@ -10,7 +10,12 @@ export default function dateTimeConvert(dateTimeString) {
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
 
+    let formattedDateTime;
     // Combine date and time
-    const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}`;
+    if (hours !== "00") {
+        formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}`;
+    } else {
+        formattedDateTime = `${year}-${month}-${day}`;
+    }
     return formattedDateTime;
 }

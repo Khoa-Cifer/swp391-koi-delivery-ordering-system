@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +43,8 @@ public class LicenseServiceImpl implements ILicenseService{
         newLicense.setDescription(request.getLicenseDescription());
         Optional<Fish> foundedFish = fishRepository.findById(request.getFishId());
         newLicense.setFish(foundedFish.get());
-        newLicense.setDateOfIssue(request.getLicenseDateOfIssue());
+        System.out.println("Date is " + request.getLicenseDate());
+        newLicense.setDateOfIssue(request.getLicenseDate());
         licenseRepository.save(newLicense);
         return newLicense.getId();
     }
