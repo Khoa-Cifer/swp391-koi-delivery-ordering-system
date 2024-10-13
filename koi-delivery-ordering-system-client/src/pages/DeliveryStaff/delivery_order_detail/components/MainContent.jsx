@@ -159,38 +159,41 @@ function MainContent() {
     }
   }
 
-  const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
-    return (prev.id > current.id) ? prev : current;
-  });
+
 
   useEffect(() => {
     if (address && currentLocation.lat && currentLocation.lng) {
-      async function handleUpdateOrderLocation() {
-        console.log(address);
-        const response = await updateOrderDeliveringLocation(availableOrderDelivering.id, address, currentLocation.lat, currentLocation.lng);
-  
-        if (response) {
-          await updateDeliveryStaffCurrentLocation(deliveryStaffId, address, currentLocation.lat, currentLocation.lng);
+      if (state.orderDeliveringSet && state.orderDeliveringSet.length > 0) {
+
+        const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
+          return (prev.id > current.id) ? prev : current;
+        });
+        async function handleUpdateOrderLocation() {
+          console.log(address);
+          const response = await updateOrderDeliveringLocation(availableOrderDelivering.id, address, currentLocation.lat, currentLocation.lng);
+
+          if (response) {
+            await updateDeliveryStaffCurrentLocation(deliveryStaffId, address, currentLocation.lat, currentLocation.lng);
+          }
         }
-  
-        if (response) {
-          toast("Order Location updated");
-        } else {
-          toast("Unexpected Error has been occurred");
-        }
+
+        handleUpdateOrderLocation();
       }
-  
-      handleUpdateOrderLocation();
     }
   }, [currentLocation])
 
   async function handleFinishOrderStep(processType) {
-    const response = await finishOrder(state.id, availableOrderDelivering.id, deliveryStaffId, state.storage.id, processType);
-    if (response) {
-      toast("Order Finish");
-      navigate("/delivery-order-home");
-    } else {
-      toast("Unexpected Error has been occurred");
+    if (state.orderDeliveringSet && state.orderDeliveringSet.length > 0) {
+      const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
+        return (prev.id > current.id) ? prev : current;
+      });
+      const response = await finishOrder(state.id, availableOrderDelivering.id, deliveryStaffId, state.storage.id, processType);
+      if (response) {
+        toast("Order Finish");
+        navigate("/delivery-order-home");
+      } else {
+        toast("Unexpected Error has been occurred");
+      }
     }
   }
 

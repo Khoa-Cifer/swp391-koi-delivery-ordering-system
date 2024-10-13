@@ -37,10 +37,7 @@ import "./App.css"
 import PaymentRate from "./pages/Manager/SystemData/PaymentRate/PaymentRate";
 import ReceivedOrderSalesStaff from "./pages/SalesStaff/OrderSalesStaff/ReceivedOrderSalesStaff";
 import CustomerEditOrder from "./pages/Customer/CustomerEditOrder/CustomerEditOrder";
-import GettingOrderDeliveryStaff from "./pages/DeliveryStaff/delivery_order_home/GettingOrderDeliveryStaff";
-import AvailableToDelivery from "./pages/DeliveryStaff/delivery_order_home/AvailableToDelivery";
-import DeliveringOrder from "./pages/DeliveryStaff/delivery_order_home/DeliveringOrder";
-import AvailableToGet from "./pages/DeliveryStaff/delivery_order_home/AvailableToGet";
+import SalesStaffNews from "./pages/SalesStaff/SalesStaffNews/SalesStaffNews";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -113,10 +110,7 @@ function App() {
             <Route element={<DeliveryStaffLayout />}>
               <Route path="/delivery-order-home" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderHome />} />} />
               <Route path="/delivery-order-available" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderAvailable />} />} />
-              <Route path="/getting-order-delivery-staff" element={<DeliveryStaffPrivateRoute element={<GettingOrderDeliveryStaff />} />} />
-              <Route path="/available-to-delivery-staff" element={<DeliveryStaffPrivateRoute element={<AvailableToDelivery />} />} />
-              <Route path="/delivering-order-delivery-staff" element={<DeliveryStaffPrivateRoute element={<DeliveringOrder />} />} />
-              <Route path="/available-to-get-delivery-staff" element={<DeliveryStaffPrivateRoute element={<AvailableToGet />} />} />
+
               <Route path="/delivery-order-detail/:id" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderDetail />} />} />
               <Route path="/delivery-order-detail/:id/delivery-fish-detail" element={<DeliveryStaffPrivateRoute element={<DeliveryFishDetail />} />} />
             </Route>
@@ -125,8 +119,9 @@ function App() {
               <Route path="/posted-order-sales-staff" element={<SalesStaffPrivateRoute element={<PostedOrderSalesStaff />} />} />
               <Route path="/received-order-sales-staff" element={<SalesStaffPrivateRoute element={<ReceivedOrderSalesStaff />} />} />
               <Route path="/sales-staff-home" element={<SalesStaffPrivateRoute element={<SalesStaffHome />} />} />
-              <Route path="/sales-order-detail/:id" element={<AllowedRoute element={<SalesOrderDetail />} />} />
-              <Route path="/sales-order-detail/:id/sales-fish-detail" element={<AllowedRoute element={<SalesFishDetail />} />} />
+              <Route path="/sales-order-detail/:id" element={<SalesStaffPrivateRoute element={<SalesOrderDetail />} />} />
+              <Route path="/sales-order-detail/:id/sales-fish-detail" element={<SalesStaffPrivateRoute element={<SalesFishDetail />} />} />
+              <Route path="/news-sales-staff" element={<SalesStaffPrivateRoute element={<SalesStaffNews />} />} />
             </Route>
 
             <Route path="/payment-success" element={<AllowedRoute element={<PaymentSuccess />} />} />
