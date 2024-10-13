@@ -140,16 +140,24 @@ function MainContent() {
 
   useEffect(() => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+      const watcher = navigator.geolocation.watchPosition(
         (position) => {
-          const { latitude, longitude } = position.coords;
+          const latitude = parseFloat(position.coords.latitude.toFixed(15));
+          const longitude = parseFloat(position.coords.longitude.toFixed(15));
           setCurrentLocation({ lat: latitude, lng: longitude });
           getAddressFromCoordinates(latitude, longitude);
         },
         (error) => {
           console.error("Error getting location:", error);
-        }
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
       );
+
+      return () => {
+        navigator.geolocation.clearWatch(watcher);
+      }
+    } else {
+      console.log("Geolocation is not available.");
     }
   }, []);
 
@@ -209,20 +217,21 @@ function MainContent() {
   const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
     return (prev.id > current.id) ? prev : current;
   });
+
+  useEffect(() => {
+    if (address && currentLocation.lat && currentLocation.lng) {
+      async function handleUpdateOrderLocation() {
+        console.log(address);
+        const response = await updateOrderDeliveringLocation(availableOrderDelivering.id, address, currentLocation.lat, currentLocation.lng);
   
-  async function handleUpdateOrderLocation() {
-    const response = await updateOrderDeliveringLocation(availableOrderDelivering.id, address, currentLocation.lat, currentLocation.lng);
-
-    if (response) {
-      await updateDeliveryStaffCurrentLocation(deliveryStaffId, address, currentLocation.lat, currentLocation.lng);
+        if (response) {
+          await updateDeliveryStaffCurrentLocation(deliveryStaffId, address, currentLocation.lat, currentLocation.lng);
+        }
+      }
+  
+      handleUpdateOrderLocation();
     }
-
-    if (response) {
-      toast("Order information updated");
-    } else {
-      toast("Unexpected Error has been occurred");
-    }
-  }
+  }, [currentLocation])
 
   async function handleFinishOrderStep(processType) {
     const response = await finishOrder(state.id, availableOrderDelivering.id, deliveryStaffId, state.storage.id, processType);
@@ -374,27 +383,17 @@ function MainContent() {
               <SubmitButton variant="contained" style={{ backgroundColor: "#f44336" }} onClick={() => handleCancelOrder()}>Cancel</SubmitButton>
               {state.orderStatus === 3 && (
                 state.orderDeliveringSet && state.orderDeliveringSet.length > 0 && (
-                  <>
-                    <SubmitButton variant="contained" onClick={() => handleUpdateOrderLocation()}>
-                      Update Location
-                    </SubmitButton>
-                    <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep(0)}>
-                      Getting Complete
-                    </SubmitButton>
-                  </>
+                  <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep(0)}>
+                    Getting Complete
+                  </SubmitButton>
                 )
               )}
 
               {state.orderStatus === 6 && (
                 state.orderDeliveringSet && state.orderDeliveringSet.length > 0 && (
-                  <>
-                    <SubmitButton variant="contained" onClick={() => handleUpdateOrderLocation()}>
-                      Update Location
-                    </SubmitButton>
-                    <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep(1)}>
-                      Delivering Complete
-                    </SubmitButton>
-                  </>
+                  <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep(1)}>
+                    Delivering Complete
+                  </SubmitButton>
                 )
               )}
 

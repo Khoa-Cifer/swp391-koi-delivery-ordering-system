@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { getOrdersByStatus } from "../../../../utils/axios/order";
 import dateTimeConvert from "../../../../components/utils";
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
-import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
-import EditIcon from '@mui/icons-material/Edit';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 const commonStyles = {
@@ -86,8 +84,6 @@ function DeliveringOrder() {
                                 </div>
 
                                 <div className="icon-group">
-                                    <div className="button-icon"><EditIcon /></div>
-                                    <div className="button-icon"><RestoreFromTrashIcon /></div>
                                     <div className="button-icon" onClick={() => handleClick(order.id)}><MenuOpenIcon /></div>
                                 </div>
                             </div>

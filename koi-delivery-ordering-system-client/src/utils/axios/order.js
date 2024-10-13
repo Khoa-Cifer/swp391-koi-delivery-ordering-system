@@ -67,14 +67,7 @@ export async function calculateOrderPrice(orderId) {
 
 export async function getOrdersByStatus(orderStatus) {
   try {
-    const response = await axiosClient.get(
-      `orders/getOrderByStatus/${orderStatus}`, {
-      headers: {
-        Authorization: `Bearer your-token-here`,
-        'Content-Type': 'application/json'
-      }
-    }
-    );
+    const response = await axiosClient.get(`orders/getOrderByStatus/${orderStatus}`);
     return response.data;
   } catch (error) {
     console.log(error);
