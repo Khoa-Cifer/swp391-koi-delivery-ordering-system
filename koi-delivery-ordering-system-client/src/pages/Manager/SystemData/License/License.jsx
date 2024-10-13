@@ -19,7 +19,7 @@ function License() {
   return (
     <div>
       <div className="dashboard-info">
-        <h2 style={{ marginTop: "0" }}>Fish</h2>
+        <h2 style={{ marginTop: "0" }}>Licenses</h2>
       </div>
 
       <TableContainer component={Paper} style={{ marginTop: "25px" }}>
