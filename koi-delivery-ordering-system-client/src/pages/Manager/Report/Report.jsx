@@ -1,15 +1,62 @@
 import React, { useEffect, useState } from "react";
 import StatCard from "./components/Card/ReportCard";
 import Table from "./components/Card/Table";
-import { Box, Container, Grid, Paper, Typography } from "@mui/material";
+import { Box, Grid, Paper, Typography, TablePagination } from "@mui/material";
 import { HelpCircle } from "lucide-react";
 import { getOrdersByStatus } from "../../../utils/axios/order";
+import { getAllDeliveryStaff } from "../../../utils/axios/deliveryStaff";
+import {
+  getDeliverystaffReporById,
+  getTotalOrders,
+} from "../../../utils/axios/report";
 
 const Report = () => {
   // State to hold the fetched data
   const [data, setData] = useState([]);
+  const [dataTotalOrders, setDatadataTotalOrder] = useState([]);
+  const [dataDeliveryReport, setdataDeliveryReport] = useState([]);
+
+  // Pagination state for Delivery Staff table
+  const [staffPage, setStaffPage] = useState(0);
+  const [staffRowsPerPage, setStaffRowsPerPage] = useState(5);
+
+  // Pagination state for Orders table
+  const [orderPage, setOrderPage] = useState(0);
+  const [orderRowsPerPage, setOrderRowsPerPage] = useState(5);
 
   // Fetch data from API
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const responses = await getTotalOrders([]);
+        setDatadataTotalOrder(responses);
+        console.log(dataTotalOrders);
+      } catch (error) {
+        console.error("Error fetching data", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const deliveryStaff = await getAllDeliveryStaff();
+        const deliveryStaffIds = deliveryStaff.map((staff) => staff.id);
+        const responses = await Promise.all(
+          deliveryStaffIds.map((id) => getDeliverystaffReporById(id))
+        );
+        setdataDeliveryReport(responses);
+      } catch (error) {
+        console.error("Error fetching data", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -17,7 +64,6 @@ const Report = () => {
           getOrdersByStatus(7),
           getOrdersByStatus(8),
         ]);
-        console.log(responses);
 
         const combinedData = [
           ...responses[0].map((item) => ({ ...item, status: "Completed" })),
@@ -33,18 +79,28 @@ const Report = () => {
     fetchData();
   }, []);
 
-  // Calculate totals
-  const totalDaysOperated = data.reduce(
-    (sum, item) => sum + item.daysOperated || 0,
-    0
-  );
-  const totalCompleted = data.filter(
-    (item) => item.status === "Completed"
-  ).length; // Count completed orders
-  const totalFailed = data.filter((item) => item.status === "Failed").length;
+  // Pagination Handlers for Delivery Staff table
+  const handleChangeStaffPage = (event, newPage) => {
+    setStaffPage(newPage);
+  };
+
+  const handleChangeStaffRowsPerPage = (event) => {
+    setStaffRowsPerPage(parseInt(event.target.value, 10));
+    setStaffPage(0);
+  };
+
+  // Pagination Handlers for Orders table
+  const handleChangeOrderPage = (event, newPage) => {
+    setOrderPage(newPage);
+  };
+
+  const handleChangeOrderRowsPerPage = (event) => {
+    setOrderRowsPerPage(parseInt(event.target.value, 10));
+    setOrderPage(0);
+  };
 
   return (
-    <Container
+    <Box
       sx={{ minHeight: "100vh", padding: "32px", backgroundColor: "#f5f5f5" }}
     >
       <Box mb={8}>
@@ -62,9 +118,8 @@ const Report = () => {
       <Grid container spacing={3} mb={8}>
         <Grid item xs={12} md={4}>
           <StatCard
-            title="Days Operated"
-            value={totalDaysOperated}
-            description="NaN% vs last 7 days"
+            title="Total Orders"
+            value={`${dataTotalOrders.totalOrders} Orders`}
             icon={<HelpCircle className="w-5 h-5 text-blue-500" />}
             color="#bbdefb"
             textColor="#0d47a1"
@@ -74,8 +129,7 @@ const Report = () => {
         <Grid item xs={12} md={4}>
           <StatCard
             title="Completed"
-            value={`${totalCompleted} Deliveries`}
-            description="2% vs last 7 days"
+            value={`${dataTotalOrders.completedOrders} Orders`}
             icon={<HelpCircle className="w-5 h-5 text-green-500" />}
             color="#c8e6c9"
             textColor="#2e7d32"
@@ -85,8 +139,7 @@ const Report = () => {
         <Grid item xs={12} md={4}>
           <StatCard
             title="Failed"
-            value={`${totalFailed} Deliveries`}
-            description="147% vs last 7 days"
+            value={`${dataTotalOrders.failedOrders} Orders`}
             icon={<HelpCircle className="w-5 h-5 text-red-500" />}
             color="#ffcdd2"
             textColor="#c62828"
@@ -97,7 +150,7 @@ const Report = () => {
 
       {/* Tables */}
       <Grid container spacing={3}>
-        {/*Delivery staff orders Table */}
+        {/* Delivery staff orders Table */}
         <Grid item xs={12} md={5}>
           <Paper elevation={3}>
             <Typography
@@ -108,15 +161,31 @@ const Report = () => {
               Delivery staff orders
             </Typography>
             <Table
-              headers={["Delivery Staff", "Order Status"]}
-              data={data
-                .filter((item) => item.status === "Completed")
-                .map((item) => [item.deliveryStaff, item.status])}
+              headers={["Delivery Staff", "Order failed", "Order complete"]}
+              data={dataDeliveryReport
+                .slice(
+                  staffPage * staffRowsPerPage,
+                  staffPage * staffRowsPerPage + staffRowsPerPage
+                )
+                .map((item) => [
+                  item.deliveryStaffName,
+                  item.totalOrderFailed,
+                  item.totalOrderCompleted,
+                ])}
+            />
+            {/* Pagination for Delivery Staff Table */}
+            <TablePagination
+              component="div"
+              count={dataDeliveryReport.length}
+              page={staffPage}
+              onPageChange={handleChangeStaffPage}
+              rowsPerPage={staffRowsPerPage}
+              onRowsPerPageChange={handleChangeStaffRowsPerPage}
             />
           </Paper>
         </Grid>
 
-        {/*Orders delivery details Table */}
+        {/* Orders delivery details Table */}
         <Grid item xs={12} md={7}>
           <Paper elevation={3}>
             <Typography
@@ -124,7 +193,7 @@ const Report = () => {
               component="h2"
               sx={{ p: 2, backgroundColor: "#1976d2", color: "white" }}
             >
-              Orders delivery detail
+              Orders detail
             </Typography>
             <Table
               headers={[
@@ -134,18 +203,32 @@ const Report = () => {
                 "Created Date",
                 "Order Status",
               ]}
-              data={data.map((item) => [
-                item.id,
-                item.senderAddress,
-                item.destinationAddress,
-                new Date(item.createdDate).toLocaleDateString(),
-                item.status, // Show status as Completed or Failed
-              ])}
+              data={data
+                .slice(
+                  orderPage * orderRowsPerPage,
+                  orderPage * orderRowsPerPage + orderRowsPerPage
+                )
+                .map((item) => [
+                  item.id,
+                  item.senderAddress,
+                  item.destinationAddress,
+                  new Date(item.createdDate).toLocaleDateString(),
+                  item.status,
+                ])}
+            />
+            {/* Pagination for Orders Table */}
+            <TablePagination
+              component="div"
+              count={data.length}
+              page={orderPage}
+              onPageChange={handleChangeOrderPage}
+              rowsPerPage={orderRowsPerPage}
+              onRowsPerPageChange={handleChangeOrderRowsPerPage}
             />
           </Paper>
         </Grid>
       </Grid>
-    </Container>
+    </Box>
   );
 };
 

@@ -18,10 +18,6 @@ function Sidebar() {
     const dataItemList = [
         "Customer",
         "Delivery Staff",
-        // "File",
-        // "Manager",
-        // "News",
-        // "Order",
         // "Rating",
         "Sales Staff",
         "Fish",
@@ -31,6 +27,12 @@ function Sidebar() {
         // "Delivery Type",
         "Storage",
         "Payment Rate",
+        // "File",
+        // "Fish",
+        // "License",
+        // "Manager",
+        // "News",
+        "Orders",
     ];
 
     const dashboardItemList = ["Dashboard", "Report"];

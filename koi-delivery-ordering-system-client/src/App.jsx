@@ -43,6 +43,10 @@ import DeliveringOrder from "./pages/DeliveryStaff/delivery_order_home/Deliverin
 import AvailableToGet from "./pages/DeliveryStaff/delivery_order_home/AvailableToGet";
 import SalesStaffNews from "./pages/SalesStaff/SalesStaffNews/SalesStaffNews"
 import Page404 from "./pages/DefaultError/404";
+import Transaction from "./pages/Manager/SystemData/Transaction/Transaction";
+import License from "./pages/Manager/SystemData/License/License";
+import PaymentHistory from "./pages/Manager/SystemData/PaymentHistory/PaymentHistory";
+import Fish from "./pages/Manager/SystemData/Fish/Fish";
 
 function App() {
   // eslint-disable-next-line react/prop-types

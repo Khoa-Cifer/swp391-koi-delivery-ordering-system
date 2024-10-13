@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { CreateNews } from "../../../../utils/axios/news";
-import { Editor } from "@tinymce/tinymce-react"; // Nhập Editor từ TinyMCE
-import "./Maincontent.scss"; // Import một tệp CSS cho kiểu dáng
+import { Editor } from "@tinymce/tinymce-react"; 
+import "./Maincontent.scss"; 
 import { jwtDecode } from "jwt-decode";
 
 function Maincontent() {
   const [file, setFile] = useState(null);
 
   const [salesStaffId, setSalesStaffId] = useState(0);
-  const editorRef = useRef(null); // Tham chiếu đến trình soạn thảo
+  const editorRef = useRef(null); 
 
   useEffect(() => {
-    // Chức năng giải mã token và lấy salesStaffId
     const decodeToken = () => {
       const token = localStorage.getItem("token");
       if (token) {
@@ -33,12 +32,12 @@ function Maincontent() {
 
     // Tạo FormData cho yêu cầu
     const data = new FormData();
-    data.append("file", file); // Thêm tệp vào FormData
-    data.append("description", editorRef.current.getContent()); // Lấy nội dung từ TinyMCE
-    data.append("salesStaffId", salesStaffId); // Thêm salesStaffId đã giải mã
+    data.append("file", file);
+    data.append("description", editorRef.current.getContent()); 
+    data.append("salesStaffId", salesStaffId); 
 
     try {
-      const response = await CreateNews(data); // Gọi CreateNews với FormData
+      const response = await CreateNews(data); 
       console.log("Response:", response.data);
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -72,7 +71,7 @@ function Maincontent() {
           <label htmlFor="description">Description:</label>
           <Editor
             apiKey="9jhj4efz5nij36u8khbrkt7ik7reqfvvafwtcdaq4ww1s3qv"
-            onInit={(evt, editor) => (editorRef.current = editor)} // Lưu tham chiếu đến editor
+            onInit={(evt, editor) => (editorRef.current = editor)} 
             init={{
               height: 300,
               plugins: [

@@ -1,6 +1,7 @@
 import {  Paper,  Table,  TableBody,  TableCell,  TableContainer,  TableHead,  TableRow,  Typography,} from "@mui/material";
 import { useEffect, useState } from "react";
 import { getAllLicenses } from "../../../../utils/axios/license";
+import dateTimeConvert from "../../../../components/utils";
 
 function License() {
   const [licenseData, setLicenseData] = useState();
@@ -45,7 +46,7 @@ function License() {
                 <TableCell>{data.id}</TableCell>
                 <TableCell>{data.name}</TableCell>
                 <TableCell>{data.description}</TableCell>
-                <TableCell>{data.dateOfIssue}</TableCell>
+                <TableCell>{dateTimeConvert(data.dateOfIssue)}</TableCell>
                 </TableRow>
             ))}
           </TableBody>
