@@ -47,6 +47,7 @@ import Transaction from "./pages/Manager/SystemData/Transaction/Transaction";
 import License from "./pages/Manager/SystemData/License/License";
 import PaymentHistory from "./pages/Manager/SystemData/PaymentHistory/PaymentHistory";
 import Fish from "./pages/Manager/SystemData/Fish/Fish";
+import Orders from "./pages/Manager/SystemData/Orders/Orders";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -109,6 +110,7 @@ function App() {
               <Route path="/admin/payment-history" element={<ManagerPrivateRoute element={<PaymentHistory />} />} />
               <Route path="/admin/license" element={<ManagerPrivateRoute element={<License />} />} />
               <Route path="/admin/transaction" element={<ManagerPrivateRoute element={<Transaction />} />} />
+              <Route path="/admin/orders" element={<ManagerPrivateRoute element={<Orders />} />} />
             </Route>
 
             <Route element={<CustomerLayout />}>
