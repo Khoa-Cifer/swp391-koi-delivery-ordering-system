@@ -1,9 +1,3 @@
-// import "./MainContent.scss";
-// const MainContent = () => {
-//   return (
-//     <div className="order-details-container">
-//       {/* Order Details Table */}
-
 import { Box, Button, Grid, Paper, styled } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import { useCallback, useEffect, useState } from "react";

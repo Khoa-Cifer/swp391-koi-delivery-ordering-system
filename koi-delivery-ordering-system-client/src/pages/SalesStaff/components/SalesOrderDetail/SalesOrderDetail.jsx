@@ -135,19 +135,6 @@ function SalesOrderDetail() {
 
       <div className="order-details">
         <div className="details-row">
-          {/* <div className="details-column">
-            <p>Tracking Id</p>
-            <p>Receiver Address</p>
-            <p>Sender Address</p>
-          </div>
-          <div className="details-column">
-            <p>Name</p>
-            <p>Price</p>
-          </div>
-          <div className="details-column">
-            <p>Created Date</p>
-            <p>Last Updated Date / Finish Date</p>
-          </div> */}
           <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             <Grid item xs={6}>
               <Item>Create Date: {dateTimeConvert(state.createdDate)}</Item>

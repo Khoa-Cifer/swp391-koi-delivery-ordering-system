@@ -39,3 +39,45 @@ export async function updateDeliveryStaffCurrentLocation(
         console.log(error);
     }
 }
+
+export async function deliveryStaffUpdateProfile(id, email, username, phoneNumber, password) {
+    try {
+        const response = await axiosClient.put("delivery-staff/updateDeliveryStaffProfile",
+            {
+                id,
+                email,
+                password,
+                username,
+                phoneNumber
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function deliveryStaffUpdateProfileImage(id, file) {
+    try {
+        const response = await axiosClient.put(`delivery-staff/updateDeliveryStaffAvatar/${id}`, {
+            file
+        }, {
+            headers: {
+                'Accept': '*/*', // Accept all types for this request
+                'Content-Type': 'multipart/form-data' // Set Content-Type if uploading a file
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function getDeliveryStaffById(id) {
+    try {
+        const response = await axiosClient.get(`delivery-staff/getDeliveryStaffById/${id}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}

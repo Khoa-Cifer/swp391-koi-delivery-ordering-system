@@ -19,7 +19,7 @@ function Sidebar() {
   const [imagePreview, setImagePreview] = useState(default_avatar);
 
   const handleOpenEditProfile = () => {
-    // navigate("/customer-edit-profile")
+    navigate("/delivery-staff-edit-profile")
   }
 
   const token = localStorage.getItem("token");
