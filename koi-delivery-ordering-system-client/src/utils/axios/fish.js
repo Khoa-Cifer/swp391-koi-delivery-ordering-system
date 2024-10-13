@@ -67,3 +67,12 @@ export async function updateFishById(
         console.log(error);
     }
 }
+
+export async function getAllFishes() {
+    try {
+        const response = await axiosClient.get("fishes/getAllFishes");
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
