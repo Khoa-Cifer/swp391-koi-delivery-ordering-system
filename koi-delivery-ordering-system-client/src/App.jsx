@@ -41,6 +41,7 @@ import GettingOrderDeliveryStaff from "./pages/DeliveryStaff/delivery_order_home
 import AvailableToDelivery from "./pages/DeliveryStaff/delivery_order_home/AvailableToDelivery";
 import DeliveringOrder from "./pages/DeliveryStaff/delivery_order_home/DeliveringOrder";
 import AvailableToGet from "./pages/DeliveryStaff/delivery_order_home/AvailableToGet";
+import SalesStaffNews from "./pages/SalesStaff/SalesStaffNews/SalesStaffNews"
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -127,6 +128,9 @@ function App() {
               <Route path="/sales-staff-home" element={<SalesStaffPrivateRoute element={<SalesStaffHome />} />} />
               <Route path="/sales-order-detail/:id" element={<AllowedRoute element={<SalesOrderDetail />} />} />
               <Route path="/sales-order-detail/:id/sales-fish-detail" element={<AllowedRoute element={<SalesFishDetail />} />} />
+              <Route path="/sales-order-detail/:id" element={<SalesStaffPrivateRoute element={<SalesOrderDetail />} />} />
+              <Route path="/sales-order-detail/:id/sales-fish-detail" element={<SalesStaffPrivateRoute element={<SalesFishDetail />} />} />
+              <Route path="/news-sales-staff" element={<SalesStaffPrivateRoute element={<SalesStaffNews />} />} />
             </Route>
 
             <Route path="/payment-success" element={<AllowedRoute element={<PaymentSuccess />} />} />

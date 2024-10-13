@@ -32,7 +32,7 @@ function OrderInfo({ order }) {
     const [senderAddress, setSenderAddress] = useState(order.senderAddress);
     const [senderCoordinates, setSenderCoordinates] = useState({ lat: parseFloat(order.senderLatitude), lng: parseFloat(order.senderLongitude) });
     const [receiverAddress, setReceiverAddress] = useState(order.destinationAddress);
-    const [receiverCoordinates, setReceiverCoordinates] = useState({ lat: null, lng: null });
+    const [receiverCoordinates, setReceiverCoordinates] = useState({ lat: parseFloat(order.senderLatitude), lng: parseFloat(order.senderLatitude) });
     const [expectedFinishDate, setExpectedFinishDate] = useState(null);
     const [selectedButton, setSelectedButton] = useState(0);
 
