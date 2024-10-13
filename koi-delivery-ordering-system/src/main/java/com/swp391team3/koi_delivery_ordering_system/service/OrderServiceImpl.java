@@ -343,6 +343,15 @@ public class OrderServiceImpl implements IOrderService {
                 }
             }
 
+            //get customer
+            Customer customer = foundOrder.get().getCustomer();
+            //send mail
+            EmailDetailDTO emailDetail = new EmailDetailDTO();
+            emailDetail.setReceiver((Object) customer);
+            emailDetail.setSubject("Order " + foundOrder.get().getId() + " has been successfully delivered");
+
+            emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
+            emailService.sendEmail(emailDetail, 3);
             return result;
         } catch (Exception e) {
             return false;
