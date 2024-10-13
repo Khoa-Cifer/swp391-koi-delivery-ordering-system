@@ -227,12 +227,6 @@ function MainContent() {
         if (response) {
           await updateDeliveryStaffCurrentLocation(deliveryStaffId, address, currentLocation.lat, currentLocation.lng);
         }
-  
-        if (response) {
-          toast("Order Location updated");
-        } else {
-          toast("Unexpected Error has been occurred");
-        }
       }
   
       handleUpdateOrderLocation();

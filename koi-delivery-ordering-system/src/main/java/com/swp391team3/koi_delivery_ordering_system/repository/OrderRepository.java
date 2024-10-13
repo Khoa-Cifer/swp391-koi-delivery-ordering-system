@@ -21,4 +21,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>{
             "AND od.deliveryProcessType = :deliveryProcessType " +
             "AND od.finishDate IS NULL")
     Optional<Order> findOrderByDeliveryStaffId(Long deliveryStaffId, Long orderId, int deliveryProcessType);
+
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.orderStatus = :status")
+    int countOrdersByStatus(int status);
 }
