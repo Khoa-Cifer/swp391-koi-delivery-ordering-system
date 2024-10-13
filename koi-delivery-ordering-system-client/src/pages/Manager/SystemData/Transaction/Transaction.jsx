@@ -2,6 +2,11 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 import { useEffect, useState } from "react";
 import { getAllTransaction } from "../../../../utils/axios/transaction";
 
+// Function to format the date in "DD/MM/YYYY"
+function formatDate(dateString) {
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+}
 
 function Transaction() {
     const [transactionData, setTransactionData] = useState();
@@ -18,7 +23,7 @@ function Transaction() {
 
     return (
         <div>
-             <div className="dashboard-info">
+            <div className="dashboard-info">
                 <h2 style={{ marginTop: "0" }}>Transaction</h2>
             </div>
 
@@ -35,21 +40,21 @@ function Transaction() {
                             <TableCell style={{ color: '#041967' }}>
                                 <Typography>Transaction Date</Typography>
                             </TableCell>
-                            </TableRow>
+                        </TableRow>
                     </TableHead>
                     <TableBody>
                         {transactionData?.map((data) => (
                             <TableRow key={data.id}>
                                 <TableCell>{data.id}</TableCell>
                                 <TableCell>{data.amount}</TableCell>
-                                <TableCell>{data.transactionDate}</TableCell>
-                                </TableRow>
+                                <TableCell>{formatDate(data.transactionDate)}</TableCell> {/* Format the date here */}
+                            </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
         </div>
-    )
+    );
 }
 
 export default Transaction;
