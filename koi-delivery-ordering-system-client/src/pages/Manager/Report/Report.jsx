@@ -34,7 +34,7 @@ const Report = () => {
   }, []);
 
   // Calculate totals
-  const totalDaysOperated = data.reduce(
+  const totalOrders = data.reduce(
     (sum, item) => sum + item.daysOperated || 0,
     0
   );
@@ -44,7 +44,7 @@ const Report = () => {
   const totalFailed = data.filter((item) => item.status === "Failed").length;
 
   return (
-    <Container
+    <Box
       sx={{ minHeight: "100vh", padding: "32px", backgroundColor: "#f5f5f5" }}
     >
       <Box mb={8}>
@@ -62,9 +62,8 @@ const Report = () => {
       <Grid container spacing={3} mb={8}>
         <Grid item xs={12} md={4}>
           <StatCard
-            title="Days Operated"
-            value={totalDaysOperated}
-            description="NaN% vs last 7 days"
+            title="Total Orders"
+            value={`${totalOrders} Orders`}
             icon={<HelpCircle className="w-5 h-5 text-blue-500" />}
             color="#bbdefb"
             textColor="#0d47a1"
@@ -74,8 +73,7 @@ const Report = () => {
         <Grid item xs={12} md={4}>
           <StatCard
             title="Completed"
-            value={`${totalCompleted} Deliveries`}
-            description="2% vs last 7 days"
+            value={`${totalCompleted} Orders`}
             icon={<HelpCircle className="w-5 h-5 text-green-500" />}
             color="#c8e6c9"
             textColor="#2e7d32"
@@ -85,8 +83,7 @@ const Report = () => {
         <Grid item xs={12} md={4}>
           <StatCard
             title="Failed"
-            value={`${totalFailed} Deliveries`}
-            description="147% vs last 7 days"
+            value={`${totalFailed} Orders`}
             icon={<HelpCircle className="w-5 h-5 text-red-500" />}
             color="#ffcdd2"
             textColor="#c62828"
@@ -124,7 +121,7 @@ const Report = () => {
               component="h2"
               sx={{ p: 2, backgroundColor: "#1976d2", color: "white" }}
             >
-              Orders delivery detail
+              Orders detail
             </Typography>
             <Table
               headers={[
@@ -145,7 +142,7 @@ const Report = () => {
           </Paper>
         </Grid>
       </Grid>
-    </Container>
+    </Box>
   );
 };
 

@@ -24,37 +24,55 @@ ChartJS.register(
 );
 
 const LineChart = () => {
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // Default to current month
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // Default to current year
   const [chartData, setChartData] = useState({
-    days: [], // Days of the current month
+    days: [], // Days of the selected month
     completed: [], // Completed orders per day
     failed: [], // Failed orders per day
   });
 
+  // Array of months for the dropdown
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: currentYear - 2019 }, (_, i) => 2020 + i); 
+
   useEffect(() => {
     async function fetchData() {
       try {
-        const orders = await getAllOrders(); // Fetch all orders
+        const orders = await getAllOrders();
 
-        // Set the current month (October in this example, or dynamically get current month)
-        const currentMonth = new Date().getMonth(); // Dynamically set to the current month (0=Jan, 1=Feb,...)
         const totalDaysInMonth = new Date(
-          new Date().getFullYear(),
-          currentMonth + 1,
+          selectedYear,
+          selectedMonth + 1,
           0
         ).getDate();
 
-        // Initialize arrays for completed and failed orders for each day in the current month
         const days = Array.from({ length: totalDaysInMonth }, (_, i) => i + 1);
-        const completed = Array(totalDaysInMonth).fill(0); // Array for completed orders by day
-        const failed = Array(totalDaysInMonth).fill(0); // Array for failed orders by day
+        const completed = Array(totalDaysInMonth).fill(0); 
+        const failed = Array(totalDaysInMonth).fill(0); 
 
-        // Filter orders for the current month and sort by day
         orders.forEach((order) => {
           const orderDate = new Date(order.expectedFinishDate);
           const orderMonth = orderDate.getMonth();
+          const orderYear = orderDate.getFullYear();
 
-          // Only count orders from the current month
-          if (orderMonth === currentMonth) {
+          // Only count orders from the selected year and month
+          if (orderMonth === selectedMonth && orderYear === selectedYear) {
             const orderDay = orderDate.getDate() - 1; // Get the day (0-based index)
             if (order.orderStatus === 7) {
               completed[orderDay] += 1; // Increment completed count for the respective day
@@ -63,8 +81,6 @@ const LineChart = () => {
             }
           }
         });
-
-        // Set the data for the chart
         setChartData({
           days,
           completed,
@@ -76,22 +92,29 @@ const LineChart = () => {
     }
 
     fetchData();
-  }, []);
+  }, [selectedMonth, selectedYear]);
 
-  // Prepare data for the line chart for the selected month
+  const handleMonthChange = (event) => {
+    setSelectedMonth(parseInt(event.target.value));
+  };
+
+  const handleYearChange = (event) => {
+    setSelectedYear(parseInt(event.target.value));
+  };
+
   const data = {
-    labels: chartData.days, // [1, 2, 3, ..., total days of the month]
+    labels: chartData.days, 
     datasets: [
       {
         label: "Completed Orders",
-        data: chartData.completed, // [completed orders per day]
+        data: chartData.completed, 
         fill: false,
         borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
       },
       {
         label: "Failed Orders",
-        data: chartData.failed, // [failed orders per day]
+        data: chartData.failed, 
         fill: false,
         borderColor: "rgb(255, 99, 132)",
         tension: 0.1,
@@ -99,7 +122,6 @@ const LineChart = () => {
     ],
   };
 
-  // Chart options
   const options = {
     responsive: true,
     plugins: {
@@ -108,12 +130,48 @@ const LineChart = () => {
       },
       title: {
         display: true,
-        text: "Daily Completed and Failed Orders for the Current Month",
+        text: `Daily Completed and Failed Orders for ${months[selectedMonth]} ${selectedYear}`,
       },
     },
   };
 
-  return <Line data={data} options={options} />;
+  return (
+    <div>
+      {/* Dropdown to select year and month */}
+      <div style={{ marginBottom: "20px" }}>
+        <label htmlFor="year-select">Select Year: </label>
+        <select
+          id="year-select"
+          value={selectedYear}
+          onChange={handleYearChange}
+        >
+          {years.map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
+
+        <label htmlFor="month-select" style={{ marginLeft: "10px" }}>
+          Select Month:{" "}
+        </label>
+        <select
+          id="month-select"
+          value={selectedMonth}
+          onChange={handleMonthChange}
+        >
+          {months.map((month, index) => (
+            <option key={index} value={index}>
+              {month}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Line Chart */}
+      <Line data={data} options={options} />
+    </div>
+  );
 };
 
 export default LineChart;
