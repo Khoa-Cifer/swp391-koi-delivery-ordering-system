@@ -98,6 +98,7 @@ function Orders() {
           <TextField
             label="Tracking ID"
             variant="outlined"
+            type=""
             value={searchTrackingId}
             onChange={(e) => setSearchTrackingId(e.target.value)}
             sx={{
@@ -110,6 +111,7 @@ function Orders() {
           <TextField
             label="Name"
             variant="outlined"
+            type=""
             value={searchOrderName}
             onChange={(e) => setSearchOrderName(e.target.value)}
             sx={{
