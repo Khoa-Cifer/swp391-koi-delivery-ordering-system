@@ -26,6 +26,7 @@ function FishInfo({ orderId, formStepData }) {
 
     const [submittedLicense, setSubmittedLicense] = useState({});
     const [totalAddedFishes, setTotalAddedFishes] = useState(0);
+    
     const handleAddLicenseForm = (e, index) => {
         const { name, value, files } = e.target;
         let newFormData;

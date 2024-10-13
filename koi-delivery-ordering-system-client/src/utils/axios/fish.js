@@ -38,3 +38,32 @@ export async function createFishOrderInfo(
         console.log(error);
     }
 }
+
+export async function updateFishById(
+    fishId,
+    name,
+    age,
+    size,
+    weight,
+    price,
+    image,
+) {
+    try {
+        const response = await axiosClient.post(`fishes/editFish/${fishId}`, {
+            name,
+            age,
+            size,
+            weight,
+            price,
+            image,
+        }, {
+            headers: {
+                'Accept': '*/*', // Accept all types for this request
+                'Content-Type': 'multipart/form-data' // Set Content-Type if uploading a file
+            }
+        });
+        return response.data
+    } catch (error) {
+        console.log(error);
+    }
+}

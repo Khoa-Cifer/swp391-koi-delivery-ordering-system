@@ -6,6 +6,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import "./license.scss";
+import { getFileByFileId } from "../../../../utils/axios/file";
 
 const LicenseCustomBoxContainer = styled(Box)(() => ({
   display: "flex",
@@ -16,6 +17,7 @@ const LicenseCustomBoxContainer = styled(Box)(() => ({
 
 // eslint-disable-next-line react/prop-types
 const License = ({
+  licenseData,
   handleLicenseChange,
   dateChange,
   handleLicenseFormClose,
@@ -23,6 +25,47 @@ const License = ({
   const [previewUrls, setPreviewUrls] = useState(null);
   const [date, setDate] = useState(null);
   const [fileInputs, setFileInputs] = useState([{ id: 1, file: null }]);
+  const [licenseName, setLicenseName] = useState();
+  const [licenseDescription, setLicenseDescription] = useState();
+
+  useEffect(() => {
+    if (licenseData) {
+      console.log(licenseData);
+      setDate(licenseData.dateOfIssue);
+      setLicenseName(licenseData.name);
+      setLicenseDescription(licenseData.description);
+    }
+
+    async function fetchData() {
+      const fileIds = licenseData.files.map(license => license.file.id);
+      if (fileIds && fileIds.length > 0) {
+        const filesPromises = fileIds.map(async fileId => {
+          const response = await getFileByFileId(fileId);
+          return response; // Create Object URL from response blob
+        });
+
+        const filesArray = await Promise.all(filesPromises);
+        console.log('filesArray:', filesArray); // Debugging: Check the contents of filesArray
+        
+        setFileInputs(prevFileInputs => {
+          // Create a copy of prevFileInputs to modify
+          const updatedFileInputs = [...prevFileInputs];
+        
+          filesArray.forEach((file, index) => {
+            if (index < updatedFileInputs.length) {
+              updatedFileInputs[index].file = file; // Set the file URL
+            } else {
+              updatedFileInputs.push({ id: updatedFileInputs.length + 1, file });
+            }
+          });
+        
+          return updatedFileInputs;
+        });
+      }
+    }
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const filePreviews = fileInputs.map((input) => {
@@ -51,6 +94,16 @@ const License = ({
     handleLicenseChange(e);
   };
 
+  const handleNameChange = (e) => {
+    setLicenseName(e.target.value);
+    handleLicenseChange(e);
+  }
+
+  const handleDescriptionChange = (e) => {
+    setLicenseDescription(e.target.value);
+    handleDateChange(e);
+  }
+
   const addFileInput = () => {
     setFileInputs([...fileInputs, { id: fileInputs.length + 1, file: null }]);
   };
@@ -77,7 +130,8 @@ const License = ({
               type="text"
               name="name"
               className="form-input"
-              onChange={handleLicenseChange}
+              value={licenseName}
+              onChange={(e) => handleNameChange(e)}
             />
           </div>
           <div className="form-group">
@@ -86,7 +140,8 @@ const License = ({
               type="text"
               name="description"
               className="form-input"
-              onChange={handleLicenseChange}
+              value={licenseDescription}
+              onChange={(e) => handleDescriptionChange(e)}
             />
           </div>
           <Calendar onChange={(e) => handleDateChange(e)} date={date} />

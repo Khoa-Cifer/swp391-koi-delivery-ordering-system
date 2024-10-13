@@ -1,7 +1,9 @@
 import { Box, styled } from "@mui/material";
 import ToastUtil from "../../../../components/toastContainer";
 import { useEffect, useState } from "react";
-import License from "../../CustomerCreateOrder/utils/License";
+import { getFileByFileId } from "../../../../utils/axios/file";
+import { updateFishById } from "../../../../utils/axios/fish";
+import License from "./License";
 
 const CustomBoxContainer = styled(Box)(() => ({
     display: "flex",
@@ -10,7 +12,6 @@ const CustomBoxContainer = styled(Box)(() => ({
 
 // eslint-disable-next-line react/prop-types
 function Fish({ fish }) {
-    console.log(fish);
     const [fishName, setFishName] = useState(fish.name);
     const [fishAge, setFishAge] = useState(fish.age);
     const [fishSize, setFishSize] = useState(fish.size);
@@ -22,7 +23,52 @@ function Fish({ fish }) {
     const [previewUrl, setPreviewUrl] = useState(null);
 
     const [submittedLicense, setSubmittedLicense] = useState({});
-    const [totalAddedFishes, setTotalAddedFishes] = useState(0);
+
+    useEffect(() => {
+        async function fetchData() {
+            const fileId = fish.file.id;
+            if (fileId) {
+                try {
+                    const response = await getFileByFileId(fileId); // Assuming this returns a Blob or file
+                    setFile(response); // Set the file URL in state
+                } catch (error) {
+                    console.error('Error fetching file:', error);
+                }
+            }
+        }
+        fetchData();
+
+        function addDefaultForm() {
+            // eslint-disable-next-line react/prop-types
+            if (fish.licenses && fish.licenses.length > 0) {
+                const updatedLicenseForms = [...licenseForms]; // Make a copy of the current state
+
+                // eslint-disable-next-line react/prop-types
+                fish.licenses.forEach(() => {
+                    updatedLicenseForms.push(updatedLicenseForms.length); // Add to the array
+                });
+
+                setLicenseForms(updatedLicenseForms);
+            }
+        }
+
+        addDefaultForm();
+    }, []);
+
+    useEffect(() => {
+        if (!file) {
+            console.error("The provided file is not a valid Blob or File.");
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            setPreviewUrl(reader.result);
+        }
+
+        reader.readAsDataURL(file);
+    }, [file]);
 
     const handleAddLicenseForm = (e, index) => {
         const { name, value, files } = e.target;
@@ -41,11 +87,11 @@ function Fish({ fish }) {
 
     const handleLicenseDateChange = (e, index) => {
         const newFormData = { ...submittedLicense, [index]: { ...submittedLicense[index], 'date': e } };
-        console.log(newFormData);
         setSubmittedLicense(newFormData);
     }
 
     const addNewForm = () => {
+        console.log("function called");
         setLicenseForms([...licenseForms, licenseForms.length]); // Add a new form based on its index
     };
 
@@ -54,20 +100,6 @@ function Fish({ fish }) {
             setFile(e.target.files[0]);
         }
     };
-
-    useEffect(() => {
-        if (!file) {
-            return;
-        }
-
-        const reader = new FileReader();
-
-        reader.onloadend = () => {
-            setPreviewUrl(reader.result);
-        }
-
-        reader.readAsDataURL(file);
-    }, [file]);
 
     function handleNameChange(e) {
         setFishName(e.target.value);
@@ -81,6 +113,19 @@ function Fish({ fish }) {
             delete newData[index]; // Remove the specified index
             return newData; // Return the updated object
         });
+    }
+
+
+    async function handleConfirm() {
+        const fishData = await updateFishById(
+            fish.id,
+            fishName,
+            fishAge,
+            fishSize,
+            fishWeight,
+            fishPrice,
+            file,
+        );
     }
 
     function handleAgeChange(e) {
@@ -165,12 +210,12 @@ function Fish({ fish }) {
                             />
                         </div>
                         <div style={{ display: "flex", gap: "10px" }}>
-                            {/* <button className="form-button" onClick={() => handleConfirm()}>
+                            <button className="form-button" onClick={() => handleConfirm()}>
                                 Confirm
                             </button>
                             <button className="form-button" onClick={() => addNewForm()}>
                                 Add License
-                            </button> */}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -182,6 +227,8 @@ function Fish({ fish }) {
             {licenseForms.map((index) => (
                 <License
                     key={index}
+                    // eslint-disable-next-line react/prop-types
+                    licenseData={fish.licenses && (index < fish.licenses.length ? fish.licenses[index] : null)}
                     handleLicenseChange={(e) => handleAddLicenseForm(e, index)} // Pass the index to track the form
                     dateChange={(e) => handleLicenseDateChange(e, index)}
                     handleLicenseFormClose={(e) => handleLicenseClose(e, index)}
