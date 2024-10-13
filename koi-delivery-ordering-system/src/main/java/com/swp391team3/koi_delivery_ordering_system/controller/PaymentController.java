@@ -64,20 +64,6 @@ public class PaymentController {
         }
     }
 
-    //Get All Payment History
-    //PASSED
-    @GetMapping("/getAllPaymentHistory")
-    public ResponseEntity<?> getAllPaymentHistory() {
-        return ResponseEntity.ok(paymentHistoryService.getAllPaymentHistory());
-    }
-
-    //Get Payment History By Id
-    //PASSED
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getPaymentHistoryById(@PathVariable Long id) {
-        return ResponseEntity.ok(paymentHistoryService.getPaymentHistoryById(id));
-    }
-
     //update Payment History
     //PASSED
 //    @PutMapping("/{id}")

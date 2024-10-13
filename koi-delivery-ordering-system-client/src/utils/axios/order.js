@@ -167,3 +167,40 @@ export async function getAllOrders() {
 //     console.log(error);
 //   }
 // }
+
+export async function updateGeneralOrderInfo(
+  orderId,
+  name,
+  description,
+  destinationAddress,
+  destinationLongitude,
+  destinationLatitude,
+  senderAddress,
+  senderLongitude,
+  senderLatitude,
+  expectedFinishDate
+) {
+  try {
+    const token = localStorage.getItem("token");
+    let customerId;
+    if (token) {
+      const customerInfo = jwtDecode(token);
+      customerId = customerInfo.sub.substring(2);
+    }
+    const response = await axiosClient.put(`orders/editOrder/${orderId}`, {
+      customerId,
+      name,
+      description,
+      destinationAddress,
+      destinationLongitude,
+      destinationLatitude,
+      senderAddress,
+      senderLongitude,
+      senderLatitude,
+      expectedFinishDate,
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}

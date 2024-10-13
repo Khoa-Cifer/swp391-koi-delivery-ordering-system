@@ -5,7 +5,6 @@ import DeliveryStaffHome from "./pages/DeliveryStaff/home_delivery/Delivery_staf
 import AuthProvider from "./authentication/AuthProvider";
 import PrivateRoute from "./authentication/PrivateRoute";
 import DeliveryOrderHome from "./pages/DeliveryStaff/delivery_order_home/DeliveryOrderHome";
-import DeliveryStaffEditProfile from "./pages/DeliveryStaff/DeliveryStaffEditProfile/DeliveryStaffEditProfile";
 import LoginCustomer from "./pages/login/LoginCustomer/LoginCustomer";
 import LoginSaleStaff from "./pages/login/LoginSaleStaff/LoginSaleStaff";
 import LoginDeliveryStaff from "./pages/login/LoginDeliveryStaff/LoginDeliveryStaff";
@@ -43,10 +42,7 @@ import AvailableToDelivery from "./pages/DeliveryStaff/delivery_order_home/Avail
 import DeliveringOrder from "./pages/DeliveryStaff/delivery_order_home/DeliveringOrder";
 import AvailableToGet from "./pages/DeliveryStaff/delivery_order_home/AvailableToGet";
 import SalesStaffNews from "./pages/SalesStaff/SalesStaffNews/SalesStaffNews"
-import Fish from "./pages/Manager/SystemData/Fish/Fish";
-import PaymentHistory from "./pages/Manager/SystemData/PaymentHistory/PaymentHistory";
-import License from "./pages/Manager/SystemData/License/License";
-import Transaction from "./pages/Manager/SystemData/Transaction/Transaction";
+import Page404 from "./pages/DefaultError/404";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -105,10 +101,6 @@ function App() {
               <Route path="/admin/delivery-staff" element={<ManagerPrivateRoute element={<DeliveryStaff />} />} />
               <Route path="/admin/sales-staff" element={<ManagerPrivateRoute element={<SalesStaff />} />} />
               <Route path="/admin/payment-rate" element={<ManagerPrivateRoute element={<PaymentRate />} />} />
-              <Route path="/admin/fish" element={<ManagerPrivateRoute element={<Fish />} />} />
-              <Route path="/admin/payment-history" element={<ManagerPrivateRoute element={<PaymentHistory />} />} />
-              <Route path="/admin/license" element={<ManagerPrivateRoute element={<License />} />} />
-              <Route path="/admin/transaction" element={<ManagerPrivateRoute element={<Transaction />} />} />
             </Route>
 
             <Route element={<CustomerLayout />}>
@@ -129,7 +121,6 @@ function App() {
               <Route path="/available-to-get-delivery-staff" element={<DeliveryStaffPrivateRoute element={<AvailableToGet />} />} />
               <Route path="/delivery-order-detail/:id" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderDetail />} />} />
               <Route path="/delivery-order-detail/:id/delivery-fish-detail" element={<DeliveryStaffPrivateRoute element={<DeliveryFishDetail />} />} />
-              <Route path="/delivery-staff-edit-profile" element={<CustomerPrivateRoute element={<DeliveryStaffEditProfile />} />} />
             </Route>
 
             <Route element={<SalesStaffLayout />}>
@@ -146,6 +137,8 @@ function App() {
             <Route path="/payment-success" element={<AllowedRoute element={<PaymentSuccess />} />} />
 
             <Route path="/tracking-order" element={<TrackingOrder />} />
+
+            <Route path="/*" element={<Page404 />} />
           </Routes>
         </Router>
       </main>

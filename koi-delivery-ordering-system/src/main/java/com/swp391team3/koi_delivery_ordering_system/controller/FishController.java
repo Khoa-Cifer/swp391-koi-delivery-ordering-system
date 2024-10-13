@@ -78,7 +78,7 @@ public class FishController {
             @RequestParam(name = "age") int age,
             @RequestParam(name = "size") double size,
             @RequestParam(name = "weight") double weight,
-            @RequestParam(name = "status") int status,
+//            @RequestParam(name = "status") int status,
             @RequestParam(name = "price") double price,
             @RequestParam(name = "image") MultipartFile file) {
 
@@ -95,7 +95,7 @@ public class FishController {
             }
             Order order = orderOptional.get();
             if (order.getOrderStatus() == orderStatus.DRAFT || order.getOrderStatus() == orderStatus.POSTED) {
-                Fish updatedFish = fishService.updateFish(fishId, name, age, size, weight, status, price, file);
+                Fish updatedFish = fishService.updateFish(fishId, name, age, size, weight, price, file);
                 return ResponseEntity.ok(updatedFish);
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order Status does not support");

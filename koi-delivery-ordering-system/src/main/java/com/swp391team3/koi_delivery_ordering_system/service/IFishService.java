@@ -15,5 +15,5 @@ public interface IFishService {
     Long createFishByOrderId(OrderFishInfoRequestDTO request) throws IOException;
     List<Fish> getFishesByOrderId(Long orderId);
 
-    Fish updateFish(Long fishId, String name, int age, double size, double weight, int status, double price, MultipartFile file);
+    Fish updateFish(Long fishId, String name, int age, double size, double weight, double price, MultipartFile file);
 }

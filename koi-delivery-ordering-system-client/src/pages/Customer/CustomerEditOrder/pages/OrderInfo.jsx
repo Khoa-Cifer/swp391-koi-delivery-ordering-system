@@ -1,11 +1,10 @@
 import { Box, styled } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
-import { usePlacesWidget } from "react-google-autocomplete";
+import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
 import { Calendar } from "react-date-range";
 import { GoogleMap } from "@react-google-maps/api";
 import { Button, Flex } from "antd";
-import { createGeneralOrderInfo } from "../../../../utils/axios/order";
+import { updateGeneralOrderInfo } from "../../../../utils/axios/order";
 import ToastUtil from "../../../../components/toastContainer";
 
 const CustomBoxContainer = styled(Box)(() => ({
@@ -25,15 +24,14 @@ function OrderInfo({ order }) {
         lat: 10.75,
         lng: 106.6667
     };
-
     const [center, setCenter] = useState(centerDefault);
     const [orderName, setOrderName] = useState(order.name);
     const [orderDescription, setOrderDescription] = useState(order.description);
     const [senderAddress, setSenderAddress] = useState(order.senderAddress);
     const [senderCoordinates, setSenderCoordinates] = useState({ lat: parseFloat(order.senderLatitude), lng: parseFloat(order.senderLongitude) });
     const [receiverAddress, setReceiverAddress] = useState(order.destinationAddress);
-    const [receiverCoordinates, setReceiverCoordinates] = useState({ lat: parseFloat(order.senderLatitude), lng: parseFloat(order.senderLatitude) });
-    const [expectedFinishDate, setExpectedFinishDate] = useState(null);
+    const [receiverCoordinates, setReceiverCoordinates] = useState({ lat: parseFloat(order.destinationLatitude), lng: parseFloat(order.destinationLongitude) });
+    const [expectedFinishDate, setExpectedFinishDate] = useState(order.expectedFinishDate);
     const [selectedButton, setSelectedButton] = useState(0);
 
     const onMapClick = useCallback((e) => {
@@ -98,25 +96,14 @@ function OrderInfo({ order }) {
         setOrderDescription(e.target.value);
     }
 
-    const { ref: senderRef } = usePlacesWidget({
-        onPlaceSelected: (place) => {
-            setSenderAddress(place.formatted_address || "");
-        },
-    });
-
-    const { ref: receiverRef } = usePlacesWidget({
-        onPlaceSelected: (place) => {
-            setReceiverAddress(place.formatted_address || "");
-        },
-    });
-
     async function handleSubmit() {
         if (!orderName || !orderDescription || !receiverAddress) {
             toast("All fields are required");
             return;
         }
         try {
-            const response = await createGeneralOrderInfo(
+            const response = await updateGeneralOrderInfo(
+                order.id,
                 orderName,
                 orderDescription,
                 receiverAddress,
@@ -181,7 +168,7 @@ function OrderInfo({ order }) {
                             className="form-input"
                             onChange={e => handleSenderAddressChange(e)}
                             value={senderAddress}
-                            ref={senderRef}
+                            readOnly
                         />
                     </div>
 
@@ -193,14 +180,14 @@ function OrderInfo({ order }) {
                             className="form-input"
                             onChange={e => handleReceiverAddressChange(e)}
                             value={receiverAddress}
-                            ref={receiverRef}
+                            readOnly
                         />
                     </div>
 
                     <Calendar onChange={e => handleDateChange(e)} date={expectedFinishDate} />
 
                     <button onClick={() => handleSubmit()} className="form-button">
-                        Submit & Next Step
+                        Confirm
                     </button>
                 </div>
             </div>

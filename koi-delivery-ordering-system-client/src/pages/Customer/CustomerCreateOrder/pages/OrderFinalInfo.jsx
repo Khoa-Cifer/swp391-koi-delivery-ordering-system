@@ -96,6 +96,7 @@ function OrderFinalInfo({ orderId }) {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
+                                type=""
                                 label="Create Date"
                                 value={dateTimeConvert(postedData.createdDate)}
                                 InputProps={{
@@ -107,6 +108,7 @@ function OrderFinalInfo({ orderId }) {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
+                                type=""
                                 label="Expect Finish Date"
                                 value={dateTimeConvert(postedData.expectedFinishDate)}
                                 InputProps={{
@@ -119,6 +121,7 @@ function OrderFinalInfo({ orderId }) {
                             <TextField
                                 fullWidth
                                 label="Sender Address"
+                                type=""
                                 value={postedData.senderAddress}
                                 InputProps={{
                                     readOnly: true,
@@ -129,6 +132,7 @@ function OrderFinalInfo({ orderId }) {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
+                                type=""
                                 label="Receive Address"
                                 value={postedData.destinationAddress}
                                 InputProps={{
@@ -140,6 +144,7 @@ function OrderFinalInfo({ orderId }) {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
+                                type=""
                                 label="Order Name"
                                 value={postedData.name}
                                 InputProps={{
@@ -151,6 +156,7 @@ function OrderFinalInfo({ orderId }) {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
+                                type=""
                                 label="Tracking Id"
                                 value={postedData.trackingId}
                                 InputProps={{
@@ -162,6 +168,7 @@ function OrderFinalInfo({ orderId }) {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
+                                type=""
                                 label="Description"
                                 value={postedData.description}
                                 InputProps={{
@@ -173,6 +180,7 @@ function OrderFinalInfo({ orderId }) {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
+                                type=""
                                 label="Price"
                                 value={`${Math.floor(postedData.price)} VND`}
                                 InputProps={{

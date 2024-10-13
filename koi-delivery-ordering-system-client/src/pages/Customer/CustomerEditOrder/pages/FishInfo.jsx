@@ -1,95 +1,61 @@
-import { Box, styled } from "@mui/material";
-import ToastUtil from "../../../../components/toastContainer";
+import { Box, Tab, Tabs } from "@mui/material";
+import PropTypes from 'prop-types';
+import { useState } from "react";
+import Fish from "../utils/Fish";
 
-const CustomBoxContainer = styled(Box)(() => ({
-    display: "flex",
-    gap: "40px"
-}));
+function CustomTabPanel(props) {
+    const { children, value, index, ...other } = props;
 
-// eslint-disable-next-line react/prop-types
-function FishInfo({ order }) {
     return (
-        <div>
-            <ToastUtil />
-            <CustomBoxContainer>
-                <div className="form-container">
-                    <h1>Fish Information</h1>
-                    <div className="form">
-                        <div className="form-group">
-                            <input
-                                placeholder="Name"
-                                type="text"
-                                name="name"
-                                className="form-input"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <input
-                                placeholder="Age"
-                                type="number"
-                                name="age"
-                                className="form-input"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <input
-                                placeholder="Size"
-                                type="number"
-                                name="size"
-                                className="form-input"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <input
-                                placeholder="Weight"
-                                type="number"
-                                name="weight"
-                                className="form-input"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <input
-                                placeholder="Price"
-                                type="number"
-                                name="price"
-                                className="form-input"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <input
-                                type="file"
-                                name="file"
-                                className="form-input"
-                            />
-                        </div>
-                        <div style={{ display: "flex", gap: "10px" }}>
-                            <button className="form-button" >
-                                Submit
-                            </button>
-                            <button className="form-button" >
-                                Add License
-                            </button>
-                            <button className="form-button" >
-                                Next Step
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    {/* {previewUrl && <img src={previewUrl} alt="Preview" style={{ maxWidth: "40vw" }} />} */}
-                </div>
-            </CustomBoxContainer>
-
-            {/* {licenseForms.map((index) => (
-                <License
-                    key={index}
-                    handleLicenseChange={(e) => handleAddLicenseForm(e, index)} // Pass the index to track the form
-                    dateChange={(e) => handleLicenseDateChange(e, index)}
-                    handleLicenseFormClose={(e) => handleLicenseClose(e, index)}
-                />
-            ))} */}
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && <div style={{ marginTop: "20px" }}>{children}</div>}
         </div>
+    );
+}
 
+CustomTabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
+}
+
+function FishInfo({ order }) {
+    const [value, setValue] = useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
+    return order.fishes && (
+        <div>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Tabs value={value} onChange={handleChange}>
+                    {order.fishes.map && order.fishes.map((fish, index) => (
+                        <Tab key={fish.id} label={`${fish.name}`} {...a11yProps(index)} />
+                    ))}
+                </Tabs>
+            </Box>
+            {order.fishes.map && order.fishes.map((fish, index) => (
+                <CustomTabPanel value={value} index={index} key={index}>
+                    <div className="body-container">
+                        <Fish fish={fish} />
+                    </div>
+                </CustomTabPanel>
+            ))}
+        </div>
     )
 }
 

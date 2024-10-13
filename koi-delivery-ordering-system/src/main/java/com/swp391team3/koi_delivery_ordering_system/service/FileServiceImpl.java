@@ -66,17 +66,27 @@ public class FileServiceImpl implements IFileService {
     @Override
     public String updateFileInFileSystem(Long id, MultipartFile newFile) throws IOException {
         Optional<File> fileData = fileRepository.findById(id);
-        String filePath = folderPath + newFile.getOriginalFilename();
+        if (fileData.isPresent()) {
+            String filePath = folderPath + newFile.getOriginalFilename();
 
-        File file = fileData.get();
-        file.setName(newFile.getOriginalFilename());
-        file.setType(newFile.getContentType());
-        file.setFilePath(filePath);
+            File file = fileData.get();
+            String oldFilePath = file.getFilePath();
 
-        newFile.transferTo(new java.io.File(folderPath + newFile.getOriginalFilename()));
-        fileRepository.save(file);
+            java.io.File oldFile = new java.io.File(oldFilePath);
+            if (oldFile.exists()) {
+                oldFile.delete();
+            }
 
-        return "file modified successfully : " + filePath;
+            file.setName(newFile.getOriginalFilename());
+            file.setType(newFile.getContentType());
+            file.setFilePath(filePath);
+
+            newFile.transferTo(new java.io.File(folderPath + newFile.getOriginalFilename()));
+            fileRepository.save(file);
+
+            return "file modified successfully : " + filePath;
+        }
+        return null;
     }
 
     @Override
