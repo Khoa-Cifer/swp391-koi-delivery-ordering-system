@@ -200,6 +200,9 @@ public class OrderServiceImpl implements IOrderService {
                 case 8:
                     order.setOrderStatus(orderStatus.FAILED);
                     break;
+                case 9:
+                    order.setOrderStatus(orderStatus.ABORTED_BY_CUSTOMER);
+                    break;
                 default:
                     return false;
             }
