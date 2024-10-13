@@ -46,3 +46,12 @@ export async function createLicenseFiles(
     }
     return response.data
 }
+
+export async function getAllLicenses() {
+    try {
+        const response = await axiosClient.get("licenses/getAllLicenses");
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}

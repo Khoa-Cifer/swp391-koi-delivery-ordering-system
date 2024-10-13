@@ -58,12 +58,12 @@ public class ReportServiceImpl implements IReportService {
                         totalFailed++;
                     }
                 }
-                return new DeliveryStaffReportResponseDTO(
-                        foundDeliveryStaff.get().getUsername(),
-                        totalFailed,
-                        totalCompleted
-                );
             }
+            return new DeliveryStaffReportResponseDTO(
+                    foundDeliveryStaff.get().getUsername(),
+                    totalFailed,
+                    totalCompleted
+            );
         }
         return null;
     }

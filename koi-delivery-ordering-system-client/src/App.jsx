@@ -33,36 +33,56 @@ import DeliveryStaff from "./pages/Manager/SystemData/DeliveryStaff/DeliveryStaf
 import SalesStaff from "./pages/Manager/SystemData/SalesStaff/SalesStaff";
 import Dashboard from "./pages/Manager/Report/Dashboard";
 import TrackingOrder from "./pages/public/TrackingOrder/TrackingOrder";
-import "./App.css";
+import "./App.css"
 import PaymentRate from "./pages/Manager/SystemData/PaymentRate/PaymentRate";
 import ReceivedOrderSalesStaff from "./pages/SalesStaff/OrderSalesStaff/ReceivedOrderSalesStaff";
 import CustomerEditOrder from "./pages/Customer/CustomerEditOrder/CustomerEditOrder";
-import Orders from "./pages/Manager/SystemData/Orders/Orders";
-import ContactPage from "./pages/public/Contact/Contact";
+import GettingOrderDeliveryStaff from "./pages/DeliveryStaff/delivery_order_home/GettingOrderDeliveryStaff";
+import AvailableToDelivery from "./pages/DeliveryStaff/delivery_order_home/AvailableToDelivery";
+import DeliveringOrder from "./pages/DeliveryStaff/delivery_order_home/DeliveringOrder";
+import AvailableToGet from "./pages/DeliveryStaff/delivery_order_home/AvailableToGet";
+import SalesStaffNews from "./pages/SalesStaff/SalesStaffNews/SalesStaffNews"
+import Page404 from "./pages/DefaultError/404";
+import Transaction from "./pages/Manager/SystemData/Transaction/Transaction";
+import License from "./pages/Manager/SystemData/License/License";
+import PaymentHistory from "./pages/Manager/SystemData/PaymentHistory/PaymentHistory";
+import Fish from "./pages/Manager/SystemData/Fish/Fish";
 
 function App() {
   // eslint-disable-next-line react/prop-types
   const CustomerPrivateRoute = ({ element }) => (
-    <PrivateRoute allowedRoles={1}>{element}</PrivateRoute>
+    <PrivateRoute allowedRoles={1}>
+      {element}
+    </PrivateRoute>
   );
 
   // eslint-disable-next-line react/prop-types
   const SalesStaffPrivateRoute = ({ element }) => (
-    <PrivateRoute allowedRoles={2}>{element}</PrivateRoute>
+    <PrivateRoute allowedRoles={2}>
+      {element}
+    </PrivateRoute>
   );
 
   // eslint-disable-next-line react/prop-types
   const DeliveryStaffPrivateRoute = ({ element }) => (
-    <PrivateRoute allowedRoles={3}>{element}</PrivateRoute>
+    <PrivateRoute allowedRoles={3}>
+      {element}
+    </PrivateRoute>
   );
 
   // eslint-disable-next-line react/prop-types
   const ManagerPrivateRoute = ({ element }) => (
-    <PrivateRoute allowedRoles={4}>{element}</PrivateRoute>
+    <PrivateRoute allowedRoles={4}>
+      {element}
+    </PrivateRoute>
   );
 
   // eslint-disable-next-line react/prop-types
-  const AllowedRoute = ({ element }) => <PublicRoute>{element}</PublicRoute>;
+  const AllowedRoute = ({ element }) => (
+    <PublicRoute>
+      {element}
+    </PublicRoute>
+  )
 
   return (
     <AuthProvider>
@@ -72,152 +92,61 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<SignUp />} />
 
-            <Route path="/contactPage" element={<ContactPage />} />
-
             <Route path="/login-customer" element={<LoginCustomer />} />
             <Route path="/login-sales-staff" element={<LoginSaleStaff />} />
-            <Route
-              path="/login-delivery-staff"
-              element={<LoginDeliveryStaff />}
-            />
+            <Route path="/login-delivery-staff" element={<LoginDeliveryStaff />} />
             <Route path="/login-admin" element={<LoginAdmin />} />
 
             <Route element={<ManagerLayout />}>
-              <Route
-                path="/admin/report"
-                element={<ManagerPrivateRoute element={<Report />} />}
-              />
-              <Route
-                path="/admin/dashboard"
-                element={<ManagerPrivateRoute element={<Dashboard />} />}
-              />
-              <Route
-                path="/admin/storage"
-                element={<ManagerPrivateRoute element={<Storage />} />}
-              />
-              <Route
-                path="/admin/orders"
-                element={<ManagerPrivateRoute element={<Orders />} />}
-              />
-              <Route
-                path="/admin/customer"
-                element={<ManagerPrivateRoute element={<Customer />} />}
-              />
-              <Route
-                path="/admin/delivery-staff"
-                element={<ManagerPrivateRoute element={<DeliveryStaff />} />}
-              />
-              <Route
-                path="/admin/sales-staff"
-                element={<ManagerPrivateRoute element={<SalesStaff />} />}
-              />
-              <Route
-                path="/admin/payment-rate"
-                element={<ManagerPrivateRoute element={<PaymentRate />} />}
-              />
+              <Route path="/admin/report" element={<ManagerPrivateRoute element={<Report />} />} />
+              <Route path="/admin/dashboard" element={<ManagerPrivateRoute element={<Dashboard />} />} />
+              <Route path="/admin/storage" element={<ManagerPrivateRoute element={<Storage />} />} />
+              <Route path="/admin/customer" element={<ManagerPrivateRoute element={<Customer />} />} />
+              <Route path="/admin/delivery-staff" element={<ManagerPrivateRoute element={<DeliveryStaff />} />} />
+              <Route path="/admin/sales-staff" element={<ManagerPrivateRoute element={<SalesStaff />} />} />
+              <Route path="/admin/payment-rate" element={<ManagerPrivateRoute element={<PaymentRate />} />} />
+              <Route path="/admin/fish" element={<ManagerPrivateRoute element={<Fish />} />} />
+              <Route path="/admin/payment-history" element={<ManagerPrivateRoute element={<PaymentHistory />} />} />
+              <Route path="/admin/license" element={<ManagerPrivateRoute element={<License />} />} />
+              <Route path="/admin/transaction" element={<ManagerPrivateRoute element={<Transaction />} />} />
             </Route>
 
             <Route element={<CustomerLayout />}>
-              <Route
-                path="/customer-home"
-                element={<CustomerPrivateRoute element={<CustomerHome />} />}
-              />
-              <Route
-                path="/customer-create-order"
-                element={
-                  <CustomerPrivateRoute element={<CustomerCreateOrder />} />
-                }
-              />
-              <Route
-                path="/customer-edit-profile"
-                element={
-                  <CustomerPrivateRoute element={<CustomerEditProfile />} />
-                }
-              />
-              <Route
-                path="/customer-edit-order/:id"
-                element={
-                  <CustomerPrivateRoute element={<CustomerEditOrder />} />
-                }
-              />
+              <Route path="/customer-home" element={<CustomerPrivateRoute element={<CustomerHome />} />} />
+              <Route path="/customer-create-order" element={<CustomerPrivateRoute element={<CustomerCreateOrder />} />} />
+              <Route path="/customer-edit-profile" element={<CustomerPrivateRoute element={<CustomerEditProfile />} />} />
+              <Route path="/customer-edit-order/:id" element={<CustomerPrivateRoute element={<CustomerEditOrder />} />} />
             </Route>
 
-            <Route
-              path="/delivery-staff-home"
-              element={
-                <DeliveryStaffPrivateRoute element={<DeliveryStaffHome />} />
-              }
-            />
+            <Route path="/delivery-staff-home" element={<DeliveryStaffPrivateRoute element={<DeliveryStaffHome />} />} />
 
             <Route element={<DeliveryStaffLayout />}>
-              <Route
-                path="/delivery-order-home"
-                element={
-                  <DeliveryStaffPrivateRoute element={<DeliveryOrderHome />} />
-                }
-              />
-              <Route
-                path="/delivery-order-available"
-                element={
-                  <DeliveryStaffPrivateRoute
-                    element={<DeliveryOrderAvailable />}
-                  />
-                }
-              />
-
-              <Route
-                path="/delivery-order-detail/:id"
-                element={
-                  <DeliveryStaffPrivateRoute
-                    element={<DeliveryOrderDetail />}
-                  />
-                }
-              />
-              <Route
-                path="/delivery-order-detail/:id/delivery-fish-detail"
-                element={
-                  <DeliveryStaffPrivateRoute element={<DeliveryFishDetail />} />
-                }
-              />
+              <Route path="/delivery-order-home" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderHome />} />} />
+              <Route path="/delivery-order-available" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderAvailable />} />} />
+              <Route path="/getting-order-delivery-staff" element={<DeliveryStaffPrivateRoute element={<GettingOrderDeliveryStaff />} />} />
+              <Route path="/available-to-delivery-staff" element={<DeliveryStaffPrivateRoute element={<AvailableToDelivery />} />} />
+              <Route path="/delivering-order-delivery-staff" element={<DeliveryStaffPrivateRoute element={<DeliveringOrder />} />} />
+              <Route path="/available-to-get-delivery-staff" element={<DeliveryStaffPrivateRoute element={<AvailableToGet />} />} />
+              <Route path="/delivery-order-detail/:id" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderDetail />} />} />
+              <Route path="/delivery-order-detail/:id/delivery-fish-detail" element={<DeliveryStaffPrivateRoute element={<DeliveryFishDetail />} />} />
             </Route>
 
             <Route element={<SalesStaffLayout />}>
-              <Route
-                path="/posted-order-sales-staff"
-                element={
-                  <SalesStaffPrivateRoute element={<PostedOrderSalesStaff />} />
-                }
-              />
-              <Route
-                path="/received-order-sales-staff"
-                element={
-                  <SalesStaffPrivateRoute
-                    element={<ReceivedOrderSalesStaff />}
-                  />
-                }
-              />
-              <Route
-                path="/sales-staff-home"
-                element={
-                  <SalesStaffPrivateRoute element={<SalesStaffHome />} />
-                }
-              />
-              <Route
-                path="/sales-order-detail/:id"
-                element={<AllowedRoute element={<SalesOrderDetail />} />}
-              />
-              <Route
-                path="/sales-order-detail/:id/sales-fish-detail"
-                element={<AllowedRoute element={<SalesFishDetail />} />}
-              />
+              <Route path="/posted-order-sales-staff" element={<SalesStaffPrivateRoute element={<PostedOrderSalesStaff />} />} />
+              <Route path="/received-order-sales-staff" element={<SalesStaffPrivateRoute element={<ReceivedOrderSalesStaff />} />} />
+              <Route path="/sales-staff-home" element={<SalesStaffPrivateRoute element={<SalesStaffHome />} />} />
+              <Route path="/sales-order-detail/:id" element={<AllowedRoute element={<SalesOrderDetail />} />} />
+              <Route path="/sales-order-detail/:id/sales-fish-detail" element={<AllowedRoute element={<SalesFishDetail />} />} />
+              <Route path="/sales-order-detail/:id" element={<SalesStaffPrivateRoute element={<SalesOrderDetail />} />} />
+              <Route path="/sales-order-detail/:id/sales-fish-detail" element={<SalesStaffPrivateRoute element={<SalesFishDetail />} />} />
+              <Route path="/news-sales-staff" element={<SalesStaffPrivateRoute element={<SalesStaffNews />} />} />
             </Route>
 
-            <Route
-              path="/payment-success"
-              element={<AllowedRoute element={<PaymentSuccess />} />}
-            />
+            <Route path="/payment-success" element={<AllowedRoute element={<PaymentSuccess />} />} />
 
             <Route path="/tracking-order" element={<TrackingOrder />} />
+
+            <Route path="/*" element={<Page404 />} />
           </Routes>
         </Router>
       </main>

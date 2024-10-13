@@ -23,4 +23,9 @@ public class PaymentHistoryController {
     public ResponseEntity<?> checkTransaction(@PathVariable Long id) {
         return ResponseEntity.ok(paymentHistoryService.getPaymentHistoryById(id).get());
     }
+
+    @GetMapping("/get-all-payment-history")
+    public ResponseEntity<?> getAllPaymentHistory() {
+        return ResponseEntity.ok(paymentHistoryService.getAllPaymentHistory());
+    }
 }
