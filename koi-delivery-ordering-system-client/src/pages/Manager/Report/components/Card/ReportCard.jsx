@@ -1,16 +1,6 @@
-import React from "react";
-import { ArrowDown, ArrowUp } from "lucide-react";
 import { Card, CardContent, Typography, Box } from "@mui/material";
 
-const ReportCard = ({
-  title,
-  value,
-  description,
-  icon,
-  color,
-  textColor,
-  trend,
-}) => {
+const ReportCard = ({ title, value, icon, color, textColor, trend }) => {
   return (
     <Card style={{ backgroundColor: color, color: textColor }}>
       <CardContent>
@@ -28,16 +18,6 @@ const ReportCard = ({
         <Typography variant="h3" component="div" mb={2}>
           {value}
         </Typography>
-        <Box display="flex" alignItems="center">
-          {trend === "up" ? (
-            <ArrowUp style={{ color: "green", marginRight: 4 }} />
-          ) : (
-            <ArrowDown style={{ color: "red", marginRight: 4 }} />
-          )}
-          <Typography variant="body2" color={trend === "up" ? "green" : "red"}>
-            {description}
-          </Typography>
-        </Box>
       </CardContent>
     </Card>
   );
