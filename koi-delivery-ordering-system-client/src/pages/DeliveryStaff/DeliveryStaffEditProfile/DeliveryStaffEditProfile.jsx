@@ -3,15 +3,15 @@ import { useEffect, useState } from "react";
 import default_avatar from "../../../assets/default-avatar.jpg"
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { getCustomerById, userUpdateProfile, userUpdateProfileImage } from "../../../utils/axios/customer";
 import { toast } from "react-toastify";
 import { PhotoCamera } from "@mui/icons-material";
 import { useAuth } from "../../../authentication/AuthProvider";
 import { getFileByFileId } from "../../../utils/axios/file";
 import ToastUtil from "../../../components/toastContainer";
+import { deliveryStaffUpdateProfile, deliveryStaffUpdateProfileImage, getDeliveryStaffById } from "../../../utils/axios/deliveryStaff";
 
 function CustomerEditProfile() {
-    const [user, setUser] = useState({
+    const [delivery_staff, setUser] = useState({
         username: '',
         email: '',
         phoneNumber: '',
@@ -26,19 +26,20 @@ function CustomerEditProfile() {
     const navigate = useNavigate();
 
     const token = localStorage.getItem("token");
-    let customerId;
-    if (token) {
-        const customerInfo = jwtDecode(token);
-        customerId = customerInfo.sub.substring(2);
-    }
+  let deliveryStaffId;
+  let deliveryStaffInfo;
+  if (token) {
+    deliveryStaffInfo = jwtDecode(token);
+    deliveryStaffId = deliveryStaffInfo.sub.substring(2);
+  }
     
     useEffect(() => {
         async function fetchUserData() {
-            const userData = JSON.parse(localStorage.getItem("userData"));
-            setUser(userData);
-            const customer = await getCustomerById(customerId);
-            if(customer.file) {
-                const imageResponse = await getFileByFileId(customer.file.id);;
+            const DeliveryStaffData = JSON.parse(localStorage.getItem("DeliveryStaffData"));
+            setUser(DeliveryStaffData);
+            const delivery_staff = await getDeliveryStaffById(deliveryStaffId);
+            if(delivery_staff.file) {
+                const imageResponse = await getFileByFileId(delivery_staff.file.id);;
                 const imgUrl = URL.createObjectURL(imageResponse);
                 setImagePreview(imgUrl);
             }
@@ -69,26 +70,26 @@ function CustomerEditProfile() {
     async function handleSubmit() {
         let response = null;
         if (updatePassword === false) {
-            response = await userUpdateProfile(
-                customerId,
-                user.email,
-                user.username,
-                user.phoneNumber,
+            response = await deliveryStaffUpdateProfile(
+                deliveryStaffId,
+                delivery_staff.email,
+                delivery_staff.username,
+                delivery_staff.phoneNumber,
                 "" //If do not update password, set to empty string
             );
         } else {
-            response = await userUpdateProfile(
-                customerId,
-                user.email,
-                user.username,
-                user.phoneNumber,
-                user.password
+            response = await deliveryStaffUpdateProfile(
+                deliveryStaffId,
+                delivery_staff.email,
+                delivery_staff.username,
+                delivery_staff.phoneNumber,
+                delivery_staff.password
             );
         }
 
         if (selectedImage) {
-            const imageResponse = await userUpdateProfileImage(
-                customerId,
+            const imageResponse = await deliveryStaffUpdateProfileImage(
+                deliveryStaffId,
                 selectedImage,
             )
             if (imageResponse) {
@@ -109,7 +110,7 @@ function CustomerEditProfile() {
         setUpdatePassword(!updatePassword);
     }
 
-    return user && (
+    return delivery_staff && (
         <Container maxWidth="md" style={{ marginTop: "30px" }}>
             <ToastUtil />
             <Paper elevation={3} sx={{ padding: 4 }}>
@@ -117,7 +118,7 @@ function CustomerEditProfile() {
                     {/* Avatar Section */}
                     <Grid item xs={12} sm={4} sx={{ textAlign: 'center' }}>
                         <Avatar
-                            alt={user.username}
+                            alt={delivery_staff.username}
                             src={imagePreview}
                             sx={{ width: 180, height: 180, margin: '0 auto' }}
                         />
@@ -149,9 +150,9 @@ function CustomerEditProfile() {
                                     <TextField
                                         label="Name"
                                         name="username"
-                                        value={user.username}
+                                        value={delivery_staff.username}
                                         onChange={handleChange}
-                                        type="text"
+                                        type="email"
                                         fullWidth
                                         required
                                     />
@@ -160,7 +161,7 @@ function CustomerEditProfile() {
                                     <TextField
                                         label="Email"
                                         name="email"
-                                        value={user.email}
+                                        value={delivery_staff.email}
                                         onChange={handleChange}
                                         type="email"
                                         fullWidth
@@ -171,8 +172,9 @@ function CustomerEditProfile() {
                                     <TextField
                                         label="Phone Number"
                                         name="phoneNumber"
-                                        value={user.phoneNumber}
+                                        value={delivery_staff.phoneNumber}
                                         onChange={handleChange}
+                                        type = "email"
                                         fullWidth
                                         required
                                     />
@@ -184,7 +186,7 @@ function CustomerEditProfile() {
                                                 label="Password"
                                                 name="password"
                                                 onChange={handleChange}
-                                                type="password"
+                                                type="email"
                                                 fullWidth
                                             />
                                         </Grid>
@@ -193,7 +195,7 @@ function CustomerEditProfile() {
                                                 label="Confirm Password"
                                                 name="confirm Password"
                                                 onChange={handleConfirmPasswordChange}
-                                                type="password"
+                                                type="email"
                                                 fullWidth
                                             />
                                         </Grid>
@@ -205,8 +207,8 @@ function CustomerEditProfile() {
                                 <Button variant="outlined" onClick={handleSubmit} fullWidth>
                                     Cancel
                                 </Button>
-                                {user.email && user.username && user.phoneNumber &&
-                                    (updatePassword ? confirmPassword === user.password : true) ? (
+                                {delivery_staff.email && delivery_staff.username && delivery_staff.phoneNumber &&
+                                    (updatePassword ? confirmPassword === delivery_staff.password : true) ? (
                                     <Button
                                         variant="contained"
                                         onClick={handleSubmit}
