@@ -37,6 +37,7 @@ import "./App.css"
 import PaymentRate from "./pages/Manager/SystemData/PaymentRate/PaymentRate";
 import ReceivedOrderSalesStaff from "./pages/SalesStaff/OrderSalesStaff/ReceivedOrderSalesStaff";
 import CustomerEditOrder from "./pages/Customer/CustomerEditOrder/CustomerEditOrder";
+import SalesStaffNews from "./pages/SalesStaff/SalesStaffNews/SalesStaffNews";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -118,8 +119,9 @@ function App() {
               <Route path="/posted-order-sales-staff" element={<SalesStaffPrivateRoute element={<PostedOrderSalesStaff />} />} />
               <Route path="/received-order-sales-staff" element={<SalesStaffPrivateRoute element={<ReceivedOrderSalesStaff />} />} />
               <Route path="/sales-staff-home" element={<SalesStaffPrivateRoute element={<SalesStaffHome />} />} />
-              <Route path="/sales-order-detail/:id" element={<AllowedRoute element={<SalesOrderDetail />} />} />
-              <Route path="/sales-order-detail/:id/sales-fish-detail" element={<AllowedRoute element={<SalesFishDetail />} />} />
+              <Route path="/sales-order-detail/:id" element={<SalesStaffPrivateRoute element={<SalesOrderDetail />} />} />
+              <Route path="/sales-order-detail/:id/sales-fish-detail" element={<SalesStaffPrivateRoute element={<SalesFishDetail />} />} />
+              <Route path="/news-sales-staff" element={<SalesStaffPrivateRoute element={<SalesStaffNews />} />} />
             </Route>
 
             <Route path="/payment-success" element={<AllowedRoute element={<PaymentSuccess />} />} />

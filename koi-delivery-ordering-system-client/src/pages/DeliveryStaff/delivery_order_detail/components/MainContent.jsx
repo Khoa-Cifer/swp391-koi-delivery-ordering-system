@@ -21,55 +21,6 @@ import { updateDeliveryStaffCurrentLocation } from "../../../../utils/axios/deli
 import { finishOrder } from "../../../../utils/axios/order";
 import Spinner from "../../../../components/SpinnerLoading";
 
-//       <div className="order-name-detail">
-//         <strong>Order name</strong>
-//       </div>
-//       <div className="order-status-detail">Order status</div>
-
-//       <div className="order-details">
-//         <div className="details-row">
-//           <div className="details-column">
-//             <p>Tracking Id</p>
-//             <p>Receiver Address</p>
-//             <p>Sender Address</p>
-//           </div>
-//           <div className="details-column">
-//             <p>Name</p>
-//             <p>Price</p>
-//           </div>
-//           <div className="details-column">
-//             <p>Created Date</p>
-//             <p>Last Updated Date / Finish Date</p>
-//           </div>
-//           <div className="view-fish">
-//             <button className="view-fish-btn">View Fish </button>
-//           </div>
-//         </div>
-
-//         <div className="map-placeholder">Google Map</div>
-
-//         <div className="order-description">
-//           <h4>Description</h4>
-//           <p>
-//             Con biết bây giờ mẹ chờ tin con Khi thấy mai đào nở vàng bên nương
-//             Năm trước con hẹn đầu xuân sẽ về Nay én bay đầy trước ngõ mà tin con
-//             vẫn xa ngàn xa Ôi nhớ xuân nào thuở trời yên vui Nghe pháo giao thừa
-//             rộn ràng nơi nơi Bên mái tranh nghèo ngồi quanh bếp hồng Trông bánh
-//             chưng chờ trời sáng Đỏ hây hây những đôi má đào Nếu con không về
-//             chắc mẹ buồn lắm, Mái tranh nghèo không người sửa sang Khu vườn
-//             thiếu hoa vàng mừng xuân Đàn trẻ thơ ngây chờ mong anh trai Sẽ đem
-//             về cho tà áo mới Ba ngày xuân đi khoe xóm giềng
-//           </p>
-//         </div>
-//       </div>
-
-//       {/* Google Map Section */}
-//     </div>
-//   );
-// };
-
-// export default MainContent;
-
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#fff',
   ...theme.typography.body2,
@@ -214,32 +165,41 @@ function MainContent() {
     }
   }
 
-  const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
-    return (prev.id > current.id) ? prev : current;
-  });
+
 
   useEffect(() => {
     if (address && currentLocation.lat && currentLocation.lng) {
-      async function handleUpdateOrderLocation() {
-        console.log(address);
-        const response = await updateOrderDeliveringLocation(availableOrderDelivering.id, address, currentLocation.lat, currentLocation.lng);
-  
-        if (response) {
-          await updateDeliveryStaffCurrentLocation(deliveryStaffId, address, currentLocation.lat, currentLocation.lng);
+      if (state.orderDeliveringSet && state.orderDeliveringSet.length > 0) {
+
+        const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
+          return (prev.id > current.id) ? prev : current;
+        });
+        async function handleUpdateOrderLocation() {
+          console.log(address);
+          const response = await updateOrderDeliveringLocation(availableOrderDelivering.id, address, currentLocation.lat, currentLocation.lng);
+
+          if (response) {
+            await updateDeliveryStaffCurrentLocation(deliveryStaffId, address, currentLocation.lat, currentLocation.lng);
+          }
         }
+
+        handleUpdateOrderLocation();
       }
-  
-      handleUpdateOrderLocation();
     }
   }, [currentLocation])
 
   async function handleFinishOrderStep(processType) {
-    const response = await finishOrder(state.id, availableOrderDelivering.id, deliveryStaffId, state.storage.id, processType);
-    if (response) {
-      toast("Order Finish");
-      navigate("/delivery-order-home");
-    } else {
-      toast("Unexpected Error has been occurred");
+    if (state.orderDeliveringSet && state.orderDeliveringSet.length > 0) {
+      const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
+        return (prev.id > current.id) ? prev : current;
+      });
+      const response = await finishOrder(state.id, availableOrderDelivering.id, deliveryStaffId, state.storage.id, processType);
+      if (response) {
+        toast("Order Finish");
+        navigate("/delivery-order-home");
+      } else {
+        toast("Unexpected Error has been occurred");
+      }
     }
   }
 
