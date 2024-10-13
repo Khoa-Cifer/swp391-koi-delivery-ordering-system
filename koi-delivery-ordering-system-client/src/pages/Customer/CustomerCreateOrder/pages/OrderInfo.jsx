@@ -74,36 +74,6 @@ function OrderInfo({ orderId, formStepData }) {
 
     const [map, setMap] = useState(null)
 
-    useEffect(() => {
-        const geocodeAddress = () => {
-            if (senderAddress.trim() === '') {
-                return;
-            }
-
-            const geocoder = new window.google.maps.Geocoder();
-
-            geocoder.geocode({ address: senderAddress }, (results, status) => {
-                if (status === 'OK' && results[0]) {
-                    const location = results[0].geometry.location;
-                    setSenderCoordinates({
-                        lat: location.lat(),
-                        lng: location.lng(),
-                    });
-                } else {
-                    setSenderCoordinates({
-                        lat: null,
-                        lng: null,
-                    });
-                }
-            });
-        };
-
-        if (senderAddress.length >= 5) { // Minimal validation for address length
-            geocodeAddress();
-        }
-
-    }, [senderAddress]);
-
     const onLoad = useCallback(function callback(map) {
         setMap(map)
     }, [])
@@ -111,37 +81,6 @@ function OrderInfo({ orderId, formStepData }) {
     const onUnmount = useCallback(function callback(map) {
         setMap(null)
     }, [])
-
-    useEffect(() => {
-        const geocodeAddress = () => {
-            if (receiverAddress.trim() === '') {
-                return;
-            }
-
-            const geocoder = new window.google.maps.Geocoder();
-
-            //Đổi toạ độ
-            geocoder.geocode({ address: receiverAddress }, (results, status) => {
-                if (status === 'OK' && results[0]) {
-                    const location = results[0].geometry.location;
-                    setReceiverCoordinates({
-                        lat: location.lat(),
-                        lng: location.lng(),
-                    });
-                } else {
-                    setReceiverCoordinates({
-                        lat: null,
-                        lng: null,
-                    });
-                }
-            });
-        };
-
-        if (receiverAddress.length >= 5) { // Minimal validation for address length
-            geocodeAddress();
-        }
-
-    }, [receiverAddress]);
 
     function handleNameChange(e) {
         setOrderName(e.target.value);

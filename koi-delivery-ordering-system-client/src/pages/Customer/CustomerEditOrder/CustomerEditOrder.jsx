@@ -44,7 +44,6 @@ function a11yProps(index) {
 function CustomerEditOrder() {
     const location = useLocation();
     const { state } = location;
-    console.log(state);
     const [value, setValue] = useState(0);
 
     const handleChange = (event, newValue) => {
@@ -62,17 +61,17 @@ function CustomerEditOrder() {
             </Box>
             <CustomTabPanel value={value} index={0}>
                 <div className="body-container">
-                    <OrderInfo />
+                    <OrderInfo order={state}/>
                 </div>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
                 <div className="body-container">
-                    <FishInfo />
+                    <FishInfo order={state}/>
                 </div>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
                 <div className="body-container">
-                    <OrderFinalInfo />
+                    <OrderFinalInfo order={state}/>
                 </div>
             </CustomTabPanel>
         </div>
