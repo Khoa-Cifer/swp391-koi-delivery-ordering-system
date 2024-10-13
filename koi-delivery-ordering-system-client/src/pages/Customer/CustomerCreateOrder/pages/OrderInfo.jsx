@@ -1,6 +1,5 @@
 import { Box, styled } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
-import { usePlacesWidget } from "react-google-autocomplete";
+import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
 import { Calendar } from "react-date-range";
 import { GoogleMap } from "@react-google-maps/api";
@@ -98,18 +97,6 @@ function OrderInfo({ orderId, formStepData }) {
         setOrderDescription(e.target.value);
     }
 
-    const { ref: senderRef } = usePlacesWidget({
-        onPlaceSelected: (place) => {
-            setSenderAddress(place.formatted_address || "");
-        },
-    });
-
-    const { ref: receiverRef } = usePlacesWidget({
-        onPlaceSelected: (place) => {
-            setReceiverAddress(place.formatted_address || "");
-        },
-    });
-
     async function handleSubmit() {
         if (!orderName || !orderDescription || !receiverAddress) {
             toast("All fields are required");
@@ -181,7 +168,7 @@ function OrderInfo({ orderId, formStepData }) {
                             className="form-input"
                             onChange={e => handleSenderAddressChange(e)}
                             value={senderAddress}
-                            ref={senderRef}
+                            readOnly
                         />
                     </div>
 
@@ -193,7 +180,7 @@ function OrderInfo({ orderId, formStepData }) {
                             className="form-input"
                             onChange={e => handleReceiverAddressChange(e)}
                             value={receiverAddress}
-                            ref={receiverRef}
+                            readOnly
                         />
                     </div>
 

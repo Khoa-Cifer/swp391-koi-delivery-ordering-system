@@ -102,17 +102,9 @@ public class OrderController {
     public ResponseEntity<?> finishOrder(@RequestBody FinishOrderUpdateRequestDTO request) {
         return ResponseEntity.ok(orderService.finishOrder(request));
     }
-    @PostMapping(value = "/editOrder/{id}")
-    public ResponseEntity<?> editOrder(@PathVariable("id") Long orderId,
-                                       @RequestParam(name = "name") String name,
-                                       @RequestParam(name = "description") String description,
-                                       @RequestParam(name = "expectedFinishDate")@DateTimeFormat(pattern = "yyyy-MM-dd") Date expectedFinishDate,
-                                       @RequestParam(name = "destinationAddress") String destinationAddress,
-                                       @RequestParam(name = "destinationLongitude") String destinationLongitude,
-                                       @RequestParam(name = "destinationLatitude") String destinationLatitude,
-                                       @RequestParam(name = "senderAddress") String senderAddress,
-                                       @RequestParam(name = "senderLongitude") String senderLongitude,
-                                       @RequestParam(name = "senderLatitude") String senderLatitude) {
+
+    @PutMapping(value = "/editOrder/{orderId}")
+    public ResponseEntity<?> editOrder(@PathVariable Long orderId, @RequestBody OrderGeneralInfoRequestDTO request) {
 
         Optional<Order> optionalOrder = orderService.getOrderById(orderId);
 
@@ -120,9 +112,18 @@ public class OrderController {
             Order order = optionalOrder.get();
 
             if (order.getOrderStatus() == orderStatus.DRAFT || order.getOrderStatus() == orderStatus.POSTED) {
-
-                Order updatedOrder = orderService.updateOrder(orderId, name, description, expectedFinishDate, destinationAddress, destinationLongitude
-                , destinationLatitude, senderAddress, senderLongitude, senderLatitude);
+                Order updatedOrder = orderService.updateOrder(
+                        orderId,
+                        request.getName(),
+                        request.getDescription(),
+                        request.getExpectedFinishDate(),
+                        request.getDestinationAddress(),
+                        request.getDestinationLongitude(),
+                        request.getDestinationLatitude(),
+                        request.getSenderAddress(),
+                        request.getSenderLongitude(),
+                        request.getSenderLatitude()
+                );
                 return ResponseEntity.ok(updatedOrder);
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot edit order with status other than DRAFT or POSTED");

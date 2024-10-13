@@ -1,11 +1,11 @@
 import { Box, styled, Tab, Tabs } from "@mui/material";
 import PropTypes from 'prop-types';
 import OrderInfo from "./pages/OrderInfo";
-import FishInfo from "./pages/FishInfo";
 import { useState } from "react";
 import "./customer_create_order.scss"
 import OrderFinalInfo from "./pages/OrderFinalInfo";
 import { useLocation } from "react-router-dom";
+import FishInfo from "./pages/FishInfo";
 
 const CustomTab = styled(Tab)(() => ({
     maxWidth: "20%"
@@ -51,7 +51,7 @@ function CustomerEditOrder() {
     };
 
     return (
-        <div>
+        <div style={{ width: "100%" }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChange}>
                     <CustomTab label="Order Info" {...a11yProps(0)} />
@@ -61,17 +61,17 @@ function CustomerEditOrder() {
             </Box>
             <CustomTabPanel value={value} index={0}>
                 <div className="body-container">
-                    <OrderInfo order={state}/>
+                    <OrderInfo order={state} />
                 </div>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
                 <div className="body-container">
-                    <FishInfo order={state}/>
+                    <FishInfo order={state} />
                 </div>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
                 <div className="body-container">
-                    <OrderFinalInfo order={state}/>
+                    <OrderFinalInfo order={state} />
                 </div>
             </CustomTabPanel>
         </div>

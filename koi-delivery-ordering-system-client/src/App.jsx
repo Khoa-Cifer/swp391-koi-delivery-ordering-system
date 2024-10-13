@@ -42,6 +42,7 @@ import AvailableToDelivery from "./pages/DeliveryStaff/delivery_order_home/Avail
 import DeliveringOrder from "./pages/DeliveryStaff/delivery_order_home/DeliveringOrder";
 import AvailableToGet from "./pages/DeliveryStaff/delivery_order_home/AvailableToGet";
 import SalesStaffNews from "./pages/SalesStaff/SalesStaffNews/SalesStaffNews"
+import Page404 from "./pages/DefaultError/404";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -136,6 +137,8 @@ function App() {
             <Route path="/payment-success" element={<AllowedRoute element={<PaymentSuccess />} />} />
 
             <Route path="/tracking-order" element={<TrackingOrder />} />
+
+            <Route path="/*" element={<Page404 />} />
           </Routes>
         </Router>
       </main>
