@@ -4,7 +4,7 @@ import { createDeliveryStaff, getAllDeliveryStaff } from "../../../../utils/axio
 import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";
 
-const { Text } = Typography;
+const { Title } = Typography;
 
 function DeliveryStaff() {
     const [deliveryStaffData, setDeliveryStaffData] = useState([]);
@@ -77,7 +77,7 @@ function DeliveryStaff() {
         <div>
             <ToastUtil />
             <div className="dashboard-info">
-                <Typography.Title level={2}>Delivery Staff</Typography.Title>
+                <Title level={2} style={{ marginTop: 0 }}>Delivery Staff</Title>
             </div>
             <div>
                 <Space style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>

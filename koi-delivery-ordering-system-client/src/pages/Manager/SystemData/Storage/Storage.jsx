@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Table, Modal, Button, Input, Typography, notification } from "antd";
+import { useCallback, useEffect, useState } from "react";
+import { Table, Modal, Button, Input, Typography } from "antd";
 import { usePlacesWidget } from "react-google-autocomplete";
 import { createStorage, getAllStorages } from "../../../../utils/axios/storage";
 import { GoogleMap } from "@react-google-maps/api";
 import 'react-toastify/dist/ReactToastify.css';
 import ToastUtil from "../../../../components/toastContainer";
+import { toast } from "react-toastify";
 
 const { Title } = Typography;
 
@@ -58,12 +59,12 @@ function Storage() {
     const handleCreateStorage = async () => {
         if (coordinates.lat && coordinates.lng) {
             const data = await createStorage(name, address, coordinates.lat, coordinates.lng);
-            notification.info({ message: data });
-            if (data === "Storage created successfully") {
+            if (data) {
                 await fetchStorageData();
+                toast("Create Storage successfully");
             }
         } else {
-            notification.error({ message: "Invalid address" });
+            toast("Unexpected error has been occurred");
         }
         handleClose();
     };
@@ -78,7 +79,7 @@ function Storage() {
     };
 
     const containerStyle = {
-        width: '800px',
+        width: '100%',
         height: '400px'
     };
 
