@@ -1,14 +1,15 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { Table, Typography } from "antd";
 import { getAllFishes } from "../../../../utils/axios/fish";
 
+const { Title } = Typography;
 
 function Fish() {
-    const [fishData, setFishData] = useState();
+    const [fishData, setFishData] = useState([]);
 
     useEffect(() => {
         async function fetchFish() {
-            let fetchedData = await getAllFishes();
+            const fetchedData = await getAllFishes();
             if (fetchedData) {
                 setFishData(fetchedData);
             }
@@ -16,52 +17,53 @@ function Fish() {
         fetchFish();
     }, []);
 
+    const columns = [
+        {
+            title: "Id",
+            dataIndex: "id",
+            key: "id",
+        },
+        {
+            title: "Name",
+            dataIndex: "name",
+            key: "name",
+        },
+        {
+            title: "Size",
+            dataIndex: "size",
+            key: "size",
+        },
+        {
+            title: "Age",
+            dataIndex: "age",
+            key: "age",
+        },
+        {
+            title: "Weight",
+            dataIndex: "weight",
+            key: "weight",
+        },
+        {
+            title: "Price",
+            dataIndex: "price",
+            key: "price",
+        },
+    ];
+
     return (
         <div>
-             <div className="dashboard-info">
-                <h2 style={{ marginTop: "0" }}>Fish</h2>
+            <div className="dashboard-info">
+                <Title level={2} style={{ marginTop: 0 }}>Fish</Title>
             </div>
-
-            <TableContainer component={Paper} style={{ marginTop: "25px", justifyContent: "center" }}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow >
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Id</Typography>
-                            </TableCell>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Name</Typography>
-                            </TableCell>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Size</Typography>
-                            </TableCell>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Price</Typography>
-                            </TableCell>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Age</Typography>
-                            </TableCell>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Weight</Typography>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {fishData?.map((data) => (
-                            <TableRow key={data.id}>
-                                <TableCell>{data.id}</TableCell>
-                                <TableCell>{data.name}</TableCell>
-                                <TableCell>{data.size}</TableCell>
-                                <TableCell>{data.age}</TableCell>
-                                <TableCell>{data.weight}</TableCell>
-                                <TableCell>{data.price}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <Table
+                columns={columns}
+                dataSource={fishData}
+                rowKey="id"
+                pagination={{ pageSize: 5 }} // Pagination to display 5 records per page
+                style={{ marginTop: "25px" }}
+            />
         </div>
-    )
+    );
 }
 
 export default Fish;

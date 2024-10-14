@@ -1,5 +1,5 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Table, Typography } from "antd";
 import { getAllTransaction } from "../../../../utils/axios/transaction";
 
 // Function to format the date in "DD/MM/YYYY"
@@ -9,11 +9,11 @@ function formatDate(dateString) {
 }
 
 function Transaction() {
-    const [transactionData, setTransactionData] = useState();
+    const [transactionData, setTransactionData] = useState([]);
 
     useEffect(() => {
         async function fetchTransaction() {
-            let fetchedData = await getAllTransaction();
+            const fetchedData = await getAllTransaction();
             if (fetchedData) {
                 setTransactionData(fetchedData);
             }
@@ -21,38 +21,38 @@ function Transaction() {
         fetchTransaction();
     }, []);
 
+    const columns = [
+        {
+            title: 'Id',
+            dataIndex: 'id',
+            key: 'id',
+        },
+        {
+            title: 'Amount',
+            dataIndex: 'amount',
+            key: 'amount',
+        },
+        {
+            title: 'Transaction Date',
+            dataIndex: 'transactionDate',
+            key: 'transactionDate',
+            render: (text) => formatDate(text), // Format the date here
+        },
+    ];
+
     return (
         <div>
             <div className="dashboard-info">
-                <h2 style={{ marginTop: "0" }}>Transaction</h2>
+                <Typography.Title level={2} style={{ marginTop: 0 }}>Transaction</Typography.Title>
             </div>
 
-            <TableContainer component={Paper} style={{ marginTop: "25px" }}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Id</Typography>
-                            </TableCell>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Amount</Typography>
-                            </TableCell>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Transaction Date</Typography>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {transactionData?.map((data) => (
-                            <TableRow key={data.id}>
-                                <TableCell>{data.id}</TableCell>
-                                <TableCell>{data.amount}</TableCell>
-                                <TableCell>{formatDate(data.transactionDate)}</TableCell> {/* Format the date here */}
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <Table 
+                dataSource={transactionData} 
+                columns={columns} 
+                rowKey="id" 
+                pagination={{ pageSize: 5 }} // Adjust pagination as needed
+                style={{ marginTop: "25px" }}
+            />
         </div>
     );
 }

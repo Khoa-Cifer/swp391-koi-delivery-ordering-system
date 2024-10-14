@@ -1,14 +1,16 @@
-import {  Paper,  Table,  TableBody,  TableCell,  TableContainer,  TableHead,  TableRow,  Typography,} from "@mui/material";
 import { useEffect, useState } from "react";
+import { Table, Typography } from "antd";
 import { getAllLicenses } from "../../../../utils/axios/license";
 import dateTimeConvert from "../../../../components/utils";
 
+const { Title } = Typography;
+
 function License() {
-  const [licenseData, setLicenseData] = useState();
+  const [licenseData, setLicenseData] = useState([]);
 
   useEffect(() => {
     async function fetchLicense() {
-      let fetchedData = await getAllLicenses();
+      const fetchedData = await getAllLicenses();
       if (fetchedData) {
         setLicenseData(fetchedData);
       }
@@ -16,42 +18,42 @@ function License() {
     fetchLicense();
   }, []);
 
+  const columns = [
+    {
+      title: "Id",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Description",
+      dataIndex: "description",
+      key: "description",
+    },
+    {
+      title: "Date of Issue",
+      dataIndex: "dateOfIssue",
+      key: "dateOfIssue",
+      render: (date) => dateTimeConvert(date), // Using your dateTimeConvert function
+    },
+  ];
+
   return (
     <div>
       <div className="dashboard-info">
-        <h2 style={{ marginTop: "0" }}>Licenses</h2>
+        <Title level={2} style={{ marginTop: 0 }}>Licenses</Title>
       </div>
-
-      <TableContainer component={Paper} style={{ marginTop: "25px" }}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell style={{ color: "#041967" }}>
-                <Typography>Id</Typography>
-              </TableCell>
-              <TableCell style={{ color: "#041967" }}>
-                <Typography>Name</Typography>
-              </TableCell>
-              <TableCell style={{ color: "#041967" }}>
-                <Typography>Description</Typography>
-              </TableCell>
-              <TableCell style={{ color: "#041967" }}>
-                <Typography>Date of issue</Typography>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {licenseData?.map((data) => (
-              <TableRow key={data.id}>
-                <TableCell>{data.id}</TableCell>
-                <TableCell>{data.name}</TableCell>
-                <TableCell>{data.description}</TableCell>
-                <TableCell>{dateTimeConvert(data.dateOfIssue)}</TableCell>
-                </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Table
+        columns={columns}
+        dataSource={licenseData}
+        rowKey="id"
+        pagination={{ pageSize: 5 }}
+        style={{ marginTop: "25px" }}
+      />
     </div>
   );
 }

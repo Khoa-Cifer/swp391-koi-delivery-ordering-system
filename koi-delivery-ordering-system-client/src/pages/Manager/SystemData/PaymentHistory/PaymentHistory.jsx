@@ -1,10 +1,11 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { Table, Typography } from "antd";
 import { getAllPaymentHistory } from "../../../../utils/axios/paymentHistory";
 
+const { Title } = Typography;
 
 function PaymentHistory() {
-    const [paymentHistoryData, setPaymentHistoryData] = useState();
+    const [paymentHistoryData, setPaymentHistoryData] = useState([]);
 
     useEffect(() => {
         async function fetchPaymentHistory() {
@@ -16,36 +17,36 @@ function PaymentHistory() {
         fetchPaymentHistory();
     }, []);
 
+    const columns = [
+        {
+            title: "Id",
+            dataIndex: "id",
+            key: "id",
+        },
+        {
+            title: "Amount",
+            dataIndex: "amount",
+            key: "amount",
+        },
+    ];
+
     return (
         <div>
-             <div className="dashboard-info">
-                <h2 style={{ marginTop: "0" }}>Payment History</h2>
+            <div className="dashboard-info">
+                <Title level={2} style={{ marginTop: 0 }}>
+                    Payment History
+                </Title>
             </div>
 
-            <TableContainer component={Paper} style={{ marginTop: "25px" }}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Id</Typography>
-                            </TableCell>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Amount</Typography>
-                            </TableCell>
-                            </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {paymentHistoryData?.map((data) => (
-                            <TableRow key={data.id}>
-                                <TableCell>{data.id}</TableCell>
-                                <TableCell>{data.amount}</TableCell>
-                                </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <Table
+                columns={columns}
+                dataSource={paymentHistoryData}
+                rowKey="id"
+                pagination={{ pageSize: 5 }} // Adjust page size as needed
+                style={{ marginTop: "25px" }}
+            />
         </div>
-    )
+    );
 }
 
 export default PaymentHistory;

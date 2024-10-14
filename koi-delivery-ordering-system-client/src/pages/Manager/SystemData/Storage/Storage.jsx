@@ -1,23 +1,12 @@
-import { Box, Button, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
-import 'react-toastify/dist/ReactToastify.css';
-import ToastUtil from "../../../../components/toastContainer";
-import { toast } from "react-toastify";
+import React, { useCallback, useEffect, useState } from "react";
+import { Table, Modal, Button, Input, Typography, notification } from "antd";
 import { usePlacesWidget } from "react-google-autocomplete";
 import { createStorage, getAllStorages } from "../../../../utils/axios/storage";
 import { GoogleMap } from "@react-google-maps/api";
+import 'react-toastify/dist/ReactToastify.css';
+import ToastUtil from "../../../../components/toastContainer";
 
-const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 800,
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 2,
-};
+const { Title } = Typography;
 
 function Storage() {
     const centerDefault = {
@@ -27,32 +16,27 @@ function Storage() {
 
     const [center, setCenter] = useState(centerDefault);
     const [storageData, setStorageData] = useState([]);
-    const [open, setOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [name, setName] = useState("");
     const [address, setAddress] = useState("");
     const [coordinates, setCoordinates] = useState({ lat: null, lng: null });
+    const [map, setMap] = useState(null);
 
-    const [map, setMap] = useState(null)
-
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => {
-        setOpen(false);
-        // Reset states if needed
-        setName("");
-        setAddress("");
-        setCoordinates({ lat: null, lng: null });
+    const fetchStorageData = async () => {
+        const fetchedData = await getAllStorages();
+        if (fetchedData) { setStorageData(fetchedData); }
     };
+
+    useEffect(() => {
+        fetchStorageData();
+    }, []);
 
     const onMapClick = useCallback((e) => {
         const lat = e.latLng.lat();
         const lng = e.latLng.lng();
 
-        setCenter({
-            lat: e.latLng.lat(),
-            lng: e.latLng.lng()
-        })
-
-        setCoordinates({ lat, lng })
+        setCenter({ lat, lng });
+        setCoordinates({ lat, lng });
 
         // Initialize the Geocoder
         const geocoder = new window.google.maps.Geocoder();
@@ -71,51 +55,27 @@ function Storage() {
         });
     }, []);
 
-    useEffect(() => {
-        const geocodeAddress = () => {
-            if (address.trim() === '') return;
-
-            const geocoder = new window.google.maps.Geocoder();
-            geocoder.geocode({ address: address }, (results, status) => {
-                if (status === 'OK' && results[0]) {
-                    const location = results[0].geometry.location;
-                    setCoordinates({ lat: location.lat(), lng: location.lng() });
-                } else {
-                    setCoordinates({ lat: null, lng: null });
-                }
-            });
-        };
-
-        if (address.length >= 5) {
-            geocodeAddress();
-        }
-    }, [address]);
-
-    async function fetchStorageData() {
-        const fetchedData = await getAllStorages();
-        if (fetchedData) { setStorageData(fetchedData) };
-    }
-
-    const { ref: storageAddress } = usePlacesWidget({
-        onPlaceSelected: (place) => console.log(place.formatted_address),
-    })
-
-    useEffect(() => {
-        fetchStorageData();
-    }, []);
-
-    async function handleCreateStorage() {
+    const handleCreateStorage = async () => {
         if (coordinates.lat && coordinates.lng) {
             const data = await createStorage(name, address, coordinates.lat, coordinates.lng);
-            if (data) {
+            notification.info({ message: data });
+            if (data === "Storage created successfully") {
                 await fetchStorageData();
-                toast("Create storage successfully");
             }
         } else {
-            toast("Invalid address");
+            notification.error({ message: "Invalid address" });
         }
         handleClose();
-    }
+    };
+
+    const handleOpen = () => setIsModalOpen(true);
+    const handleClose = () => {
+        setIsModalOpen(false);
+        // Reset states if needed
+        setName("");
+        setAddress("");
+        setCoordinates({ lat: null, lng: null });
+    };
 
     const containerStyle = {
         width: '800px',
@@ -123,114 +83,86 @@ function Storage() {
     };
 
     const onLoad = useCallback(function callback(map) {
-        setMap(map)
-    }, [])
+        setMap(map);
+    }, []);
 
     const onUnmount = useCallback(function callback(map) {
-        setMap(null)
-    }, [])
+        setMap(null);
+    }, []);
 
-    const handleStorageAddressChange = (e) => {
-        setAddress(e.target.value);
-    }
+    const { ref: storageAddress } = usePlacesWidget({
+        onPlaceSelected: (place) => {
+            setAddress(place.formatted_address);
+        },
+    });
 
     return (
         <div>
             <ToastUtil />
             <div className="dashboard-info">
-                <h2 style={{ marginTop: "0" }}>Storage</h2>
+                <Title level={2} style={{ marginTop: 0 }}>Storage</Title>
             </div>
-            <div className={open ? 'blur' : ''}>
-                <div style={{ display: "flex", justifyContent: "flex-end", marginRight: "30px" }}>
-                    <Button onClick={handleOpen} variant="contained" style={{ maxWidth: "30%" }}>Create New Storage</Button>
-                </div>
-                <Modal
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="modal-title"
-                    aria-describedby="modal-description"
-                >
-                    <Box sx={modalStyle}>
-                        <div className="form-group">
-                            <input
-                                style={{
-                                    width: "100%",
-                                    boxSizing: "border-box"
-                                }}
-                                placeholder="Name"
-                                type="text"
-                                name="text"
-                                onChange={(e) => setName(e.target.value)}
-                                className="form-input"
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <input
-                                style={{
-                                    width: "100%",
-                                    boxSizing: "border-box"
-                                }}
-                                placeholder="Address"
-                                type="text"
-                                name="text"
-                                className="form-input"
-                                value={address}
-                                onChange={handleStorageAddressChange}
-                                ref={storageAddress}
-                            />
-                        </div>
-
-                        <GoogleMap
-                            mapContainerStyle={containerStyle}
-                            center={center}
-                            zoom={10}
-                            onLoad={onLoad}
-                            onUnmount={onUnmount}
-                            onClick={onMapClick}
-                        >
-                            { /* Child components, such as markers, info windows, etc. */}
-                            <></>
-                        </GoogleMap>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleCreateStorage}
-                            disabled={!address || !name} // Disable if either is empty
-                        >
-                            Submit
-                        </Button>
-                    </Box>
-                </Modal>
+            <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "20px" }}>
+                <Button type="primary" onClick={handleOpen}>
+                    Create New Storage
+                </Button>
             </div>
-            <TableContainer component={Paper} style={{ marginTop: "25px" }}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell style={{ color: '#041967' }}><Typography>Id</Typography></TableCell>
-                            <TableCell style={{ color: '#041967' }}><Typography>Name</Typography></TableCell>
-                            <TableCell style={{ color: '#041967' }}><Typography>Address</Typography></TableCell>
-                            <TableCell style={{ color: '#041967' }}><Typography>Longitude</Typography></TableCell>
-                            <TableCell style={{ color: '#041967' }}><Typography>Latitude</Typography></TableCell>
-                            <TableCell style={{ color: '#041967' }}><Typography>Order Amount</Typography></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {storageData?.map((data) => (
-                            <TableRow key={data.id}>
-                                <TableCell>{data.id}</TableCell>
-                                <TableCell>{data.name}</TableCell>
-                                <TableCell>{data.address}</TableCell>
-                                <TableCell>{data.longitude}</TableCell>
-                                <TableCell>{data.latitude}</TableCell>
-                                <TableCell>{data.orderAmount}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+
+            <Table
+                dataSource={storageData}
+                rowKey="id"
+                pagination={{ pageSize: 5 }} // Adjust as needed
+            >
+                <Table.Column title="Id" dataIndex="id" key="id" />
+                <Table.Column title="Name" dataIndex="name" key="name" />
+                <Table.Column title="Address" dataIndex="address" key="address" />
+                <Table.Column title="Longitude" dataIndex="longitude" key="longitude" />
+                <Table.Column title="Latitude" dataIndex="latitude" key="latitude" />
+                <Table.Column title="Order Amount" dataIndex="orderAmount" key="orderAmount" />
+            </Table>
+
+            <Modal
+                title="Create New Storage"
+                open={isModalOpen}
+                onCancel={handleClose}
+                footer={[
+                    <Button key="back" onClick={handleClose}>
+                        Cancel
+                    </Button>,
+                    <Button
+                        key="submit"
+                        type="primary"
+                        onClick={handleCreateStorage}
+                        disabled={!address || !name} // Disable if either is empty
+                    >
+                        Submit
+                    </Button>,
+                ]}
+            >
+                <Input
+                    placeholder="Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    style={{ marginBottom: "10px" }}
+                />
+                <Input
+                    placeholder="Address"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    ref={storageAddress}
+                    style={{ marginBottom: "10px" }}
+                />
+                <GoogleMap
+                    mapContainerStyle={containerStyle}
+                    center={center}
+                    zoom={10}
+                    onLoad={onLoad}
+                    onUnmount={onUnmount}
+                    onClick={onMapClick}
+                />
+            </Modal>
         </div>
-    )
+    );
 }
 
 export default Storage;
