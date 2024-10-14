@@ -81,3 +81,12 @@ export async function getDeliveryStaffById(id) {
         console.log(error);
     }
 }
+
+export async function deleteDeliveryStaffById(id) {
+    try {
+        const response = await axiosClient.get(`delivery-staff/deleteDeliveryStaffById/${id}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}

@@ -78,7 +78,7 @@ function Storage() {
     };
 
     const containerStyle = {
-        width: '800px',
+        width: '470px',
         height: '400px'
     };
 
