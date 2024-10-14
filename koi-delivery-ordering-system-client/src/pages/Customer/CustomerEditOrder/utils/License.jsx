@@ -30,12 +30,13 @@ const License = ({
 
   useEffect(() => {
     if (licenseData) {
-      console.log(licenseData);
       setDate(licenseData.dateOfIssue);
       setLicenseName(licenseData.name);
       setLicenseDescription(licenseData.description);
+      handleLicenseChange({
+        target: { name: "id", value: licenseData.id }
+      });
     }
-
     async function fetchData() {
       const fileIds = licenseData.files.map(license => license.file.id);
       if (fileIds && fileIds.length > 0) {
@@ -46,11 +47,11 @@ const License = ({
 
         const filesArray = await Promise.all(filesPromises);
         console.log('filesArray:', filesArray); // Debugging: Check the contents of filesArray
-        
+
         setFileInputs(prevFileInputs => {
           // Create a copy of prevFileInputs to modify
           const updatedFileInputs = [...prevFileInputs];
-        
+
           filesArray.forEach((file, index) => {
             if (index < updatedFileInputs.length) {
               updatedFileInputs[index].file = file; // Set the file URL
@@ -58,7 +59,7 @@ const License = ({
               updatedFileInputs.push({ id: updatedFileInputs.length + 1, file });
             }
           });
-        
+
           return updatedFileInputs;
         });
       }
@@ -101,7 +102,7 @@ const License = ({
 
   const handleDescriptionChange = (e) => {
     setLicenseDescription(e.target.value);
-    handleDateChange(e);
+    handleLicenseChange(e);
   }
 
   const addFileInput = () => {

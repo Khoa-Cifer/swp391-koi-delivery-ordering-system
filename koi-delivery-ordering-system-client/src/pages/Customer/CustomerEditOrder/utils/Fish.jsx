@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getFileByFileId } from "../../../../utils/axios/file";
 import { updateFishById } from "../../../../utils/axios/fish";
 import License from "./License";
+import { toast } from "react-toastify";
 
 const CustomBoxContainer = styled(Box)(() => ({
     display: "flex",
@@ -22,7 +23,7 @@ function Fish({ fish }) {
     const [file, setFile] = useState();
     const [previewUrl, setPreviewUrl] = useState(null);
 
-    const [submittedLicense, setSubmittedLicense] = useState({});
+    const [submittedLicense, setSubmittedLicense] = useState([]);
 
     useEffect(() => {
         async function fetchData() {
@@ -71,25 +72,48 @@ function Fish({ fish }) {
     }, [file]);
 
     const handleAddLicenseForm = (e, index) => {
+        console.log(index);
+        console.log(e);
         const { name, value, files } = e.target;
-        let newFormData;
 
-        if (files) {
-            // If there are files (indicating it's a file input), store the file(s) instead of the value
-            newFormData = { ...submittedLicense, [index]: { ...submittedLicense[index], [name]: files[0] } }; // store first file only
-        } else {
-            // Handle regular input fields
-            newFormData = { ...submittedLicense, [index]: { ...submittedLicense[index], [name]: value } };
-        }
+        setSubmittedLicense((prevSubmittedLicense) => {
+            let updatedFormData = [...prevSubmittedLicense]; // Spread operator to copy the current state
 
-        setSubmittedLicense(newFormData);
+            // Ensure the object at this index exists
+            if (!updatedFormData[index]) {
+                updatedFormData[index] = {}; // Initialize the object if it doesn't exist
+            }
+
+            if (files) {
+                // Handle file input
+                updatedFormData[index] = { ...updatedFormData[index], [name]: files[0] }; // Store the file
+            } else {
+                // Handle regular input fields
+                updatedFormData[index] = { ...updatedFormData[index], [name]: value };
+            }
+
+            return updatedFormData;
+        });
     };
 
     const handleLicenseDateChange = (e, index) => {
-        const newFormData = { ...submittedLicense, [index]: { ...submittedLicense[index], 'date': e } };
-        setSubmittedLicense(newFormData);
-    }
+        // Update the state by mapping through the array and updating only the object at the given index
+        setSubmittedLicense((prevSubmittedLicense) => {
+            // Create a copy of the previous state
+            const updatedFormData = [...prevSubmittedLicense];
 
+            // Ensure the object at this index exists
+            if (!updatedFormData[index]) {
+                updatedFormData[index] = {}; // Initialize the object if it doesn't exist
+            }
+
+            // Update the 'date' field in the object at the given index
+            updatedFormData[index] = { ...updatedFormData[index], date: e };
+
+            // Return the updated form data array
+            return updatedFormData;
+        });
+    };
     const addNewForm = () => {
         console.log("function called");
         setLicenseForms([...licenseForms, licenseForms.length]); // Add a new form based on its index
@@ -115,17 +139,41 @@ function Fish({ fish }) {
         });
     }
 
-
     async function handleConfirm() {
-        const fishData = await updateFishById(
-            fish.id,
-            fishName,
-            fishAge,
-            fishSize,
-            fishWeight,
-            fishPrice,
-            file,
-        );
+        // const fishData = await updateFishById(
+        //     fish.id,
+        //     fishName,
+        //     fishAge,
+        //     fishSize,
+        //     fishWeight,
+        //     fishPrice,
+        //     file,
+        // );
+        console.log(submittedLicense);
+        // if (fishData) {
+        //     let licenseData;
+
+        //     if (submittedLicenseArray.length > 0) {
+        //         for (var i = 0; i < submittedLicenseArray.length; i++) {
+
+        //             console.log(new Date(submittedLicenseArray[i].date).toISOString());
+        //             const fileList = Object.keys(submittedLicenseArray[i])
+        //                 .filter(key => key.startsWith("file-"))  // Filter keys that start with "file-"
+        //                 .map(key => submittedLicenseArray[i][key]);  // Map them to their respective values
+        //             console.log(fileList)
+        //         }
+        //         // if (licenseData) {
+        //         //     toast("Add Fish and its License to the order successfully");
+        //         // } else {
+        //         //     toast("Unexpected error has been occurred");
+        //         // }
+        //     } else {
+        //         toast("Add Fish to the order successfully");
+        //     }
+        //     // await calculateOrderPrice(orderId);
+        // } else {
+        //     toast("Unexpected error has been occurred");
+        // }
     }
 
     function handleAgeChange(e) {
@@ -210,10 +258,10 @@ function Fish({ fish }) {
                             />
                         </div>
                         <div style={{ display: "flex", gap: "10px" }}>
-                            <button className="form-button" onClick={() => handleConfirm()}>
+                            <button className="form-button" style={{ width: "50%" }} onClick={() => handleConfirm()}>
                                 Confirm
                             </button>
-                            <button className="form-button" onClick={() => addNewForm()}>
+                            <button className="form-button" style={{ width: "50%" }} onClick={() => addNewForm()}>
                                 Add License
                             </button>
                         </div>
