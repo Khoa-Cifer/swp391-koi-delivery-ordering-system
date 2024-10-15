@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Box, styled } from "@mui/material";
 import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
@@ -18,7 +19,6 @@ const containerStyle = {
     maxWidth: '35vw'
 };
 
-// eslint-disable-next-line react/prop-types
 function OrderInfo({ order }) {
     const centerDefault = {
         lat: 10.75,
@@ -31,7 +31,7 @@ function OrderInfo({ order }) {
     const [senderCoordinates, setSenderCoordinates] = useState({ lat: parseFloat(order.senderLatitude), lng: parseFloat(order.senderLongitude) });
     const [receiverAddress, setReceiverAddress] = useState(order.destinationAddress);
     const [receiverCoordinates, setReceiverCoordinates] = useState({ lat: parseFloat(order.destinationLatitude), lng: parseFloat(order.destinationLongitude) });
-    const [expectedFinishDate, setExpectedFinishDate] = useState(order.expectedFinishDate);
+    const [expectedFinishDate, setExpectedFinishDate] = useState(new Date(order.expectedFinishDate));
     const [selectedButton, setSelectedButton] = useState(0);
 
     const onMapClick = useCallback((e) => {
