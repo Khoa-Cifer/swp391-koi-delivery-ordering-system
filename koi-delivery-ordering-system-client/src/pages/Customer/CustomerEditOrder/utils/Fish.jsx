@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Box, styled } from "@mui/material";
 import ToastUtil from "../../../../components/toastContainer";
 import { useEffect, useState } from "react";
@@ -5,13 +6,13 @@ import { getFileByFileId } from "../../../../utils/axios/file";
 import { updateFishById } from "../../../../utils/axios/fish";
 import License from "./License";
 import { toast } from "react-toastify";
+import { updateLicenseFiles, updateLicenseOrderInfo } from "../../../../utils/axios/license";
 
 const CustomBoxContainer = styled(Box)(() => ({
     display: "flex",
     gap: "40px"
 }));
 
-// eslint-disable-next-line react/prop-types
 function Fish({ fish }) {
     const [fishName, setFishName] = useState(fish.name);
     const [fishAge, setFishAge] = useState(fish.age);
@@ -115,7 +116,6 @@ function Fish({ fish }) {
         });
     };
     const addNewForm = () => {
-        console.log("function called");
         setLicenseForms([...licenseForms, licenseForms.length]); // Add a new form based on its index
     };
 
@@ -140,40 +140,51 @@ function Fish({ fish }) {
     }
 
     async function handleConfirm() {
-        // const fishData = await updateFishById(
-        //     fish.id,
-        //     fishName,
-        //     fishAge,
-        //     fishSize,
-        //     fishWeight,
-        //     fishPrice,
-        //     file,
-        // );
-        console.log(submittedLicense);
-        // if (fishData) {
-        //     let licenseData;
+        const fishData = await updateFishById(
+            fish.id,
+            fishName,
+            fishAge,
+            fishSize,
+            fishWeight,
+            fishPrice,
+            file,
+        );
+        if (fishData) {
+            let licenseData;
 
-        //     if (submittedLicenseArray.length > 0) {
-        //         for (var i = 0; i < submittedLicenseArray.length; i++) {
-
-        //             console.log(new Date(submittedLicenseArray[i].date).toISOString());
-        //             const fileList = Object.keys(submittedLicenseArray[i])
-        //                 .filter(key => key.startsWith("file-"))  // Filter keys that start with "file-"
-        //                 .map(key => submittedLicenseArray[i][key]);  // Map them to their respective values
-        //             console.log(fileList)
-        //         }
-        //         // if (licenseData) {
-        //         //     toast("Add Fish and its License to the order successfully");
-        //         // } else {
-        //         //     toast("Unexpected error has been occurred");
-        //         // }
-        //     } else {
-        //         toast("Add Fish to the order successfully");
-        //     }
-        //     // await calculateOrderPrice(orderId);
-        // } else {
-        //     toast("Unexpected error has been occurred");
-        // }
+            if (submittedLicense.length > 0) {
+                for (var i = 0; i < submittedLicense.length; i++) {
+                    licenseData = await updateLicenseOrderInfo(
+                        submittedLicense[i].name,
+                        submittedLicense[i].description,
+                        new Date(submittedLicense[i].date).toISOString(),
+                        fishData
+                    )
+                    console.log(new Date(submittedLicense[i].date).toISOString());
+                    const fileList = Object.keys(submittedLicense[i])
+                        .filter(key => key.startsWith("file-"))  // Filter keys that start with "file-"
+                        .map(key => submittedLicense[i][key]);  // Map them to their respective values
+                    try {
+                        await updateLicenseFiles(
+                            licenseData,
+                            fileList
+                        )
+                    } catch (error) {
+                        console.log(error);
+                        toast("Unexpected error has been occurred");
+                    }
+                }
+                if (licenseData) {
+                    toast("Add Fish and its License to the order successfully");
+                } else {
+                    toast("Unexpected error has been occurred");
+                }
+            } else {
+                toast("Add Fish to the order successfully");
+            }
+        } else {
+            toast("Unexpected error has been occurred");
+        }
     }
 
     function handleAgeChange(e) {

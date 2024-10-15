@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Box, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Calendar } from "react-date-range";
@@ -15,7 +16,6 @@ const LicenseCustomBoxContainer = styled(Box)(() => ({
   marginBottom: "40px",
 }));
 
-// eslint-disable-next-line react/prop-types
 const License = ({
   licenseData,
   handleLicenseChange,
@@ -23,14 +23,14 @@ const License = ({
   handleLicenseFormClose,
 }) => {
   const [previewUrls, setPreviewUrls] = useState(null);
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState(new Date());
   const [fileInputs, setFileInputs] = useState([{ id: 1, file: null }]);
   const [licenseName, setLicenseName] = useState();
   const [licenseDescription, setLicenseDescription] = useState();
 
   useEffect(() => {
     if (licenseData) {
-      setDate(licenseData.dateOfIssue);
+      setDate(new Date(licenseData.dateOfIssue));
       setLicenseName(licenseData.name);
       setLicenseDescription(licenseData.description);
       handleLicenseChange({
@@ -38,6 +38,7 @@ const License = ({
       });
     }
     async function fetchData() {
+      // eslint-disable-next-line react/prop-types
       const fileIds = licenseData.files.map(license => license.file.id);
       if (fileIds && fileIds.length > 0) {
         const filesPromises = fileIds.map(async fileId => {

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Box, Tab, Tabs } from "@mui/material";
 import PropTypes from 'prop-types';
 import { useState } from "react";

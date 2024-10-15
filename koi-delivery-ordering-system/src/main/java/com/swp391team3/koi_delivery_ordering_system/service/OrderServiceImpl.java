@@ -376,7 +376,7 @@ public class OrderServiceImpl implements IOrderService {
         order.setSenderAddress(senderAddress);
         order.setSenderLongitude(senderLongitude);
         order.setSenderLatitude(senderLatitude);
-
+        order.setOrderStatus(orderStatus.DRAFT);
         return orderRepository.save(order);
     }
 
