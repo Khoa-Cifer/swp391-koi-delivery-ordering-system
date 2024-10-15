@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Button, Input, Modal, Table, Typography, Space, Popconfirm } from "antd";
-import { createDeliveryStaff, deleteDeliveryStaffById, getAllDeliveryStaff, deliveryStaffUpdateProfile, managerEditDeliveryStaffProfile } from "../../../../utils/axios/deliveryStaff"; // Import delete function and update function
+import { Button, Input, Modal, Table, Typography, Space, Popconfirm, notification } from "antd";
+import { createDeliveryStaff, deleteDeliveryStaffById, getAllDeliveryStaff, managerEditDeliveryStaffProfile } from "../../../../utils/axios/deliveryStaff";
 import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";
 
@@ -8,15 +8,17 @@ const { Title } = Typography;
 
 function DeliveryStaff() {
     const [deliveryStaffData, setDeliveryStaffData] = useState([]);
-    const [open, setOpen] = useState(false);
+    const [createModalOpen, setCreateModalOpen] = useState(false);
+    const [editModalOpen, setEditModalOpen] = useState(false);
     const [editingStaff, setEditingStaff] = useState(null);
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
 
-    const handleOpen = () => setOpen(true);
+    const handleOpen = () => setCreateModalOpen(true);
     const handleClose = () => {
-        setOpen(false);
+        setCreateModalOpen(false);
+        setEditModalOpen(false);
         setEditingStaff(null);
         setEmail("");
         setUsername("");
@@ -34,24 +36,25 @@ function DeliveryStaff() {
         fetchDeliveryStaffs();
     }, []);
 
-    async function handleCreateOrEditDeliveryStaff() {
-        if (editingStaff) {
-            // Update staff
-            const message = await managerEditDeliveryStaffProfile(editingStaff, username, email, phoneNumber);
-            // Create new staff
-            const data = await createDeliveryStaff(email, username);
-        }
+    const handleCreateDeliveryStaff = async () => {
+        const response = await createDeliveryStaff(email, username, phoneNumber);
+        notification.info({ message: response });
+        await fetchDeliveryStaffs();
+        setCreateModalOpen(false);
+    };
 
-        if (message === "Account create successfully" || message === "Staff updated successfully") {
-            await fetchDeliveryStaffs();
+    async function handleEditDeliveryStaff() {
+        if (editingStaff) {
+            const message = await managerEditDeliveryStaffProfile(editingStaff, username, email, phoneNumber);
+            toast(message);
+            fetchDeliveryStaffs();
         }
-        toast(message);
         handleClose();
     }
 
     function handleEdit(record) {
         setEditingStaff(record);
-        setOpen(true);
+        setEditModalOpen(true);
     }
 
     const handleDelete = async (id) => {
@@ -137,32 +140,7 @@ function DeliveryStaff() {
                         Create New Delivery Staff
                     </Button>
                 </Space>
-                <Modal
-                    title={editingStaff ? "Edit Delivery Staff" : "Create New Delivery Staff"}
-                    visible={open}
-                    onCancel={handleClose}
-                    onOk={handleCreateOrEditDeliveryStaff}
-                    okButtonProps={{ disabled: !username || !email }} // Disable OK button if fields are empty
-                >
-                    <Input
-                        placeholder="Username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        style={{ marginBottom: 16 }}
-                    />
-                    <Input
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        style={{ marginBottom: 16 }}
-                    />
-                    <Input
-                        placeholder="Phone number"
-                        value={phoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                        style={{ marginBottom: 16 }}
-                    />
-                </Modal>
+
             </div>
             <Table
                 dataSource={deliveryStaffData}
@@ -170,6 +148,60 @@ function DeliveryStaff() {
                 rowKey="id"
                 pagination={{ pageSize: 5 }}
             />
+
+            <Modal
+                title={"Create New Delivery Staff"}
+                visible={createModalOpen}
+                onCancel={handleClose}
+                onOk={() => handleCreateDeliveryStaff()}
+                okButtonProps={{ disabled: !username || !email }} // Disable OK button if fields are empty
+            >
+                <Input
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    style={{ marginBottom: 16 }}
+                />
+                <Input
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    style={{ marginBottom: 16 }}
+                />
+                <Input
+                    placeholder="Phone number"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    style={{ marginBottom: 16 }}
+                />
+            </Modal>
+
+            <Modal
+                title={"Edit Delivery Staff"}
+                visible={editModalOpen}
+                onCancel={handleClose}
+                onOk={() => handleEditDeliveryStaff()}
+                okButtonProps={{ disabled: !username || !email }} // Disable OK button if fields are empty
+            >
+                <Input
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    style={{ marginBottom: 16 }}
+                />
+                <Input
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    style={{ marginBottom: 16 }}
+                />
+                <Input
+                    placeholder="Phone number"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    style={{ marginBottom: 16 }}
+                />
+            </Modal>
         </div>
     );
 }

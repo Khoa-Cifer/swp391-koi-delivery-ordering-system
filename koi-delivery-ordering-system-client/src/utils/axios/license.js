@@ -61,7 +61,6 @@ export async function updateLicenseOrderInfo(
     licenseName,
     licenseDescription,
     licenseDate,
-    fishId
 ) {
     try {
         const response = await axiosClient.put("licenses/update-license-by-id", {
@@ -69,7 +68,6 @@ export async function updateLicenseOrderInfo(
             licenseName,
             licenseDescription,
             licenseDate,
-            fishId
         });
         return response.data
     } catch (error) {
@@ -79,28 +77,29 @@ export async function updateLicenseOrderInfo(
 
 export async function updateLicenseFiles(
     licenseId,
+    originalFileList,
     fileList
 ) {
-    let response = false;
+    let response = null;
     if (fileList.length > 0) {
         try {
-            fileList.forEach(async file => {
-                await axiosClient.put("licenses/update-license-files", {
+            for (let i = 0; i < fileList.length; i++) {
+                const res = await axiosClient.put("licenses/update-license-files", {
                     licenseId,
-                    file
+                    fileId: originalFileList[i].id, // Correct property naming
+                    file: fileList[i] // Correct property naming
                 }, {
                     headers: {
                         'Accept': '*/*', // Accept all types for this request
-                        'Content-Type': 'multipart/form-data' // Set Content-Type if uploading a file
+                        'Content-Type': 'multipart/form-data' // Set Content-Type for file upload
                     }
                 });
-            });
-
-            response = true;
+                response = res; // Store the last response, or you can push responses to an array if needed
+            }
         } catch (error) {
-            response = false;
-            console.log(error);
+            console.error(error);
+            return false;
         }
     }
-    return response.data
+    return response ? response.data : false; // Return the response data or false
 }

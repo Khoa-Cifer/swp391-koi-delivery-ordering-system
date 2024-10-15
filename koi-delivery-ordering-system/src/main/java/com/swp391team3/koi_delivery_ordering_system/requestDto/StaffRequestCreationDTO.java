@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class StaffRequestCreationDTO {
-    private String username;
     private String email;
+    private String username;
+    private String phoneNumber;
 }

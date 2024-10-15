@@ -11,12 +11,13 @@ export async function getAllSalesStaff() {
     }
 }
 
-export async function createSalesStaff(email, username) {
+export async function createSalesStaff(email, username, phoneNumber) {
     try {
         const response = await axiosClient.post(prefixAdminSalesStaff + "createSalesStaff",
             {
                 email,
                 username,
+                phoneNumber,
             }
         );
         return response.data;

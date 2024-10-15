@@ -56,12 +56,13 @@ public class LicenseController {
         licenseService.deleteLicenseById(id);
         return ResponseEntity.ok("License deleted successfully");
     }
-    @PostMapping(value = "/editLicense/{id}")
+
+    @PutMapping(value = "/update-license-by-id")
     public ResponseEntity<?> editLicense(
-            @PathVariable("id") Long licenseId,
-            @RequestParam(name = "name") String name,
-            @RequestParam(name = "description") String description,
-            @RequestParam(name = "dateOfIssue") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateOfIssue) {
+            @RequestParam(name = "licenseId") Long licenseId,
+            @RequestParam(name = "licenseName") String name,
+            @RequestParam(name = "licenseDescription") String description,
+            @RequestParam(name = "licenseDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateOfIssue) {
 
             Optional<License> optionalLicense = licenseService.getLicenseById(licenseId);
 
@@ -72,7 +73,8 @@ public class LicenseController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The license does not exist");
             }
     }
-    @PostMapping("/updateLicenseFile")
+
+    @PutMapping("/update-license-files")
     public ResponseEntity<?> updateLicenseFile(
             @RequestParam("licenseId") Long licenseId,
             @RequestParam("fileId") Long fileId,

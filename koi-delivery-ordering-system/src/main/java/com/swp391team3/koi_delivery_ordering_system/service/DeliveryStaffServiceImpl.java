@@ -18,7 +18,7 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public String createDeliveryStaff(String email, String username) {
+    public String createDeliveryStaff(String email, String username, String phoneNumber) {
         DeliveryStaff newDeliveryStaff = new DeliveryStaff();
 
         boolean emailDuplicatedCheck = deliveryStaffRepository.existsByEmail(email);
@@ -33,6 +33,7 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
         newDeliveryStaff.setPassword(encodedPassword);
 
         newDeliveryStaff.setUsername(username);
+        newDeliveryStaff.setPhoneNumber(phoneNumber);
 
         deliveryStaffRepository.save(newDeliveryStaff);
         return "Account create successfully";

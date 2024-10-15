@@ -18,6 +18,7 @@ function SalesStaff() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
 
     const fetchSalesStaffs = async () => {
         const fetchedData = await getAllSalesStaff();
@@ -31,11 +32,9 @@ function SalesStaff() {
     }, []);
 
     const handleCreateSalesStaff = async () => {
-        const response = await createSalesStaff(email, username);
+        const response = await createSalesStaff(email, username, phoneNumber);
         notification.info({ message: response });
-        if (response === "Account create successfully") {
-            await fetchSalesStaffs();
-        }
+        await fetchSalesStaffs();
         setIsModalOpen(false);
     };
 
@@ -109,6 +108,12 @@ function SalesStaff() {
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    style={{ marginBottom: "10px" }}
+                />
+                <Input
+                    placeholder="Phone Number"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
                     style={{ marginBottom: "10px" }}
                 />
             </Modal>

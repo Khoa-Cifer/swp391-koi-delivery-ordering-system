@@ -45,12 +45,13 @@ public class EmailService {
             } else if (type == typeMail.GETTING_TEMPLATE) {
                 template = templateEngine.process("getting-template", context);
                 context.setVariable("link", emailDetail.getLink());
-            } else if (type == typeMail.COMPLETE_DELIVERY_TEMPLATE){
+            } else if (type == typeMail.COMPLETE_DELIVERY_TEMPLATE) {
                 template = templateEngine.process("complete-delivery-template", context);
-            } else if (type == typeMail.DELIVERY_STAFF_DELIVERING_TEMPLATE){
-                template = templateEngine.process("deliverystaff-delivering-template", context);
-            }else if (type == typeMail.CUSTOMER_DELIVERING_TEMPLATE){
-                template = templateEngine.process("customer-delivering-template", context);
+//            } else if (type == typeMail.DELIVERY_STAFF_DELIVERING_TEMPLATE){
+//                template = templateEngine.process("deliverystaff-delivering-template", context);
+//            } else if (type == typeMail.CUSTOMER_DELIVERING_TEMPLATE){
+//                template = templateEngine.process("customer-delivering-template", context);
+//            }
             }
             //Creating a simple mail message
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();

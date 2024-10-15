@@ -73,8 +73,6 @@ function Fish({ fish }) {
     }, [file]);
 
     const handleAddLicenseForm = (e, index) => {
-        console.log(index);
-        console.log(e);
         const { name, value, files } = e.target;
 
         setSubmittedLicense((prevSubmittedLicense) => {
@@ -149,24 +147,30 @@ function Fish({ fish }) {
             fishPrice,
             file,
         );
-        if (fishData) {
-            let licenseData;
 
+        if (fishData && fishData.licenses && fishData.licenses.length > 0) {
+            let licenseData;
+            console.log(fishData);
+            console.log(submittedLicense);
             if (submittedLicense.length > 0) {
                 for (var i = 0; i < submittedLicense.length; i++) {
+                    const licenseDateResult = submittedLicense[i].date ? submittedLicense[i].date : null;
                     licenseData = await updateLicenseOrderInfo(
+                        submittedLicense[i].id,
                         submittedLicense[i].name,
                         submittedLicense[i].description,
-                        new Date(submittedLicense[i].date).toISOString(),
-                        fishData
+                        new Date(licenseDateResult).toISOString(),
                     )
-                    console.log(new Date(submittedLicense[i].date).toISOString());
+
+                    const originalFileList = fishData.licenses[i].files;
+                    console.log(originalFileList);
                     const fileList = Object.keys(submittedLicense[i])
                         .filter(key => key.startsWith("file-"))  // Filter keys that start with "file-"
                         .map(key => submittedLicense[i][key]);  // Map them to their respective values
                     try {
                         await updateLicenseFiles(
                             licenseData,
+                            originalFileList,
                             fileList
                         )
                     } catch (error) {
@@ -175,12 +179,12 @@ function Fish({ fish }) {
                     }
                 }
                 if (licenseData) {
-                    toast("Add Fish and its License to the order successfully");
+                    toast("Update Fish and its License to the order successfully");
                 } else {
                     toast("Unexpected error has been occurred");
                 }
             } else {
-                toast("Add Fish to the order successfully");
+                toast("Update Fish to the order successfully");
             }
         } else {
             toast("Unexpected error has been occurred");

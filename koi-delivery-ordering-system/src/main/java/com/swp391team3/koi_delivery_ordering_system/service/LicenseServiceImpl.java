@@ -101,12 +101,10 @@ public class LicenseServiceImpl implements ILicenseService{
                             && licenseFile1.getFile().getId().equals(fileId))
                     .findFirst().orElse(null);
             if (licenseFile != null) {
-                File updatedFile = fileService.uploadFileToFileSystem(file);
-
-                licenseFile.setFile(updatedFile);
-                licenseFileRepository.save(licenseFile);
-
-                response = true;
+                String updatedFile = fileService.updateFileInFileSystem(fileId, file);
+                if (updatedFile != null) {
+                    response = true;
+                }
 
                 return response;
             } else {

@@ -18,7 +18,7 @@ public class SalesStaffController {
 
     @PostMapping("/createSalesStaff")
     public ResponseEntity<?> createSalesStaff(@RequestBody StaffRequestCreationDTO request) {
-        String result = salesStaffService.createSalesStaff(request.getEmail(), request.getUsername());
+        String result = salesStaffService.createSalesStaff(request.getEmail(), request.getUsername(), request.getPhoneNumber());
         return ResponseEntity.ok(result);
     }
 

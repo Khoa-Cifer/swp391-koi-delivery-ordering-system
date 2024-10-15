@@ -11,12 +11,13 @@ export async function getAllDeliveryStaff() {
     }
 }
 
-export async function createDeliveryStaff(email, username) {
+export async function createDeliveryStaff(email, username, phoneNumber) {
     try {
         const response = await axiosClient.post(prefixAdminDeliveryStaff + "createDeliveryStaff",
             {
                 email,
                 username,
+                phoneNumber
             }
         );
         return response.data;

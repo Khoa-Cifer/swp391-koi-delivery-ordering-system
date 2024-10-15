@@ -138,8 +138,4 @@ public class OrderDeliveringServiceImpl implements IOrderDeliveringService {
         }
         return false;
     }
-    @Override
-    public void deleteOrderDelivering(Long id){
-        orderDeliveringRepository.deleteOrderDeliveringById(id);
-    }
 }

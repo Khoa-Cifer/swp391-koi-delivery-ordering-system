@@ -20,7 +20,7 @@ public class DeliveryStaffController {
 
     @PostMapping("/createDeliveryStaff")
     public ResponseEntity<?> createDeliveryStaff(@RequestBody StaffRequestCreationDTO request) {
-        String result = deliveryStaffService.createDeliveryStaff(request.getEmail(), request.getUsername());
+        String result = deliveryStaffService.createDeliveryStaff(request.getEmail(), request.getUsername(), request.getPhoneNumber());
         return ResponseEntity.ok(result);
     }
 

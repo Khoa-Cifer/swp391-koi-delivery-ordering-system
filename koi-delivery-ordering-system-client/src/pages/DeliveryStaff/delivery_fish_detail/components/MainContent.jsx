@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { getFileByFileId } from "../../../../utils/axios/file";
 import ImageSlider from "../../../../components/ImageSlider";
 
-import { Box, Modal } from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Modal, Select } from "@mui/material";
 import dateTimeConvert from "../../../../components/utils";
 
 const modalStyle = {
@@ -96,11 +96,34 @@ const MainContent = () => {
     width: 300,
   };
 
+  const [age, setAge] = useState('');
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
+
   return state && (
     <div className="main-content-license-sale">
       <div className="slider-container">
         <ImageSlider fishInfo={state.fishes} images={imagePreviews} onImageChange={e => handleSlider(e)} />
       </div>
+
+      <Box sx={{ maxWidth: 180, marginTop: "20px" }}>
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Age</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={age}
+            label="Age"
+            onChange={handleChange}
+          >
+            <MenuItem value={10}>Ten</MenuItem>
+            <MenuItem value={20}>Twenty</MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
       <Link className="link" to={`/delivery-order-home`}>Go back</Link>
 
