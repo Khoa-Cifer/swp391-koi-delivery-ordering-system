@@ -54,10 +54,10 @@ function CustomerHome() {
             <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange}>
-                        <Tab label="Draft Order" {...a11yProps(0)} />
-                        <Tab label="Posted Order" {...a11yProps(1)} />
-                        <Tab label="Getting Order" {...a11yProps(2)} />
-                        <Tab label="Delivering Order" {...a11yProps(3)} />
+                        <Tab label="Draft" {...a11yProps(0)} />
+                        <Tab label="Posted" {...a11yProps(1)} />
+                        <Tab label="Getting" {...a11yProps(2)} />
+                        <Tab label="Delivering" {...a11yProps(3)} />
                         <Tab label="Complete" {...a11yProps(4)} />
                     </Tabs>
                 </Box>

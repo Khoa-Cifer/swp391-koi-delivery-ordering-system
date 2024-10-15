@@ -1,136 +1,200 @@
-import { Box, Button, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { createDeliveryStaff, getAllDeliveryStaff } from "../../../../utils/axios/deliveryStaff";
-import 'react-toastify/dist/ReactToastify.css';
+import { Button, Input, Modal, Table, Typography, Space, Dropdown, Menu } from "antd";
+import { createDeliveryStaff, getAllDeliveryStaff, updateDeliveryStaff } from "../../../../utils/axios/deliveryStaff"; // Add update function
 import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";
+import { MoreOutlined } from "@ant-design/icons";
 
-const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 2,
-};
+const { Title } = Typography;
 
 function DeliveryStaff() {
-    const [deliveryStaffData, setDeliveryStaffData] = useState();
-    const [open, setOpen] = useState(false);
-
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-
+    const [deliveryStaffData, setDeliveryStaffData] = useState([]);
+    const [createModalOpen, setCreateModalOpen] = useState(false);
+    const [editModalOpen, setEditModalOpen] = useState(false);
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
+    const [currentId, setCurrentId] = useState(null); // Track the ID of the staff being edited
+
+    const handleOpenCreate = () => setCreateModalOpen(true);
+    const handleCloseCreate = () => {
+        setCreateModalOpen(false);
+        setUsername("");
+        setEmail("");
+    };
+
+    const handleOpenEdit = (id, userName, email) => {
+        setCurrentId(id);
+        setUsername(userName);
+        setEmail(email);
+        setEditModalOpen(true);
+    };
+
+    const handleCloseEdit = () => {
+        setEditModalOpen(false);
+        setUsername("");
+        setEmail("");
+        setCurrentId(null);
+    };
 
     async function fetchDeliveryStaffs() {
-        let fetchedData = await getAllDeliveryStaff();
-        if (fetchedData) {
-            setDeliveryStaffData(fetchedData);
+        try {
+            const fetchedData = await getAllDeliveryStaff();
+            if (fetchedData) {
+                setDeliveryStaffData(fetchedData);
+            }
+        } catch (error) {
+            toast.error("Failed to fetch delivery staff data.");
         }
     }
 
     useEffect(() => {
         fetchDeliveryStaffs();
-    }, [])
+    }, []);
 
     async function handleCreateDeliveryStaff() {
-        const data = await createDeliveryStaff(email, username);
-        if (data === "Account create successfully") {
-            await fetchDeliveryStaffs();
+        try {
+            const data = await createDeliveryStaff(email, username);
+            toast.success(data);
+            if (data === "Account created successfully") {
+                await fetchDeliveryStaffs();
+                handleCloseCreate();
+            }
+        } catch (error) {
+            toast.error("Failed to create delivery staff.");
         }
-        toast(data);
-        handleClose();
     }
+
+    async function handleUpdateDeliveryStaff() {
+        try {
+            const data = await updateDeliveryStaff(currentId, { username, email }); // Send updated data
+            toast.success(data);
+            if (data === "Account updated successfully") {
+                await fetchDeliveryStaffs();
+                handleCloseEdit();
+            }
+        } catch (error) {
+            toast.error("Failed to update delivery staff.");
+        }
+    }
+
+    const columns = [
+        {
+            title: "Id",
+            dataIndex: "id",
+            key: "id",
+        },
+        {
+            title: "Username",
+            dataIndex: "username",
+            key: "username",
+        },
+        {
+            title: "Email",
+            dataIndex: "email",
+            key: "email",
+        },
+        {
+            title: "Address",
+            dataIndex: "address",
+            key: "address",
+        },
+        {
+            title: "Longitude",
+            dataIndex: "longitude",
+            key: "longitude",
+        },
+        {
+            title: "Latitude",
+            dataIndex: "latitude",
+            key: "latitude",
+        },
+        {
+            title: "Phone Number",
+            dataIndex: "phoneNumber",
+            key: "phoneNumber",
+        },
+        {
+            title: "Action",
+            key: "action",
+            render: (_, record) => (
+                <Dropdown
+                    overlay={
+                        <Menu>
+                            <Menu.Item onClick={() => handleOpenEdit(record.id, record.username, record.email)}>
+                                Edit
+                            </Menu.Item>
+                        </Menu>
+                    }
+                    trigger={['click']}
+                >
+                    <Button icon={<MoreOutlined />} />
+                </Dropdown>
+            ),
+        },
+    ];
 
     return (
         <div>
             <ToastUtil />
             <div className="dashboard-info">
-                <h2 style={{ marginTop: "0" }}>Delivery Staff</h2>
+                <Title level={2}>Delivery Staff</Title>
             </div>
-            <div className={open ? 'blur' : ''}>
-                <div style={{ display: "flex", justifyContent: "flex-end", marginRight: "30px" }}>
-                    <Button onClick={handleOpen} variant="contained" style={{ maxWidth: "30%" }}>Create New Delivery Staff</Button>
-                </div>
+            <div>
+                <Space style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
+                    <Button type="primary" onClick={handleOpenCreate}>
+                        Create New Delivery Staff
+                    </Button>
+                </Space>
                 <Modal
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="modal-title"
-                    aria-describedby="modal-description"
+                    title="Create New Delivery Staff"
+                    visible={createModalOpen}
+                    onCancel={handleCloseCreate}
+                    onOk={handleCreateDeliveryStaff}
+                    okButtonProps={{ disabled: !username || !email }} // Disable OK button if fields are empty
                 >
-                    <Box sx={modalStyle}>
-                        <TextField
-                            label="Username"
-                            fullWidth
-                            margin="normal"
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
-                        <TextField
-                            label="Email"
-                            fullWidth
-                            margin="normal"
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleCreateDeliveryStaff}
-                            disabled={!username || !email} // Disable if either is empty
-                        >
-                            Submit
-                        </Button>
-                    </Box>
+                    <Input
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        style={{ marginBottom: 16 }}
+                    />
+                    <Input
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        style={{ marginBottom: 16 }}
+                    />
+                </Modal>
+
+                <Modal
+                    title="Edit Delivery Staff"
+                    visible={editModalOpen}
+                    onCancel={handleCloseEdit}
+                    onOk={handleUpdateDeliveryStaff}
+                    okButtonProps={{ disabled: !username || !email }} // Disable OK button if fields are empty
+                >
+                    <Input
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        style={{ marginBottom: 16 }}
+                    />
+                    <Input
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        style={{ marginBottom: 16 }}
+                    />
                 </Modal>
             </div>
-            <TableContainer component={Paper} style={{ marginTop: "25px" }}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Id</Typography>
-                            </TableCell>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Username</Typography>
-                            </TableCell>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Email</Typography>
-                            </TableCell>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Address</Typography>
-                            </TableCell>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Longitude</Typography>
-                            </TableCell>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Latitude</Typography>
-                            </TableCell>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Phone Number</Typography>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {deliveryStaffData?.map((data) => (
-                            <TableRow key={data.id}>
-                                <TableCell>{data.id}</TableCell>
-                                <TableCell>{data.username}</TableCell>
-                                <TableCell>{data.email}</TableCell>
-                                <TableCell>{data.address}</TableCell>
-                                <TableCell>{data.longitude}</TableCell>
-                                <TableCell>{data.latitude}</TableCell>
-                                <TableCell>{data.phoneNumber}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <Table
+                dataSource={deliveryStaffData}
+                columns={columns}
+                rowKey="id"
+                pagination={{ pageSize: 5 }}
+            />
         </div>
-    )
+    );
 }
 
 export default DeliveryStaff;

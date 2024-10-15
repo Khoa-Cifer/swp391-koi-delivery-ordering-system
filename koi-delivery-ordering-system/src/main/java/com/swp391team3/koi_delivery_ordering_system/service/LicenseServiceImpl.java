@@ -71,12 +71,23 @@ public class LicenseServiceImpl implements ILicenseService{
         License license = licenseRepository.findById(licenseId)
                 .orElseThrow(() -> new RuntimeException("License not found"));
 
-        license.setName(name);
-        license.setDescription(description);
-        license.setDateOfIssue(dateOfIssue);
+        if (name != null) {
+            license.setName(name);
+
+        }
+
+        if (description != null) {
+            license.setDescription(description);
+
+        }
+
+        if (dateOfIssue != null) {
+            license.setDateOfIssue(dateOfIssue);
+        }
 
         return licenseRepository.save(license);
     }
+
     @Override
     public boolean updateLicenseFile(Long licenceId, Long fileId, MultipartFile file) throws IOException {
         Optional<License> optionalLicense = licenseRepository.findById(licenceId);

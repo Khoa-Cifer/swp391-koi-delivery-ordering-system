@@ -8,5 +8,5 @@ import java.util.List;
 public interface ITransactionService {
     boolean createTransaction(Long customerId, Date createdDate, double amount);
     List<Transaction> getAllTransactionsHistory();
-    List<Transaction> getTransactionsByCustomerId();
+    List<Transaction> getTransactionsByCustomerId(Long customerId);
 }

@@ -18,10 +18,6 @@ function Sidebar() {
   const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState(default_avatar);
 
-  const handleOpenEditProfile = () => {
-    navigate("/delivery-staff-edit-profile")
-  }
-
   const token = localStorage.getItem("token");
   let deliveryStaffId;
   let deliveryStaffInfo;
@@ -63,12 +59,15 @@ function Sidebar() {
       <div className="list-function">
         <List>
           <ListItem className="button">
-            <ListItemText primary="Home" />
+            <ListItemText
+              primary="Home"
+              onClick={() => navigate('/delivery-order-home')}
+            />
           </ListItem>
           <ListItem className="button">
             <ListItemText
               primary="Profile"
-              onClick={handleOpenEditProfile}
+              onClick={() => navigate("/delivery-staff-edit-profile")}
             />
           </ListItem>
           <ListItem className="button">

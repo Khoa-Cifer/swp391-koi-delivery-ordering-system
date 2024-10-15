@@ -1,67 +1,60 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { getAllFishes } from "../../../../utils/axios/fish";
+import React, { useEffect, useState } from "react";
+import { Table, Typography } from "antd";
+import { getAllTransaction } from "../../../../utils/axios/transaction";
 
+// Function to format the date in "DD/MM/YYYY"
+function formatDate(dateString) {
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+}
 
 function Transaction() {
-    const [fishData, setFishData] = useState();
+    const [transactionData, setTransactionData] = useState([]);
 
     useEffect(() => {
-        async function fetchFish() {
-            let fetchedData = await getAllFishes();
+        async function fetchTransaction() {
+            const fetchedData = await getAllTransaction();
             if (fetchedData) {
-                setFishData(fetchedData);
+                setTransactionData(fetchedData);
             }
         }
-        fetchFish();
+        fetchTransaction();
     }, []);
+
+    const columns = [
+        {
+            title: 'Id',
+            dataIndex: 'id',
+            key: 'id',
+        },
+        {
+            title: 'Amount',
+            dataIndex: 'amount',
+            key: 'amount',
+        },
+        {
+            title: 'Transaction Date',
+            dataIndex: 'transactionDate',
+            key: 'transactionDate',
+            render: (text) => formatDate(text), // Format the date here
+        },
+    ];
 
     return (
         <div>
-             <div className="dashboard-info">
-                <h2 style={{ marginTop: "0" }}>Fish</h2>
+            <div className="dashboard-info">
+                <Typography.Title level={2} style={{ marginTop: 0 }}>Transaction</Typography.Title>
             </div>
 
-            <TableContainer component={Paper} style={{ marginTop: "25px" }}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Id</Typography>
-                            </TableCell>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Name</Typography>
-                            </TableCell>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Size</Typography>
-                            </TableCell>
-                            {/* <TableCell style={{ color: '#041967' }}>
-                                <Typography>Password</Typography>
-                            </TableCell> */}
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Age</Typography>
-                            </TableCell>
-                            <TableCell style={{ color: '#041967' }}>
-                                <Typography>Weight</Typography>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {fishData?.map((data) => (
-                            <TableRow key={data.id}>
-                                <TableCell>{data.id}</TableCell>
-                                <TableCell>{data.name}</TableCell>
-                                <TableCell>{data.size}</TableCell>
-                                <TableCell>{data.age}</TableCell>
-                                <TableCell>{data.weight}</TableCell>
-                                {/* <TableCell>{data.total_fail}</TableCell> */}
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <Table 
+                dataSource={transactionData} 
+                columns={columns} 
+                rowKey="id" 
+                pagination={{ pageSize: 5 }} // Adjust pagination as needed
+                style={{ marginTop: "25px" }}
+            />
         </div>
-    )
+    );
 }
 
 export default Transaction;
