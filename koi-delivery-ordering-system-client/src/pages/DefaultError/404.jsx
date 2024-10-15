@@ -1,42 +1,25 @@
+import { Image } from "antd";
 import Logo from "../../assets/logo.png";
-import { styled } from "@mui/material";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import MainSlider from "../../components/MainSlider";
+import "./404.scss";
 
-const BoxSignIn = styled(Box)(({ theme }) => ({
-    padding: theme.spacing(8),
-}));
+function Page404() {
+  return (
+    <div className="page404-container">
+      <div className="logo">
+        <Image src="./src/assets/logo.png" />
+      </div>
 
-const BoxLogo = styled(Box)(() => ({
-    display: "flex",
-    justifyContent: "center",
-}));
+      <div className="main-content">
+        <div className="content1" ><strong>404</strong></div>
+        <div className="content2" ><strong>Sorry, we couldn't find this page</strong></div>
+      </div>
 
-const BoxForm = styled(Box)(() => ({
-    margin: "25% 25%",
-    textAlign: "center",
-}));
-
-const Page404 = () => {
-    return (
-        <BoxSignIn>
-            <Grid container spacing={2}>
-                <Grid item xs={6}>
-                    <BoxLogo>
-                        <img src={Logo} alt="" />
-                    </BoxLogo>
-                    <BoxForm>
-                        <Typography>Page Not Found</Typography>
-                    </BoxForm>
-                </Grid>
-                <Grid item xs={6}>
-                    <MainSlider />
-                </Grid>
-            </Grid>
-        </BoxSignIn>
-    );
-};
+      <div className="main-slider">
+        <MainSlider />
+      </div>
+    </div>
+  );
+}
 
 export default Page404;
