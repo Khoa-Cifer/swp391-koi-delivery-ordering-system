@@ -8,6 +8,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Button,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getFishesByOrderId } from "../../../utils/axios/fish";
@@ -20,7 +21,7 @@ const Invoice = () => {
   const location = useLocation();
 
   const useQuery = () => {
-      return new URLSearchParams(location.search);
+    return new URLSearchParams(location.search);
   };
 
   const query = useQuery();
@@ -59,6 +60,10 @@ const Invoice = () => {
     fetchData();
   }, []);
 
+  const handleNavigateFeedback = () => {
+    
+  }
+  
   const totalFishPrice = fish.reduce((total, item) => total + item.price, 0);
   const totalAmount = totalFishPrice + taxes + shipping - discount;
 
@@ -216,9 +221,15 @@ const Invoice = () => {
         </Box>
       </Box>
 
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="h6">PAYMENT DUE DATE</Typography>
-        <Typography>{dateTimeConvert(order.finishDate)}</Typography>
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Box sx={{ mb: 3 }}>
+          <Typography variant="h6">PAYMENT DUE DATE</Typography>
+          <Typography>{dateTimeConvert(order.finishDate)}</Typography>
+        </Box>
+
+        <Box>
+          <Button variant="contained" onClick={() => handleNavigateFeedback()}>Please give us your feedback</Button>
+        </Box>
       </Box>
 
       {/* Terms and Conditions */}

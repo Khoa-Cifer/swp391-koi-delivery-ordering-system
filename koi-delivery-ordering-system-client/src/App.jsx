@@ -49,6 +49,7 @@ import Fish from "./pages/Manager/SystemData/Fish/Fish";
 import Orders from "./pages/Manager/SystemData/Orders/Orders";
 import Invoice from "./pages/public/Invoice/Invoice";
 import OrderFinalInfo from "./pages/Customer/CustomerEditOrder/pages/OrderFinalInfo";
+import ContactPage from "./pages/public/Contact/Contact";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -147,6 +148,7 @@ function App() {
 
             <Route path="/payment-success" element={<AllowedRoute element={<PaymentSuccess />} />} />
             <Route path="/invoice" element={<Invoice />} />
+            <Route path="/contact-us" element={<ContactPage />} />
             <Route path="/tracking-order" element={<TrackingOrder />} />
 
             <Route path="/*" element={<Page404 />} />

@@ -119,6 +119,7 @@ const TrackingOrder = () => {
             <TextField
               variant="outlined"
               label="Search by Tracking ID"
+              type=""
               value={trackingId}
               onChange={(e) => setTrackingId(e.target.value)} // Update tracking ID state
               sx={{ mr: 1 }} // Margin to the right

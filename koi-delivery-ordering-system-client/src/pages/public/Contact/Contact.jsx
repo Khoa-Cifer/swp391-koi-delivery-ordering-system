@@ -1,4 +1,3 @@
-import React from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import {
   Box,
@@ -13,6 +12,8 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import "./Contact.css";
+import StarRating from "../../../components/StarRating";
+import { Link } from "react-router-dom";
 const theme = createTheme({
   palette: {
     primary: {
@@ -97,6 +98,10 @@ function ContactPage() {
                     </Typography>
                   </Box>
                 </Box>
+
+                <StarRating />
+
+                <Link to="/">Back to home page</Link>
               </Grid>
 
               <Grid item xs={12} md={6} sx={{ p: 4 }}>
@@ -106,6 +111,7 @@ function ContactPage() {
                 <form>
                   <TextField
                     fullWidth
+                    type=""
                     label="Name"
                     variant="outlined"
                     margin="normal"
@@ -113,6 +119,7 @@ function ContactPage() {
                   <TextField
                     fullWidth
                     label="Email"
+                    type=""
                     variant="outlined"
                     margin="normal"
                   />
@@ -120,12 +127,14 @@ function ContactPage() {
                     fullWidth
                     label="Phone"
                     variant="outlined"
+                    type=""
                     margin="normal"
                   />
                   <TextField
                     fullWidth
                     label="Message"
                     variant="outlined"
+                    type=""
                     margin="normal"
                     multiline
                     rows={4}
