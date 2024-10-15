@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Input, Modal, Table, Typography, Space, Popconfirm } from "antd";
-import { createDeliveryStaff, deleteDeliveryStaffById, getAllDeliveryStaff, deliveryStaffUpdateProfile } from "../../../../utils/axios/deliveryStaff"; // Import delete function and update function
+import { createDeliveryStaff, deleteDeliveryStaffById, getAllDeliveryStaff, deliveryStaffUpdateProfile, managerEditDeliveryStaffProfile } from "../../../../utils/axios/deliveryStaff"; // Import delete function and update function
 import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";
 
@@ -12,6 +12,7 @@ function DeliveryStaff() {
     const [editingStaff, setEditingStaff] = useState(null);
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
@@ -19,6 +20,7 @@ function DeliveryStaff() {
         setEditingStaff(null);
         setEmail("");
         setUsername("");
+        setPhoneNumber("");
     };
 
     async function fetchDeliveryStaffs() {
@@ -33,13 +35,11 @@ function DeliveryStaff() {
     }, []);
 
     async function handleCreateOrEditDeliveryStaff() {
-        let message;
         if (editingStaff) {
             // Update staff
-            message = await deliveryStaffUpdateProfile();
-        } else {
+            const message = await managerEditDeliveryStaffProfile(editingStaff, username, email, phoneNumber);
             // Create new staff
-            message = await createDeliveryStaff();
+            const data = await createDeliveryStaff(email, username);
         }
 
         if (message === "Account create successfully" || message === "Staff updated successfully") {
@@ -51,8 +51,6 @@ function DeliveryStaff() {
 
     function handleEdit(record) {
         setEditingStaff(record);
-        setUsername(record.username);
-        setEmail(record.email);
         setOpen(true);
     }
 
@@ -105,15 +103,16 @@ function DeliveryStaff() {
         },
         {
             title: "Action",
+            dataIndex: "id",
             key: "id",
-            render: (text, record) => (
+            render: (id) => (
                 <Space size="middle">
-                    <Button type="link" onClick={() => handleEdit(record)}>
+                    <Button type="link" onClick={() => handleEdit(id)}>
                         Edit
                     </Button>
                     <Popconfirm
                         title="Are you sure to delete this staff?"
-                        onConfirm={() => handleDelete(record.id)} // Pass the staff id to delete
+                        onConfirm={() => handleDelete(id)} // Pass the staff id to delete
                         okText="Yes"
                         cancelText="No"
                     >
@@ -155,6 +154,12 @@ function DeliveryStaff() {
                         placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        style={{ marginBottom: 16 }}
+                    />
+                    <Input
+                        placeholder="Phone number"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
                         style={{ marginBottom: 16 }}
                     />
                 </Modal>
