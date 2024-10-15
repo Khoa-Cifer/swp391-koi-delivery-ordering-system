@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import StatCard from "./components/Card/ReportCard";
 import Table from "./components/Card/Table";
 import { Box, Grid, Paper, Typography, TablePagination } from "@mui/material";
