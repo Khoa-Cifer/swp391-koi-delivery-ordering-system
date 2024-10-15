@@ -15,7 +15,7 @@ public interface IDeliveryStaffService {
     List<DeliveryStaff> getAllDeliveryStaffs();
     Optional<DeliveryStaff> getDeliveryStaffById(Long id);
     void deleteDeliveryStaffById(Long id);
-    DeliveryStaff updateDeliveryStaffById(Long id, String email, String phoneNumber);
+    DeliveryStaff updateDeliveryStaffById(Long id, String email, String phoneNumber, String username);
 
     boolean updateDeliveryStaffLocation(DeliveryStaffLocationUpdateRequestDTO request);
 }
