@@ -36,7 +36,7 @@ public class NewsServiceImpl implements INewsService {
     }
 
     @Override
-    public News createNews(String title, String description, String type, Long salesStaffId, MultipartFile file) {
+    public boolean createNews(String title, String description, Long salesStaffId, MultipartFile file) {
         File uploadedFile = null;
         try {
             uploadedFile = fileService.uploadFileToFileSystem(file);
@@ -48,11 +48,10 @@ public class NewsServiceImpl implements INewsService {
         news.setCreatedDate(new java.util.Date());
         news.setTitle(title);
         news.setDescription(description);
-        news.setType(type);
 
         news.setCreatedBy(salesStaffRepository.findById(salesStaffId).get());
         news.setFile(uploadedFile);
-
-        return newsRepository.save(news);
+        newsRepository.save(news);
+        return true;
     }
 }

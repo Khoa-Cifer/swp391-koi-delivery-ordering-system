@@ -3,6 +3,7 @@ package com.swp391team3.koi_delivery_ordering_system.controller;
 import com.swp391team3.koi_delivery_ordering_system.model.News;
 import com.swp391team3.koi_delivery_ordering_system.service.INewsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,14 +32,13 @@ public class NewsController {
         newsService.deleteNewsById(id);
     }
 
-    @PostMapping(value = "/createNews")
-    public ResponseEntity<?> createNews(@RequestParam(name = "title") String title,
+    @PostMapping(value = "/createNews/{salesStaffId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> createNews(@PathVariable(name = "salesStaffId") Long salesStaffId,
+                                        @RequestParam(name = "title") String title,
                                         @RequestParam(name = "description") String description,
-                                        @RequestParam(name = "type") String type,
-                                        @RequestParam(name = "salesStaffId") Long salesStaffId,
-                                        @RequestParam(name = "image") MultipartFile file)
-    {
-        News news = newsService.createNews(title, description, type, salesStaffId, file);
+                                        @RequestParam(name = "image") MultipartFile file) {
+        System.out.println("Desc is" + description);
+        boolean news = newsService.createNews(title, description, salesStaffId, file);
 
         return ResponseEntity.ok(news);
     }
