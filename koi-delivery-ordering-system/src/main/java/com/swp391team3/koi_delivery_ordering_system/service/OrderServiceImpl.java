@@ -6,6 +6,7 @@ import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepositor
 import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.*;
+import com.swp391team3.koi_delivery_ordering_system.responseDto.UpdateOrderResponseDTO;
 import com.swp391team3.koi_delivery_ordering_system.utils.PriceBoard;
 import com.swp391team3.koi_delivery_ordering_system.utils.Utilities;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
@@ -219,8 +220,7 @@ public class OrderServiceImpl implements IOrderService {
         return orders;
     }
 
-    @Override
-    public double calculateOrderPrice(Long id) {
+    private double calculateOrderPriceUtils(Long id) {
         List<Fish> fishList = fishService.getFishesByOrderId(id);
         Optional<Order> order = getOrderById(id);
         double distance = Utilities.calculateDistance(
@@ -230,7 +230,13 @@ public class OrderServiceImpl implements IOrderService {
                 Double.parseDouble(order.get().getDestinationLongitude())
         );
 
-        double price = getPrice(fishList, order, distance);
+        return getPrice(fishList, order, distance);
+    }
+
+    @Override
+    public double calculateOrderPrice(Long id) {
+        Optional<Order> order = getOrderById(id);
+        double price = calculateOrderPriceUtils(id);
         order.get().setPrice(price);
         orderRepository.save(order.get());
         return price;
@@ -359,9 +365,9 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public Order updateOrder(Long orderId, String name, String description, Date expectedFinishDate,
-                             String destinationAddress, String destinationLongitude, String destinationLatitude,
-                             String senderAddress, String senderLongitude, String senderLatitude) {
+    public UpdateOrderResponseDTO updateOrder(Long orderId, String name, String description, Date expectedFinishDate,
+                                              String destinationAddress, String destinationLongitude, String destinationLatitude,
+                                              String senderAddress, String senderLongitude, String senderLatitude) {
 
         Order order = orderRepository.findById(orderId).orElseThrow(() ->
                 new RuntimeException("Order not found")
@@ -377,7 +383,18 @@ public class OrderServiceImpl implements IOrderService {
         order.setSenderLongitude(senderLongitude);
         order.setSenderLatitude(senderLatitude);
         order.setOrderStatus(orderStatus.DRAFT);
-        return orderRepository.save(order);
+        double price = calculateOrderPriceUtils(orderId);
+        double extraMoney = 0;
+        UpdateOrderResponseDTO response = new UpdateOrderResponseDTO();
+        if (price > order.getPrice()) {
+            extraMoney = price - order.getPrice();
+            order.setPrice(price);
+            orderRepository.save(order);
+        }
+
+        response.setOrderId(orderId);
+        response.setPrice(extraMoney);
+        return response;
     }
 
 

@@ -49,6 +49,7 @@ import PaymentHistory from "./pages/Manager/SystemData/PaymentHistory/PaymentHis
 import Fish from "./pages/Manager/SystemData/Fish/Fish";
 import Orders from "./pages/Manager/SystemData/Orders/Orders";
 import Invoice from "./pages/public/Invoice/Invoice";
+import OrderFinalInfo from "./pages/Customer/CustomerEditOrder/pages/OrderFinalInfo";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -119,6 +120,7 @@ function App() {
               <Route path="/customer-create-order" element={<CustomerPrivateRoute element={<CustomerCreateOrder />} />} />
               <Route path="/customer-edit-profile" element={<CustomerPrivateRoute element={<CustomerEditProfile />} />} />
               <Route path="/customer-edit-order/:id" element={<CustomerPrivateRoute element={<CustomerEditOrder />} />} />
+              <Route path="/customer-edit-order/:id/order-conclusion-info" element={<CustomerPrivateRoute element={<OrderFinalInfo />} />} />
             </Route>
 
             <Route path="/delivery-staff-home" element={<DeliveryStaffPrivateRoute element={<DeliveryStaffHome />} />} />

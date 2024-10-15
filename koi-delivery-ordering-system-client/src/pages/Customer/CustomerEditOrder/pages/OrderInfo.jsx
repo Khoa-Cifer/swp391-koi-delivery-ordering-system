@@ -7,6 +7,7 @@ import { GoogleMap } from "@react-google-maps/api";
 import { Button, Flex } from "antd";
 import { updateGeneralOrderInfo } from "../../../../utils/axios/order";
 import ToastUtil from "../../../../components/toastContainer";
+import { useNavigate } from "react-router-dom";
 
 const CustomBoxContainer = styled(Box)(() => ({
     display: "flex",
@@ -33,6 +34,10 @@ function OrderInfo({ order }) {
     const [receiverCoordinates, setReceiverCoordinates] = useState({ lat: parseFloat(order.destinationLatitude), lng: parseFloat(order.destinationLongitude) });
     const [expectedFinishDate, setExpectedFinishDate] = useState(new Date(order.expectedFinishDate));
     const [selectedButton, setSelectedButton] = useState(0);
+    const [updated, setUpdated] = useState(false);
+    const [extraInfo, setExtraInfo] = useState(false);
+
+    const navigate = useNavigate();
 
     const onMapClick = useCallback((e) => {
         const lat = e.latLng.lat();
@@ -96,6 +101,12 @@ function OrderInfo({ order }) {
         setOrderDescription(e.target.value);
     }
 
+    function handleConclusion() {
+        navigate(`/customer-edit-order/${order.id}/order-conclusion-info`, {
+            state: extraInfo,
+        })
+    }
+
     async function handleSubmit() {
         if (!orderName || !orderDescription || !receiverAddress) {
             toast("All fields are required");
@@ -114,9 +125,11 @@ function OrderInfo({ order }) {
                 senderCoordinates.lat,
                 new Date(expectedFinishDate).toISOString()
             )
-            // const filter = await filterOrder(response);
+
             if (response) {
-                toast("Create successfully");
+                setExtraInfo(response);
+                toast("Update successfully, please conclude your update and pay the extra money");
+                setUpdated(true);
             } else {
                 toast("Unsupported Area");
             }
@@ -186,9 +199,15 @@ function OrderInfo({ order }) {
 
                     <Calendar onChange={e => handleDateChange(e)} date={expectedFinishDate} />
 
-                    <button onClick={() => handleSubmit()} className="form-button">
-                        Confirm
-                    </button>
+                    {updated ? (
+                        <button onClick={() => handleConclusion()} className="form-button">
+                            Next Step
+                        </button>
+                    ) : (
+                        <button onClick={() => handleSubmit()} className="form-button">
+                            Confirm
+                        </button>
+                    )}
                 </div>
             </div>
             <div>

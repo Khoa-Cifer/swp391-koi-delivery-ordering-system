@@ -6,7 +6,6 @@ public class Utilities {
     private static final double R = 6371.0;
     private static final int CODE_LENGTH = 6; // Total length of numeric part
 
-
     public static boolean compareCountry(String address1, String address2) {
         if (address1.equalsIgnoreCase(address2)) {
             return true;
