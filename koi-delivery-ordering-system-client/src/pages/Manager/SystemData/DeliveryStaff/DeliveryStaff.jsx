@@ -1,49 +1,30 @@
 import { useEffect, useState } from "react";
-import { Button, Input, Modal, Table, Typography, Space, Dropdown, Menu } from "antd";
-import { createDeliveryStaff, getAllDeliveryStaff, updateDeliveryStaff } from "../../../../utils/axios/deliveryStaff"; // Add update function
+import { Button, Input, Modal, Table, Typography, Space, Popconfirm } from "antd";
+import { createDeliveryStaff, deleteDeliveryStaffById, getAllDeliveryStaff, deliveryStaffUpdateProfile } from "../../../../utils/axios/deliveryStaff"; // Import delete function and update function
 import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";
-import { MoreOutlined } from "@ant-design/icons";
 
-const { Title } = Typography;
+const { Text } = Typography;
 
 function DeliveryStaff() {
     const [deliveryStaffData, setDeliveryStaffData] = useState([]);
-    const [createModalOpen, setCreateModalOpen] = useState(false);
-    const [editModalOpen, setEditModalOpen] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [editingStaff, setEditingStaff] = useState(null);
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
-    const [currentId, setCurrentId] = useState(null); // Track the ID of the staff being edited
 
-    const handleOpenCreate = () => setCreateModalOpen(true);
-    const handleCloseCreate = () => {
-        setCreateModalOpen(false);
-        setUsername("");
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => {
+        setOpen(false);
+        setEditingStaff(null);
         setEmail("");
-    };
-
-    const handleOpenEdit = (id, userName, email) => {
-        setCurrentId(id);
-        setUsername(userName);
-        setEmail(email);
-        setEditModalOpen(true);
-    };
-
-    const handleCloseEdit = () => {
-        setEditModalOpen(false);
         setUsername("");
-        setEmail("");
-        setCurrentId(null);
     };
 
     async function fetchDeliveryStaffs() {
-        try {
-            const fetchedData = await getAllDeliveryStaff();
-            if (fetchedData) {
-                setDeliveryStaffData(fetchedData);
-            }
-        } catch (error) {
-            toast.error("Failed to fetch delivery staff data.");
+        const fetchedData = await getAllDeliveryStaff();
+        if (fetchedData) {
+            setDeliveryStaffData(fetchedData);
         }
     }
 
@@ -51,31 +32,40 @@ function DeliveryStaff() {
         fetchDeliveryStaffs();
     }, []);
 
-    async function handleCreateDeliveryStaff() {
-        try {
-            const data = await createDeliveryStaff(email, username);
-            toast.success(data);
-            if (data === "Account created successfully") {
-                await fetchDeliveryStaffs();
-                handleCloseCreate();
-            }
-        } catch (error) {
-            toast.error("Failed to create delivery staff.");
+    async function handleCreateOrEditDeliveryStaff() {
+        let message;
+        if (editingStaff) {
+            // Update staff
+            message = await deliveryStaffUpdateProfile();
+        } else {
+            // Create new staff
+            message = await createDeliveryStaff();
         }
+
+        if (message === "Account create successfully" || message === "Staff updated successfully") {
+            await fetchDeliveryStaffs();
+        }
+        toast(message);
+        handleClose();
     }
 
-    async function handleUpdateDeliveryStaff() {
-        try {
-            const data = await updateDeliveryStaff(currentId, { username, email }); // Send updated data
-            toast.success(data);
-            if (data === "Account updated successfully") {
-                await fetchDeliveryStaffs();
-                handleCloseEdit();
-            }
-        } catch (error) {
-            toast.error("Failed to update delivery staff.");
-        }
+    function handleEdit(record) {
+        setEditingStaff(record);
+        setUsername(record.username);
+        setEmail(record.email);
+        setOpen(true);
     }
+
+    const handleDelete = async (id) => {
+        try {
+            await deleteDeliveryStaffById(id); // Call the API to delete the staff
+            toast("Staff deleted successfully"); // Notify the user
+            await fetchDeliveryStaffs(); // Refresh the list after deletion
+        } catch (err) {
+            console.error(err);
+            toast.error("Failed to delete staff"); // Notify if there's an error
+        }
+    };
 
     const columns = [
         {
@@ -115,20 +105,23 @@ function DeliveryStaff() {
         },
         {
             title: "Action",
-            key: "action",
-            render: (_, record) => (
-                <Dropdown
-                    overlay={
-                        <Menu>
-                            <Menu.Item onClick={() => handleOpenEdit(record.id, record.username, record.email)}>
-                                Edit
-                            </Menu.Item>
-                        </Menu>
-                    }
-                    trigger={['click']}
-                >
-                    <Button icon={<MoreOutlined />} />
-                </Dropdown>
+            key: "id",
+            render: (text, record) => (
+                <Space size="middle">
+                    <Button type="link" onClick={() => handleEdit(record)}>
+                        Edit
+                    </Button>
+                    <Popconfirm
+                        title="Are you sure to delete this staff?"
+                        onConfirm={() => handleDelete(record.id)} // Pass the staff id to delete
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button type="link" danger>
+                            Delete
+                        </Button>
+                    </Popconfirm>
+                </Space>
             ),
         },
     ];
@@ -137,40 +130,19 @@ function DeliveryStaff() {
         <div>
             <ToastUtil />
             <div className="dashboard-info">
-                <Title level={2}>Delivery Staff</Title>
+                <Typography.Title level={2}>Delivery Staff</Typography.Title>
             </div>
             <div>
                 <Space style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
-                    <Button type="primary" onClick={handleOpenCreate}>
+                    <Button type="primary" onClick={handleOpen}>
                         Create New Delivery Staff
                     </Button>
                 </Space>
                 <Modal
-                    title="Create New Delivery Staff"
-                    visible={createModalOpen}
-                    onCancel={handleCloseCreate}
-                    onOk={handleCreateDeliveryStaff}
-                    okButtonProps={{ disabled: !username || !email }} // Disable OK button if fields are empty
-                >
-                    <Input
-                        placeholder="Username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        style={{ marginBottom: 16 }}
-                    />
-                    <Input
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        style={{ marginBottom: 16 }}
-                    />
-                </Modal>
-
-                <Modal
-                    title="Edit Delivery Staff"
-                    visible={editModalOpen}
-                    onCancel={handleCloseEdit}
-                    onOk={handleUpdateDeliveryStaff}
+                    title={editingStaff ? "Edit Delivery Staff" : "Create New Delivery Staff"}
+                    visible={open}
+                    onCancel={handleClose}
+                    onOk={handleCreateOrEditDeliveryStaff}
                     okButtonProps={{ disabled: !username || !email }} // Disable OK button if fields are empty
                 >
                     <Input
