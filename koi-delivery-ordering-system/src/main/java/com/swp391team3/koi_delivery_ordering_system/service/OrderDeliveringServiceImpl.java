@@ -1,6 +1,7 @@
 package com.swp391team3.koi_delivery_ordering_system.service;
 
 import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailService;
+import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
 import com.swp391team3.koi_delivery_ordering_system.model.Order;
 import com.swp391team3.koi_delivery_ordering_system.model.OrderDelivering;
@@ -8,15 +9,12 @@ import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepo
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderDeliveringRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.EmailDetailDTO;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderDeliveringInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderDeliveringUpdateInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import com.swp391team3.koi_delivery_ordering_system.utils.ProcessType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.Optional;
 
@@ -122,15 +120,26 @@ public class OrderDeliveringServiceImpl implements IOrderDeliveringService {
             orderService.updateOrderStatus(orderId, orderStatus.DELIVERING);
             DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
             generateOrderDelivering(order, deliveryStaff);
+            Customer customer = optionalOrder.get().getCustomer();
 
-            //send mail
+            //send mail for delivery staff
             EmailDetailDTO emailDetail = new EmailDetailDTO();
             emailDetail.setReceiver((Object) deliveryStaff);
             emailDetail.setSubject("The Order "+ orderId +" Is Delivering By "+ deliveryStaff.getUsername());
             emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
-            emailService.sendEmail(emailDetail, 2);
+            emailService.sendEmail(emailDetail, 4);
+
+            //send mail for delivery staff
+            emailDetail.setReceiver((Object) customer);
+            emailDetail.setSubject("Order " + order.getId() + " Is Being Delivered To You");
+            emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
+            emailService.sendEmail(emailDetail, 5);
             return true;
         }
         return false;
+    }
+    @Override
+    public void deleteOrderDelivering(Long id){
+        orderDeliveringRepository.deleteOrderDeliveringById(id);
     }
 }
