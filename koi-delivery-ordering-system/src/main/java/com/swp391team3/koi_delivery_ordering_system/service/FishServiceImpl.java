@@ -6,6 +6,7 @@ import com.swp391team3.koi_delivery_ordering_system.model.Order;
 import com.swp391team3.koi_delivery_ordering_system.repository.FishRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderFishInfoRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.utils.FishStatus;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ public class FishServiceImpl implements IFishService {
     private final FishRepository fishRepository;
     private final OrderRepository orderRepository;
     private final IFileService fileService;
+    private final FishStatus fishStatus;
 
     @Override
     public List<Fish> getAllFishs() {
@@ -53,6 +55,7 @@ public class FishServiceImpl implements IFishService {
             newFish.setSize(request.getFishSize());
             newFish.setWeight(request.getFishWeight());
             newFish.setLicenses(null);
+            newFish.setStatus(fishStatus.GOOD);
             fishRepository.save(newFish);
             return newFish.getId();
         } catch (Exception e) {
@@ -88,5 +91,16 @@ public class FishServiceImpl implements IFishService {
         fish.setWeight(weight);
         fish.setPrice(price);
         return fishRepository.save(fish);
+    }
+
+    @Override
+    public boolean updateFishStatus(Long id, int status) {
+        Optional<Fish> foundedFish = getFishById(id);
+        if (foundedFish.isPresent()) {
+            foundedFish.get().setStatus(status);
+            fishRepository.save(foundedFish.get());
+            return true;
+        }
+        return false;
     }
 }

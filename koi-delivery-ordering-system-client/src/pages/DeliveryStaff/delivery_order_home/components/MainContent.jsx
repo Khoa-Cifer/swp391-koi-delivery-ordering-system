@@ -47,7 +47,6 @@ const MainContent = () => {
       const recommendedOrderResponse = await getOrdersRecommendedForDeliveryStaff(deliveryStaffId);
       const ongoingGettingOrderResponse = await getOnGoingOrderForDeliveryStaff(deliveryStaffId, 0, gettingOrderStatus);
       const ongoingDeliveringOrderResponse = await getOnGoingOrderForDeliveryStaff(deliveryStaffId, 1, deliveringOrderStatus);
-      console.log(ongoingDeliveringOrderResponse);
       setOngoingDeliveringOrders(ongoingDeliveringOrderResponse);
       setAcceptedOrders(acceptedOrderResponse);
       setConfirmedOrders(confirmedOrderResponse);

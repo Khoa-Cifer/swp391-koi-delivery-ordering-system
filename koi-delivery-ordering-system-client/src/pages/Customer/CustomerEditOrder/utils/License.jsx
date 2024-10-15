@@ -47,7 +47,6 @@ const License = ({
         });
 
         const filesArray = await Promise.all(filesPromises);
-        console.log('filesArray:', filesArray); // Debugging: Check the contents of filesArray
 
         setFileInputs(prevFileInputs => {
           // Create a copy of prevFileInputs to modify

@@ -59,6 +59,11 @@ public class FishController {
         return ResponseEntity.ok(fishService.getFishesByOrderId(orderId));
     }
 
+    @PutMapping("/update-fish-status/{id}/{status}")
+    public ResponseEntity<?> updateFishStatus(@PathVariable Long id, @PathVariable int status) {
+        return ResponseEntity.ok(fishService.updateFishStatus(id, status));
+    }
+
     @GetMapping("/getFishById")
     public Fish getFishById(@RequestParam("id") Long id) {
         return fishService.getFishById(id).get();

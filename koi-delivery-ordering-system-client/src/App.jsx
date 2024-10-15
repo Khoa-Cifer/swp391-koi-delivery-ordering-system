@@ -18,7 +18,6 @@ import SalesStaffHome from "./pages/SalesStaff/SalesStaffHome/SalesStaffHome";
 import PaymentSuccess from "./utils/DefaultPages/PaymentSuccess";
 import DeliveryStaffLayout from "./pages/Layout/DeliveryStaffLayout/DeliveryStaffLayout";
 import SalesStaffLayout from "./pages/Layout/SalesStaffLayout/SalesStaffLayout";
-import DeliveryOrderAvailable from "./pages/DeliveryStaff/delivery_available_order/DeliveryOrderAvailable";
 import PublicRoute from "./authentication/PublicRoute";
 import SalesOrderDetail from "./pages/SalesStaff/components/SalesOrderDetail/SalesOrderDetail";
 import SalesFishDetail from "./pages/SalesStaff/components/SalesFishDetail/SalesFishDetail";
@@ -127,7 +126,6 @@ function App() {
 
             <Route element={<DeliveryStaffLayout />}>
               <Route path="/delivery-order-home" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderHome />} />} />
-              <Route path="/delivery-order-available" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderAvailable />} />} />
               <Route path="/getting-order-delivery-staff" element={<DeliveryStaffPrivateRoute element={<GettingOrderDeliveryStaff />} />} />
               <Route path="/available-to-delivery-staff" element={<DeliveryStaffPrivateRoute element={<AvailableToDelivery />} />} />
               <Route path="/delivering-order-delivery-staff" element={<DeliveryStaffPrivateRoute element={<DeliveringOrder />} />} />

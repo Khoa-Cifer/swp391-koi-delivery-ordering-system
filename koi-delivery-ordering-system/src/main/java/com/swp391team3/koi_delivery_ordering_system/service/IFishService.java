@@ -16,4 +16,6 @@ public interface IFishService {
     List<Fish> getFishesByOrderId(Long orderId);
 
     Fish updateFish(Long fishId, String name, int age, double size, double weight, double price, MultipartFile file);
+
+    boolean updateFishStatus(Long id, int status);
 }
