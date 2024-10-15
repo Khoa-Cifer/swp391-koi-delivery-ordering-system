@@ -72,12 +72,13 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
     }
 
     @Override
-    public DeliveryStaff updateDeliveryStaffById(Long id, String email, String phoneNumber) {
+    public DeliveryStaff updateDeliveryStaffById(Long id, String email, String phoneNumber, String username) {
         Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(id);
         if (optionalDeliveryStaff.isPresent()) {
             DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
             deliveryStaff.setEmail(email);
             deliveryStaff.setPhoneNumber(phoneNumber);
+            deliveryStaff.setUsername(username);
 
             return deliveryStaffRepository.save(deliveryStaff);
         } else {
