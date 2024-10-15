@@ -20,5 +20,5 @@ public interface ILicenseService {
 
     License updateLicense(Long licenseId, String name, String description, Date dateOfIssue);
 
-    LicenseFile updateLicenseFile(Long licenceId, Long fileId, MultipartFile file) throws IOException;
+    boolean updateLicenseFile(Long licenceId, Long fileId, MultipartFile file) throws IOException;
 }

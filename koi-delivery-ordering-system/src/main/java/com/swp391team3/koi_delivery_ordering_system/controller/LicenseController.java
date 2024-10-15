@@ -78,13 +78,10 @@ public class LicenseController {
             @RequestParam("fileId") Long fileId,
             @RequestParam("file") MultipartFile file
     ) throws IOException {
-
-        try {
-            LicenseFile updatedFile = licenseService.updateLicenseFile(licenseId, fileId, file);
-            return ResponseEntity.ok(updatedFile);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+        boolean updatedFile = licenseService.updateLicenseFile(licenseId, fileId, file);
+        if (updatedFile)
+            return ResponseEntity.status(HttpStatus.OK).body("License updated successfully");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The license does not exist");
     }
 
 }

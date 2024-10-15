@@ -78,23 +78,36 @@ public class LicenseServiceImpl implements ILicenseService{
         return licenseRepository.save(license);
     }
     @Override
-    public LicenseFile updateLicenseFile(Long licenceId, Long fileId, MultipartFile file) throws IOException {
+    public boolean updateLicenseFile(Long licenceId, Long fileId, MultipartFile file) throws IOException {
         Optional<License> optionalLicense = licenseRepository.findById(licenceId);
+
+        boolean response = false;
 
         if (optionalLicense.isPresent()) {
 
             LicenseFile licenseFile = licenseFileRepository.findAll().stream()
                     .filter(licenseFile1 -> licenseFile1.getLicense().getId().equals(licenceId)
-                    && licenseFile1.getFile().getId().equals(fileId))
-                    .findFirst().orElseThrow(() -> new RuntimeException("File does not belong to the specified license"));
+                            && licenseFile1.getFile().getId().equals(fileId))
+                    .findFirst().orElse(null);
+            if (licenseFile != null) {
+                File updatedFile = fileService.uploadFileToFileSystem(file);
 
-            File updatedFile = fileService.uploadFileToFileSystem(file);
+                licenseFile.setFile(updatedFile);
+                licenseFileRepository.save(licenseFile);
 
-            licenseFile.setFile(updatedFile);
+                response = true;
 
-            return licenseFileRepository.save(licenseFile);
-        } else {
-            throw new RuntimeException("File not found");
+                return response;
+            } else {
+                LicenseFileRequestDTO licenseFileRequestDTO = new LicenseFileRequestDTO();
+                licenseFileRequestDTO.setLicenseId(licenceId);
+                licenseFileRequestDTO.setFile(file);
+
+                response = createFilesBasedOnLicenseId(licenseFileRequestDTO);
+
+                return response;
+            }
         }
+        return response;
     }
 }
