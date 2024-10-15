@@ -1,7 +1,5 @@
 import {
-  Box,
   Paper,
-  styled,
   Table,
   TableBody,
   TableCell,
@@ -14,11 +12,10 @@ import {
   Pagination,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getAllOrders } from "../../../../utils/axios/order";
-
+ 
 import ToastUtil from "../../../../components/toastContainer";
 
-function Orders() {
+function Orders() { 
   const [orders, setOrders] = useState([]); // Initialize as an empty array
   const [filteredOrders, setFilteredOrders] = useState([]); // Filtered orders for display
   const [searchTrackingId, setSearchTrackingId] = useState(""); // For search by order ID

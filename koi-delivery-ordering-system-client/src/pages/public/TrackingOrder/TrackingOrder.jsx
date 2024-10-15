@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import {
   GoogleMap,
-  DirectionsService,
   DirectionsRenderer,
   useJsApiLoader,
 } from "@react-google-maps/api";

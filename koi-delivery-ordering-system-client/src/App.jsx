@@ -48,6 +48,7 @@ import License from "./pages/Manager/SystemData/License/License";
 import PaymentHistory from "./pages/Manager/SystemData/PaymentHistory/PaymentHistory";
 import Fish from "./pages/Manager/SystemData/Fish/Fish";
 import Orders from "./pages/Manager/SystemData/Orders/Orders";
+import Invoice from "./pages/public/Invoice/Invoice";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -97,7 +98,7 @@ function App() {
             <Route path="/login-sales-staff" element={<LoginSaleStaff />} />
             <Route path="/login-delivery-staff" element={<LoginDeliveryStaff />} />
             <Route path="/login-admin" element={<LoginAdmin />} />
-
+            <Route path="/invoice" element={<Invoice />} />
             <Route element={<ManagerLayout />}>
               <Route path="/admin/report" element={<ManagerPrivateRoute element={<Report />} />} />
               <Route path="/admin/dashboard" element={<ManagerPrivateRoute element={<Dashboard />} />} />

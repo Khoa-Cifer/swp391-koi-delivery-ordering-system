@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Box,
   Typography,
@@ -12,38 +11,49 @@ import {
   Radio,
   RadioGroup,
   FormControlLabel,
-  TextField,
-  Button,
 } from "@mui/material";
 import { CreditCard, AttachMoney, CheckCircle } from "@mui/icons-material";
-
-const invoiceData = {
-  receiptNumber: "14258",
-  date: "MARCH 03, 2018",
-  companyName: "COMPANY NAME",
-  tagline: "BRANDING TAGLINE SPACE HERE",
-  invoiceTo: {
-    name: "JOHN SMITH",
-    address: "123 GREEN LAKE ST.",
-    cityState: "CITY STATE",
-    country: "COUNTRY",
-  },
-  items: [
-    { id: 1, description: "ITEM 1", price: 30.5, qty: 3, total: 91.5 },
-    { id: 2, description: "ITEM 2", price: 50.0, qty: 1, total: 50.0 },
-    { id: 3, description: "ITEM 3", price: 70.0, qty: 5, total: 350.0 },
-    { id: 4, description: "ITEM 4", price: 20.0, qty: 2, total: 40.0 },
-  ],
-  subtotal: 531.5,
-  taxes: 63.78,
-  shipping: 12.0,
-  discount: -15.0,
-  total: 592.28,
-  termsAndConditions:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et magna aliqua.",
-};
+import { useEffect, useState } from "react";
+import { getFishesByOrderId } from "../../../utils/axios/fish";
+import { getOrderById } from "../../../utils/axios/order";
 
 const Invoice = () => {
+  const [fish, setFish] = useState([]);
+  const [order, setOrder] = useState([]);
+
+  const taxes = 0;
+  const shipping = 0;
+  const discount = 0;
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await getOrderById(1);
+        setOrder(response);
+      } catch (error) {
+        console.error("Error fetching order data", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await getFishesByOrderId(1);
+        setFish(response);
+      } catch (error) {
+        console.error("Error fetching fish data", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  const totalFishPrice = fish.reduce((total, item) => total + item.price, 0);
+  const totalAmount = totalFishPrice + taxes + shipping - discount;
+
   return (
     <Box
       sx={{
@@ -57,50 +67,55 @@ const Invoice = () => {
         transform: "scale(0.8)",
       }}
     >
-      {/* Header Section */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-        {/* Invoice Info */}
+      <Box sx={{ textAlign: "left", mb: 2 }}>
+        <img
+          src="./src/assets/logo.png"
+          alt="Company Logo"
+          style={{ width: "23%" }}
+        />
+      </Box>
+
+      {/* Invoice Header */}
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <Box>
           <Typography
             variant="h4"
             component="h1"
             sx={{ color: "primary.main", fontWeight: "bold" }}
           >
-            Invoice
+            Koi Invoice
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            RECEIPT # {invoiceData.receiptNumber} • {invoiceData.date}
+            RECEIPT # {order.id} •{" "}
+            {new Date(order.createdDate).toLocaleDateString()}
           </Typography>
         </Box>
 
-        <Box>
-          <Typography variant="h6" sx={{ display: "inline", ml: 5 }}>
+        {/*  Customer Details */}
+        <Box sx={{ ml: 10 }}>
+          <Typography variant="h6" sx={{ display: "inline" }}>
             INVOICE TO:
           </Typography>
+          <Typography>Sender address:</Typography>
+          <Typography>Destination address: </Typography>
+          <Typography>Order created date:</Typography>
         </Box>
 
-        {/* Invoice To Section - Top Right */}
         <Box sx={{ textAlign: "left", ml: -3 }}>
           <Typography
-            variant="body1"
-            sx={{ display: "inline", fontWeight: "bold" , mb:3}}
+            variant="h6"
+            sx={{ display: "inline", fontWeight: "bold", mb: 3 }}
           >
-            {invoiceData.invoiceTo.name}
+            {order.name}
           </Typography>
 
-          {/* Address Information Below */}
-          <Typography>{invoiceData.invoiceTo.address}</Typography>
-          <Typography>{invoiceData.invoiceTo.cityState}</Typography>
-          <Typography>{invoiceData.invoiceTo.country}</Typography>
-        </Box>
-      </Box>
+          <Typography>{order.senderAddress}</Typography>
+          <Typography>{order.destinationAddress}</Typography>
 
-      {/* Company Info */}
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="h6">{invoiceData.companyName}</Typography>
-        <Typography variant="body2" color="text.secondary">
-          {invoiceData.tagline}
-        </Typography>
+          <Typography>
+            {new Date(order.createdDate).toLocaleDateString()}
+          </Typography>
+        </Box>
       </Box>
 
       {/* Items Table */}
@@ -108,15 +123,16 @@ const Invoice = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>#</TableCell>
-              <TableCell>PRODUCT DESCRIPTION</TableCell>
-              <TableCell align="right">PRICE</TableCell>
-              <TableCell align="right">QTY</TableCell>
-              <TableCell align="right">TOTAL</TableCell>
+              <TableCell></TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell align="right">Age</TableCell>
+              <TableCell align="right">Size</TableCell>
+              <TableCell align="right">Weight</TableCell>
+              <TableCell align="right">Price</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {invoiceData.items.map((item) => (
+            {fish.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>
                   <Box
@@ -134,38 +150,43 @@ const Invoice = () => {
                     {item.id}
                   </Box>
                 </TableCell>
-                <TableCell>{item.description}</TableCell>
-                <TableCell align="right">${item.price.toFixed(2)}</TableCell>
-                <TableCell align="right">{item.qty}</TableCell>
-                <TableCell align="right">${item.total.toFixed(2)}</TableCell>
+                <TableCell>{item.name}</TableCell>
+                <TableCell align="right">{item.age}</TableCell>
+                <TableCell align="right">{item.size}</TableCell>
+                <TableCell align="right">{item.weight}</TableCell>
+                <TableCell align="right">${item.price}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
 
-      {/* Terms and Total */}
+      {/* Invoice Total */}
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
         <Box sx={{ width: "48%" }}>
           <Typography variant="h6" sx={{ mb: 1 }}>
-            TERMS AND CONDITIONS
+            Description
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {invoiceData.termsAndConditions}
+            {order.description}
           </Typography>
         </Box>
         <Box sx={{ width: "30%" }}>
-          {["Subtotal", "Taxes", "Shipping", "Discount"].map((item) => (
+          {[
+            { label: "Subtotal", value: totalFishPrice },
+            { label: "Taxes", value: taxes },
+            { label: "Shipping", value: shipping },
+            { label: "Discount", value: discount },
+          ].map((item) => (
             <Box
-              key={item}
+              key={item.label}
               sx={{ display: "flex", justifyContent: "space-between", mb: 0.5 }}
             >
-              <Typography>{item}</Typography>
-              <Typography>
-                ${invoiceData[item.toLowerCase()].toFixed(2)}
-              </Typography>
+              <Typography>{item.label}</Typography>
+              <Typography>${item.value.toFixed(2)}</Typography>
             </Box>
           ))}
+
           <Box
             sx={{
               display: "flex",
@@ -181,13 +202,17 @@ const Invoice = () => {
               TOTAL
             </Typography>
             <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-              ${invoiceData.total.toFixed(2)}
+              ${totalAmount.toFixed(2)}
             </Typography>
           </Box>
         </Box>
       </Box>
 
-      {/* Payment Method */}
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h6">PAYMENT DUE DATE</Typography>
+        <Typography>{new Date(order.dueDate).toLocaleDateString()}</Typography>
+      </Box>
+
       <Box sx={{ mb: 3 }}>
         <Typography variant="h6" sx={{ mb: 2 }}>
           PAYMENT METHOD
@@ -224,24 +249,26 @@ const Invoice = () => {
             }
           />
         </RadioGroup>
-        <Box sx={{ mt: 2 }}>
-          <TextField
-            fullWidth
-            label="Cardholder's Name"
-            variant="outlined"
-            sx={{ mb: 2 }}
-          />
-          <Box sx={{ display: "flex", gap: 2 }}>
-            <TextField label="Card #" variant="outlined" fullWidth />
-            <TextField label="Exp" variant="outlined" sx={{ width: "100px" }} />
-            <TextField label="CV" variant="outlined" sx={{ width: "80px" }} />
-          </Box>
-        </Box>
+      </Box>
+
+      {/* Terms and Conditions */}
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h6">TERMS AND CONDITIONS</Typography>
+        <Typography variant="body2" color="text.secondary">
+          Payment must be made within 30 days from the invoice date. Any
+          disputes must be addressed within 15 days. Shipping times may vary
+          depending on location. For more information, contact our support team
+          at hungdqse170515@fpt.edu.vn
+        </Typography>
       </Box>
 
       {/* Footer */}
       <Box sx={{ textAlign: "center" }}>
         <Typography variant="h6">THANK YOU FOR YOUR PURCHASING!</Typography>
+        <Typography>
+          For inquiries, contact us at 0868394782 or email us at
+          hungdqse170515@fpt.edu.vn
+        </Typography>
       </Box>
     </Box>
   );
