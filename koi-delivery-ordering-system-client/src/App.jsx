@@ -98,7 +98,7 @@ function App() {
             <Route path="/login-sales-staff" element={<LoginSaleStaff />} />
             <Route path="/login-delivery-staff" element={<LoginDeliveryStaff />} />
             <Route path="/login-admin" element={<LoginAdmin />} />
-            <Route path="/invoice" element={<Invoice />} />
+            
             <Route element={<ManagerLayout />}>
               <Route path="/admin/report" element={<ManagerPrivateRoute element={<Report />} />} />
               <Route path="/admin/dashboard" element={<ManagerPrivateRoute element={<Dashboard />} />} />
@@ -146,7 +146,7 @@ function App() {
             </Route>
 
             <Route path="/payment-success" element={<AllowedRoute element={<PaymentSuccess />} />} />
-
+            <Route path="/invoice" element={<Invoice />} />
             <Route path="/tracking-order" element={<TrackingOrder />} />
 
             <Route path="/*" element={<Page404 />} />

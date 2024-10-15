@@ -8,16 +8,24 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
 } from "@mui/material";
-import { CreditCard, AttachMoney, CheckCircle } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { getFishesByOrderId } from "../../../utils/axios/fish";
 import { getOrderById } from "../../../utils/axios/order";
+import dateTimeConvert from "../../../components/utils";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Invoice = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const useQuery = () => {
+      return new URLSearchParams(location.search);
+  };
+
+  const query = useQuery();
+  const orderId = query.get('orderId');
+
   const [fish, setFish] = useState([]);
   const [order, setOrder] = useState([]);
 
@@ -28,7 +36,7 @@ const Invoice = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await getOrderById(1);
+        const response = await getOrderById(orderId);
         setOrder(response);
       } catch (error) {
         console.error("Error fetching order data", error);
@@ -41,7 +49,7 @@ const Invoice = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await getFishesByOrderId(1);
+        const response = await getFishesByOrderId(orderId);
         setFish(response);
       } catch (error) {
         console.error("Error fetching fish data", error);
@@ -54,7 +62,7 @@ const Invoice = () => {
   const totalFishPrice = fish.reduce((total, item) => total + item.price, 0);
   const totalAmount = totalFishPrice + taxes + shipping - discount;
 
-  return (
+  return fish && order && (
     <Box
       sx={{
         bgcolor: "background.paper",
@@ -210,45 +218,7 @@ const Invoice = () => {
 
       <Box sx={{ mb: 3 }}>
         <Typography variant="h6">PAYMENT DUE DATE</Typography>
-        <Typography>{new Date(order.dueDate).toLocaleDateString()}</Typography>
-      </Box>
-
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>
-          PAYMENT METHOD
-        </Typography>
-        <RadioGroup row>
-          <FormControlLabel
-            value="cash"
-            control={<Radio />}
-            label={
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <AttachMoney />
-                &nbsp;Cash/Debit
-              </Box>
-            }
-          />
-          <FormControlLabel
-            value="cheque"
-            control={<Radio />}
-            label={
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <CheckCircle />
-                &nbsp;Cheque
-              </Box>
-            }
-          />
-          <FormControlLabel
-            value="credit"
-            control={<Radio />}
-            label={
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <CreditCard />
-                &nbsp;Credit card
-              </Box>
-            }
-          />
-        </RadioGroup>
+        <Typography>{dateTimeConvert(order.finishDate)}</Typography>
       </Box>
 
       {/* Terms and Conditions */}

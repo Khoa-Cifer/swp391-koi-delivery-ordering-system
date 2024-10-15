@@ -14,6 +14,7 @@ import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -354,9 +355,10 @@ public class OrderServiceImpl implements IOrderService {
             //send mail
             EmailDetailDTO emailDetail = new EmailDetailDTO();
             emailDetail.setReceiver((Object) customer);
-            emailDetail.setSubject("Order " + foundOrder.get().getId() + " has been successfully delivered");
-
-            emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
+            emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered");
+            foundOrder.get().setFinishDate(new Date());
+            orderRepository.save(foundOrder.get());
+            emailDetail.setLink("http://localhost:5173" + "/invoice" + "?orderId=" + foundOrder.get().getId());
             emailService.sendEmail(emailDetail, 3);
             return result;
         } catch (Exception e) {
