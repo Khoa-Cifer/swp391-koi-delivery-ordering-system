@@ -31,13 +31,13 @@ function CustomerEditProfile() {
         const customerInfo = jwtDecode(token);
         customerId = customerInfo.sub.substring(2);
     }
-    
+
     useEffect(() => {
         async function fetchUserData() {
             const userData = JSON.parse(localStorage.getItem("userData"));
             setUser(userData);
             const customer = await getCustomerById(customerId);
-            if(customer.file) {
+            if (customer.file) {
                 const imageResponse = await getFileByFileId(customer.file.id);;
                 const imgUrl = URL.createObjectURL(imageResponse);
                 setImagePreview(imgUrl);
@@ -68,6 +68,7 @@ function CustomerEditProfile() {
 
     async function handleSubmit() {
         let response = null;
+        console.log(user);
         if (updatePassword === false) {
             response = await userUpdateProfile(
                 customerId,
@@ -151,7 +152,7 @@ function CustomerEditProfile() {
                                         name="username"
                                         value={user.username}
                                         onChange={handleChange}
-                                        type="text"
+                                        type=""
                                         fullWidth
                                         required
                                     />
@@ -173,6 +174,7 @@ function CustomerEditProfile() {
                                         name="phoneNumber"
                                         value={user.phoneNumber}
                                         onChange={handleChange}
+                                        type=""
                                         fullWidth
                                         required
                                     />

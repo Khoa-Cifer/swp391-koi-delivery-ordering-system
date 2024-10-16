@@ -50,6 +50,8 @@ import Orders from "./pages/Manager/SystemData/Orders/Orders";
 import Invoice from "./pages/public/Invoice/Invoice";
 import OrderFinalInfo from "./pages/Customer/CustomerEditOrder/pages/OrderFinalInfo";
 import ContactPage from "./pages/public/Contact/Contact";
+import DeliveryStaffEditProfile from "./pages/DeliveryStaff/DeliveryStaffEditProfile/DeliveryStaffEditProfile";
+import SalesStaffEditProfile from "./pages/SalesStaff/SalesStaffEditProfile/SalesStaffEditProfile";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -127,6 +129,7 @@ function App() {
 
             <Route element={<DeliveryStaffLayout />}>
               <Route path="/delivery-order-home" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderHome />} />} />
+              <Route path="/delivery-staff-edit-profile" element={<DeliveryStaffPrivateRoute element={<DeliveryStaffEditProfile />} />} />
               <Route path="/getting-order-delivery-staff" element={<DeliveryStaffPrivateRoute element={<GettingOrderDeliveryStaff />} />} />
               <Route path="/available-to-delivery-staff" element={<DeliveryStaffPrivateRoute element={<AvailableToDelivery />} />} />
               <Route path="/delivering-order-delivery-staff" element={<DeliveryStaffPrivateRoute element={<DeliveringOrder />} />} />
@@ -138,6 +141,7 @@ function App() {
             <Route element={<SalesStaffLayout />}>
               <Route path="/posted-order-sales-staff" element={<SalesStaffPrivateRoute element={<PostedOrderSalesStaff />} />} />
               <Route path="/received-order-sales-staff" element={<SalesStaffPrivateRoute element={<ReceivedOrderSalesStaff />} />} />
+              <Route path="/sales-staff-edit-profile" element={<SalesStaffPrivateRoute element={<SalesStaffEditProfile />} />} />
               <Route path="/sales-staff-home" element={<SalesStaffPrivateRoute element={<SalesStaffHome />} />} />
               <Route path="/sales-order-detail/:id" element={<AllowedRoute element={<SalesOrderDetail />} />} />
               <Route path="/sales-order-detail/:id/sales-fish-detail" element={<AllowedRoute element={<SalesFishDetail />} />} />

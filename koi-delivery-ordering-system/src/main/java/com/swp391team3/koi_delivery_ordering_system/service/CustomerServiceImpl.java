@@ -3,7 +3,7 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailService;
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.model.File;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.CustomerUpdateRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.UserUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.EmailDetailDTO;
 import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -100,7 +100,7 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public String customerUpdateProfile(CustomerUpdateRequestDTO request) {
+    public String customerUpdateProfile(UserUpdateRequestDTO request) {
         Optional<Customer> optionalCustomer = customerRepository.findById(request.getId());
 
         Customer customerCheck = customerRepository.findCustomerByEmail(request.getEmail());
@@ -118,6 +118,7 @@ public class CustomerServiceImpl implements ICustomerService {
         }
 
         customer.setEmail(request.getEmail());
+        customer.setUsername(request.getUsername ());
         customer.setPhoneNumber(request.getPhoneNumber());
         customerRepository.save(customer);
         return "Update Info Successfully";

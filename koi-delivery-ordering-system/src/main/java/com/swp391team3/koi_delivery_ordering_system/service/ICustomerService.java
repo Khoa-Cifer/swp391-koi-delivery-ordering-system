@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.CustomerUpdateRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.UserUpdateRequestDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ICustomerService {
@@ -18,7 +18,7 @@ public interface ICustomerService {
     Customer updateCustomerById(Long id, String email, String phoneNumber);
     void deleteCustomerById(Long id);
 
-    String customerUpdateProfile(CustomerUpdateRequestDTO request);
+    String customerUpdateProfile(UserUpdateRequestDTO request);
     String customerUpdateAvatar(Long id, MultipartFile file) throws IOException;
 }
 

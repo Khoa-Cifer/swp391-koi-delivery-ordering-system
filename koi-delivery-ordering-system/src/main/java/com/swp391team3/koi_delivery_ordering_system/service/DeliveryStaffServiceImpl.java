@@ -2,20 +2,27 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
+import com.swp391team3.koi_delivery_ordering_system.model.File;
 import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.DeliveryStaffLocationUpdateRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.UserUpdateRequestDTO;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
 public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
     private final DeliveryStaffRepository deliveryStaffRepository;
     private final PasswordEncoder passwordEncoder;
+    private final IFileService fileService;
 
     @Override
     public String createDeliveryStaff(String email, String username, String phoneNumber) {
@@ -98,5 +105,46 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String deliveryStaffUpdateProfile(UserUpdateRequestDTO request) {
+        Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(request.getId());
+
+        DeliveryStaff deliveryStaffCheck = deliveryStaffRepository.findDeliveryStaffByEmail(request.getEmail());
+        if (deliveryStaffCheck != null) {
+            if ((!Objects.equals(deliveryStaffCheck.getId(), optionalDeliveryStaff.get().getId()))
+                    && (Objects.equals(deliveryStaffCheck.getEmail(), optionalDeliveryStaff.get().getEmail()))) {
+                return "This email already exist";
+            }
+        }
+
+        DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
+        if (!request.getPassword().isEmpty()) {
+            String encodedPassword = passwordEncoder.encode(request.getPassword());
+            deliveryStaff.setPassword(encodedPassword);
+        }
+
+        deliveryStaff.setUsername(request.getUsername());
+        deliveryStaff.setEmail(request.getEmail());
+        deliveryStaff.setPhoneNumber(request.getPhoneNumber());
+        deliveryStaffRepository.save(deliveryStaff);
+        return "Update Info Successfully";
+    }
+
+    @Override
+    public String deliveryStaffUpdateAvatar(Long id, MultipartFile file) throws IOException {
+        Optional<DeliveryStaff> deliveryStaff = deliveryStaffRepository.findById(id);
+        if (deliveryStaff.get().getFile() == null) {
+            File newFile = fileService.uploadFileToFileSystem(file);
+            if (newFile != null) {
+                deliveryStaff.get().setFile(newFile);
+                deliveryStaffRepository.save(deliveryStaff.get());
+                return "Update Avatar successfully";
+            }
+        } else {
+            return fileService.updateFileInFileSystem(deliveryStaff.get().getFile().getId(), file);
+        }
+        return "";
     }
 }

@@ -25,3 +25,36 @@ export async function createSalesStaff(email, username, phoneNumber) {
         console.log(error);
     }
 }
+
+export async function salesStaffUpdateProfile(id, email, username, phoneNumber, password) {
+    try {
+        const response = await axiosClient.put(prefixAdminSalesStaff + "updateSalesStaffProfile",
+            {
+                id,
+                email,
+                username,
+                phoneNumber,
+                password,
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function salesStaffUpdateProfileImage(id, file) {
+    try {
+        const response = await axiosClient.put(prefixAdminSalesStaff + `updateSalesStaffAvatar/${id}`, {
+            file
+        }, {
+            headers: {
+                'Accept': '*/*', // Accept all types for this request
+                'Content-Type': 'multipart/form-data' // Set Content-Type if uploading a file
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}

@@ -279,7 +279,7 @@ function HomeContent() {
 
                     <div className="news-content">
                       <h3 className="news-title">{news.title}</h3>
-                      <p className="news-description" dangerouslySetInnerHTML={{ __html: news.description }} />
+                      {/* <p className="news-description" dangerouslySetInnerHTML={{ __html: news.description }} /> */}
                       <div className="news-footer">
                         <span className="news-author">{news.createdBy.username}</span>
                         <span className="news-date">{dateTimeConvert(news.createdDate)}</span>

@@ -1,22 +1,22 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
-import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.UserUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.DeliveryStaffLocationUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestCreationDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestUpdateDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IDeliveryStaffService;
-import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
+
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("api/deliveryStaff")
 @RequiredArgsConstructor
 public class DeliveryStaffController {
     private final IDeliveryStaffService deliveryStaffService;
-
-    private final IOrderService orderService;
 
     @PostMapping("/createDeliveryStaff")
     public ResponseEntity<?> createDeliveryStaff(@RequestBody StaffRequestCreationDTO request) {
@@ -63,5 +63,17 @@ public class DeliveryStaffController {
     @PutMapping("/updateDeliveryStaffLocation")
     public ResponseEntity<?> updateDeliveryStaffLocation(@RequestBody DeliveryStaffLocationUpdateRequestDTO request) {
         return ResponseEntity.ok(deliveryStaffService.updateDeliveryStaffLocation(request));
+    }
+
+     @PutMapping("/updateDeliveryStaffProfile")
+    public ResponseEntity<?> updateCustomerProfile(@RequestBody UserUpdateRequestDTO request) {
+        return ResponseEntity.ok(deliveryStaffService.deliveryStaffUpdateProfile(request));
+    }
+
+    @PutMapping("/updateDeliveryStaffAvatar/{id}")
+    public ResponseEntity<?> updateCustomerProfileAvatar(
+            @PathVariable("id") Long id,
+            @RequestParam("file") MultipartFile file) throws IOException {
+        return ResponseEntity.ok(deliveryStaffService.deliveryStaffUpdateAvatar(id, file));
     }
 }

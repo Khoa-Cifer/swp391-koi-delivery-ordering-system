@@ -2,11 +2,15 @@ package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.SalesStaff;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestCreationDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.UserUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.ISalesStaffService;
 import com.swp391team3.koi_delivery_ordering_system.service.NewsServiceImpl;
+
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -14,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class SalesStaffController {
     private final ISalesStaffService salesStaffService;
-    private final NewsServiceImpl newsService;
 
     @PostMapping("/createSalesStaff")
     public ResponseEntity<?> createSalesStaff(@RequestBody StaffRequestCreationDTO request) {
@@ -54,4 +57,15 @@ public class SalesStaffController {
         return ResponseEntity.ok("Sales Staff not found");
     }
 
+    @PutMapping("/updateSalesStaffProfile")
+    public ResponseEntity<?> updateSalesStaffProfile(@RequestBody UserUpdateRequestDTO request) {
+        return ResponseEntity.ok(salesStaffService.salesStaffUpdateProfile(request));
+    }
+
+    @PutMapping("/updateSalesStaffAvatar/{id}")
+    public ResponseEntity<?> updateSalesStaffProfileAvatar(
+            @PathVariable("id") Long id,
+            @RequestParam("file") MultipartFile file) throws IOException {
+        return ResponseEntity.ok(salesStaffService.salesStaffUpdateAvatar(id, file));
+    }
 }

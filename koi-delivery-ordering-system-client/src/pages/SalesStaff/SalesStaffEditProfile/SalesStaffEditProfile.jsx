@@ -3,12 +3,13 @@ import { useEffect, useState } from "react";
 import default_avatar from "../../../assets/default-avatar.jpg"
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { getCustomerById, userUpdateProfile, userUpdateProfileImage } from "../../../utils/axios/customer";
+import { getCustomerById } from "../../../utils/axios/customer";
 import { toast } from "react-toastify";
 import { PhotoCamera } from "@mui/icons-material";
 import { useAuth } from "../../../authentication/AuthProvider";
 import { getFileByFileId } from "../../../utils/axios/file";
 import ToastUtil from "../../../components/toastContainer";
+import { salesStaffUpdateProfile, salesStaffUpdateProfileImage } from "../../../utils/axios/salesStaff";
 
 function SalesStaffEditProfile() {
     const [user, setUser] = useState({
@@ -26,17 +27,17 @@ function SalesStaffEditProfile() {
     const navigate = useNavigate();
 
     const token = localStorage.getItem("token");
-    let customerId;
+    let salestaffId;
     if (token) {
         const customerInfo = jwtDecode(token);
-        customerId = customerInfo.sub.substring(2);
+        salestaffId = customerInfo.sub.substring(2);
     }
     
     useEffect(() => {
         async function fetchUserData() {
             const userData = JSON.parse(localStorage.getItem("userData"));
             setUser(userData);
-            const customer = await getCustomerById(customerId);
+            const customer = await getCustomerById(salestaffId);
             if(customer.file) {
                 const imageResponse = await getFileByFileId(customer.file.id);;
                 const imgUrl = URL.createObjectURL(imageResponse);
@@ -69,16 +70,16 @@ function SalesStaffEditProfile() {
     async function handleSubmit() {
         let response = null;
         if (updatePassword === false) {
-            response = await userUpdateProfile(
-                customerId,
+            response = await salesStaffUpdateProfile(
+                salestaffId,
                 user.email,
                 user.username,
                 user.phoneNumber,
                 "" //If do not update password, set to empty string
             );
         } else {
-            response = await userUpdateProfile(
-                customerId,
+            response = await salesStaffUpdateProfile(
+                salestaffId,
                 user.email,
                 user.username,
                 user.phoneNumber,
@@ -87,8 +88,8 @@ function SalesStaffEditProfile() {
         }
 
         if (selectedImage) {
-            const imageResponse = await userUpdateProfileImage(
-                customerId,
+            const imageResponse = await salesStaffUpdateProfileImage(
+                salestaffId,
                 selectedImage,
             )
             if (imageResponse) {
@@ -151,7 +152,7 @@ function SalesStaffEditProfile() {
                                         name="username"
                                         value={user.username}
                                         onChange={handleChange}
-                                        type="text"
+                                        type=""
                                         fullWidth
                                         required
                                     />
@@ -173,6 +174,7 @@ function SalesStaffEditProfile() {
                                         name="phoneNumber"
                                         value={user.phoneNumber}
                                         onChange={handleChange}
+                                        type=""
                                         fullWidth
                                         required
                                     />

@@ -37,9 +37,9 @@ export async function userUpdateProfile(id, email, username, phoneNumber, passwo
             {
                 id,
                 email,
-                password,
                 username,
-                phoneNumber
+                phoneNumber,
+                password,
             }
         );
         return response.data;
