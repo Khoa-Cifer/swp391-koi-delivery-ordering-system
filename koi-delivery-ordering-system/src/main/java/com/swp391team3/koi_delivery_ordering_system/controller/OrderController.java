@@ -51,12 +51,13 @@ public class OrderController {
         return order.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-//    @DeleteMapping("/deleteOrderById/{id}/{orderStatus}")
-//    public ResponseEntity<?> deleteOrderById(@PathVariable Long id, @PathVariable int orderStatus) {
-////        orderService.deleteOrderById(id);
-////        return ResponseEntity.noContent().build();
-//        return ResponseEntity.ok(orderService.updateOrderStatus(id, orderStatus));
-//    }
+    @DeleteMapping("/deleteOrderById/{id}")
+    public ResponseEntity<?> deleteOrderById(@PathVariable Long id) {
+        if(orderService.deleteOrderById(id)){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order can not be deleted.");
+    }
 
     @GetMapping("/getOrderByStatus/{status}")
     public ResponseEntity<List<Order>> getOrdersByStatus(@PathVariable int status) {

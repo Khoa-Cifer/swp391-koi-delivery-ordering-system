@@ -13,7 +13,7 @@ public interface IOrderService {
     Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto);
     List<Order> getAllOrders();
     Optional<Order> getOrderById(Long id);
-    void deleteOrderById(Long id);
+    boolean deleteOrderById(Long id);
     Storage filterOrderToStorage(String senderLatitude, String senderLongitude, String senderAddress);
     boolean postOrder(Long id);
 
@@ -33,4 +33,5 @@ public interface IOrderService {
     UpdateOrderResponseDTO updateOrder(Long orderId, String name, String description, Date expectedFinishDate,
                                        String destinationAddress, String destinationLongitude, String destinationLatitude,
                                        String senderAddress, String senderLongitude, String senderLatitude);
+
 }
