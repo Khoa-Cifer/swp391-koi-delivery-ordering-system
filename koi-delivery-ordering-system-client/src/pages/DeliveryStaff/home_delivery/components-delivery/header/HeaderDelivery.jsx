@@ -1,20 +1,23 @@
 import { Image } from "antd";
 import "./HeaderDelivery.scss";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../../../authentication/AuthProvider";
 
 function HeaderDelivery() {
   const navigate = useNavigate();
+  const auth = useAuth();
 
   const handleHomeNavigate = () => {
     navigate("/");
   }
 
-  const handleOrderListNavigate = () => {
-    navigate("/delivery-order-available");
-  }
-
   const handleOrderHomePage = () => {
     navigate("/delivery-order-home");
+  }
+
+  const handleLogout = () => {
+    auth.handleLogout();
+    handleHomeNavigate();
   }
 
   return (
@@ -25,15 +28,12 @@ function HeaderDelivery() {
 
       <div className="function">
         <button>
-          <strong onClick={() => handleOrderListNavigate()}>Order List Page</strong>
-        </button>
-        <button>
           <strong onClick={() => handleOrderHomePage()}>Delivery Staff Order Page</strong>
         </button>
       </div>
 
       <div className="logout-delivery">
-        <button>Log out</button>
+        <button onClick={() => handleLogout()}>Log out</button>
       </div>
     </div>
   );

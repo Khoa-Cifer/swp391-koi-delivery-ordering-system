@@ -169,7 +169,6 @@ function MainContent() {
           return (prev.id > current.id) ? prev : current;
         });
         async function handleUpdateOrderLocation() {
-          console.log(address);
           const response = await updateOrderDeliveringLocation(availableOrderDelivering.id, address, currentLocation.lat, currentLocation.lng);
 
           if (response) {
@@ -183,18 +182,27 @@ function MainContent() {
   }, [currentLocation])
 
   async function handleFinishOrderStep(processType) {
-    if (state.orderDeliveringSet && state.orderDeliveringSet.length > 0) {
-      const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
-        return (prev.id > current.id) ? prev : current;
-      });
-      const response = await finishOrder(state.id, availableOrderDelivering.id, deliveryStaffId, state.storage.id, processType);
-      if (response) {
-        toast("Order Finish");
-        navigate("/delivery-order-home");
-      } else {
-        toast("Unexpected Error has been occurred");
+    setIsLoading(true);
+    try {
+      if (state.orderDeliveringSet && state.orderDeliveringSet.length > 0) {
+        const availableOrderDelivering = state.orderDeliveringSet.reduce((prev, current) => {
+          return (prev.id > current.id) ? prev : current;
+        });
+        const response = await finishOrder(state.id, availableOrderDelivering.id, deliveryStaffId, state.storage.id, processType);
+        if (response) {
+          toast("Order Finish");
+          navigate("/delivery-order-home");
+        } else {
+          toast("Unexpected Error has been occurred");
+        }
       }
+    } catch (error) {
+      console.error("Error while receiving the order:", error);
+      toast("An error occurred while processing request.");
+    } finally {
+      setIsLoading(false); // Hide loading spinner after processing
     }
+
   }
 
   function handleCancelOrder() {

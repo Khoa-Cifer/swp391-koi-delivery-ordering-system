@@ -11,12 +11,13 @@ export async function getAllDeliveryStaff() {
     }
 }
 
-export async function createDeliveryStaff(email, username) {
+export async function createDeliveryStaff(email, username, phoneNumber) {
     try {
         const response = await axiosClient.post(prefixAdminDeliveryStaff + "createDeliveryStaff",
             {
                 email,
                 username,
+                phoneNumber
             }
         );
         return response.data;
@@ -40,9 +41,24 @@ export async function updateDeliveryStaffCurrentLocation(
     }
 }
 
+export async function managerEditDeliveryStaffProfile(id, username, email, phoneNumber) {
+    try {
+        const response = await axiosClient.put(`deliveryStaff/updateDeliveryStaffById/${id}`,
+            {
+                username,
+                email,
+                phoneNumber
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export async function deliveryStaffUpdateProfile(id, email, username, phoneNumber, password) {
     try {
-        const response = await axiosClient.put("delivery-staff/updateDeliveryStaffProfile",
+        const response = await axiosClient.put("deliveryStaff/updateDeliveryStaffProfile",
             {
                 id,
                 email,
@@ -59,7 +75,7 @@ export async function deliveryStaffUpdateProfile(id, email, username, phoneNumbe
 
 export async function deliveryStaffUpdateProfileImage(id, file) {
     try {
-        const response = await axiosClient.put(`delivery-staff/updateDeliveryStaffAvatar/${id}`, {
+        const response = await axiosClient.put(`deliveryStaff/updateDeliveryStaffAvatar/${id}`, {
             file
         }, {
             headers: {
@@ -75,7 +91,16 @@ export async function deliveryStaffUpdateProfileImage(id, file) {
 
 export async function getDeliveryStaffById(id) {
     try {
-        const response = await axiosClient.get(`delivery-staff/getDeliveryStaffById/${id}`);
+        const response = await axiosClient.get(`deliveryStaff/getDeliveryStaffById/${id}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function deleteDeliveryStaffById(id) {
+    try {
+        const response = await axiosClient.delete(`deliveryStaff/deleteDeliveryStaffById/${id}`);
         return response.data;
     } catch (error) {
         console.log(error);

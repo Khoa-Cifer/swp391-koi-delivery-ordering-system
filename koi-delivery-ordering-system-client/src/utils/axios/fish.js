@@ -76,3 +76,13 @@ export async function getAllFishes() {
         console.log(error);
     }
 }
+
+export async function updateFishStatusById(id, status) {
+    console.log(status);
+    try {
+        const response = await axiosClient.put(`fishes/update-fish-status/${id}/${status}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}

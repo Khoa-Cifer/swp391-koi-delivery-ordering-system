@@ -5,8 +5,10 @@ import { useEffect, useState } from "react";
 import { getFileByFileId } from "../../../../utils/axios/file";
 import ImageSlider from "../../../../components/ImageSlider";
 
-import { Box, Modal } from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Modal, Select } from "@mui/material";
 import dateTimeConvert from "../../../../components/utils";
+import { updateFishStatusById } from "../../../../utils/axios/fish";
+import { toast } from "react-toastify";
 
 const modalStyle = {
   position: 'absolute',
@@ -28,6 +30,7 @@ const MainContent = () => {
   const [fish, setFish] = useState();
   const [selectedFishLicenses, setSelectedFishLicenses] = useState([]);
   const [open, setOpen] = useState(false);
+  const [fishStatus, setFishStatus] = useState(1);
 
   function handleSlider(e) {
     setFish(e);
@@ -40,7 +43,6 @@ const MainContent = () => {
 
   async function handleLicenseImages(license) {
     handleOpen();
-    console.log(license.files)
     if (Array.isArray(license.files) && license.files.length > 0) {
       const imagePromises = license.files.map(async (file) => {
         const fileId = file.file.id;
@@ -79,21 +81,33 @@ const MainContent = () => {
 
   useEffect(() => {
     if (fish) {
-      console.log(fish.licenses);
       if (fish.licenses && fish.licenses.length > 0) {
         if (Array.isArray(fish.licenses) && fish.licenses.length > 0) {
           setSelectedFishLicenses(fish.licenses);
-          console.log(fish.licenses);
         }
       } else {
         setSelectedFishLicenses([]);
       }
+      setFishStatus(fish.status);
     }
 
   }, [fish]);
 
+  console.log(fish);
   const cardStyle = {
     width: 300,
+  };
+
+
+  const handleStatusChange = async (event) => {
+    setFishStatus(event.target.value);
+    console.log(event.target.value);
+    const response = await updateFishStatusById(fish.id, event.target.value);
+    if (response) {
+      toast("Update fish's status successfully");
+    } else {
+      toast("Unexpected error has been occurred")
+    }
   };
 
   return state && (
@@ -101,6 +115,23 @@ const MainContent = () => {
       <div className="slider-container">
         <ImageSlider fishInfo={state.fishes} images={imagePreviews} onImageChange={e => handleSlider(e)} />
       </div>
+
+      <Box sx={{ maxWidth: 180, marginTop: "20px" }}>
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Fish Status</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={fishStatus}
+            label="Status"
+            onChange={(e) => handleStatusChange(e)}
+          >
+            <MenuItem value={1}>Good</MenuItem>
+            <MenuItem value={2}>Sick</MenuItem>
+            <MenuItem value={3}>Dead</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
       <Link className="link" to={`/delivery-order-home`}>Go back</Link>
 

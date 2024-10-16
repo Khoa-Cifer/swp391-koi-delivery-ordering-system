@@ -1,107 +1,244 @@
 import { Box, Button, Grid, styled, TextField, Typography } from "@mui/material";
 import ToastUtil from "../../../../components/toastContainer";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import { getOrderById, postOrder } from "../../../../utils/axios/order";
+import { getFileByFileId } from "../../../../utils/axios/file";
+import { getPaymentHistory, logPaymentHistory, paymentOpenGateway } from "../../../../utils/axios/payment";
+import { toast } from "react-toastify";
+import dateTimeConvert from "../../../../components/utils";
 
 const SubmitButton = styled(Button)(() => ({
     padding: "10px 80px"
 }))
 
 // eslint-disable-next-line react/prop-types
-function OrderFinalInfo({ order }) {
+function OrderFinalInfo() {
+    const location = useLocation();
+    const { state } = location;
+    
+    const [postedData, setPostedData] = useState();
+    const [fishOrderData, setFishOrderData] = useState([]);
+    const [fishFiles, setFishFiles] = useState([]);
+    const [paymentSuccess, setPaymentSuccess] = useState(false);
+
+    const navigate = useNavigate();
+
+    const token = localStorage.getItem("token");
+    let customerId;
+    if (token) {
+        const customerInfo = jwtDecode(token);
+        customerId = customerInfo.sub.substring(2);
+    }
+
+    useEffect(() => {
+        async function fetchData() {
+            const postedOrder = await getOrderById(state.orderId);
+            setPostedData(postedOrder);
+            setFishOrderData(postedOrder.fishes);
+
+            const fileIds = postedOrder.fishes.map(fish => fish.file.id);
+            if (fileIds && fileIds.length > 0) {
+                const fishFilesPromises = fileIds.map(async fileId => {
+                    const response = await getFileByFileId(fileId);
+                    return URL.createObjectURL(response); // Create Object URL from response blob
+                });
+
+                const fishFilesArray = await Promise.all(fishFilesPromises);
+                setFishFiles(fishFilesArray);
+            }
+        }
+
+        fetchData();
+
+        async function checkOrder() {
+            if (Math.floor(state.price) === 0) {
+                setPaymentSuccess(true);
+                const response = await postOrder(state.orderId);
+                if (response) {
+                    toast("Order posted successfully");
+                }
+            }
+        }
+
+        checkOrder();
+    }, []);
+
+    async function handleUpdateOrder() {
+        const paymentResponse = await logPaymentHistory(customerId, state.orderId, Math.floor(state.price));
+        const paymentOpen = await paymentOpenGateway(customerId, Math.floor(state.price), "NCB");
+
+        if (paymentOpen) {
+            let paymentWindow = window.open(paymentOpen.paymentUrl, "_blank");
+
+            // Check every 500ms if the window is closed
+            let checkWindowClosed = setInterval(async function () {
+                if (paymentWindow.closed) {
+                    clearInterval(checkWindowClosed);
+                    if (paymentResponse) {
+                        const paymentCheck = await getPaymentHistory(paymentResponse.id);
+                        if (paymentCheck.paymentStatus) {
+                            const response = await postOrder(state.orderId);
+                            if (response) {
+                                toast("Order posted successfully");
+                                setPaymentSuccess(true);
+                            } else {
+                                toast("Unexpected error has been occurred");
+                            }
+                        }
+                    } else {
+                        toast("Unexpected error has been occurred");
+                    }
+                }
+            }, 500);
+        }
+    }
+
     return (
         <Box>
             <ToastUtil />
-            <Box
-                sx={{
-                    border: '1px solid #C3F4FD',
-                    padding: '16px',
-                    borderRadius: '8px',
-                }}
-            >
-                <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            fullWidth
-                            label="Create Date"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />
+            {postedData && (
+                <Box
+                    sx={{
+                        border: '1px solid #C3F4FD',
+                        padding: '16px',
+                        borderRadius: '8px',
+                    }}
+                >
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                fullWidth
+                                type=""
+                                label="Create Date"
+                                value={dateTimeConvert(postedData.createdDate)}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                fullWidth
+                                type=""
+                                label="Expect Finish Date"
+                                value={dateTimeConvert(postedData.expectedFinishDate)}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                fullWidth
+                                label="Sender Address"
+                                type=""
+                                value={postedData.senderAddress}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                fullWidth
+                                type=""
+                                label="Receive Address"
+                                value={postedData.destinationAddress}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                fullWidth
+                                type=""
+                                label="Order Name"
+                                value={postedData.name}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                fullWidth
+                                type=""
+                                label="Tracking Id"
+                                value={postedData.trackingId}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                fullWidth
+                                type=""
+                                label="Description"
+                                value={postedData.description}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                fullWidth
+                                type=""
+                                label="Extra Price"
+                                value={`${Math.floor(state.price)} VND`}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </Grid>
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            fullWidth
-                            label="Expect Finish Date"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />
+                    <div style={{ marginTop: "20px" }}></div>
+                    {/* Display fish details and images */}
+                    <Grid container spacing={2}>
+                        {fishOrderData && fishOrderData.length > 0 && fishOrderData.map((fish, index) => (
+                            <Grid container item xs={12} sm={6} key={index} spacing={2}>
+                                {/* Fish details */}
+                                <Grid item xs={12}>
+                                    <Typography variant="h6">Fish {index + 1}</Typography>
+                                    <Typography>Name: {fish.name}</Typography>
+                                </Grid>
+
+                                {/* Fish image */}
+                                <Grid item xs={12}>
+                                    {fishFiles[index] && (
+                                        <img src={fishFiles[index]} alt={`Fish ${index + 1}`} width="100%" style={{ maxWidth: "200px", height: "200px" }} />
+                                    )}
+                                </Grid>
+                            </Grid>
+                        ))}
                     </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            fullWidth
-                            label="Sender Address"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            fullWidth
-                            label="Receive Address"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            fullWidth
-                            label="Order Name"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            fullWidth
-                            label="Tracking Id"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            fullWidth
-                            label="Description"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            fullWidth
-                            label="Price"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />
-                    </Grid>
-                </Grid>
-
-                <div style={{ marginTop: "20px" }}></div>
-
-            </Box>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginTop: "30px"
+                        }}>
+                        {paymentSuccess ? (
+                            <SubmitButton variant="contained" onClick={() => navigate("/customer-home")}>Back to Home Page</SubmitButton>
+                        ) : (
+                            <SubmitButton variant="contained" onClick={handleUpdateOrder}>Post as Order</SubmitButton>
+                        )}
+                    </Box>
+                </Box>
+            )}
         </Box>
     );
 }

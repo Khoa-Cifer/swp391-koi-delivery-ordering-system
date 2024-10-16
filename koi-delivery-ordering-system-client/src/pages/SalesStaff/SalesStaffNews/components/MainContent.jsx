@@ -1,14 +1,38 @@
-import React, { useState, useEffect, useRef } from "react";
-import { CreateNews } from "../../../../utils/axios/news";
-import { Editor } from "@tinymce/tinymce-react"; 
-import "./Maincontent.scss"; 
+import { useState, useEffect, useRef } from "react";
+import { createNews } from "../../../../utils/axios/news";
+import { Editor } from "@tinymce/tinymce-react";
+import "./Maincontent.scss";
 import { jwtDecode } from "jwt-decode";
+import { CONSTANT_TINY_MCE_API_KEY } from "../../../../utils/constants";
+import { TextField } from "@mui/material";
+import { toast } from "react-toastify";
+import ToastUtil from "../../../../components/toastContainer";
 
 function Maincontent() {
   const [file, setFile] = useState(null);
 
   const [salesStaffId, setSalesStaffId] = useState(0);
-  const editorRef = useRef(null); 
+  const editorRef = useRef(null);
+  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState("");
+
+  const handleEditorChange = (content) => {
+    setDescription(content);
+  };
+
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+  }
+
+  const saveContent = async () => {
+    console.log(description);
+    const response = await createNews(salesStaffId, title, description, file)
+    if (response) {
+      toast("Create successfully");
+    } else {
+      toast("Unexpected error has been occurred");
+    }
+  };
 
   useEffect(() => {
     const decodeToken = () => {
@@ -27,112 +51,103 @@ function Maincontent() {
     setFile(selectedFile);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Tạo FormData cho yêu cầu
-    const data = new FormData();
-    data.append("file", file);
-    data.append("description", editorRef.current.getContent()); 
-    data.append("salesStaffId", salesStaffId); 
-
-    try {
-      const response = await CreateNews(data); 
-      console.log("Response:", response.data);
-    } catch (error) {
-      console.error("Error uploading file:", error);
-    }
-  };
-
   return (
     <div className="file-upload-container">
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="file-input">Choose an image:</label>
-          <input
-            type="file"
-            id="file-input"
-            onChange={handleFileChange}
-            accept="image/*"
+      <ToastUtil />
+      <div className="form-group">
+        <label htmlFor="file-input">Choose an image:</label>
+        <input
+          type="file"
+          id="file-input"
+          onChange={handleFileChange}
+          accept="image/*"
+        />
+      </div>
+
+      {file && (
+        <div className="image-preview">
+          <img
+            src={URL.createObjectURL(file)}
+            alt="Selected"
+            className="preview-image"
           />
         </div>
+      )}
 
-        {file && (
-          <div className="image-preview">
-            <img
-              src={URL.createObjectURL(file)}
-              alt="Selected"
-              className="preview-image"
-            />
-          </div>
-        )}
+      <TextField
+        fullWidth
+        type=""
+        label="Title"
+        style={{ marginBottom: "20px" }}
+        onChange={(e) => handleTitleChange(e)}
+      />
 
-        <div className="form-group">
-          <label htmlFor="description">Description:</label>
-          <Editor
-            apiKey="9jhj4efz5nij36u8khbrkt7ik7reqfvvafwtcdaq4ww1s3qv"
-            onInit={(evt, editor) => (editorRef.current = editor)} 
-            init={{
-              height: 300,
-              plugins: [
-                "anchor",
-                "autolink",
-                "charmap",
-                "codesample",
-                "emoticons",
-                "image",
-                "link",
-                "lists",
-                "media",
-                "searchreplace",
-                "table",
-                "visualblocks",
-                "wordcount",
-                "checklist",
-                "mediaembed",
-                "casechange",
-                "export",
-                "formatpainter",
-                "pageembed",
-                "a11ychecker",
-                "tinymcespellchecker",
-                "permanentpen",
-                "powerpaste",
-                "advtable",
-                "advcode",
-                "editimage",
-                "advtemplate",
-                "ai",
-                "mentions",
-                "tinycomments",
-                "tableofcontents",
-                "footnotes",
-                "mergetags",
-                "autocorrect",
-                "typography",
-                "inlinecss",
-                "markdown",
-              ],
-              toolbar:
-                "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
-              tinycomments_mode: "embedded",
-              tinycomments_author: "Author name",
-              mergetags_list: [
-                { value: "First.Name", title: "First Name" },
-                { value: "Email", title: "Email" },
-              ],
-              ai_request: (request, respondWith) =>
-                respondWith.string(() =>
-                  Promise.reject("See docs to implement AI Assistant")
-                ),
-            }}
-          />
-        </div>
+      <div className="form-group">
+        <label htmlFor="description">Description:</label>
+        <Editor
+          apiKey={CONSTANT_TINY_MCE_API_KEY}
+          onInit={(evt, editor) => (editorRef.current = editor)}
+          onEditorChange={handleEditorChange}  // Correctly handle content change
+          init={{
+            height: 300,
+            plugins: [
+              "anchor",
+              "autolink",
+              "charmap",
+              "codesample",
+              "emoticons",
+              "image",
+              "link",
+              "lists",
+              "media",
+              "searchreplace",
+              "table",
+              "visualblocks",
+              "wordcount",
+              "checklist",
+              "mediaembed",
+              "casechange",
+              "export",
+              "formatpainter",
+              "pageembed",
+              "a11ychecker",
+              "tinymcespellchecker",
+              "permanentpen",
+              "powerpaste",
+              "advtable",
+              "advcode",
+              "editimage",
+              "advtemplate",
+              "ai",
+              "mentions",
+              "tinycomments",
+              "tableofcontents",
+              "footnotes",
+              "mergetags",
+              "autocorrect",
+              "typography",
+              "inlinecss",
+              "markdown",
+            ],
+            toolbar:
+              "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
+            tinycomments_mode: "embedded",
+            tinycomments_author: "Author name",
+            mergetags_list: [
+              { value: "First.Name", title: "First Name" },
+              { value: "Email", title: "Email" },
+            ],
+            ai_request: (request, respondWith) =>
+              respondWith.string(() =>
+                Promise.reject("See docs to implement AI Assistant")
+              ),
+          }}
+        />
+      </div>
 
-        <button type="submit" className="upload-button">
-          Upload File
-        </button>
-      </form>
+      <button type="submit" className="upload-button" onClick={() => saveContent()}>
+        Upload
+      </button>
     </div>
   );
 }

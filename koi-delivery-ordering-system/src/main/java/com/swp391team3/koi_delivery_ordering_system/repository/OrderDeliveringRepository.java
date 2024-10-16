@@ -11,4 +11,6 @@ import java.util.List;
 public interface OrderDeliveringRepository extends JpaRepository<OrderDelivering, Long> {
     @Query("SELECT od FROM OrderDelivering od WHERE od.driver.id = :deliveryStaffId")
     List<OrderDelivering> getOrderDeliveringByDeliveryStaffId(Long deliveryStaffId);
+
+    void deleteOrderDeliveringById(Long id);
 }

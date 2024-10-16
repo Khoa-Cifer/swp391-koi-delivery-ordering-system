@@ -7,6 +7,7 @@ import com.swp391team3.koi_delivery_ordering_system.repository.TransactionReposi
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -36,11 +37,18 @@ public class TransactionServiceImpl implements ITransactionService {
 
     @Override
     public List<Transaction> getAllTransactionsHistory() {
-        return List.of();
+        return transactionRepository.findAll();
     }
 
     @Override
-    public List<Transaction> getTransactionsByCustomerId() {
-        return List.of();
+    public List<Transaction> getTransactionsByCustomerId(Long customerId) {
+        List<Transaction> result = new ArrayList<>();
+        if (customerId != null) {
+            Optional<Customer> foundCustomer = customerRepository.findById(customerId);
+            if (foundCustomer.isPresent()) {
+                result = transactionRepository.getTransactionHistoryByCustomerId(customerId);
+            }
+        }
+        return result;
     }
 }

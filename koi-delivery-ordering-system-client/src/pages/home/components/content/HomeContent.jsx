@@ -1,6 +1,38 @@
 import "./content.scss";
+import { useEffect, useState } from "react";
+import { getAllNews } from "../../../../utils/axios/news";
+import { getFileByFileId } from "../../../../utils/axios/file";
+import dateTimeConvert from "../../../../components/utils";
 
 function HomeContent() {
+  const [content, setContent] = useState([]);
+  const [files, setFiles] = useState("");
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const response = await getAllNews();
+        setContent(response);
+      } catch (error) {
+        console.error("Error fetching content", error);
+      }
+
+      if (content && content.length > 0) {
+        const fishFilesPromises = content.map(async file => {
+          const response = await getFileByFileId(file.file.id);
+          return URL.createObjectURL(response); // Create Object URL from response blob
+        });
+
+        const fishFilesArray = await Promise.all(fishFilesPromises);
+        setFiles(fishFilesArray);
+      }
+    };
+
+    fetchContent();
+  }, []);
+
+  console.log(content);
+
   const newsData = [
     {
       category: "ECOMMERCE",
@@ -236,24 +268,26 @@ function HomeContent() {
           </p>
           <div className="news-container">
             <div className="news-grid">
-              {newsData.map((news, index) => (
-                <div key={index} className="news-item">
-                  <img
-                    src={news.imageUrl}
-                    alt={news.title}
-                    className="news-image"
-                  />
-                  <div className="news-content">
-                    <span className="news-category">{news.category}</span>
-                    <h3 className="news-title">{news.title}</h3>
-                    <p className="news-description">{news.description}</p>
-                    <div className="news-footer">
-                      <span className="news-author">{news.author}</span>
-                      <span className="news-date">{news.date}</span>
+              {content.map((news, index) => {
+                if (index >= 3) return null;
+                return (
+                  <div key={index} className="news-item">
+
+                    {files[index] && (
+                      <img alt={news.title} src={files[index]} width="100%" />
+                    )}
+
+                    <div className="news-content">
+                      <h3 className="news-title">{news.title}</h3>
+                      <p className="news-description" dangerouslySetInnerHTML={{ __html: news.description }} />
+                      <div className="news-footer">
+                        <span className="news-author">{news.createdBy.username}</span>
+                        <span className="news-date">{dateTimeConvert(news.createdDate)}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
 
             <div className="view-more">

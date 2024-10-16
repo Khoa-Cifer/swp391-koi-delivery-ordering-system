@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Box, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Calendar } from "react-date-range";
@@ -15,7 +16,6 @@ const LicenseCustomBoxContainer = styled(Box)(() => ({
   marginBottom: "40px",
 }));
 
-// eslint-disable-next-line react/prop-types
 const License = ({
   licenseData,
   handleLicenseChange,
@@ -23,20 +23,22 @@ const License = ({
   handleLicenseFormClose,
 }) => {
   const [previewUrls, setPreviewUrls] = useState(null);
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState(new Date());
   const [fileInputs, setFileInputs] = useState([{ id: 1, file: null }]);
   const [licenseName, setLicenseName] = useState();
   const [licenseDescription, setLicenseDescription] = useState();
 
   useEffect(() => {
     if (licenseData) {
-      console.log(licenseData);
-      setDate(licenseData.dateOfIssue);
+      setDate(new Date(licenseData.dateOfIssue));
       setLicenseName(licenseData.name);
       setLicenseDescription(licenseData.description);
+      handleLicenseChange({
+        target: { name: "id", value: licenseData.id }
+      });
     }
-
     async function fetchData() {
+      // eslint-disable-next-line react/prop-types
       const fileIds = licenseData.files.map(license => license.file.id);
       if (fileIds && fileIds.length > 0) {
         const filesPromises = fileIds.map(async fileId => {
@@ -45,12 +47,11 @@ const License = ({
         });
 
         const filesArray = await Promise.all(filesPromises);
-        console.log('filesArray:', filesArray); // Debugging: Check the contents of filesArray
-        
+
         setFileInputs(prevFileInputs => {
           // Create a copy of prevFileInputs to modify
           const updatedFileInputs = [...prevFileInputs];
-        
+
           filesArray.forEach((file, index) => {
             if (index < updatedFileInputs.length) {
               updatedFileInputs[index].file = file; // Set the file URL
@@ -58,7 +59,7 @@ const License = ({
               updatedFileInputs.push({ id: updatedFileInputs.length + 1, file });
             }
           });
-        
+
           return updatedFileInputs;
         });
       }
@@ -101,7 +102,7 @@ const License = ({
 
   const handleDescriptionChange = (e) => {
     setLicenseDescription(e.target.value);
-    handleDateChange(e);
+    handleLicenseChange(e);
   }
 
   const addFileInput = () => {

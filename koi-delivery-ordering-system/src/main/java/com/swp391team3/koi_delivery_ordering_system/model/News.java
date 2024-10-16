@@ -20,8 +20,10 @@ public class News {
     private Long id;
     private Date createdDate;
     private String title;
+
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
-    private String type;
 
     @ManyToOne
     @JoinColumn(name = "creator_id")

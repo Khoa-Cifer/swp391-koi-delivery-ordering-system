@@ -1,21 +1,12 @@
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-  Grid,
-  TextField,
-  Pagination,
-} from "@mui/material";
 import { useEffect, useState } from "react";
- 
+import { Table, Typography, Input, Pagination, Row, Col } from "antd";
+import { getAllOrders } from "../../../../utils/axios/order";
 import ToastUtil from "../../../../components/toastContainer";
 
-function Orders() { 
+const { Title } = Typography;
+const { Search } = Input;
+
+function Orders() {
   const [orders, setOrders] = useState([]); // Initialize as an empty array
   const [filteredOrders, setFilteredOrders] = useState([]); // Filtered orders for display
   const [searchTrackingId, setSearchTrackingId] = useState(""); // For search by order ID
@@ -72,8 +63,8 @@ function Orders() {
   }, [searchTrackingId, searchOrderName, orders]); // Re-filter when search terms or orders change
 
   // Handle page change
-  const handlePageChange = (event, value) => {
-    setCurrentPage(value);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   const indexOfLastOrder = currentPage * ordersPerPage;
@@ -83,112 +74,102 @@ function Orders() {
     indexOfLastOrder
   );
 
+  const columns = [
+    {
+      title: "Id",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Created date",
+      dataIndex: "createdDate",
+      key: "createdDate",
+      render: (text) => new Date(text).toLocaleDateString(),
+    },
+    {
+      title: "Sender address",
+      dataIndex: "senderAddress",
+      key: "senderAddress",
+    },
+    {
+      title: "Destination address",
+      dataIndex: "destinationAddress",
+      key: "destinationAddress",
+    },
+    {
+      title: "Expected date",
+      dataIndex: "expectedFinishDate",
+      key: "expectedFinishDate",
+      render: (text) => new Date(text).toLocaleDateString(),
+    },
+    {
+      title: "Tracking id",
+      dataIndex: "trackingId",
+      key: "trackingId",
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+    },
+    {
+      title: "Order status",
+      dataIndex: "orderStatus",
+      key: "orderStatus",
+      render: (status) => statusMapping[status],
+    },
+  ];
+
   return (
     <div>
       <ToastUtil />
       <div className="dashboard-info">
-        <h2 style={{ marginTop: "0" }}>Orders</h2>
+        <Title level={2} style={{ marginTop: 0 }}>
+          Orders
+        </Title>
       </div>
 
-      <Grid container sx={{ mb: -1, columnGap: "1.5%", paddingLeft: "5%" }}>
-        <Grid item xs={2}>
-          <TextField
-            label="Tracking ID"
-            variant="outlined"
-            type=""
+      <Row gutter={16} style={{ marginBottom: "16px", paddingLeft: "5%" }}>
+        <Col span={8}>
+          <Search
+            placeholder="Tracking ID"
             value={searchTrackingId}
             onChange={(e) => setSearchTrackingId(e.target.value)}
-            sx={{
-              backgroundColor: "white",
-              borderRadius: "4px",
-            }}
+            allowClear
+            enterButton="Search"
           />
-        </Grid>
-        <Grid item xs={{ ml: 2 }}>
-          <TextField
-            label="Name"
-            variant="outlined"
-            type=""
+        </Col>
+        <Col span={8}>
+          <Search
+            placeholder="Name"
             value={searchOrderName}
             onChange={(e) => setSearchOrderName(e.target.value)}
-            sx={{
-              backgroundColor: "white",
-              borderRadius: "4px",
-            }}
+            allowClear
+            enterButton="Search"
           />
-        </Grid>
-      </Grid>
-      <div className={open ? "blur" : ""}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginRight: "30px",
-          }}
-        ></div>
-      </div>
+        </Col>
+      </Row>
 
-      <TableContainer component={Paper} style={{ marginTop: "25px" }}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell style={{ color: "#041967" }}>
-                <Typography>Id</Typography>
-              </TableCell>
-              <TableCell style={{ color: "#041967" }}>
-                <Typography>Name</Typography>
-              </TableCell>
-              <TableCell style={{ color: "#041967" }}>
-                <Typography>Created date</Typography>
-              </TableCell>
-              <TableCell style={{ color: "#041967" }}>
-                <Typography>Sender address</Typography>
-              </TableCell>
-              <TableCell style={{ color: "#041967" }}>
-                <Typography>Destination address</Typography>
-              </TableCell>
-              <TableCell style={{ color: "#041967" }}>
-                <Typography>Expected date</Typography>
-              </TableCell>
-              <TableCell style={{ color: "#041967" }}>
-                <Typography>Tracking id</Typography>
-              </TableCell>
-              <TableCell style={{ color: "#041967" }}>
-                <Typography>Price</Typography>
-              </TableCell>
-              <TableCell style={{ color: "#041967" }}>
-                <Typography>Order status</Typography>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {currentOrders?.map((data) => (
-              <TableRow key={data.id}>
-                <TableCell>{data.id}</TableCell>
-                <TableCell>{data.name}</TableCell>
-                <TableCell>
-                  {new Date(data.createdDate).toLocaleDateString()}
-                </TableCell>
-                <TableCell>{data.senderAddress}</TableCell>
-                <TableCell>{data.destinationAddress}</TableCell>
-                <TableCell>
-                  {new Date(data.expectedFinishDate).toLocaleDateString()}
-                </TableCell>
-                <TableCell>{data.trackingId}</TableCell>
-                <TableCell>{data.price}</TableCell>
-                <TableCell>{statusMapping[data.orderStatus]}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Table
+        columns={columns}
+        dataSource={currentOrders}
+        pagination={false}
+        rowKey="id"
+        style={{ marginTop: "25px" }}
+      />
 
       {/* Pagination */}
       <Pagination
-        count={Math.ceil(filteredOrders.length / ordersPerPage)}
-        page={currentPage}
+        current={currentPage}
+        pageSize={ordersPerPage}
+        total={filteredOrders.length}
         onChange={handlePageChange}
-        sx={{ mt: 3, display: "flex", justifyContent: "end" }}
+        style={{ marginTop: "20px", textAlign: "right" }}
       />
     </div>
   );

@@ -68,6 +68,7 @@ function Sidebar() {
           <ListItem className="button">
             <ListItemText
               primary="Post News"
+              onClick={() => navigate("/news-sales-staff")}
             />
           </ListItem>
           {/* <ListItem className="button">

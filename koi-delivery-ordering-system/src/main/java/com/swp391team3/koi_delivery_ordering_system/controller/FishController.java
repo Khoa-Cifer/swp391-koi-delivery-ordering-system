@@ -1,6 +1,5 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
-import com.swp391team3.koi_delivery_ordering_system.model.File;
 import com.swp391team3.koi_delivery_ordering_system.model.Fish;
 import com.swp391team3.koi_delivery_ordering_system.model.Order;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderFishInfoRequestDTO;
@@ -9,7 +8,6 @@ import com.swp391team3.koi_delivery_ordering_system.service.IFishService;
 import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import lombok.RequiredArgsConstructor;
-import okhttp3.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,6 +57,11 @@ public class FishController {
     @GetMapping("/getFishByOrderId/{orderId}")
     public ResponseEntity<List<Fish>> getFishesByOrderId(@PathVariable("orderId") Long orderId) {
         return ResponseEntity.ok(fishService.getFishesByOrderId(orderId));
+    }
+
+    @PutMapping("/update-fish-status/{id}/{status}")
+    public ResponseEntity<?> updateFishStatus(@PathVariable Long id, @PathVariable int status) {
+        return ResponseEntity.ok(fishService.updateFishStatus(id, status));
     }
 
     @GetMapping("/getFishById")

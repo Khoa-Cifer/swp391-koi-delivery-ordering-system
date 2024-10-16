@@ -25,6 +25,7 @@ public class Order {
     private String description;
     private Date createdDate;
     private Date expectedFinishDate;
+    private Date finishDate;
     private String destinationAddress;
     private String destinationLongitude;
     private String destinationLatitude;

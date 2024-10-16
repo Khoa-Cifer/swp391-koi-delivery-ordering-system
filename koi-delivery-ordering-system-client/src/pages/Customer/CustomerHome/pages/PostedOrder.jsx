@@ -340,7 +340,7 @@ function PostedOrder() {
             ))}
         </>
       ) : (
-        <Typography>No orders found</Typography>
+        <Typography>No order found</Typography>
       )}
     </div>
   );

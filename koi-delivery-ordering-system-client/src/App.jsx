@@ -18,7 +18,6 @@ import SalesStaffHome from "./pages/SalesStaff/SalesStaffHome/SalesStaffHome";
 import PaymentSuccess from "./utils/DefaultPages/PaymentSuccess";
 import DeliveryStaffLayout from "./pages/Layout/DeliveryStaffLayout/DeliveryStaffLayout";
 import SalesStaffLayout from "./pages/Layout/SalesStaffLayout/SalesStaffLayout";
-import DeliveryOrderAvailable from "./pages/DeliveryStaff/delivery_available_order/DeliveryOrderAvailable";
 import PublicRoute from "./authentication/PublicRoute";
 import SalesOrderDetail from "./pages/SalesStaff/components/SalesOrderDetail/SalesOrderDetail";
 import SalesFishDetail from "./pages/SalesStaff/components/SalesFishDetail/SalesFishDetail";
@@ -49,6 +48,8 @@ import PaymentHistory from "./pages/Manager/SystemData/PaymentHistory/PaymentHis
 import Fish from "./pages/Manager/SystemData/Fish/Fish";
 import Orders from "./pages/Manager/SystemData/Orders/Orders";
 import Invoice from "./pages/public/Invoice/Invoice";
+import OrderFinalInfo from "./pages/Customer/CustomerEditOrder/pages/OrderFinalInfo";
+import ContactPage from "./pages/public/Contact/Contact";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -98,7 +99,7 @@ function App() {
             <Route path="/login-sales-staff" element={<LoginSaleStaff />} />
             <Route path="/login-delivery-staff" element={<LoginDeliveryStaff />} />
             <Route path="/login-admin" element={<LoginAdmin />} />
-            <Route path="/invoice" element={<Invoice />} />
+            
             <Route element={<ManagerLayout />}>
               <Route path="/admin/report" element={<ManagerPrivateRoute element={<Report />} />} />
               <Route path="/admin/dashboard" element={<ManagerPrivateRoute element={<Dashboard />} />} />
@@ -119,13 +120,13 @@ function App() {
               <Route path="/customer-create-order" element={<CustomerPrivateRoute element={<CustomerCreateOrder />} />} />
               <Route path="/customer-edit-profile" element={<CustomerPrivateRoute element={<CustomerEditProfile />} />} />
               <Route path="/customer-edit-order/:id" element={<CustomerPrivateRoute element={<CustomerEditOrder />} />} />
+              <Route path="/customer-edit-order/:id/order-conclusion-info" element={<CustomerPrivateRoute element={<OrderFinalInfo />} />} />
             </Route>
 
             <Route path="/delivery-staff-home" element={<DeliveryStaffPrivateRoute element={<DeliveryStaffHome />} />} />
 
             <Route element={<DeliveryStaffLayout />}>
               <Route path="/delivery-order-home" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderHome />} />} />
-              <Route path="/delivery-order-available" element={<DeliveryStaffPrivateRoute element={<DeliveryOrderAvailable />} />} />
               <Route path="/getting-order-delivery-staff" element={<DeliveryStaffPrivateRoute element={<GettingOrderDeliveryStaff />} />} />
               <Route path="/available-to-delivery-staff" element={<DeliveryStaffPrivateRoute element={<AvailableToDelivery />} />} />
               <Route path="/delivering-order-delivery-staff" element={<DeliveryStaffPrivateRoute element={<DeliveringOrder />} />} />
@@ -146,7 +147,8 @@ function App() {
             </Route>
 
             <Route path="/payment-success" element={<AllowedRoute element={<PaymentSuccess />} />} />
-
+            <Route path="/invoice" element={<Invoice />} />
+            <Route path="/contact-us" element={<ContactPage />} />
             <Route path="/tracking-order" element={<TrackingOrder />} />
 
             <Route path="/*" element={<Page404 />} />

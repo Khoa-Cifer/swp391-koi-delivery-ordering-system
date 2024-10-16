@@ -3,6 +3,7 @@ package com.swp391team3.koi_delivery_ordering_system.controller;
 import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.DeliveryStaffLocationUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestCreationDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestUpdateDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IDeliveryStaffService;
 import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class DeliveryStaffController {
 
     @PostMapping("/createDeliveryStaff")
     public ResponseEntity<?> createDeliveryStaff(@RequestBody StaffRequestCreationDTO request) {
-        String result = deliveryStaffService.createDeliveryStaff(request.getEmail(), request.getUsername());
+        String result = deliveryStaffService.createDeliveryStaff(request.getEmail(), request.getUsername(), request.getPhoneNumber());
         return ResponseEntity.ok(result);
     }
 
@@ -47,8 +48,8 @@ public class DeliveryStaffController {
     //Update Delivery Staff
     //PASSED
     @PutMapping("/updateDeliveryStaffById/{id}")
-    public ResponseEntity<?> updateDeliveryStaff(@PathVariable Long id, @RequestBody DeliveryStaff deliveryStaff) {
-        return ResponseEntity.ok(deliveryStaffService.updateDeliveryStaffById(id, deliveryStaff.getEmail(), deliveryStaff.getPhoneNumber()));
+    public ResponseEntity<?> updateDeliveryStaff(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO request) {
+        return ResponseEntity.ok(deliveryStaffService.updateDeliveryStaffById(id, request.getEmail(), request.getPhoneNumber(), request.getUsername()));
     }
 //    @PostMapping("/startDelivery/{id}")
 //    public ResponseEntity<?> startDelivery(@PathVariable Long id, @RequestBody Long driverId) {

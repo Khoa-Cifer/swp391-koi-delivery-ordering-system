@@ -17,7 +17,7 @@ public class SalesStaffServiceImpl implements ISalesStaffService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public String createSalesStaff(String email, String username) {
+    public String createSalesStaff(String email, String username, String phoneNumber) {
         SalesStaff newSalesStaff = new SalesStaff();
 
         boolean emailDuplicatedCheck = salesStaffRepository.existsByEmail(email);
@@ -32,6 +32,7 @@ public class SalesStaffServiceImpl implements ISalesStaffService {
         newSalesStaff.setPassword(encodedPassword);
 
         newSalesStaff.setUsername(username);
+        newSalesStaff.setPhoneNumber(phoneNumber);
 
         salesStaffRepository.save(newSalesStaff);
         return "Account create successfully";

@@ -4,6 +4,7 @@ import com.swp391team3.koi_delivery_ordering_system.model.Order;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.FinishOrderUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderSalesStaffCheckingRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.responseDto.UpdateOrderResponseDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import lombok.RequiredArgsConstructor;
@@ -112,7 +113,7 @@ public class OrderController {
             Order order = optionalOrder.get();
 
             if (order.getOrderStatus() == orderStatus.DRAFT || order.getOrderStatus() == orderStatus.POSTED) {
-                Order updatedOrder = orderService.updateOrder(
+                UpdateOrderResponseDTO updatedOrder = orderService.updateOrder(
                         orderId,
                         request.getName(),
                         request.getDescription(),
