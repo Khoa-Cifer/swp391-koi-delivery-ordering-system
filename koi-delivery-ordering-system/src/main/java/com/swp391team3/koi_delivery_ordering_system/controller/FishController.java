@@ -70,8 +70,11 @@ public class FishController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteFish(@PathVariable("id") Long id) {
-        fishService.deleteFishById(id);
+    public ResponseEntity<?> deleteFish(@PathVariable("id") Long id) {
+        if(fishService.deleteFishById(id)){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fish can not be deleted.");
     }
 
     @PostMapping(value = "/editFish/{id}")

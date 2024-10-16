@@ -11,11 +11,12 @@ import java.util.Optional;
 public interface IFishService {
     List<Fish> getAllFishs();
     Optional<Fish> getFishById(Long id);
-    void deleteFishById(Long id);
+    boolean deleteFishById(Long id);
     Long createFishByOrderId(OrderFishInfoRequestDTO request) throws IOException;
     List<Fish> getFishesByOrderId(Long orderId);
 
     Fish updateFish(Long fishId, String name, int age, double size, double weight, double price, MultipartFile file);
 
     boolean updateFishStatus(Long id, int status);
+
 }
