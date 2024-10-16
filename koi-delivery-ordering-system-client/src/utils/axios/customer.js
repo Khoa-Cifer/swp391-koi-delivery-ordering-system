@@ -81,3 +81,27 @@ export async function getAllCustomers() {
         console.log(error);
     }
 }
+
+export async function managerEditCustomerProfile(id, username, email, phoneNumber) {
+    try {
+        const response = await axiosClient.put(`customer/updateCustomerById/${id}`,
+            {
+                username,
+                email,
+                phoneNumber
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function deleteCustomerById(id) {
+    try {
+        const response = await axiosClient.delete(`customer/deleteCustomerById/${id}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
