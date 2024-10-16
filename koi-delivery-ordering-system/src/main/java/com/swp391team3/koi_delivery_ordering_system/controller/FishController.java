@@ -77,36 +77,36 @@ public class FishController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fish can not be deleted.");
     }
 
-    @PostMapping(value = "/editFish/{id}")
-    public ResponseEntity<?> editFish(
-            @PathVariable("id") Long fishId,
-            @RequestParam(name = "name") String name,
-            @RequestParam(name = "age") int age,
-            @RequestParam(name = "size") double size,
-            @RequestParam(name = "weight") double weight,
-//            @RequestParam(name = "status") int status,
-            @RequestParam(name = "price") double price,
-            @RequestParam(name = "image") MultipartFile file) {
-
-
-        Optional<Fish> optionalFish = fishService.getFishById(fishId);
-
-        if (optionalFish.isPresent()) {
-            Fish fish = optionalFish.get();
-
-            Optional<Order> orderOptional = orderService.getOrderById(fish.getOrder().getId());
-
-            if (!orderOptional.isPresent()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The order does not exist");
-            }
-            Order order = orderOptional.get();
-            if (order.getOrderStatus() == orderStatus.DRAFT || order.getOrderStatus() == orderStatus.POSTED) {
-                Fish updatedFish = fishService.updateFish(fishId, name, age, size, weight, price, file);
-                return ResponseEntity.ok(updatedFish);
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order Status does not support");
-            }
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The fish does not exist");
-    }
+//    @PostMapping(value = "/editFish/{id}")
+//    public ResponseEntity<?> editFish(
+//            @PathVariable("id") Long fishId,
+//            @RequestParam(name = "name") String name,
+//            @RequestParam(name = "age") int age,
+//            @RequestParam(name = "size") double size,
+//            @RequestParam(name = "weight") double weight,
+////            @RequestParam(name = "status") int status,
+//            @RequestParam(name = "price") double price,
+//            @RequestParam(name = "image") MultipartFile file) {
+//
+//
+//        Optional<Fish> optionalFish = fishService.getFishById(fishId);
+//
+//        if (optionalFish.isPresent()) {
+//            Fish fish = optionalFish.get();
+//
+//            Optional<Order> orderOptional = orderService.getOrderById(fish.getOrder().getId());
+//
+//            if (!orderOptional.isPresent()) {
+//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The order does not exist");
+//            }
+//            Order order = orderOptional.get();
+//            if (order.getOrderStatus() == orderStatus.DRAFT || order.getOrderStatus() == orderStatus.POSTED) {
+//                Fish updatedFish = fishService.updateFish(fishId, name, age, size, weight, price, file);
+//                return ResponseEntity.ok(updatedFish);
+//            } else {
+//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order Status does not support");
+//            }
+//        }
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The fish does not exist");
+//    }
 }

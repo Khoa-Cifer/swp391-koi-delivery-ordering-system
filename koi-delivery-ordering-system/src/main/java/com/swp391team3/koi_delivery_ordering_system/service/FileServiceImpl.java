@@ -98,4 +98,20 @@ public class FileServiceImpl implements IFileService {
     public List<String> getDuplicatedFileInFileSystem() {
         return fileRepository.getDuplicateImageName();
     }
+
+    @Override
+    public boolean deleteFile(Long fileId) {
+        Optional<File> fileData = fileRepository.findById(fileId);
+        if (fileData.isPresent()) {
+            File file = fileData.get();
+            String oldFilePath = file.getFilePath();
+
+            java.io.File oldFile = new java.io.File(oldFilePath);
+            if (oldFile.exists()) {
+                oldFile.delete();
+                return true;
+            }
+        }
+        return false;
+    }
 }

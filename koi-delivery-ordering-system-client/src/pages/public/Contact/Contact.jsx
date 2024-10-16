@@ -12,8 +12,12 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import "./Contact.css";
-import StarRating from "../../../components/StarRating";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { createFeedback } from "../../../utils/axios/rating";
+import { toast } from "react-toastify";
+import ToastUtil from "../../../components/toastContainer";
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -26,6 +30,38 @@ const theme = createTheme({
 });
 
 function ContactPage() {
+  const [rating, setRating] = useState(0); // State to store the selected rating
+  const [hover, setHover] = useState(0); // State to track hover over stars
+  const [comment, setComment] = useState(""); // State to track hover over stars
+
+  const location = useLocation();
+  const { state } = location;
+
+  const handleClick = (index) => {
+    setRating(index); // Set rating when a star is clicked
+  };
+
+  const handleMouseEnter = (index) => {
+    setHover(index); // Update hover state on mouse enter
+  };
+
+  const handleMouseLeave = () => {
+    setHover(0); // Reset hover state on mouse leave
+  };
+
+  const handleSubmit = async () => {
+    const response = await createFeedback(state.orderId, state.userId, comment, rating);
+    if (response) {
+      toast("Thank you for your feedback");
+    } else {
+      toast("Unexpected error has been occurred");
+    }
+  }
+
+  const handleCommentChange = (e) => {
+    setComment(e.target.value);
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -38,6 +74,7 @@ function ContactPage() {
           padding: 4,
         }}
       >
+        <ToastUtil />
         <Container maxWidth="lg">
           <Paper elevation={3} sx={{ overflow: "hidden" }}>
             <Grid container>
@@ -99,7 +136,24 @@ function ContactPage() {
                   </Box>
                 </Box>
 
-                <StarRating />
+                <div>
+                  {[1, 2, 3, 4, 5].map((star, index) => (
+                    <span
+                      key={index}
+                      style={{
+                        fontSize: '2rem',
+                        cursor: 'pointer',
+                        color: hover >= star || rating >= star ? 'gold' : 'gray',
+                      }}
+                      onClick={() => handleClick(star)}
+                      onMouseEnter={() => handleMouseEnter(star)}
+                      onMouseLeave={handleMouseLeave}
+                    >
+                      ★
+                    </span>
+                  ))}
+                  <p>Selected Rating: {rating}</p>
+                </div>
 
                 <Link to="/">Back to home page</Link>
               </Grid>
@@ -108,37 +162,41 @@ function ContactPage() {
                 <Typography variant="h4" gutterBottom>
                   SEND US A MESSAGE
                 </Typography>
-                <form>
-                  <TextField
-                    fullWidth
-                    type=""
-                    label="Name"
-                    variant="outlined"
-                    margin="normal"
-                  />
-                  <TextField
-                    fullWidth
-                    label="Email"
-                    type=""
-                    variant="outlined"
-                    margin="normal"
-                  />
-                  <TextField
-                    fullWidth
-                    label="Phone"
-                    variant="outlined"
-                    type=""
-                    margin="normal"
-                  />
-                  <TextField
-                    fullWidth
-                    label="Message"
-                    variant="outlined"
-                    type=""
-                    margin="normal"
-                    multiline
-                    rows={4}
-                  />
+                <TextField
+                  fullWidth
+                  type=""
+                  label="Name"
+                  variant="outlined"
+                  margin="normal"
+                  value={state.username}
+                />
+                <TextField
+                  fullWidth
+                  label="Email"
+                  type=""
+                  variant="outlined"
+                  margin="normal"
+                  value={state.email}
+                />
+                <TextField
+                  fullWidth
+                  label="Phone"
+                  variant="outlined"
+                  type=""
+                  margin="normal"
+                  value={state.phoneNumber}
+                />
+                <TextField
+                  fullWidth
+                  label="Message"
+                  variant="outlined"
+                  type=""
+                  margin="normal"
+                  multiline
+                  rows={4}
+                  onChange={(e) => handleCommentChange(e)}
+                />
+                {rating === 0 ? (
                   <Button
                     type="submit"
                     variant="contained"
@@ -146,10 +204,23 @@ function ContactPage() {
                     fullWidth
                     size="large"
                     sx={{ mt: 2 }}
+                    disabled
                   >
                     Send Message
                   </Button>
-                </form>
+                ) : (
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="secondary"
+                    fullWidth
+                    size="large"
+                    sx={{ mt: 2 }}
+                    onClick={() => handleSubmit()}
+                  >
+                    Send Message
+                  </Button>
+                )}
               </Grid>
             </Grid>
           </Paper>

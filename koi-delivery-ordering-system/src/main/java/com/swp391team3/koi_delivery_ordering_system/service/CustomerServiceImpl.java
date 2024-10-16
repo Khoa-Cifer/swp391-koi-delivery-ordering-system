@@ -82,11 +82,12 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public Customer updateCustomerById(Long id, String email, String phoneNumber) {
+    public Customer updateCustomerById(Long id, String username, String email, String phoneNumber) {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
         if (optionalCustomer.isPresent()) {
             Customer customer = optionalCustomer.get();
             customer.setEmail(email);
+            customer.setUsername(username);
             customer.setPhoneNumber(phoneNumber);
             return customerRepository.save(customer);
         } else {

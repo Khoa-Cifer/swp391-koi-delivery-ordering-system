@@ -34,7 +34,7 @@ public class OrderServiceImpl implements IOrderService {
     private final FishRepository fishRepository;
     private final LicenseFileRepository licenseFileRepository;
     private final FileRepository fileRepository;
-
+    private final IFileService fileService;
 
     @Autowired
     public OrderServiceImpl
@@ -44,7 +44,12 @@ public class OrderServiceImpl implements IOrderService {
              IFishService fishService, PriceBoard priceBoard, DeliveryStaffRepository deliveryStaffRepository,
              ISalesStaffService salesStaffService, EmailService emailService,
              @Lazy IOrderDeliveringService orderDeliveringService,
-             IDeliveryStaffService deliveryStaffService, IPaymentRateService paymentRateService, LicenseRepository licenseRepository, FishRepository fishRepository, LicenseFileRepository licenseFileRepository, FileRepository fileRepository) {
+             IDeliveryStaffService deliveryStaffService, IPaymentRateService paymentRateService,
+             LicenseRepository licenseRepository, FishRepository fishRepository,
+             LicenseFileRepository licenseFileRepository, FileRepository fileRepository,
+             IFileService fileService
+            ) {
+        this.fileService = fileService;
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.orderStatus = orderStatus;
@@ -115,18 +120,22 @@ public class OrderServiceImpl implements IOrderService {
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
             int currentStatus = order.getOrderStatus();
-            if(currentStatus==orderStatus.DRAFT || currentStatus==orderStatus.POSTED) {
+            if(currentStatus == orderStatus.DRAFT || currentStatus == orderStatus.POSTED) {
                 Set<Fish> fishes = order.getFishes();
                 if (fishes != null) {
                     for (Fish fish : fishes) {
                         Set<License> licenses = fish.getLicenses();
                         if (licenses != null) {
                             for (License license : licenses) {
-                                Set<LicenseFile> licenseFile = licenseFileRepository.findAll().stream()
+                                Set<LicenseFile> licenseFiles = licenseFileRepository.findAll().stream()
                                         .filter(licenseFile1 -> licenseFile1.getLicense().equals(license))
                                         .collect(Collectors.toSet());
-                                if (licenseFile != null) {
-                                    licenseFileRepository.deleteAll(licenseFile);
+                                if (licenseFiles != null) {
+                                    for (LicenseFile licenseFile : licenseFiles) {
+                                        Long licenseFileId = licenseFile.getFile().getId();
+                                        fileService.deleteFile(licenseFileId);
+                                    }
+                                    licenseFileRepository.deleteAll(licenseFiles);
                                 }
                                 licenseRepository.delete(license);
                             }
@@ -134,6 +143,7 @@ public class OrderServiceImpl implements IOrderService {
                         fishRepository.delete(fish);
                         if (fish.getFile() != null) {
                             fileRepository.delete(fish.getFile());
+                            fileService.deleteFile(fish.getFile().getId());
                         }
                     }
                 }
@@ -396,7 +406,12 @@ public class OrderServiceImpl implements IOrderService {
             emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered");
             foundOrder.get().setFinishDate(new Date());
             orderRepository.save(foundOrder.get());
-            emailDetail.setLink("http://localhost:5173" + "/invoice" + "?orderId=" + foundOrder.get().getId());
+            emailDetail.setLink("http://localhost:5173" + "/invoice" +
+                    "?orderId=" + foundOrder.get().getId() +
+                    "&userId=" + customer.getId() +
+                    "&username=" + customer.getUsername() +
+                    "&email=" + customer.getEmail() +
+                    "&phoneNumber=" + customer.getPhoneNumber());
             emailService.sendEmail(emailDetail, 3);
             return result;
         } catch (Exception e) {

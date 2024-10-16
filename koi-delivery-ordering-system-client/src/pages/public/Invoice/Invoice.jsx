@@ -26,6 +26,10 @@ const Invoice = () => {
 
   const query = useQuery();
   const orderId = query.get('orderId');
+  const userId = query.get('userId');
+  const username = query.get('username');
+  const email = query.get('email');
+  const phoneNumber = query.get('phoneNumber');
 
   const [fish, setFish] = useState([]);
   const [order, setOrder] = useState([]);
@@ -61,7 +65,15 @@ const Invoice = () => {
   }, []);
 
   const handleNavigateFeedback = () => {
-    
+    navigate('/contact-us', {
+      state: {
+        orderId,
+        userId,
+        username,
+        email,
+        phoneNumber
+      }
+    })
   }
   
   const totalFishPrice = fish.reduce((total, item) => total + item.price, 0);

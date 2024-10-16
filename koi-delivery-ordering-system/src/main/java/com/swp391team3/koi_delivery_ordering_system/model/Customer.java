@@ -29,7 +29,6 @@ public class Customer implements UserDetails {
     @Column(unique = true, nullable = false)
     private String email;
     private String password;
-    private double amount;
     private String phoneNumber;
 
     @OneToOne

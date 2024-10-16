@@ -15,7 +15,7 @@ public interface ICustomerService {
     
     List<Customer> getAllCustomer();
     Optional<Customer> getCustomerById(Long id);
-    Customer updateCustomerById(Long id, String email, String phoneNumber);
+    Customer updateCustomerById(Long id, String username, String email, String phoneNumber);
     void deleteCustomerById(Long id);
 
     String customerUpdateProfile(UserUpdateRequestDTO request);

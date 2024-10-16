@@ -1,6 +1,7 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestUpdateDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.ICustomerService;
 import lombok.RequiredArgsConstructor;
@@ -51,8 +52,8 @@ public class CustomerController {
     // Update customer by ID
     //PASSED
     @PutMapping("/updateCustomerById/{id}")
-    public ResponseEntity<Customer> updateCustomerById(@PathVariable Long id, @RequestBody Customer customer) {
-        Customer updated = customerService.updateCustomerById(id, customer.getEmail(), customer.getPhoneNumber());
+    public ResponseEntity<Customer> updateCustomerById(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO request) {
+        Customer updated = customerService.updateCustomerById(id, request.getUsername(), request.getEmail(), request.getPhoneNumber());
         if (updated != null) {
             return ResponseEntity.ok(updated);
         } else {

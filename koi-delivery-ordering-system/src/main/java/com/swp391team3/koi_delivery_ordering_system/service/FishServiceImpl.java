@@ -47,16 +47,20 @@ public class FishServiceImpl implements IFishService {
         Order order = orderRepository.findAll().stream()
                 .filter(order1 -> order1.getFishes().equals(fish))
                 .findFirst().orElse(null);
-        if (order.getOrderStatus()==orderStatus.DRAFT || order.getOrderStatus()==orderStatus.POSTED) {
+        if (order.getOrderStatus() == orderStatus.DRAFT || order.getOrderStatus() == orderStatus.POSTED) {
             if (fish != null) {
                 Set<License> licenses = fish.getLicenses();
                 if (licenses != null) {
                     for (License license : licenses) {
-                        Set<LicenseFile> licenseFile = licenseFileRepository.findAll().stream()
+                        Set<LicenseFile> licenseFiles = licenseFileRepository.findAll().stream()
                                 .filter(licenseFile1 -> licenseFile1.getLicense().equals(license))
                                 .collect(Collectors.toSet());
-                        if (licenseFile != null) {
-                            licenseFileRepository.deleteAll(licenseFile);
+                        if (licenseFiles != null) {
+                            for (LicenseFile licenseFile : licenseFiles) {
+                                Long licenseFileId = licenseFile.getFile().getId();
+                                fileService.deleteFile(licenseFileId);
+                            }
+                            licenseFileRepository.deleteAll(licenseFiles);
                         }
                         licenseRepository.delete(license);
                     }
@@ -64,6 +68,7 @@ public class FishServiceImpl implements IFishService {
                 fishRepository.delete(fish);
                 if (fish.getFile() != null) {
                     fileRepository.delete(fish.getFile());
+                    fileService.deleteFile(fish.getFile().getId());
                 }
                 result = true;
             }
