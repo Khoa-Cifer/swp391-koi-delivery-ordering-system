@@ -33,6 +33,7 @@ public class OrderServiceImpl implements IOrderService {
     private final LicenseRepository licenseRepository;
     private final FishRepository fishRepository;
     private final LicenseFileRepository licenseFileRepository;
+    private final FileRepository fileRepository;
 
 
     @Autowired
@@ -43,7 +44,7 @@ public class OrderServiceImpl implements IOrderService {
              IFishService fishService, PriceBoard priceBoard, DeliveryStaffRepository deliveryStaffRepository,
              ISalesStaffService salesStaffService, EmailService emailService,
              @Lazy IOrderDeliveringService orderDeliveringService,
-             IDeliveryStaffService deliveryStaffService, IPaymentRateService paymentRateService, LicenseRepository licenseRepository, FishRepository fishRepository, LicenseFileRepository licenseFileRepository) {
+             IDeliveryStaffService deliveryStaffService, IPaymentRateService paymentRateService, LicenseRepository licenseRepository, FishRepository fishRepository, LicenseFileRepository licenseFileRepository, FileRepository fileRepository) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.orderStatus = orderStatus;
@@ -59,6 +60,7 @@ public class OrderServiceImpl implements IOrderService {
         this.licenseRepository = licenseRepository;
         this.fishRepository = fishRepository;
         this.licenseFileRepository = licenseFileRepository;
+        this.fileRepository = fileRepository;
     }
 
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
@@ -130,6 +132,9 @@ public class OrderServiceImpl implements IOrderService {
                             }
                         }
                         fishRepository.delete(fish);
+                        if (fish.getFile() != null) {
+                            fileRepository.delete(fish.getFile());
+                        }
                     }
                 }
                 orderRepository.deleteById(id);
