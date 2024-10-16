@@ -1,13 +1,13 @@
 .order-container-sale {
   margin-top: 3%;
   width: 100%;
-  
+
   .order {
     font-size: 1.2em;
     color: rgb(5, 10, 176);
     margin-left: 4%;
   }
- 
+
   .order-card {
     display: flex;
     justify-content: space-between;
@@ -30,7 +30,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
     max-width: 30%; /* Ensure the width is less than 33% */
-    flex: 1 1 30%;  /* Allow items to grow and shrink and wrap at 30% */
+    flex: 1 1 30%; /* Allow items to grow and shrink and wrap at 30% */
     margin-bottom: 20px; /* Add some space between rows */
   }
 
@@ -77,5 +77,8 @@
 
   .order-footer {
     width: 100%;
+  }
+  .order-container-sale-search input[type="text"] {
+    box-sizing: content-box !important;
   }
 }
