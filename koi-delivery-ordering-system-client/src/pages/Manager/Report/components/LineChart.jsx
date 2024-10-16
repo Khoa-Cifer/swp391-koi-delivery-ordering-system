@@ -49,7 +49,7 @@ const LineChart = () => {
   ];
 
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: currentYear - 2019 }, (_, i) => 2020 + i); 
+  const years = Array.from({ length: currentYear - 2019 }, (_, i) => 2020 + i);
 
   useEffect(() => {
     async function fetchData() {
@@ -63,8 +63,8 @@ const LineChart = () => {
         ).getDate();
 
         const days = Array.from({ length: totalDaysInMonth }, (_, i) => i + 1);
-        const completed = Array(totalDaysInMonth).fill(0); 
-        const failed = Array(totalDaysInMonth).fill(0); 
+        const completed = Array(totalDaysInMonth).fill(0);
+        const failed = Array(totalDaysInMonth).fill(0);
 
         orders.forEach((order) => {
           const orderDate = new Date(order.expectedFinishDate);
@@ -103,18 +103,18 @@ const LineChart = () => {
   };
 
   const data = {
-    labels: chartData.days, 
+    labels: chartData.days,
     datasets: [
       {
         label: "Completed Orders",
-        data: chartData.completed, 
+        data: chartData.completed,
         fill: false,
         borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
       },
       {
         label: "Failed Orders",
-        data: chartData.failed, 
+        data: chartData.failed,
         fill: false,
         borderColor: "rgb(255, 99, 132)",
         tension: 0.1,
@@ -138,7 +138,7 @@ const LineChart = () => {
   return (
     <div>
       {/* Dropdown to select year and month */}
-      <div style={{ marginBottom: "20px" }}>
+      <div style={{ marginBottom: "20px", display: "flex" }}>
         <label htmlFor="year-select">Select Year: </label>
         <select
           id="year-select"

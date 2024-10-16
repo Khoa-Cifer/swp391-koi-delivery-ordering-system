@@ -3,7 +3,7 @@ import StatCard from "./components/Card/ReportCard";
 import Table from "./components/Card/Table";
 import { Box, Grid, Paper, Typography, TablePagination } from "@mui/material";
 import { HelpCircle } from "lucide-react";
-import { getOrdersByStatus } from "../../../utils/axios/order";
+import { getAllOrders, getOrdersByStatus } from "../../../utils/axios/order";
 import { getAllDeliveryStaff } from "../../../utils/axios/deliveryStaff";
 import {
   getDeliverystaffReporById,
@@ -15,23 +15,37 @@ const Report = () => {
   const [data, setData] = useState([]);
   const [dataTotalOrders, setDatadataTotalOrder] = useState([]);
   const [dataDeliveryReport, setdataDeliveryReport] = useState([]);
-
-  // Pagination state for Delivery Staff table
+  const [dataRevenue, setDataRevenue] = useState([]);
   const [staffPage, setStaffPage] = useState(0);
   const [staffRowsPerPage, setStaffRowsPerPage] = useState(5);
-
-  // Pagination state for Orders table
   const [orderPage, setOrderPage] = useState(0);
   const [orderRowsPerPage, setOrderRowsPerPage] = useState(5);
 
-  // Fetch data from API
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const responses = await getAllOrders([]);
+        const prices = responses.map((order) => order.price);
+
+        // Calculate total revenue
+        const totalRevenue = prices.reduce((sum, price) => sum + price, 0);
+
+        console.log(totalRevenue);
+
+        setDataRevenue(totalRevenue); // Set total revenue here
+      } catch (error) {
+        console.error("Error fetching data", error);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
       try {
         const responses = await getTotalOrders([]);
         setDatadataTotalOrder(responses);
-        console.log(dataTotalOrders);
       } catch (error) {
         console.error("Error fetching data", error);
       }
@@ -143,6 +157,17 @@ const Report = () => {
             icon={<HelpCircle className="w-5 h-5 text-red-500" />}
             color="#ffcdd2"
             textColor="#c62828"
+            trend="up"
+          />
+        </Grid>
+
+        <Grid item xs={12} md={4}>
+          <StatCard
+            title="Total Revenue"
+            value={`$${dataRevenue}`} // Format revenue to two decimal places
+            icon={<HelpCircle className="w-5 h-5 text-green-500" />}
+            color="#c8e6c9"
+            textColor="#2e7d32"
             trend="up"
           />
         </Grid>
