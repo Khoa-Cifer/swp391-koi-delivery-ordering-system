@@ -120,11 +120,11 @@ public class OrderServiceImpl implements IOrderService {
                         Set<License> licenses = fish.getLicenses();
                         if (licenses != null) {
                             for (License license : licenses) {
-                                LicenseFile licenseFile = licenseFileRepository.findAll().stream()
+                                Set<LicenseFile> licenseFile = licenseFileRepository.findAll().stream()
                                         .filter(licenseFile1 -> licenseFile1.getLicense().equals(license))
-                                        .findFirst().orElse(null);
+                                        .collect(Collectors.toSet());
                                 if (licenseFile != null) {
-                                    licenseFileRepository.delete(licenseFile);
+                                    licenseFileRepository.deleteAll(licenseFile);
                                 }
                                 licenseRepository.delete(license);
                             }
