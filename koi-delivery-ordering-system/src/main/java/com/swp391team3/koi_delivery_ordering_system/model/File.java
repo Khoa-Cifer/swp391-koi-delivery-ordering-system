@@ -24,5 +24,5 @@ public class File {
     private Date createdTime;
     private String type;
     private String filePath;
-    private int versionCopy = 0;
+//    private int versionCopy = 0;
 }

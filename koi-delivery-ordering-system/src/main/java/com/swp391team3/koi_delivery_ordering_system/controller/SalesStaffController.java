@@ -3,6 +3,7 @@ package com.swp391team3.koi_delivery_ordering_system.controller;
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.model.SalesStaff;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestCreationDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestUpdateDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.ISalesStaffService;
 import com.swp391team3.koi_delivery_ordering_system.service.NewsServiceImpl;
@@ -25,6 +26,7 @@ public class SalesStaffController {
 
     @PostMapping("/createSalesStaff")
     public ResponseEntity<?> createSalesStaff(@RequestBody StaffRequestCreationDTO request) {
+        System.out.println("Result: " + request.getPhoneNumber());
         String result = salesStaffService.createSalesStaff(request.getEmail(), request.getUsername(), request.getPhoneNumber());
         return ResponseEntity.ok(result);
     }
@@ -46,8 +48,8 @@ public class SalesStaffController {
     //UPDATE SALES STAFF
     //PASSED
     @PutMapping("/updateSalesStaffById/{id}")
-    public ResponseEntity<?> updateSalesStaff(@PathVariable Long id, @RequestBody SalesStaff salesStaff) {
-        return ResponseEntity.ok(salesStaffService.updateSalesStaff(id, salesStaff.getEmail(), salesStaff.getPhoneNumber())) ;
+    public ResponseEntity<?> updateSalesStaff(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO salesStaff) {
+        return ResponseEntity.ok(salesStaffService.updateSalesStaff(id, salesStaff.getUsername(), salesStaff.getEmail(), salesStaff.getPhoneNumber())) ;
     }
 
     @PutMapping("/updateSalesStaffProfile")

@@ -306,19 +306,19 @@ function PostedOrder() {
                               <TableCell>{fish.name}</TableCell>
                               <TableCell>{fish.price}</TableCell>
                               <TableCell>{fish.size}</TableCell>
-                              {fish.status === 0 && (
-                                <TableCell sx={{ color: "red" }}>
-                                  CANCEL
-                                </TableCell>
-                              )}
                               {fish.status === 1 && (
-                                <TableCell sx={{ color: "orange" }}>
-                                  PROCESSING
+                                <TableCell sx={{ color: "red" }}>
+                                  Good
                                 </TableCell>
                               )}
                               {fish.status === 2 && (
+                                <TableCell sx={{ color: "orange" }}>
+                                  Sick
+                                </TableCell>
+                              )}
+                              {fish.status === 3 && (
                                 <TableCell sx={{ color: "green" }}>
-                                  SUCCESS
+                                  Dead
                                 </TableCell>
                               )}
                               <TableCell>{fish.weight}</TableCell>

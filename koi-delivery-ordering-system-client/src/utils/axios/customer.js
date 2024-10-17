@@ -99,7 +99,16 @@ export async function managerEditCustomerProfile(id, username, email, phoneNumbe
 
 export async function deleteCustomerById(id) {
     try {
-        const response = await axiosClient.delete(`customer/deleteCustomerById/${id}`);
+        const response = await axiosClient.delete(`customer/disable/${id}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function enableCustomerById(id) {
+    try {
+        const response = await axiosClient.delete(`customer/enable/${id}`);
         return response.data;
     } catch (error) {
         console.log(error);

@@ -16,7 +16,7 @@ public interface ISalesStaffService {
 
     List<SalesStaff> getAllSalesStaff();
     Optional<SalesStaff> getSalesStaffById(Long id);
-    SalesStaff updateSalesStaff(Long id, String email, String phoneNumber);
+    SalesStaff updateSalesStaff(Long id, String username, String email, String phoneNumber);
 
     void disableSalesStaffById(Long id);
     void enableSalesStaffById(Long id);

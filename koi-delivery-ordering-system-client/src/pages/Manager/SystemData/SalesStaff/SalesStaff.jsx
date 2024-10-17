@@ -9,7 +9,8 @@ const { Title } = Typography;
 
 function SalesStaff() {
   const [salesStaffData, setSalesStaffData] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingSalesStaff, setSalesStaff] = useState(null);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -30,11 +31,12 @@ function SalesStaff() {
     const response = await createSalesStaff(email, username, phoneNumber);
     notification.info({ message: response });
     await fetchSalesStaffs();
-    setIsModalOpen(false);
+    setIsCreateModalOpen(false);
   };
 
   const handleClose = () => {
-    setIsModalOpen(false);
+    setIsCreateModalOpen(false);
+    setIsEditModalOpen(false);
     setSalesStaff(null);
     setEmail("");
     setUsername("");
@@ -43,13 +45,17 @@ function SalesStaff() {
 
   async function handleEditSalesStaff() {
     if (editingSalesStaff) {
-      const message = await managerEditSalesStaffProfile(
+      const response = await managerEditSalesStaffProfile(
         editingSalesStaff,
         username,
         email,
         phoneNumber
       );
-      toast(message);
+      if (response) {
+        toast("Edit sales staff successfully");
+      } else {
+        toast("Unexpected error has been occurred");
+      }
       fetchSalesStaffs();
     }
     handleClose();
@@ -57,7 +63,11 @@ function SalesStaff() {
 
   function handleEdit(record) {
     setSalesStaff(record);
-    setIsModalOpen(true);
+    setIsEditModalOpen(true);
+  }
+
+  function handleCreate() {
+    setIsCreateModalOpen(true);
   }
 
   const handleDelete = async (id) => {
@@ -131,7 +141,7 @@ function SalesStaff() {
           marginBottom: "20px",
         }}
       >
-        <Button type="primary" onClick={() => setIsModalOpen(true)}>
+        <Button type="primary" onClick={() => handleCreate(true)}>
           Create New Sales Staff
         </Button>
       </div>
@@ -145,10 +155,10 @@ function SalesStaff() {
 
       <Modal
         title="Create New Sales Staff"
-        visible={isModalOpen}
-        onCancel={() => setIsModalOpen(false)}
+        visible={isCreateModalOpen}
+        onCancel={() => setIsCreateModalOpen(false)}
         footer={[
-          <Button key="back" onClick={() => setIsModalOpen(false)}>
+          <Button key="back" onClick={() => setIsCreateModalOpen(false)}>
             Cancel
           </Button>,
           <Button
@@ -180,9 +190,10 @@ function SalesStaff() {
           style={{ marginBottom: "10px" }}
         />
       </Modal>
+
       <Modal
-        title={"Edit Customer"}
-        visible={isModalOpen}
+        title={"Edit Sales Staff"}
+        visible={isEditModalOpen}
         onCancel={handleClose}
         onOk={() => handleEditSalesStaff()}
         okButtonProps={{ disabled: !username || !email }} // Disable OK button if fields are empty
