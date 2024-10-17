@@ -31,6 +31,10 @@ public class SalesStaff implements UserDetails {
     private String password;
     private String phoneNumber;
 
+    @Column(columnDefinition = "boolean default true")
+    @JsonIgnore
+    private boolean activeStatus=true;
+
     @OneToOne
     @JoinColumn(name = "avatar_id", referencedColumnName = "id")
     private File file;
