@@ -41,8 +41,7 @@ const OrderInfoHeader = styled(Typography)(() => ({
 
 const SearchBox = styled(Box)(() => ({
   display: "flex",
-  gap: "30px",
-  justifyContent: "flex-start", // Ensure the inputs stay aligned to the left
+  gap: "30px"
 }));
 
 const searchInputStyle = {
@@ -183,10 +182,12 @@ function PostedOrder() {
 
       {orders && orders.length > 0 ? (
         <>
-          <SearchBox>
+          <SearchBox >
             <div className="form-group">
               <input
-                style={searchInputStyle}
+                style={{
+                  boxSizing: "border-box",
+                }}
                 placeholder="Tracking ID"
                 type="text"
                 name="text"
@@ -198,7 +199,9 @@ function PostedOrder() {
 
             <div className="form-group">
               <input
-                style={searchInputStyle}
+                style={{
+                  boxSizing: "border-box",
+                }}
                 placeholder="Name"
                 type="text"
                 name="text"
@@ -207,8 +210,8 @@ function PostedOrder() {
                 className="form-input"
               />
             </div>
-          </SearchBox>
-
+          </SearchBox >
+          
           {filteredOrders &&
             filteredOrders.map &&
             filteredOrders.map((order) => (
