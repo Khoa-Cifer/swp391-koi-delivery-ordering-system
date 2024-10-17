@@ -58,3 +58,27 @@ export async function salesStaffUpdateProfileImage(id, file) {
         console.log(error);
     }
 }
+
+export async function managerEditSalesStaffProfile(id, username, email, phoneNumber) {
+    try {
+        const response = await axiosClient.put(`salesStaff/updateSalesStaffById/${id}`,
+            {
+                username,
+                email,
+                phoneNumber
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function deletesalesStaffById(id) {
+    try {
+        const response = await axiosClient.delete(`salesStaff/${id}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
