@@ -74,11 +74,12 @@ public class SalesStaffServiceImpl implements ISalesStaffService {
     }
 
     @Override
-    public SalesStaff updateSalesStaff(Long id, String email, String phoneNumber) {
+    public SalesStaff updateSalesStaff(Long id, String username, String email, String phoneNumber) {
         SalesStaff salesStaff = salesStaffRepository.findById(id).get();
         if(salesStaff != null) {
             salesStaff.setEmail(email);
             salesStaff.setPhoneNumber(phoneNumber);
+            salesStaff.setUsername(username);
 
             salesStaffRepository.save(salesStaff);
             return salesStaffRepository.save(salesStaff);
@@ -87,8 +88,16 @@ public class SalesStaffServiceImpl implements ISalesStaffService {
     }
 
     @Override
-    public void deleteSalesStaffById(Long id) {
-        salesStaffRepository.deleteById(id);
+    public void disableSalesStaffById(Long id) {
+        SalesStaff salesStaff = salesStaffRepository.findById(id).get();
+        salesStaff.setActiveStatus(false);
+        salesStaffRepository.save(salesStaff);
+    }
+    @Override
+    public void enableSalesStaffById(Long id) {
+        SalesStaff salesStaff = salesStaffRepository.findById(id).get();
+        salesStaff.setActiveStatus(true);
+        salesStaffRepository.save(salesStaff);
     }
 
     @Override

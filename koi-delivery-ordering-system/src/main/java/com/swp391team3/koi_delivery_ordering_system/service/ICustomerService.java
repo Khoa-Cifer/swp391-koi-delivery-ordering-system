@@ -16,7 +16,8 @@ public interface ICustomerService {
     List<Customer> getAllCustomer();
     Optional<Customer> getCustomerById(Long id);
     Customer updateCustomerById(Long id, String username, String email, String phoneNumber);
-    void deleteCustomerById(Long id);
+    void disableCustomerById(Long id);
+    void enableCustomerById(Long id);
 
     String customerUpdateProfile(UserUpdateRequestDTO request);
     String customerUpdateAvatar(Long id, MultipartFile file) throws IOException;

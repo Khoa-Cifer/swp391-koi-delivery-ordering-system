@@ -452,7 +452,6 @@ public class OrderServiceImpl implements IOrderService {
         return response;
     }
 
-
     private double getPrice(List<Fish> fishList, Optional<Order> order, double distance) {
         String[] senderAddress = order.get().getSenderAddress().split(",");
         String[] receiverAddress = order.get().getDestinationAddress().split(",");

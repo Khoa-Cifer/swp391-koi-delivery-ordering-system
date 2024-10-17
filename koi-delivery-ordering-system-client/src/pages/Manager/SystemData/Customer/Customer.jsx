@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Input, Modal, Popconfirm, Space, Table, Typography } from "antd";
-import { deleteCustomerById, getAllCustomers, managerEditCustomerProfile } from "../../../../utils/axios/customer";
+import { deleteCustomerById as disableCustomerById, enableCustomerById, getAllCustomers, managerEditCustomerProfile } from "../../../../utils/axios/customer";
 import { toast } from "react-toastify";
 
 const { Title } = Typography;
@@ -32,6 +32,8 @@ function Customer() {
         fetchCustomers();
     }, []);
 
+    console.log(customerData);
+
     async function handleEditCustomers() {
         if (editingCustomer) {
             const message = await managerEditCustomerProfile(editingCustomer, username, email, phoneNumber);
@@ -46,14 +48,25 @@ function Customer() {
         setEditModalOpen(true);
     }
 
-    const handleDelete = async (id) => {
+    const handleDisableCustomer = async (id) => {
         try {
-            await deleteCustomerById(id); // Call the API to delete the staff
-            toast("Customer deleted successfully"); // Notify the user
+            await disableCustomerById(id); // Call the API to delete the staff
+            toast("Customer disabled successfully"); // Notify the user
             await fetchCustomers(); // Refresh the list after deletion
         } catch (err) {
             console.error(err);
-            toast.error("Failed to delete customer"); // Notify if there's an error
+            toast.error("Failed to disable customer"); // Notify if there's an error
+        }
+    };
+
+    const handleEnableCustomer = async (id) => {
+        try {
+            await enableCustomerById(id); // Call the API to delete the staff
+            toast("Customer enabled successfully"); // Notify the user
+            await fetchCustomers(); // Refresh the list after deletion
+        } catch (err) {
+            console.error(err);
+            toast.error("Failed to enable customer"); // Notify if there's an error
         }
     };
 
@@ -74,11 +87,6 @@ function Customer() {
             key: 'email',
         },
         {
-            title: 'Amount',
-            dataIndex: 'amount',
-            key: 'amount',
-        },
-        {
             title: 'Phone Number',
             dataIndex: 'phoneNumber',
             key: 'phoneNumber',
@@ -94,7 +102,7 @@ function Customer() {
                     </Button>
                     <Popconfirm
                         title="Are you sure to delete customer?"
-                        onConfirm={() => handleDelete(id)} // Pass the customer id to delete
+                        onConfirm={() => handleDisableCustomer(id)} // Pass the customer id to delete
                         okText="Yes"
                         cancelText="No"
                     >

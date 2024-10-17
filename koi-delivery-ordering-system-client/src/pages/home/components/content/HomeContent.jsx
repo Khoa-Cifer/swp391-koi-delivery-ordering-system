@@ -7,7 +7,7 @@ import dateTimeConvert from "../../../../components/utils";
 function HomeContent() {
   const [content, setContent] = useState([]);
   const [files, setFiles] = useState("");
-
+  
   useEffect(() => {
     const fetchContent = async () => {
       try {
@@ -30,8 +30,6 @@ function HomeContent() {
 
     fetchContent();
   }, []);
-
-  console.log(content);
 
   const newsData = [
     {

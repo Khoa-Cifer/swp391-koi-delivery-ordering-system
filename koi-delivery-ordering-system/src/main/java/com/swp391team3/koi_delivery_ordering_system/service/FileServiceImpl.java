@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,36 +23,26 @@ public class FileServiceImpl implements IFileService {
 
     @Override
     public File uploadFileToFileSystem(MultipartFile file) throws IOException {
-        String filePath = folderPath + file.getOriginalFilename();
-        File fileData = getFile(file, filePath);
+        String uuid = String.valueOf(UUID.randomUUID());
+        String fileName = uuid + "-" + file.getOriginalFilename();
+        String filePath = folderPath + fileName;
+        File fileData = getFile(file, filePath, uuid);
 
         fileRepository.save(fileData);
 
-        if (fileData.getVersionCopy() == 0) {
-            file.transferTo(new java.io.File(folderPath + file.getOriginalFilename()));
-        } else {
-            file.transferTo(new java.io.File(folderPath + file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf('.'))
-                    + " " + "(" + fileData.getVersionCopy() + ")" + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.'))));
-        }
+        file.transferTo(new java.io.File(filePath));
 
         return fileData;
     }
 
-    private File getFile(MultipartFile file, String filePath) {
+    private File getFile(MultipartFile file, String filePath, String uuid) {
         Date currentDate = new Date();
         File fileData = new File();
-        int versionCopy = 0;
-        for (int i = 0; i < getTotalFileInFileSystem(); i++) {
-            if (file.getOriginalFilename().equalsIgnoreCase(fileRepository.getDuplicateImageName().get(i))) {
-                versionCopy++;
-            }
-        }
 
-        fileData.setName(file.getOriginalFilename());
+        fileData.setName(uuid + "-" + file.getOriginalFilename());
         fileData.setCreatedTime(currentDate);
         fileData.setType(file.getContentType());
         fileData.setFilePath(filePath);
-        fileData.setVersionCopy(versionCopy);
         return fileData;
     }
 
@@ -67,7 +58,9 @@ public class FileServiceImpl implements IFileService {
     public String updateFileInFileSystem(Long id, MultipartFile newFile) throws IOException {
         Optional<File> fileData = fileRepository.findById(id);
         if (fileData.isPresent()) {
-            String filePath = folderPath + newFile.getOriginalFilename();
+            String fileName = UUID.randomUUID() + "-" + newFile.getOriginalFilename();
+
+            String filePath = folderPath + fileName;
 
             File file = fileData.get();
             String oldFilePath = file.getFilePath();

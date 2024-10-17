@@ -16,8 +16,10 @@ public interface ISalesStaffService {
 
     List<SalesStaff> getAllSalesStaff();
     Optional<SalesStaff> getSalesStaffById(Long id);
-    SalesStaff updateSalesStaff(Long id, String email, String phoneNumber);
-    void deleteSalesStaffById(Long id);
+    SalesStaff updateSalesStaff(Long id, String username, String email, String phoneNumber);
+
+    void disableSalesStaffById(Long id);
+    void enableSalesStaffById(Long id);
 
     String salesStaffUpdateProfile(UserUpdateRequestDTO request);
     String salesStaffUpdateAvatar(Long id, MultipartFile file) throws IOException;

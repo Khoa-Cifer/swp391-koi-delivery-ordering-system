@@ -1,13 +1,18 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
+import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.model.SalesStaff;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestCreationDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestUpdateDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.ISalesStaffService;
 import com.swp391team3.koi_delivery_ordering_system.service.NewsServiceImpl;
 
 import java.io.IOException;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +26,7 @@ public class SalesStaffController {
 
     @PostMapping("/createSalesStaff")
     public ResponseEntity<?> createSalesStaff(@RequestBody StaffRequestCreationDTO request) {
+        System.out.println("Result: " + request.getPhoneNumber());
         String result = salesStaffService.createSalesStaff(request.getEmail(), request.getUsername(), request.getPhoneNumber());
         return ResponseEntity.ok(result);
     }
@@ -42,19 +48,8 @@ public class SalesStaffController {
     //UPDATE SALES STAFF
     //PASSED
     @PutMapping("/updateSalesStaffById/{id}")
-    public ResponseEntity<?> updateSalesStaff(@PathVariable Long id, @RequestBody SalesStaff salesStaff) {
-        return ResponseEntity.ok(salesStaffService.updateSalesStaff(id, salesStaff.getEmail(), salesStaff.getPhoneNumber())) ;
-    }
-
-    //DELETE SALES STAFF
-    //PASSED
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteSalesStaff(@PathVariable Long id) {
-        if(salesStaffService.getSalesStaffById(id).isPresent()){
-            salesStaffService.deleteSalesStaffById(id);
-            return ResponseEntity.ok("Sales Staff deleted successfully");
-        }
-        return ResponseEntity.ok("Sales Staff not found");
+    public ResponseEntity<?> updateSalesStaff(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO salesStaff) {
+        return ResponseEntity.ok(salesStaffService.updateSalesStaff(id, salesStaff.getUsername(), salesStaff.getEmail(), salesStaff.getPhoneNumber())) ;
     }
 
     @PutMapping("/updateSalesStaffProfile")
@@ -67,5 +62,26 @@ public class SalesStaffController {
             @PathVariable("id") Long id,
             @RequestParam("file") MultipartFile file) throws IOException {
         return ResponseEntity.ok(salesStaffService.salesStaffUpdateAvatar(id, file));
+    }
+    @PostMapping("/disable/{id}")
+    public ResponseEntity<?> disableSalesStaffById(@PathVariable Long id) {
+        Optional<SalesStaff> salesStaff = salesStaffService.getSalesStaffById(id);
+        if (salesStaff.isPresent()) {
+            salesStaffService.disableSalesStaffById(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Disabled sales staff with id: " + id + " successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping("/enable/{id}")
+    public ResponseEntity<?> enableSalesStaffSalesStaffById(@PathVariable Long id) {
+        Optional<SalesStaff> salesStaff = salesStaffService.getSalesStaffById(id);
+        if (salesStaff.isPresent()) {
+            salesStaffService.enableSalesStaffById(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Enabled sales staff with id: " + id + " successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }
