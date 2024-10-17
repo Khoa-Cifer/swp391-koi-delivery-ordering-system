@@ -19,11 +19,13 @@ public interface IDeliveryStaffService {
 
     List<DeliveryStaff> getAllDeliveryStaffs();
     Optional<DeliveryStaff> getDeliveryStaffById(Long id);
-    void deleteDeliveryStaffById(Long id);
     DeliveryStaff updateDeliveryStaffById(Long id, String email, String phoneNumber, String username);
 
     boolean updateDeliveryStaffLocation(DeliveryStaffLocationUpdateRequestDTO request);
 
     String deliveryStaffUpdateProfile(UserUpdateRequestDTO request);
     String deliveryStaffUpdateAvatar(Long id, MultipartFile file) throws IOException;
+
+    void disableDeliveryStaffById(Long id);
+    void enableDeliveryStaffById(Long id);
 }

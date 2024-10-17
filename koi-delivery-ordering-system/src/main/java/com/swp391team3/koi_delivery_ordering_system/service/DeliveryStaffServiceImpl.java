@@ -1,6 +1,5 @@
 package com.swp391team3.koi_delivery_ordering_system.service;
 
-import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
 import com.swp391team3.koi_delivery_ordering_system.model.File;
 import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
@@ -75,11 +74,6 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
     }
 
     @Override
-    public void deleteDeliveryStaffById(Long id) {
-        deliveryStaffRepository.deleteById(id);
-    }
-
-    @Override
     public DeliveryStaff updateDeliveryStaffById(Long id, String email, String phoneNumber, String username) {
         Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(id);
         if (optionalDeliveryStaff.isPresent()) {
@@ -146,5 +140,17 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
             return fileService.updateFileInFileSystem(deliveryStaff.get().getFile().getId(), file);
         }
         return "";
+    }
+    @Override
+    public void disableDeliveryStaffById(Long id) {
+        DeliveryStaff deliveryStaff = deliveryStaffRepository.findById(id).get();
+        deliveryStaff.setActiveStatus(false);
+        deliveryStaffRepository.save(deliveryStaff);
+    }
+    @Override
+    public void enableDeliveryStaffById(Long id) {
+        DeliveryStaff deliveryStaff = deliveryStaffRepository.findById(id).get();
+        deliveryStaff.setActiveStatus(true);
+        deliveryStaffRepository.save(deliveryStaff);
     }
 }

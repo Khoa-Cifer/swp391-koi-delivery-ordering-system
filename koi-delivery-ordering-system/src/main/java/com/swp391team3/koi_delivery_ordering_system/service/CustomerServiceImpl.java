@@ -96,8 +96,16 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public void deleteCustomerById(Long id) {
-        customerRepository.deleteById(id);
+    public void disableCustomerById(Long id) {
+        Customer customer = customerRepository.findById(id).get();
+        customer.setActiveStatus(false);
+        customerRepository.save(customer);
+    }
+    @Override
+    public void enableCustomerById(Long id) {
+        Customer customer = customerRepository.findById(id).get();
+        customer.setActiveStatus(true);
+        customerRepository.save(customer);
     }
 
     @Override

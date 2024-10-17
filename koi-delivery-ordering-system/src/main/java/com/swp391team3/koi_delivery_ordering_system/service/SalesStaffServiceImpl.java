@@ -87,8 +87,16 @@ public class SalesStaffServiceImpl implements ISalesStaffService {
     }
 
     @Override
-    public void deleteSalesStaffById(Long id) {
-        salesStaffRepository.deleteById(id);
+    public void disableSalesStaffById(Long id) {
+        SalesStaff salesStaff = salesStaffRepository.findById(id).get();
+        salesStaff.setActiveStatus(false);
+        salesStaffRepository.save(salesStaff);
+    }
+    @Override
+    public void enableSalesStaffById(Long id) {
+        SalesStaff salesStaff = salesStaffRepository.findById(id).get();
+        salesStaff.setActiveStatus(true);
+        salesStaffRepository.save(salesStaff);
     }
 
     @Override

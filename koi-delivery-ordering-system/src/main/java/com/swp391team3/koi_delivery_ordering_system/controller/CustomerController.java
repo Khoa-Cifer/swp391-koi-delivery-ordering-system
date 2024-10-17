@@ -61,14 +61,23 @@ public class CustomerController {
         }
     }
 
-    // Delete customer by ID
-    //PASSED
-    @DeleteMapping("/deleteCustomerById/{id}")
-    public ResponseEntity<?> deleteCustomerById(@PathVariable Long id) {
+    @PostMapping("/disable/{id}")
+    public ResponseEntity<?> disableCustomerById(@PathVariable Long id) {
         Optional<Customer> customer = customerService.getCustomerById(id);
         if (customer.isPresent()) {
-            customerService.deleteCustomerById(id);
-            return ResponseEntity.status(HttpStatus.OK).body("Deleted customer with id: " + id + " successfully");
+            customerService.disableCustomerById(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Disabled customer with id: " + id + " successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping("/enable/{id}")
+    public ResponseEntity<?> enableCustomerById(@PathVariable Long id) {
+        Optional<Customer> customer = customerService.getCustomerById(id);
+        if (customer.isPresent()) {
+            customerService.enableCustomerById(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Enabled customer with id: " + id + " successfully");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
