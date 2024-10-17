@@ -361,13 +361,13 @@ function MainContent() {
 
               {state.orderStatus === 2 && (
                 <SubmitButton variant="contained" onClick={() => handleReceiveOrder()}>
-                  Get This Order to get
+                  Get This Order
                 </SubmitButton>
               )}
 
               {state.orderStatus === 5 && (
                 <SubmitButton variant="contained" onClick={() => handleDeliveryOrder()}>
-                  Get This Order to delivery
+                  Delivery This Order
                 </SubmitButton>
               )}
             </>

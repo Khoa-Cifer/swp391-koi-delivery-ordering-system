@@ -29,8 +29,10 @@ public class Customer implements UserDetails {
     @Column(unique = true, nullable = false)
     private String email;
     private String password;
-    private double amount;
     private String phoneNumber;
+
+    @Column(columnDefinition = "boolean default true")
+    private boolean activeStatus = true;
 
     @OneToOne
     @JoinColumn(name = "avatar_id", referencedColumnName = "id")
@@ -52,6 +54,7 @@ public class Customer implements UserDetails {
     @JsonIgnore
     private Set<PaymentHistory> paymentHistorySet;
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -60,6 +63,7 @@ public class Customer implements UserDetails {
     }
 
     @Override
+
     public boolean isAccountNonExpired() {
         return true;
     }

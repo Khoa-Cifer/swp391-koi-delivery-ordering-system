@@ -37,9 +37,9 @@ export async function userUpdateProfile(id, email, username, phoneNumber, passwo
             {
                 id,
                 email,
-                password,
                 username,
-                phoneNumber
+                phoneNumber,
+                password,
             }
         );
         return response.data;
@@ -76,6 +76,39 @@ export async function getCustomerById(id) {
 export async function getAllCustomers() {
     try {
         const response = await axiosClient.get("customer/getAllCustomers");
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function managerEditCustomerProfile(id, username, email, phoneNumber) {
+    try {
+        const response = await axiosClient.put(`customer/updateCustomerById/${id}`,
+            {
+                username,
+                email,
+                phoneNumber
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function deleteCustomerById(id) {
+    try {
+        const response = await axiosClient.delete(`customer/disable/${id}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function enableCustomerById(id) {
+    try {
+        const response = await axiosClient.delete(`customer/enable/${id}`);
         return response.data;
     } catch (error) {
         console.log(error);

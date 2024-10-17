@@ -55,6 +55,10 @@ function Header() {
         navigate("/");
     }
 
+    const handleOpenEditProfile = () => {
+        navigate("/sales-staff-edit-profile")
+    }
+
     return (
         <div className="sales-header-container">
             <div className="logo">
@@ -94,7 +98,7 @@ function Header() {
                             horizontal: 'right',
                         }}
                     >
-                        <MenuItem>Profile</MenuItem>
+                        <MenuItem onClick={handleOpenEditProfile}>Profile</MenuItem>
                         <MenuItem onClick={handleLogout}>Logout</MenuItem>
                     </Menu>
                 </Box>

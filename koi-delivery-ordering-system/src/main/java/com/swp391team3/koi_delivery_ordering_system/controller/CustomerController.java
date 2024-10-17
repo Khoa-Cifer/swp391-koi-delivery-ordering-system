@@ -1,7 +1,8 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.CustomerUpdateRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestUpdateDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.UserUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.ICustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -51,8 +52,8 @@ public class CustomerController {
     // Update customer by ID
     //PASSED
     @PutMapping("/updateCustomerById/{id}")
-    public ResponseEntity<Customer> updateCustomerById(@PathVariable Long id, @RequestBody Customer customer) {
-        Customer updated = customerService.updateCustomerById(id, customer.getEmail(), customer.getPhoneNumber());
+    public ResponseEntity<Customer> updateCustomerById(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO request) {
+        Customer updated = customerService.updateCustomerById(id, request.getUsername(), request.getEmail(), request.getPhoneNumber());
         if (updated != null) {
             return ResponseEntity.ok(updated);
         } else {
@@ -60,21 +61,30 @@ public class CustomerController {
         }
     }
 
-    // Delete customer by ID
-    //PASSED
-    @DeleteMapping("/deleteCustomerById/{id}")
-    public ResponseEntity<?> deleteCustomerById(@PathVariable Long id) {
+    @PostMapping("/disable/{id}")
+    public ResponseEntity<?> disableCustomerById(@PathVariable Long id) {
         Optional<Customer> customer = customerService.getCustomerById(id);
         if (customer.isPresent()) {
-            customerService.deleteCustomerById(id);
-            return ResponseEntity.status(HttpStatus.OK).body("Deleted customer with id: " + id + " successfully");
+            customerService.disableCustomerById(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Disabled customer with id: " + id + " successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping("/enable/{id}")
+    public ResponseEntity<?> enableCustomerById(@PathVariable Long id) {
+        Optional<Customer> customer = customerService.getCustomerById(id);
+        if (customer.isPresent()) {
+            customerService.enableCustomerById(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Enabled customer with id: " + id + " successfully");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
     @PutMapping("/updateCustomerProfile")
-    public ResponseEntity<?> updateCustomerProfile(@RequestBody CustomerUpdateRequestDTO request) {
+    public ResponseEntity<?> updateCustomerProfile(@RequestBody UserUpdateRequestDTO request) {
         return ResponseEntity.ok(customerService.customerUpdateProfile(request));
     }
 

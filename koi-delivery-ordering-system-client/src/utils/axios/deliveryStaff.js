@@ -62,9 +62,9 @@ export async function deliveryStaffUpdateProfile(id, email, username, phoneNumbe
             {
                 id,
                 email,
-                password,
                 username,
-                phoneNumber
+                phoneNumber,
+                password,
             }
         );
         return response.data;

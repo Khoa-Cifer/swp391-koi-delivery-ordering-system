@@ -2,9 +2,7 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 
 import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailService;
 import com.swp391team3.koi_delivery_ordering_system.model.*;
-import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
-import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
-import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
+import com.swp391team3.koi_delivery_ordering_system.repository.*;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.*;
 import com.swp391team3.koi_delivery_ordering_system.responseDto.UpdateOrderResponseDTO;
 import com.swp391team3.koi_delivery_ordering_system.utils.PriceBoard;
@@ -14,7 +12,6 @@ import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,6 +30,11 @@ public class OrderServiceImpl implements IOrderService {
     private final IOrderDeliveringService orderDeliveringService;
     private final IDeliveryStaffService deliveryStaffService;
     private final IPaymentRateService paymentRateService;
+    private final LicenseRepository licenseRepository;
+    private final FishRepository fishRepository;
+    private final LicenseFileRepository licenseFileRepository;
+    private final FileRepository fileRepository;
+    private final IFileService fileService;
 
     @Autowired
     public OrderServiceImpl
@@ -42,7 +44,12 @@ public class OrderServiceImpl implements IOrderService {
              IFishService fishService, PriceBoard priceBoard, DeliveryStaffRepository deliveryStaffRepository,
              ISalesStaffService salesStaffService, EmailService emailService,
              @Lazy IOrderDeliveringService orderDeliveringService,
-             IDeliveryStaffService deliveryStaffService, IPaymentRateService paymentRateService) {
+             IDeliveryStaffService deliveryStaffService, IPaymentRateService paymentRateService,
+             LicenseRepository licenseRepository, FishRepository fishRepository,
+             LicenseFileRepository licenseFileRepository, FileRepository fileRepository,
+             IFileService fileService
+            ) {
+        this.fileService = fileService;
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.orderStatus = orderStatus;
@@ -55,6 +62,10 @@ public class OrderServiceImpl implements IOrderService {
         this.orderDeliveringService = orderDeliveringService;
         this.deliveryStaffService = deliveryStaffService;
         this.paymentRateService = paymentRateService;
+        this.licenseRepository = licenseRepository;
+        this.fishRepository = fishRepository;
+        this.licenseFileRepository = licenseFileRepository;
+        this.fileRepository = fileRepository;
     }
 
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
@@ -103,8 +114,45 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public void deleteOrderById(Long id) {
-        orderRepository.deleteById(id);
+    public boolean deleteOrderById(Long id) {
+        boolean result = false;
+        Optional<Order> optionalOrder = getOrderById(id);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            int currentStatus = order.getOrderStatus();
+            if(currentStatus == orderStatus.DRAFT || currentStatus == orderStatus.POSTED) {
+                Set<Fish> fishes = order.getFishes();
+                if (fishes != null) {
+                    for (Fish fish : fishes) {
+                        Set<License> licenses = fish.getLicenses();
+                        if (licenses != null) {
+                            for (License license : licenses) {
+                                Set<LicenseFile> licenseFiles = licenseFileRepository.findAll().stream()
+                                        .filter(licenseFile1 -> licenseFile1.getLicense().equals(license))
+                                        .collect(Collectors.toSet());
+                                if (licenseFiles != null) {
+                                    for (LicenseFile licenseFile : licenseFiles) {
+                                        Long licenseFileId = licenseFile.getFile().getId();
+                                        fileService.deleteFile(licenseFileId);
+                                    }
+                                    licenseFileRepository.deleteAll(licenseFiles);
+                                }
+                                licenseRepository.delete(license);
+                            }
+                        }
+                        fishRepository.delete(fish);
+                        if (fish.getFile() != null) {
+                            fileRepository.delete(fish.getFile());
+                            fileService.deleteFile(fish.getFile().getId());
+                        }
+                    }
+                }
+                orderRepository.deleteById(id);
+                result = true;
+                return result;
+            } else return result;
+        }
+        return result;
     }
 
     @Override
@@ -358,7 +406,12 @@ public class OrderServiceImpl implements IOrderService {
             emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered");
             foundOrder.get().setFinishDate(new Date());
             orderRepository.save(foundOrder.get());
-            emailDetail.setLink("http://localhost:5173" + "/invoice" + "?orderId=" + foundOrder.get().getId());
+            emailDetail.setLink("http://localhost:5173" + "/invoice" +
+                    "?orderId=" + foundOrder.get().getId() +
+                    "&userId=" + customer.getId() +
+                    "&username=" + customer.getUsername() +
+                    "&email=" + customer.getEmail() +
+                    "&phoneNumber=" + customer.getPhoneNumber());
             emailService.sendEmail(emailDetail, 3);
             return result;
         } catch (Exception e) {
@@ -398,7 +451,6 @@ public class OrderServiceImpl implements IOrderService {
         response.setPrice(extraMoney);
         return response;
     }
-
 
     private double getPrice(List<Fish> fishList, Optional<Order> order, double distance) {
         String[] senderAddress = order.get().getSenderAddress().split(",");

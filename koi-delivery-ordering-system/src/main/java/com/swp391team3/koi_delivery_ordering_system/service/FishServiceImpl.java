@@ -1,10 +1,7 @@
 package com.swp391team3.koi_delivery_ordering_system.service;
 
-import com.swp391team3.koi_delivery_ordering_system.model.File;
-import com.swp391team3.koi_delivery_ordering_system.model.Fish;
-import com.swp391team3.koi_delivery_ordering_system.model.Order;
-import com.swp391team3.koi_delivery_ordering_system.repository.FishRepository;
-import com.swp391team3.koi_delivery_ordering_system.repository.OrderRepository;
+import com.swp391team3.koi_delivery_ordering_system.model.*;
+import com.swp391team3.koi_delivery_ordering_system.repository.*;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderFishInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.utils.FishStatus;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
@@ -17,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +24,10 @@ public class FishServiceImpl implements IFishService {
     private final OrderRepository orderRepository;
     private final IFileService fileService;
     private final FishStatus fishStatus;
+    private final LicenseRepository licenseRepository;
+    private final LicenseFileRepository licenseFileRepository;
+    private final FileRepository fileRepository;
+    private final OrderStatus orderStatus;
 
     @Override
     public List<Fish> getAllFishs() {
@@ -37,8 +40,40 @@ public class FishServiceImpl implements IFishService {
     }
 
     @Override
-    public void deleteFishById(Long id) {
-        fishRepository.deleteById(id);
+    public boolean deleteFishById(Long id) {
+        boolean result = false;
+        Fish fish = fishRepository.findById(id)
+                .orElse(null);
+        Order order = orderRepository.findAll().stream()
+                .filter(order1 -> order1.getFishes().equals(fish))
+                .findFirst().orElse(null);
+        if (order.getOrderStatus() == orderStatus.DRAFT || order.getOrderStatus() == orderStatus.POSTED) {
+            if (fish != null) {
+                Set<License> licenses = fish.getLicenses();
+                if (licenses != null) {
+                    for (License license : licenses) {
+                        Set<LicenseFile> licenseFiles = licenseFileRepository.findAll().stream()
+                                .filter(licenseFile1 -> licenseFile1.getLicense().equals(license))
+                                .collect(Collectors.toSet());
+                        if (licenseFiles != null) {
+                            for (LicenseFile licenseFile : licenseFiles) {
+                                Long licenseFileId = licenseFile.getFile().getId();
+                                fileService.deleteFile(licenseFileId);
+                            }
+                            licenseFileRepository.deleteAll(licenseFiles);
+                        }
+                        licenseRepository.delete(license);
+                    }
+                }
+                fishRepository.delete(fish);
+                if (fish.getFile() != null) {
+                    fileRepository.delete(fish.getFile());
+                    fileService.deleteFile(fish.getFile().getId());
+                }
+                result = true;
+            }
+        }
+        return result;
     }
 
     @Override

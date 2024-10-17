@@ -10,7 +10,7 @@ import { getFileByFileId } from "../../../utils/axios/file";
 import ToastUtil from "../../../components/toastContainer";
 import { deliveryStaffUpdateProfile, deliveryStaffUpdateProfileImage, getDeliveryStaffById } from "../../../utils/axios/deliveryStaff";
 
-function CustomerEditProfile() {
+function DeliveryStaffEditProfile() {
     const [delivery_staff, setUser] = useState({
         username: '',
         email: '',
@@ -26,20 +26,19 @@ function CustomerEditProfile() {
     const navigate = useNavigate();
 
     const token = localStorage.getItem("token");
-  let deliveryStaffId;
-  let deliveryStaffInfo;
-  if (token) {
-    deliveryStaffInfo = jwtDecode(token);
-    deliveryStaffId = deliveryStaffInfo.sub.substring(2);
-  }
-    
+    let deliveryStaffId;
+    if (token) {
+        const deliveryStaffInfo = jwtDecode(token);
+        deliveryStaffId = deliveryStaffInfo.sub.substring(2);
+    }
+
     useEffect(() => {
         async function fetchUserData() {
-            const DeliveryStaffData = JSON.parse(localStorage.getItem("DeliveryStaffData"));
-            setUser(DeliveryStaffData);
-            const delivery_staff = await getDeliveryStaffById(deliveryStaffId);
-            if(delivery_staff.file) {
-                const imageResponse = await getFileByFileId(delivery_staff.file.id);;
+            const deliveryStaffData = JSON.parse(localStorage.getItem("userData"));
+            setUser(deliveryStaffData);
+            const deliveryStaff = await getDeliveryStaffById(deliveryStaffId);
+            if (deliveryStaff.file) {
+                const imageResponse = await getFileByFileId(deliveryStaff.file.id);;
                 const imgUrl = URL.createObjectURL(imageResponse);
                 setImagePreview(imgUrl);
             }
@@ -174,7 +173,7 @@ function CustomerEditProfile() {
                                         name="phoneNumber"
                                         value={delivery_staff.phoneNumber}
                                         onChange={handleChange}
-                                        type = "email"
+                                        type="email"
                                         fullWidth
                                         required
                                     />
@@ -236,4 +235,4 @@ function CustomerEditProfile() {
     )
 }
 
-export default CustomerEditProfile;
+export default DeliveryStaffEditProfile;

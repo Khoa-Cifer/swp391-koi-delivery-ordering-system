@@ -8,6 +8,7 @@ class KoiDeliveryOrderingSystemApplicationTests {
 
 	@Test
 	void contextLoads() {
+		
 	}
 
 }

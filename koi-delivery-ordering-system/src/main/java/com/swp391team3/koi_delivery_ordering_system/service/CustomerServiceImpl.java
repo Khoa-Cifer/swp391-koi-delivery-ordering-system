@@ -3,7 +3,7 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailService;
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.model.File;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.CustomerUpdateRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.UserUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.EmailDetailDTO;
 import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -82,11 +82,12 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public Customer updateCustomerById(Long id, String email, String phoneNumber) {
+    public Customer updateCustomerById(Long id, String username, String email, String phoneNumber) {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
         if (optionalCustomer.isPresent()) {
             Customer customer = optionalCustomer.get();
             customer.setEmail(email);
+            customer.setUsername(username);
             customer.setPhoneNumber(phoneNumber);
             return customerRepository.save(customer);
         } else {
@@ -95,12 +96,20 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public void deleteCustomerById(Long id) {
-        customerRepository.deleteById(id);
+    public void disableCustomerById(Long id) {
+        Customer customer = customerRepository.findById(id).get();
+        customer.setActiveStatus(false);
+        customerRepository.save(customer);
+    }
+    @Override
+    public void enableCustomerById(Long id) {
+        Customer customer = customerRepository.findById(id).get();
+        customer.setActiveStatus(true);
+        customerRepository.save(customer);
     }
 
     @Override
-    public String customerUpdateProfile(CustomerUpdateRequestDTO request) {
+    public String customerUpdateProfile(UserUpdateRequestDTO request) {
         Optional<Customer> optionalCustomer = customerRepository.findById(request.getId());
 
         Customer customerCheck = customerRepository.findCustomerByEmail(request.getEmail());
@@ -118,6 +127,7 @@ public class CustomerServiceImpl implements ICustomerService {
         }
 
         customer.setEmail(request.getEmail());
+        customer.setUsername(request.getUsername ());
         customer.setPhoneNumber(request.getPhoneNumber());
         customerRepository.save(customer);
         return "Update Info Successfully";
