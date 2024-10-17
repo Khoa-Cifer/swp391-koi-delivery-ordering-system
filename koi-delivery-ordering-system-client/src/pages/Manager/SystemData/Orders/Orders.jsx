@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Table, Typography, Input, Pagination, Row, Col } from "antd";
+import { Table, Typography, Input, Pagination, Row, Col, Select } from "antd";
 import { getAllOrders } from "../../../../utils/axios/order";
 import ToastUtil from "../../../../components/toastContainer";
-
+const { Option } = Select;
 const { Title } = Typography;
 const { Search } = Input;
 
@@ -11,6 +11,7 @@ function Orders() {
   const [filteredOrders, setFilteredOrders] = useState([]); // Filtered orders for display
   const [searchTrackingId, setSearchTrackingId] = useState(""); // For search by order ID
   const [searchOrderName, setSearchOrderName] = useState(""); // For search by customer name
+  const [selectedOrderStatus, setSelectedOrderStatus] = useState(-1);
 
   const statusMapping = {
     0: "Draft",
@@ -24,6 +25,10 @@ function Orders() {
     8: "Failed",
     9: "Aborted by Customer",
   };
+
+  const handleSelectStatusChange = (e) => {
+    setSelectedOrderStatus(e);
+  }
 
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 8;
@@ -153,6 +158,20 @@ function Orders() {
             enterButton="Search"
           />
         </Col>
+        <Col span={8}>
+        <Select
+          placeholder="Filter by order's status"
+          value={selectedOrderStatus}
+          onChange={handleSelectStatusChange}
+          style={{ width: "50%" }}
+          allowClear
+        >
+          <Option value={-1}>Select</Option>
+          <Option value={1}>Option 1</Option>
+          <Option value={2}>Option 2</Option>
+          <Option value={3}>Option 3</Option>
+        </Select>
+      </Col>
       </Row>
 
       <Table
