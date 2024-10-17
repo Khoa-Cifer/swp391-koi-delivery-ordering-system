@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Button, Input, Modal, Popconfirm, Space, Table, Typography } from "antd";
-import { deleteCustomerById as disableCustomerById, enableCustomerById, getAllCustomers, managerEditCustomerProfile } from "../../../../utils/axios/customer";
+import { disableCustomerById as disableCustomerById, enableCustomerById, getAllCustomers, managerEditCustomerProfile } from "../../../../utils/axios/customer";
 import { toast } from "react-toastify";
+import ToastUtil from "../../../../components/toastContainer";
 
 const { Title } = Typography;
 
@@ -27,7 +28,7 @@ function Customer() {
             setCustomerData(fetchedData);
         }
     }
-    
+
     useEffect(() => {
         fetchCustomers();
     }, []);
@@ -95,19 +96,29 @@ function Customer() {
             title: "Action",
             dataIndex: "id",
             key: "id",
-            render: (id) => (
+            render: (id, record) => (
                 <Space size="middle">
                     <Button type="link" onClick={() => handleEdit(id)}>
                         Edit
                     </Button>
                     <Popconfirm
-                        title="Are you sure to delete customer?"
-                        onConfirm={() => handleDisableCustomer(id)} // Pass the customer id to delete
+                        title={
+                            record.activeStatus
+                                ? "Are you sure to disable this customer?"
+                                : "Are you sure to enable this customer?"
+                        }
+                        onConfirm={() => {
+                            if (record.activeStatus) {
+                                handleDisableCustomer(id); // Handle delete if enabled
+                            } else {
+                                handleEnableCustomer(id); // Handle enabling if disabled
+                            }
+                        }}
                         okText="Yes"
                         cancelText="No"
                     >
-                        <Button type="link" danger>
-                            Delete
+                        <Button type="link" danger={record.activeStatus}>
+                            {record.activeStatus ? "Delete" : "Enable"}
                         </Button>
                     </Popconfirm>
                 </Space>
@@ -120,6 +131,7 @@ function Customer() {
             <div className="dashboard-info">
                 <Title level={2} style={{ marginTop: 0 }}>Customer</Title>
             </div>
+            <ToastUtil />
             <Table
                 columns={columns}
                 dataSource={customerData}

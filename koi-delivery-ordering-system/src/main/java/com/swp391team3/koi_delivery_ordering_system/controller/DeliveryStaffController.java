@@ -42,7 +42,8 @@ public class DeliveryStaffController {
     public ResponseEntity<?> getDeliveryStaffById(@PathVariable Long id) {
         return ResponseEntity.ok(deliveryStaffService.getDeliveryStaffById(id));
     }
-    @PostMapping("/disable/{id}")
+
+    @PutMapping("/disable/{id}")
     public ResponseEntity<?> disableDeliveryStaffById(@PathVariable Long id) {
         Optional<DeliveryStaff> deliveryStaff = deliveryStaffService.getDeliveryStaffById(id);
         if (deliveryStaff.isPresent()) {
@@ -53,7 +54,7 @@ public class DeliveryStaffController {
         }
     }
 
-    @PostMapping("/enable/{id}")
+    @PutMapping("/enable/{id}")
     public ResponseEntity<?> enableDeliveryStaffById(@PathVariable Long id) {
         Optional<DeliveryStaff> deliveryStaff = deliveryStaffService.getDeliveryStaffById(id);
         if (deliveryStaff.isPresent()) {

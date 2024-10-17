@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import {  Table,  Modal,  Button,  Input,  Typography,  notification,  Popconfirm,  Space,} from "antd";
-import {  getAllSalesStaff,  createSalesStaff,  managerEditSalesStaffProfile,  deletesalesStaffById,} from "../../../../utils/axios/salesStaff";
+import { Table, Modal, Button, Input, Typography, notification, Popconfirm, Space, } from "antd";
+import { getAllSalesStaff, createSalesStaff, managerEditSalesStaffProfile, disableSalesStaffById, enableSalesStaffById, } from "../../../../utils/axios/salesStaff";
 import "react-toastify/dist/ReactToastify.css";
 import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";
@@ -70,14 +70,25 @@ function SalesStaff() {
     setIsCreateModalOpen(true);
   }
 
-  const handleDelete = async (id) => {
+  const handleDisableSalesStaff = async (id) => {
     try {
-      await deletesalesStaffById(id); // Call the API to delete the staff
-      toast("Customer deleted successfully"); // Notify the user
+      await disableSalesStaffById(id); // Call the API to delete the staff
+      toast("Sales Staff disabled successfully"); // Notify the user
       await fetchSalesStaffs(); // Refresh the list after deletion
     } catch (err) {
       console.error(err);
-      toast.error("Failed to delete customer"); // Notify if there's an error
+      toast.error("Failed to disable customer"); // Notify if there's an error
+    }
+  };
+
+  const handleEnableSalesStaff = async (id) => {
+    try {
+      await enableSalesStaffById(id); // Call the API to delete the staff
+      toast("Sales Staff enabled successfully"); // Notify the user
+      await fetchSalesStaffs(); // Refresh the list after deletion
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to enable customer"); // Notify if there's an error
     }
   };
 
@@ -106,19 +117,29 @@ function SalesStaff() {
       title: "Action",
       dataIndex: "id",
       key: "id",
-      render: (id) => (
+      render: (id, record) => (
         <Space size="middle">
           <Button type="link" onClick={() => handleEdit(id)}>
             Edit
           </Button>
           <Popconfirm
-            title="Are you sure to delete sale staff?"
-            onConfirm={() => handleDelete(id)} // Pass the sale staff id to delete
+            title={
+              record.activeStatus
+                ? "Are you sure to disable this sale staff?"
+                : "Are you sure to enable this sale staff?"
+            }
+            onConfirm={() => {
+              if (record.activeStatus) {
+                handleDisableSalesStaff(id); // Handle delete if enabled
+              } else {
+                handleEnableSalesStaff(id); // Handle enabling if disabled
+              }
+            }}
             okText="Yes"
             cancelText="No"
           >
-            <Button type="link" danger>
-              Delete
+            <Button type="link" danger={record.activeStatus}>
+              {record.activeStatus ? "Delete" : "Enable"}
             </Button>
           </Popconfirm>
         </Space>

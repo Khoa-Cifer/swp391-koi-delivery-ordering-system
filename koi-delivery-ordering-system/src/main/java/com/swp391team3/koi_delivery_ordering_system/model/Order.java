@@ -65,8 +65,4 @@ public class Order {
 
     @OneToMany(mappedBy = "order")
     private Set<Fish> fishes;
-
-    @ManyToOne
-    @JoinColumn(name = "delivering_type_id")
-    private DeliveringType deliveringType;
 }
