@@ -63,7 +63,7 @@ public class SalesStaffController {
             @RequestParam("file") MultipartFile file) throws IOException {
         return ResponseEntity.ok(salesStaffService.salesStaffUpdateAvatar(id, file));
     }
-    @PostMapping("/disable/{id}")
+    @PutMapping("/disable/{id}")
     public ResponseEntity<?> disableSalesStaffById(@PathVariable Long id) {
         Optional<SalesStaff> salesStaff = salesStaffService.getSalesStaffById(id);
         if (salesStaff.isPresent()) {
@@ -74,7 +74,7 @@ public class SalesStaffController {
         }
     }
 
-    @PostMapping("/enable/{id}")
+    @PutMapping("/enable/{id}")
     public ResponseEntity<?> enableSalesStaffSalesStaffById(@PathVariable Long id) {
         Optional<SalesStaff> salesStaff = salesStaffService.getSalesStaffById(id);
         if (salesStaff.isPresent()) {

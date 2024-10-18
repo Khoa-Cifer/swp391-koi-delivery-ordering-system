@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   Box,
   Paper,
@@ -14,7 +15,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
-  getOrdersByStatus,
+  getOrdersByStatusAndCustomerId,
   updateOrderStatus,
 } from "../../../../utils/axios/order";
 import dateTimeConvert from "../../../../components/utils";
@@ -24,6 +25,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import ToastUtil from "../../../../components/toastContainer";
 
 const commonStyles = {
   bgcolor: "background.paper",
@@ -40,15 +42,14 @@ const OrderInfoHeader = styled(Typography)(() => ({
 
 const SearchBox = styled(Box)(() => ({
   display: "flex",
-  gap: "30px",
-  justifyContent: "flex-start", // Ensure the inputs stay aligned to the left
+  gap: "30px"
 }));
 
-const searchInputStyle = {
-  width: "100px", // Adjust width for smaller search inputs
-  boxSizing: "border-box",
-  padding: "8px", // Add some padding to ensure usability
-};
+// const searchInputStyle = {
+//   width: "100px", // Adjust width for smaller search inputs
+//   boxSizing: "border-box",
+//   padding: "8px", // Add some padding to ensure usability
+// };
 
 const modalStyle = {
   position: "absolute",
@@ -62,7 +63,7 @@ const modalStyle = {
   borderRadius: 2,
 };
 
-function PostedOrder() {
+function PostedOrder({ customerId }) {
   const [orders, setOrders] = useState();
   const [filteredOrders, setFilteredOrders] = useState([]); // Filtered orders for display
   const [expandedOrderId, setExpandedOrderId] = useState(null); // To track expanded orders
@@ -104,7 +105,7 @@ function PostedOrder() {
 
   const postedOrderStatus = 1;
   async function fetchPostedOrder() {
-    const response = await getOrdersByStatus(postedOrderStatus);
+    const response = await getOrdersByStatusAndCustomerId(customerId, postedOrderStatus);
     if (response) {
       setOrders(response);
       setFilteredOrders(response);
@@ -193,10 +194,12 @@ function PostedOrder() {
 
       {orders && orders.length > 0 ? (
         <>
-          <SearchBox>
+          <SearchBox >
             <div className="form-group">
               <input
-                style={searchInputStyle}
+                style={{
+                  boxSizing: "border-box",
+                }}
                 placeholder="Tracking ID"
                 type="text"
                 name="text"
@@ -208,7 +211,9 @@ function PostedOrder() {
 
             <div className="form-group">
               <input
-                style={searchInputStyle}
+                style={{
+                  boxSizing: "border-box",
+                }}
                 placeholder="Name"
                 type="text"
                 name="text"
@@ -217,7 +222,7 @@ function PostedOrder() {
                 className="form-input"
               />
             </div>
-          </SearchBox>
+          </SearchBox >
 
           {filteredOrders &&
             filteredOrders.map &&
@@ -358,6 +363,7 @@ function PostedOrder() {
       ) : (
         <Typography>No order found</Typography>
       )}
+      <ToastUtil />
     </div>
   );
 }

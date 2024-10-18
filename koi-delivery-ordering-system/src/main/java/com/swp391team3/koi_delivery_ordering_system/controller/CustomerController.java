@@ -61,7 +61,7 @@ public class CustomerController {
         }
     }
 
-    @PostMapping("/disable/{id}")
+    @PutMapping("/disable/{id}")
     public ResponseEntity<?> disableCustomerById(@PathVariable Long id) {
         Optional<Customer> customer = customerService.getCustomerById(id);
         if (customer.isPresent()) {
@@ -72,7 +72,7 @@ public class CustomerController {
         }
     }
 
-    @PostMapping("/enable/{id}")
+    @PutMapping("/enable/{id}")
     public ResponseEntity<?> enableCustomerById(@PathVariable Long id) {
         Optional<Customer> customer = customerService.getCustomerById(id);
         if (customer.isPresent()) {

@@ -269,6 +269,12 @@ public class OrderServiceImpl implements IOrderService {
         return orders;
     }
 
+    @Override
+    public List<Order> getOrderByStatusFilteredByCustomer(OrderListFilteredRequestDTO request) {
+        List<Order> orders = orderRepository.findByOrderStatusAndCustomerId(request.getCustomerId(), request.getStatus());
+        return orders;
+    }
+
     private double calculateOrderPriceUtils(Long id) {
         List<Fish> fishList = fishService.getFishesByOrderId(id);
         Optional<Order> order = getOrderById(id);

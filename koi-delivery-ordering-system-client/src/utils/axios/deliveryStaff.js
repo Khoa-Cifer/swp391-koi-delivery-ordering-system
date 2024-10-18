@@ -98,9 +98,27 @@ export async function getDeliveryStaffById(id) {
     }
 }
 
-export async function deleteDeliveryStaffById(id) {
+// export async function deleteDeliveryStaffById(id) {
+//     try {
+//         const response = await axiosClient.delete(`deliveryStaff/deleteDeliveryStaffById/${id}`);
+//         return response.data;
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
+
+export async function disableDeliveryStaffById(id) {
     try {
-        const response = await axiosClient.delete(`deliveryStaff/deleteDeliveryStaffById/${id}`);
+        const response = await axiosClient.put(`deliveryStaff/disable/${id}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function enableDeliveryStaffById(id) {
+    try {
+        const response = await axiosClient.put(`deliveryStaff/enable/${id}`);
         return response.data;
     } catch (error) {
         console.log(error);
