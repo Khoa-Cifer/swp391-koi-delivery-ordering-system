@@ -74,9 +74,27 @@ export async function managerEditSalesStaffProfile(id, username, email, phoneNum
     }
 }
 
-export async function deletesalesStaffById(id) {
+// export async function deletesalesStaffById(id) {
+//     try {
+//         const response = await axiosClient.delete(`salesStaff/${id}`);
+//         return response.data;
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
+
+export async function disableSalesStaffById(id) {
     try {
-        const response = await axiosClient.delete(`salesStaff/${id}`);
+        const response = await axiosClient.put(`salesStaff/disable/${id}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function enableSalesStaffById(id) {
+    try {
+        const response = await axiosClient.put(`salesStaff/enable/${id}`);
         return response.data;
     } catch (error) {
         console.log(error);

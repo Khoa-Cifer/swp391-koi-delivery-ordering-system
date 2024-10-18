@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Input, Modal, Table, Typography, Space, Popconfirm, notification } from "antd";
-import { createDeliveryStaff, deleteDeliveryStaffById, getAllDeliveryStaff, managerEditDeliveryStaffProfile } from "../../../../utils/axios/deliveryStaff";
+import { createDeliveryStaff, disableDeliveryStaffById, enableDeliveryStaffById, getAllDeliveryStaff, managerEditDeliveryStaffProfile } from "../../../../utils/axios/deliveryStaff";
 import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";
 
@@ -57,14 +57,25 @@ function DeliveryStaff() {
         setEditModalOpen(true);
     }
 
-    const handleDelete = async (id) => {
+    const handleDisableDeliveryStaff = async (id) => {
         try {
-            await deleteDeliveryStaffById(id); // Call the API to delete the staff
-            toast("Staff deleted successfully"); // Notify the user
+            await disableDeliveryStaffById(id); // Call the API to delete the staff
+            toast("Delivery Staff disabled successfully"); // Notify the user
             await fetchDeliveryStaffs(); // Refresh the list after deletion
         } catch (err) {
             console.error(err);
-            toast.error("Failed to delete staff"); // Notify if there's an error
+            toast.error("Failed to disable customer"); // Notify if there's an error
+        }
+    };
+
+    const handleEnableDeliveryStaff = async (id) => {
+        try {
+            await enableDeliveryStaffById(id); // Call the API to delete the staff
+            toast("Delivery Staff enabled successfully"); // Notify the user
+            await fetchDeliveryStaffs(); // Refresh the list after deletion
+        } catch (err) {
+            console.error(err);
+            toast.error("Failed to enable customer"); // Notify if there's an error
         }
     };
 
@@ -108,19 +119,29 @@ function DeliveryStaff() {
             title: "Action",
             dataIndex: "id",
             key: "id",
-            render: (id) => (
+            render: (id, record) => (
                 <Space size="middle">
                     <Button type="link" onClick={() => handleEdit(id)}>
                         Edit
                     </Button>
                     <Popconfirm
-                        title="Are you sure to delete this staff?"
-                        onConfirm={() => handleDelete(id)} // Pass the staff id to delete
+                        title={
+                            record.activeStatus
+                                ? "Are you sure to disable this delivery staff?"
+                                : "Are you sure to enable this delivery staff?"
+                        }
+                        onConfirm={() => {
+                            if (record.activeStatus) {
+                                handleDisableDeliveryStaff(id); // Handle delete if enabled
+                            } else {
+                                handleEnableDeliveryStaff(id); // Handle enabling if disabled
+                            }
+                        }}
                         okText="Yes"
                         cancelText="No"
                     >
-                        <Button type="link" danger>
-                            Delete
+                        <Button type="link" danger={record.activeStatus}>
+                            {record.activeStatus ? "Delete" : "Enable"}
                         </Button>
                     </Popconfirm>
                 </Space>
