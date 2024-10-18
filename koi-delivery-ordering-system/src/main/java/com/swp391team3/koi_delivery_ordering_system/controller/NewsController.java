@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -37,9 +38,24 @@ public class NewsController {
                                         @RequestParam(name = "title") String title,
                                         @RequestParam(name = "description") String description,
                                         @RequestParam(name = "image") MultipartFile file) {
-        System.out.println("Desc is" + description);
         boolean news = newsService.createNews(title, description, salesStaffId, file);
 
         return ResponseEntity.ok(news);
+    }
+
+    @PutMapping(value = "/update-news", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateNews(@RequestParam(name = "newsId") Long newsId,
+                                        @RequestParam(name = "salesStaffId") Long salesStaffId,
+                                        @RequestParam(name = "title") String title,
+                                        @RequestParam(name = "description") String description,
+                                        @RequestParam(name = "image") MultipartFile file) throws IOException {
+        boolean news = newsService.updateNews(newsId, salesStaffId, title, description, file);
+
+        return ResponseEntity.ok(news);
+    }
+
+    @GetMapping("/get-news-by-sales-staff/{salesStaffId}")
+    public ResponseEntity<?> getNewsBySalesStaffId(@PathVariable Long salesStaffId) {
+        return ResponseEntity.ok(newsService.getNewsCreatedBySalesStaff(salesStaffId));
     }
 }
