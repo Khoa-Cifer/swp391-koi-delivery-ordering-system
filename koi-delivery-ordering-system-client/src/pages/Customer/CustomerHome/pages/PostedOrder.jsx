@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
-  getOrderByStatusAndCustomerId,
+  getOrdersByStatusAndCustomerId,
   updateOrderStatus,
 } from "../../../../utils/axios/order";
 import dateTimeConvert from "../../../../components/utils";
@@ -96,7 +96,7 @@ function PostedOrder({ customerId }) {
 
   const postedOrderStatus = 1;
   async function fetchPostedOrder() {
-    const response = await getOrderByStatusAndCustomerId(customerId, postedOrderStatus);
+    const response = await getOrdersByStatusAndCustomerId(customerId, postedOrderStatus);
     if (response) {
       setOrders(response);
       setFilteredOrders(response);

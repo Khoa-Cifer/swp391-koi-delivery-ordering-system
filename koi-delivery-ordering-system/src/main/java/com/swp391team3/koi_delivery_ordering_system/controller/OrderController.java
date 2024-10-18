@@ -71,8 +71,12 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/get-order-filtered")
-    public ResponseEntity<?> getOrdersFilteredForCustomer(@RequestBody OrderListFilteredRequestDTO request) {
+    @GetMapping("/get-orders-filtered")
+    public ResponseEntity<?> getOrdersFilteredForCustomer(@RequestParam Long customerId,
+                                                          @RequestParam int status) {
+        OrderListFilteredRequestDTO request = new OrderListFilteredRequestDTO();
+        request.setCustomerId(customerId);
+        request.setStatus(status);
         List<Order> orders = orderService.getOrderByStatusFilteredByCustomer(request);
         return ResponseEntity.ok(orders);
     }

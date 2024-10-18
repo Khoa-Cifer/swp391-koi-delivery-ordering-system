@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Box, Button, Modal, Paper, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getOrderByStatusAndCustomerId, updateOrderStatus } from "../../../../utils/axios/order";
+import { getOrdersByStatusAndCustomerId, updateOrderStatus } from "../../../../utils/axios/order";
 import dateTimeConvert from "../../../../components/utils";
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
@@ -97,7 +97,7 @@ function DraftOrder({ customerId }) {
 
     const draftOrderStatus = 0;
     async function fetchDraftOrder() {
-        const response = await getOrderByStatusAndCustomerId(customerId, draftOrderStatus);
+        const response = await getOrdersByStatusAndCustomerId(customerId, draftOrderStatus);
         if (response) {
             setOrders(response);
             setFilteredOrders(response);

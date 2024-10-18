@@ -74,10 +74,12 @@ export async function getOrdersByStatus(orderStatus) {
   }
 }
 
-export async function getOrderByStatusAndCustomerId(customerId, status) {
+export async function getOrdersByStatusAndCustomerId(customerId, status) {
   try {
-    const response = await axiosClient.get(`orders/get-order-filtered`, {
-      customerId, status
+    const response = await axiosClient.get(`orders/get-orders-filtered`, {
+      params: {
+        customerId, status
+      }
     });
     return response.data;
   } catch (error) {
