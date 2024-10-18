@@ -1,10 +1,10 @@
-import { Box,   Paper,  styled,  Table,  TableBody,  TableCell,  TableContainer,  TableHead,  TableRow,  Typography,} from "@mui/material";
+/* eslint-disable react/prop-types */
+import { Box, Paper, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getOrdersByStatus } from "../../../../utils/axios/order";
+import { getOrderByStatusAndCustomerId } from "../../../../utils/axios/order";
 import dateTimeConvert from "../../../../components/utils";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import ToastUtil from "../../../../components/toastContainer";
 
 const commonStyles = {
   bgcolor: "background.paper",
@@ -24,7 +24,7 @@ const SearchBox = styled(Box)(() => ({
   gap: "30px",
 }));
 
-function CompletedOrder() {
+function CompletedOrder({ customerId }) {
   const [orders, setOrders] = useState();
   const [expandedOrderId, setExpandedOrderId] = useState(null); // To track expanded orders
 
@@ -40,7 +40,7 @@ function CompletedOrder() {
   useEffect(() => {
     const completedOrderStatus = 7;
     async function fetchGettingOrder() {
-      const response = await getOrdersByStatus(completedOrderStatus);
+      const response = await getOrderByStatusAndCustomerId(customerId, completedOrderStatus);
       if (response) {
         setOrders(response);
         setFilteredOrders(response);
@@ -187,31 +187,31 @@ function CompletedOrder() {
                         </TableHead>
                         <TableBody>
                           {filteredOrders.fishes && filteredOrders.fishes.map && filteredOrders.fishes.map((fish) => (
-                              <TableRow key={fish.id}>
-                                <TableCell>{fish.id}</TableCell>
-                                <TableCell>{fish.name}</TableCell>
-                                <TableCell>{fish.price}</TableCell>
-                                <TableCell>{fish.size}</TableCell>
-                                {fish.status === 0 && (
-                                  <TableCell>Unknown</TableCell>
-                                )}
-                                {fish.status === 1 && (
-                                  <TableCell>Good</TableCell>
-                                )}
-                                {fish.status === 2 && (
-                                  <TableCell>Sick</TableCell>
-                                )}
-                                {fish.status === 3 && (
-                                  <TableCell>Dead</TableCell>
-                                )}
-                                <TableCell>{fish.weight}</TableCell>
-                                <TableCell>
-                                  <div className="button-icon">
-                                    <MoreHorizIcon />
-                                  </div>
-                                </TableCell>
-                              </TableRow>
-                            ))}
+                            <TableRow key={fish.id}>
+                              <TableCell>{fish.id}</TableCell>
+                              <TableCell>{fish.name}</TableCell>
+                              <TableCell>{fish.price}</TableCell>
+                              <TableCell>{fish.size}</TableCell>
+                              {fish.status === 0 && (
+                                <TableCell>Unknown</TableCell>
+                              )}
+                              {fish.status === 1 && (
+                                <TableCell>Good</TableCell>
+                              )}
+                              {fish.status === 2 && (
+                                <TableCell>Sick</TableCell>
+                              )}
+                              {fish.status === 3 && (
+                                <TableCell>Dead</TableCell>
+                              )}
+                              <TableCell>{fish.weight}</TableCell>
+                              <TableCell>
+                                <div className="button-icon">
+                                  <MoreHorizIcon />
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))}
                         </TableBody>
                       </Table>
                     </TableContainer>
@@ -223,7 +223,6 @@ function CompletedOrder() {
       ) : (
         <Typography>No order found</Typography>
       )}
-      <ToastUtil />
     </div>
   );
 }

@@ -1,10 +1,10 @@
+/* eslint-disable react/prop-types */
 import { Box, Paper, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getOrdersByStatus } from "../../../../utils/axios/order";
+import { getOrderByStatusAndCustomerId } from "../../../../utils/axios/order";
 import dateTimeConvert from "../../../../components/utils";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import ToastUtil from "../../../../components/toastContainer";
 
 const commonStyles = {
   bgcolor: "background.paper",
@@ -20,11 +20,11 @@ const OrderInfoHeader = styled(Typography)(() => ({
 }));
 
 const SearchBox = styled(Box)(() => ({
-    display: "flex",
-    gap: "30px"
+  display: "flex",
+  gap: "30px"
 }));
 
-function DeliveringOrder() {
+function DeliveringOrder({ customerId }) {
   const [orders, setOrders] = useState();
   const [expandedOrderId, setExpandedOrderId] = useState(null); // To track expanded orders
   const [filteredOrders, setFilteredOrders] = useState([]); // Filtered orders for display
@@ -39,7 +39,7 @@ function DeliveringOrder() {
   useEffect(() => {
     const deliveringOrderStatus = 6;
     async function fetchGettingOrder() {
-      const response = await getOrdersByStatus(deliveringOrderStatus);
+      const response = await getOrderByStatusAndCustomerId(customerId, deliveringOrderStatus);
       if (response) {
         setOrders(response);
         setFilteredOrders(response);
@@ -108,121 +108,120 @@ function DeliveringOrder() {
           </SearchBox >
 
           {filteredOrders && filteredOrders.map && filteredOrders.map((order) => (
-              <>
-                <Box
-                  sx={{ ...commonStyles, borderRadius: "16px" }}
-                  className="order-box"
-                  key={order.id}
-                >
-                  <div className="order-main-info">
-                    <div className="order-text-info">
-                      <div>
-                        <OrderInfoHeader>Name</OrderInfoHeader>
-                        <Typography>{order.name}</Typography>
-                      </div>
-
-                      <div>
-                        <OrderInfoHeader>Created Date</OrderInfoHeader>
-                        <Typography>
-                          {dateTimeConvert(order.createdDate)}
-                        </Typography>
-                      </div>
-
-                      <div>
-                        <OrderInfoHeader>Expected Finish Date</OrderInfoHeader>
-                        <Typography>
-                          {dateTimeConvert(order.expectedFinishDate)}
-                        </Typography>
-                      </div>
+            <>
+              <Box
+                sx={{ ...commonStyles, borderRadius: "16px" }}
+                className="order-box"
+                key={order.id}
+              >
+                <div className="order-main-info">
+                  <div className="order-text-info">
+                    <div>
+                      <OrderInfoHeader>Name</OrderInfoHeader>
+                      <Typography>{order.name}</Typography>
                     </div>
 
                     <div>
-                      <div>
-                        <OrderInfoHeader>Sender Address</OrderInfoHeader>
-                        <Typography>{order.senderAddress}</Typography>
-                      </div>
-                      <div>
-                        <OrderInfoHeader>Receiver Address</OrderInfoHeader>
-                        <Typography>{order.destinationAddress}</Typography>
-                      </div>
+                      <OrderInfoHeader>Created Date</OrderInfoHeader>
+                      <Typography>
+                        {dateTimeConvert(order.createdDate)}
+                      </Typography>
                     </div>
 
-                    <div className="order-text-info">
-                      <div>
-                        <OrderInfoHeader>Price</OrderInfoHeader>
-                        <Typography>{Math.floor(order.price)}</Typography>
-                      </div>
-                      <div>
-                        <OrderInfoHeader>Tracking Id</OrderInfoHeader>
-                        <Typography>{order.trackingId}</Typography>
-                      </div>
-
-                      <div className="icon-group">
-                        <div
-                          className="button-icon"
-                          onClick={() => handleClick(order.id)}
-                        >
-                          <MenuOpenIcon />
-                        </div>
-                      </div>
+                    <div>
+                      <OrderInfoHeader>Expected Finish Date</OrderInfoHeader>
+                      <Typography>
+                        {dateTimeConvert(order.expectedFinishDate)}
+                      </Typography>
                     </div>
                   </div>
 
-                  {expandedOrderId === order.id && (
-                    <TableContainer component={Paper} sx={{ mt: 2 }}>
-                      <Table aria-label="order-details">
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Fish Id</TableCell>
-                            <TableCell>Name</TableCell>
-                            <TableCell>Price</TableCell>
-                            <TableCell>Size</TableCell>
-                            <TableCell>Status</TableCell>
-                            <TableCell>Weight</TableCell>
-                            <TableCell>Action</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {order.fishes &&
-                            order.fishes.map &&
-                            order.fishes.map((fish) => (
-                              <TableRow key={fish.id}>
-                                <TableCell>{fish.id}</TableCell>
-                                <TableCell>{fish.name}</TableCell>
-                                <TableCell>{fish.price}</TableCell>
-                                <TableCell>{fish.size}</TableCell>
-                                {fish.status === 0 && (
-                                  <TableCell>Unknown</TableCell>
-                                )}
-                                {fish.status === 1 && (
-                                  <TableCell>Good</TableCell>
-                                )}
-                                {fish.status === 2 && (
-                                  <TableCell>Sick</TableCell>
-                                )}
-                                {fish.status === 3 && (
-                                  <TableCell>Dead</TableCell>
-                                )}
-                                <TableCell>{fish.weight}</TableCell>
-                                <TableCell>
-                                  <div className="button-icon">
-                                    <MoreHorizIcon />
-                                  </div>
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  )}
-                </Box>
-              </>
-            ))}
+                  <div>
+                    <div>
+                      <OrderInfoHeader>Sender Address</OrderInfoHeader>
+                      <Typography>{order.senderAddress}</Typography>
+                    </div>
+                    <div>
+                      <OrderInfoHeader>Receiver Address</OrderInfoHeader>
+                      <Typography>{order.destinationAddress}</Typography>
+                    </div>
+                  </div>
+
+                  <div className="order-text-info">
+                    <div>
+                      <OrderInfoHeader>Price</OrderInfoHeader>
+                      <Typography>{Math.floor(order.price)}</Typography>
+                    </div>
+                    <div>
+                      <OrderInfoHeader>Tracking Id</OrderInfoHeader>
+                      <Typography>{order.trackingId}</Typography>
+                    </div>
+
+                    <div className="icon-group">
+                      <div
+                        className="button-icon"
+                        onClick={() => handleClick(order.id)}
+                      >
+                        <MenuOpenIcon />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {expandedOrderId === order.id && (
+                  <TableContainer component={Paper} sx={{ mt: 2 }}>
+                    <Table aria-label="order-details">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Fish Id</TableCell>
+                          <TableCell>Name</TableCell>
+                          <TableCell>Price</TableCell>
+                          <TableCell>Size</TableCell>
+                          <TableCell>Status</TableCell>
+                          <TableCell>Weight</TableCell>
+                          <TableCell>Action</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {order.fishes &&
+                          order.fishes.map &&
+                          order.fishes.map((fish) => (
+                            <TableRow key={fish.id}>
+                              <TableCell>{fish.id}</TableCell>
+                              <TableCell>{fish.name}</TableCell>
+                              <TableCell>{fish.price}</TableCell>
+                              <TableCell>{fish.size}</TableCell>
+                              {fish.status === 0 && (
+                                <TableCell>Unknown</TableCell>
+                              )}
+                              {fish.status === 1 && (
+                                <TableCell>Good</TableCell>
+                              )}
+                              {fish.status === 2 && (
+                                <TableCell>Sick</TableCell>
+                              )}
+                              {fish.status === 3 && (
+                                <TableCell>Dead</TableCell>
+                              )}
+                              <TableCell>{fish.weight}</TableCell>
+                              <TableCell>
+                                <div className="button-icon">
+                                  <MoreHorizIcon />
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                )}
+              </Box>
+            </>
+          ))}
         </>
       ) : (
         <Typography>No order found</Typography>
       )}
-      <ToastUtil />
     </div>
   );
 }

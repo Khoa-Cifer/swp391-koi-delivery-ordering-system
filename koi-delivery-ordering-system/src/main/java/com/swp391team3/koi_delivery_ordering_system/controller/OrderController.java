@@ -3,6 +3,7 @@ package com.swp391team3.koi_delivery_ordering_system.controller;
 import com.swp391team3.koi_delivery_ordering_system.model.Order;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.FinishOrderUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderListFilteredRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderSalesStaffCheckingRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.responseDto.UpdateOrderResponseDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
@@ -68,6 +69,12 @@ public class OrderController {
         } else {
             return ResponseEntity.ok(orders);
         }
+    }
+
+    @GetMapping("/get-order-filtered")
+    public ResponseEntity<?> getOrdersFilteredForCustomer(@RequestBody OrderListFilteredRequestDTO request) {
+        List<Order> orders = orderService.getOrderByStatusFilteredByCustomer(request);
+        return ResponseEntity.ok(orders);
     }
 
     @PostMapping("/calculatePrice/{id}")

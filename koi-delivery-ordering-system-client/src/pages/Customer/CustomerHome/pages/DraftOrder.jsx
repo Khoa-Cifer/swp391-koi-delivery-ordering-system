@@ -1,6 +1,7 @@
+/* eslint-disable react/prop-types */
 import { Box, Button, Modal, Paper, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getOrdersByStatus, updateOrderStatus } from "../../../../utils/axios/order";
+import { getOrderByStatusAndCustomerId, updateOrderStatus } from "../../../../utils/axios/order";
 import dateTimeConvert from "../../../../components/utils";
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
@@ -40,7 +41,7 @@ const modalStyle = {
     borderRadius: 2,
 };
 
-function DraftOrder() {
+function DraftOrder({ customerId }) {
     const [orders, setOrders] = useState();
     const [expandedOrderId, setExpandedOrderId] = useState(null); // To track expanded orders
     const [filteredOrders, setFilteredOrders] = useState([]); // Filtered orders for display
@@ -96,7 +97,7 @@ function DraftOrder() {
 
     const draftOrderStatus = 0;
     async function fetchDraftOrder() {
-        const response = await getOrdersByStatus(draftOrderStatus);
+        const response = await getOrderByStatusAndCustomerId(customerId, draftOrderStatus);
         if (response) {
             setOrders(response);
             setFilteredOrders(response);
