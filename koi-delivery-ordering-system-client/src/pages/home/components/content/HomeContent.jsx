@@ -3,11 +3,16 @@ import { useEffect, useState } from "react";
 import { getAllNews } from "../../../../utils/axios/news";
 import { getFileByFileId } from "../../../../utils/axios/file";
 import dateTimeConvert from "../../../../components/utils";
+import Paragraph from "antd/es/typography/Paragraph";
 
 function HomeContent() {
+  const [expanded, setExpanded] = useState(false);
+  const handleToggle = () => {
+    setExpanded(!expanded);
+  };
   const [content, setContent] = useState([]);
   const [files, setFiles] = useState("");
-  
+  const [visibleCount, setVisibleCount] = useState(4);
   useEffect(() => {
     const fetchContent = async () => {
       try {
@@ -18,18 +23,23 @@ function HomeContent() {
       }
 
       if (content && content.length > 0) {
-        const fishFilesPromises = content.map(async file => {
+        const fishFilesPromises = content.map(async (file) => {
           const response = await getFileByFileId(file.file.id);
           return URL.createObjectURL(response); // Create Object URL from response blob
         });
 
         const fishFilesArray = await Promise.all(fishFilesPromises);
         setFiles(fishFilesArray);
+        console.log(files);
       }
     };
 
     fetchContent();
   }, []);
+
+  const handleViewMore = () => {
+    setVisibleCount((prevCount) => prevCount + 4); // Show 3 more items each time
+  };
 
   const newsData = [
     {
@@ -266,31 +276,70 @@ function HomeContent() {
           </p>
           <div className="news-container">
             <div className="news-grid">
-              {content.map((news, index) => {
-                if (index >= 3) return null;
-                return (
+              {content.slice(0, visibleCount).map(
+                (
+                  news,
+                  index // Use visibleCount to determine how many to show
+                ) => (
                   <div key={index} className="news-item">
-
                     {files[index] && (
-                      <img alt={news.title} src={files[index]} width="100%" />
+                      <img
+                        alt={news.title}
+                        src={files[index]}
+                        width="100%"
+                        height="230px"
+                      />
                     )}
 
                     <div className="news-content">
-                      <h3 className="news-title">{news.title}</h3>
-                      {/* <p className="news-description" dangerouslySetInnerHTML={{ __html: news.description }} /> */}
+                      <div className="news-content">
+                        <Paragraph
+                          ellipsis={
+                            !expanded
+                              ? {
+                                  rows: 3,
+                                  expandable: true,
+                                  symbol: "Xem thêm",
+                                }
+                              : false
+                          }
+                        >
+                          <div
+                            className="news-description"
+                            dangerouslySetInnerHTML={{
+                              __html: news.description,
+                            }}
+                          />
+                        </Paragraph>
+                        {expanded && (
+                          <a
+                            onClick={handleToggle}
+                            style={{ color: "#1890ff", cursor: "pointer" }}
+                          >
+                            Ẩn bớt
+                          </a>
+                        )}
+                      </div>
+
                       <div className="news-footer">
-                        <span className="news-author">{news.createdBy.username}</span>
-                        <span className="news-date">{dateTimeConvert(news.createdDate)}</span>
+                        <span className="news-author">
+                          {news.createdBy.username}
+                        </span>
+                        <span className="news-date">
+                          {dateTimeConvert(news.createdDate)}
+                        </span>
                       </div>
                     </div>
                   </div>
                 )
-              })}
+              )}
             </div>
 
-            <div className="view-more">
-              <a href="#">View more →</a>
-            </div>
+            {visibleCount < content.length && ( // Only show "View more" if there are more items to show
+              <div className="view-more">
+                <button onClick={handleViewMore}>View more →</button>
+              </div>
+            )}
           </div>
         </div>
       </div>

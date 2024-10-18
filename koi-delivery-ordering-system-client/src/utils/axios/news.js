@@ -33,3 +33,13 @@ export async function getAllNews() {
     console.log(error);
   }
 }
+
+
+export async function deleteNewsById(newId) {
+  try {
+      const response = await axiosClient.delete(`news/deleteNewsById/${newId}`);
+      return response.data;
+  } catch (error) {
+      console.log(error);
+  }
+}

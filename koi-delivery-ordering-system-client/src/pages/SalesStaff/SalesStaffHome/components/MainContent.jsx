@@ -3,66 +3,60 @@ import { useEffect, useState } from "react";
 import { getOrdersByStatus } from "../../../../utils/axios/order";
 import dateTimeConvert from "../../../../components/utils";
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
-import { getAllNews } from "../../../../utils/axios/news";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { deleteNewsById, getAllNews } from "../../../../utils/axios/news";
 import { getFileByFileId } from "../../../../utils/axios/file";
+import ToastUtil from "../../../../components/toastContainer";
+import { toast } from "react-toastify";
+import Paragraph from "antd/es/typography/Paragraph";
 
 function MainContent() {
   const [postedOrder, setPostedOrder] = useState([]);
   const [receivedOrder, setReceivedOrder] = useState([]);
   const [news, setNews] = useState([]);
-  const [visibleNewsCount, setVisibleNewsCount] = useState(3);
+  const [visibleNewsCount, setVisibleNewsCount] = useState(4);
+
+  const [openDialog, setOpenDialog] = useState(false);  // State to control dialog visibility
+  const [selectedNewsId, setSelectedNewsId] = useState(null);  // State to track which news to delete
 
   const navigate = useNavigate();
 
   const postedStatus = 1; // Status for posted orders
   const receivedStatus = 4; // Status for received orders
 
-  // Fetch news data
-  useEffect(() => {
-    async function fetchNewsData() {
-      try {
-        const response = await getAllNews();
-        const sortedNews = response.sort(
-          (a, b) => new Date(b.date) - new Date(a.date)
-        );
+  // Fetch news data with image
+  const fetchNews = async () => {
+    try {
+      const response = await getAllNews();
 
-        // Fetch file data for each news item, checking for Blob URLs
-        const updatedNews = await Promise.all(
-          sortedNews.map(async (newsItem) => {
-            if (newsItem.fileId) {
-              const fileData = await getFileByFileId(newsItem.fileId);
+      if (response && response.length > 0) {
+        const fileIds = response.map((newsItem) => newsItem.file.id);
 
-              // Check if the filePath is a Blob URL and fetch the file content
-              const fileURL = fileData.filePath;
-              if (fileURL.startsWith("blob:")) {
-                const fileBlob = await fetchBlobFromUrl(fileURL);
-                const objectURL = URL.createObjectURL(fileBlob); // Create object URL for Blob
-                return { ...newsItem, filePath: objectURL }; // Attach the Blob URL
-              }
-              return { ...newsItem, filePath: fileURL }; // Otherwise, just return the file path
-            }
-            return newsItem;
-          })
-        );
+        if (fileIds.length > 0) {
+          const filePromises = fileIds.map(async (fileId) => {
+            const fileResponse = await getFileByFileId(fileId);
+            return URL.createObjectURL(fileResponse);
+          });
 
-        setNews(updatedNews);
-      } catch (error) {
-        console.error("Error fetching news data:", error);
+          const imageUrls = await Promise.all(filePromises);
+
+          const newsWithImages = response.map((newsItem, index) => ({
+            ...newsItem,
+            imageUrl: imageUrls[index],
+          }));
+
+          setNews(newsWithImages);
+        }
       }
+    } catch (error) {
+      console.error("Error fetching news data:", error);
     }
-
-    fetchNewsData();
-  }, []);
-
-  // Utility function to fetch Blob from Blob URL
-  const fetchBlobFromUrl = async (blobUrl) => {
-    const response = await fetch(blobUrl);
-    const blob = await response.blob();
-    return blob;
   };
 
-  // Fetch order data
+  useEffect(() => {
+    fetchNews();
+  }, []);
+
   useEffect(() => {
     const fetchOrderData = async () => {
       try {
@@ -78,6 +72,29 @@ function MainContent() {
     fetchOrderData();
   }, []);
 
+  // Handle the opening of the delete confirmation dialog
+  const handleOpenDialog = (newsId) => {
+    setSelectedNewsId(newsId);
+    setOpenDialog(true); 
+  };
+
+  // Handle the closing of the dialog without deleting
+  const handleCloseDialog = () => {
+    setOpenDialog(false);  
+  };
+
+  // Handle delete confirmation and refresh news
+  const handleConfirmDelete = async () => {
+    try {
+      await deleteNewsById(selectedNewsId);
+      setOpenDialog(false); 
+      fetchNews();  
+      toast.success("Delete successfully!");
+    } catch (error) {
+      console.error("Error deleting news:", error);
+    }
+  };
+
   const handleViewDetail = (order) => {
     navigate(`/sales-order-detail/${order.id}`, {
       state: order,
@@ -85,11 +102,12 @@ function MainContent() {
   };
 
   const handleViewMoreNews = () => {
-    setVisibleNewsCount((prevCount) => prevCount + 3);
+    setVisibleNewsCount((prevCount) => prevCount + 4);
   };
 
   return (
     <div className="main-content-container">
+      <ToastUtil />
       <div className="news-container-sale">
         <div className="New">
           <strong>News</strong>
@@ -99,19 +117,49 @@ function MainContent() {
           <div className="news-grid">
             {news.slice(0, visibleNewsCount).map((newsItem, index) => (
               <div key={index} className="news-item">
-                {newsItem.filePath && (
-                  <img
-                    src={newsItem.filePath}
-                    alt={newsItem.title}
-                    className="news-image"
-                  />
-                )}
+                <img
+                  src={newsItem.imageUrl}
+                  alt={newsItem.title}
+                  className="news-image"
+                />
                 <div className="news-content">
-                  <span className="news-category">{newsItem.category}</span>
                   <h3 className="news-title">{newsItem.title}</h3>
-                  <p className="news-description">{newsItem.description}</p>
+
+                  <Paragraph
+                    ellipsis={{
+                      rows: 3,
+                      expandable: false,
+                      symbol: '...',
+                    }}
+                  >
+                    <div dangerouslySetInnerHTML={{ __html: newsItem.description }} />
+                  </Paragraph>
+
                   <div className="news-footer">
-                    <span className="news-date">{newsItem.createdDate}</span>
+                    <span className="news-date">
+                      {new Date(newsItem.createdDate).toLocaleDateString()}
+                    </span>
+
+                    <div className="card-actions">
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        onClick={() => handleEdit(newsItem.id)}
+                        className="edit-btn"
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        size="small"
+                        onClick={() => handleOpenDialog(newsItem.id)}  // Open confirmation dialog
+                        className="delete-btn"
+                      >
+                        Delete
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -126,6 +174,30 @@ function MainContent() {
         </div>
       </div>
 
+      {/* Confirmation Dialog */}
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Confirm Deletion"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this news item?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleConfirmDelete} color="secondary" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Orders section (not modified) */}
       <div className="order-container-sale">
         {postedOrder.length > 0 && (
           <div className="order-container">
