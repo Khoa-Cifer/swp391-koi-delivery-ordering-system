@@ -5,12 +5,14 @@ import dateTimeConvert from "../../../../components/utils";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import { getAllNews } from "../../../../utils/axios/news";
+import { getFileByFileId } from "../../../../utils/axios/file";
 
 function MainContent() {
   const [postedOrder, setPostedOrder] = useState([]);
   const [receivedOrder, setReceivedOrder] = useState([]);
   const [news, setNews] = useState([]);
-  const [visibleNewsCount, setVisibleNewsCount] = useState(3); // State to track how many news items to display
+  const [visibleNewsCount, setVisibleNewsCount] = useState(3);
+
   const navigate = useNavigate();
 
   const postedStatus = 1; // Status for posted orders
@@ -18,18 +20,47 @@ function MainContent() {
 
   // Fetch news data
   useEffect(() => {
-    const fetchNewsData = async () => {
+    async function fetchNewsData() {
       try {
         const response = await getAllNews();
-        setNews(response);
-        console.log(response.title);
+        const sortedNews = response.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+
+        // Fetch file data for each news item, checking for Blob URLs
+        const updatedNews = await Promise.all(
+          sortedNews.map(async (newsItem) => {
+            if (newsItem.fileId) {
+              const fileData = await getFileByFileId(newsItem.fileId);
+
+              // Check if the filePath is a Blob URL and fetch the file content
+              const fileURL = fileData.filePath;
+              if (fileURL.startsWith("blob:")) {
+                const fileBlob = await fetchBlobFromUrl(fileURL);
+                const objectURL = URL.createObjectURL(fileBlob); // Create object URL for Blob
+                return { ...newsItem, filePath: objectURL }; // Attach the Blob URL
+              }
+              return { ...newsItem, filePath: fileURL }; // Otherwise, just return the file path
+            }
+            return newsItem;
+          })
+        );
+
+        setNews(updatedNews);
       } catch (error) {
-        console.error("Error fetching news:", error);
+        console.error("Error fetching news data:", error);
       }
-    };
+    }
 
     fetchNewsData();
   }, []);
+
+  // Utility function to fetch Blob from Blob URL
+  const fetchBlobFromUrl = async (blobUrl) => {
+    const response = await fetch(blobUrl);
+    const blob = await response.blob();
+    return blob;
+  };
 
   // Fetch order data
   useEffect(() => {
@@ -54,7 +85,7 @@ function MainContent() {
   };
 
   const handleViewMoreNews = () => {
-    setVisibleNewsCount((prevCount) => prevCount + 3); // Increase visible news count by 3
+    setVisibleNewsCount((prevCount) => prevCount + 3);
   };
 
   return (
@@ -68,11 +99,13 @@ function MainContent() {
           <div className="news-grid">
             {news.slice(0, visibleNewsCount).map((newsItem, index) => (
               <div key={index} className="news-item">
-                <img
-                  src={newsItem.file.filePath}
-                  alt={newsItem.title}
-                  className="news-image"
-                />
+                {newsItem.filePath && (
+                  <img
+                    src={newsItem.filePath}
+                    alt={newsItem.title}
+                    className="news-image"
+                  />
+                )}
                 <div className="news-content">
                   <span className="news-category">{newsItem.category}</span>
                   <h3 className="news-title">{newsItem.title}</h3>
@@ -85,7 +118,7 @@ function MainContent() {
             ))}
           </div>
 
-          {visibleNewsCount < news.length && ( // Show View More button only if there are more news items to display
+          {visibleNewsCount < news.length && (
             <div className="view-more">
               <Button onClick={handleViewMoreNews}>View more →</Button>
             </div>
@@ -94,7 +127,6 @@ function MainContent() {
       </div>
 
       <div className="order-container-sale">
-        {/* Waiting for accepted orders */}
         {postedOrder.length > 0 && (
           <div className="order-container">
             <div className="order">
@@ -133,7 +165,6 @@ function MainContent() {
 
         <div className="gap"></div>
 
-        {/* Waiting for confirm to delivery orders */}
         {receivedOrder.length > 0 && (
           <div className="order-container">
             <div className="order">

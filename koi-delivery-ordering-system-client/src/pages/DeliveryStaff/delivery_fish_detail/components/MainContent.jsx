@@ -47,7 +47,7 @@ const MainContent = () => {
       const imagePromises = license.files.map(async (file) => {
         const fileId = file.file.id;
         const imageResponse = await getFileByFileId(fileId);
-        return URL.createObjectURL(new Blob([imageResponse], { type: "image/jpeg" }));
+        return URL.createObjectURL(new Blob([imageResponse], { type: "image/jpg" }));
       });
 
       // Wait for all promises to resolve (i.e., all image URLs to be fetched)
