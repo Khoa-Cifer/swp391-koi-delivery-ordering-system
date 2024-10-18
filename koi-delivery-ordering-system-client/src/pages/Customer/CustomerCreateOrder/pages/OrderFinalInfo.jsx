@@ -97,7 +97,7 @@ function OrderFinalInfo({ orderId }) {
                             <TextField
                                 fullWidth
                                 type=""
-                                label="Create Date"
+                                label="Created Date"
                                 value={dateTimeConvert(postedData.createdDate)}
                                 InputProps={{
                                     readOnly: true,
@@ -182,7 +182,7 @@ function OrderFinalInfo({ orderId }) {
                                 fullWidth
                                 type=""
                                 label="Price"
-                                value={`${Math.floor(postedData.price)} VND`}
+                                value={`$${Math.floor(postedData.price).toLocaleString()}`}
                                 InputProps={{
                                     readOnly: true,
                                 }}

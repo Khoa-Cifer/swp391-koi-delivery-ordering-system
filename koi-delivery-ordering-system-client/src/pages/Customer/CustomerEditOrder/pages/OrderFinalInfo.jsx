@@ -111,7 +111,7 @@ function OrderFinalInfo() {
                             <TextField
                                 fullWidth
                                 type=""
-                                label="Create Date"
+                                label="Create Dated"
                                 value={dateTimeConvert(postedData.createdDate)}
                                 InputProps={{
                                     readOnly: true,

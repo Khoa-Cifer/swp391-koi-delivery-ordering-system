@@ -258,7 +258,7 @@ function PostedOrder({ customerId }) {
                   <div className="order-text-info">
                     <div>
                       <OrderInfoHeader>Price</OrderInfoHeader>
-                      <Typography>{Math.floor(order.price)}</Typography>
+                      <Typography>{Math.floor(order.price).toLocaleString()}</Typography>
                     </div>
                     <div>
                       <OrderInfoHeader>Tracking Id</OrderInfoHeader>
