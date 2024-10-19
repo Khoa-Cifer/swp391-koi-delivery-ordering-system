@@ -131,16 +131,16 @@ function LoginCustomer() {
             <Button
               variant="outlined"
               style={{ backgroundColor: "#C3F4FD" }}
-              onClick={() => handleDeliveryStaffNavigate()}
+              onClick={() => handleSignUp()}
             >
-              <Typography onClick={handleSignUp} style={{ fontSize: "12px" }}>Sign Up here</Typography>
+              <Typography style={{ fontSize: "12px" }}>Sign Up here</Typography>
             </Button>
             <Button
               variant="outlined"
               style={{ backgroundColor: "#C3F4FD" }}
-              onClick={() => handleDeliveryStaffNavigate()}
+              onClick={() => handleOpen()}
             >
-              <Typography onClick={handleOpen} style={{ fontSize: "12px" }}>Are you with us ?</Typography>
+              <Typography style={{ fontSize: "12px" }}>Are you with us ?</Typography>
             </Button>
           </div>
         </div>
