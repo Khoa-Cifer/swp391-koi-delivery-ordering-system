@@ -59,7 +59,7 @@ function Fish() {
                 columns={columns}
                 dataSource={fishData}
                 rowKey="id"
-                pagination={{ pageSize: 5 }} // Pagination to display 5 records per page
+                pagination={{ pageSize: 15 }} // Pagination to display 5 records per page
                 style={{ marginTop: "25px" }}
             />
         </div>

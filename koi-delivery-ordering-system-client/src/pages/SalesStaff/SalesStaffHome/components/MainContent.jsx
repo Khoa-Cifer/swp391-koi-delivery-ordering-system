@@ -54,6 +54,8 @@ function MainContent() {
 
           setNews(newsWithImages);
         }
+      } else {
+        setNews([]);
       }
     } catch (error) {
       console.error("Error fetching news data:", error);

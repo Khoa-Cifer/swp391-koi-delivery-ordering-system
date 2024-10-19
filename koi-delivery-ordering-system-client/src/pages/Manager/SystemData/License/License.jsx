@@ -51,7 +51,7 @@ function License() {
         columns={columns}
         dataSource={licenseData}
         rowKey="id"
-        pagination={{ pageSize: 5 }}
+        pagination={{ pageSize: 15 }}
         style={{ marginTop: "25px" }}
       />
     </div>
