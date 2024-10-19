@@ -31,6 +31,10 @@ function LoginDelivery() {
     }
   }
 
+  const handleGoBack = () => {
+    navigate("/login-customer")
+  }
+  
   return (
     <div className="login-delivery-container">
       <ToastUtil />
@@ -67,6 +71,8 @@ function LoginDelivery() {
             Login
           </button>
         </div>
+
+        <button className="back-button" onClick={() => handleGoBack()}>&#8592; Go Back</button>
       </div>
     </div>
   );

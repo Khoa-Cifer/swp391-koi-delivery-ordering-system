@@ -7,7 +7,7 @@ import PrivateRoute from "./authentication/PrivateRoute";
 import LoginCustomer from "./pages/Login/LoginCustomer/LoginCustomer";
 import LoginSaleStaff from "./pages/Login/LoginSaleStaff/LoginSaleStaff";
 import LoginDeliveryStaff from "./pages/Login/LoginDeliveryStaff/LoginDeliveryStaff";
-import LoginAdmin from "./pages/Login/LoginAdmin/LoginAdmin";
+import LoginManager from "./pages/Login/LoginManager/LoginManager";
 import PostedOrderSalesStaff from "./pages/SalesStaff/OrderSalesStaff/PostedOrderSalesStaff";
 import CustomerLayout from "./pages/Layout/CustomerLayout/CustomerLayout";
 import CustomerEditProfile from "./pages/Customer/CustomerEditProfile/CustomerEditProfile";
@@ -102,7 +102,7 @@ function App() {
             <Route path="/login-customer" element={<LoginCustomer />} />
             <Route path="/login-sales-staff" element={<LoginSaleStaff />} />
             <Route path="/login-delivery-staff" element={<LoginDeliveryStaff />} />
-            <Route path="/login-admin" element={<LoginAdmin />} />
+            <Route path="/login-manager" element={<LoginManager />} />
 
             <Route path="/waiting-for-confirmation" element={<WaitingForConfirm />} />
             <Route path="/registration-success" element={<RegistrationSuccess />} />

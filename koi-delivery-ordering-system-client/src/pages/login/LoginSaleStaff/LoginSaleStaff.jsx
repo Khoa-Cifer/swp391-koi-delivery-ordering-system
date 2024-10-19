@@ -31,6 +31,10 @@ function LoginSaleStaff() {
     }
   }
 
+  const handleGoBack = () => {
+    navigate("/login-customer")
+  }
+  
   return (
     <div className="login-sale-container">
       <ToastUtil />
@@ -64,6 +68,8 @@ function LoginSaleStaff() {
             Login
           </button>
         </div>
+
+        <button className="back-button" onClick={() => handleGoBack()}>&#8592; Go Back</button>
       </div>
     </div>
   );

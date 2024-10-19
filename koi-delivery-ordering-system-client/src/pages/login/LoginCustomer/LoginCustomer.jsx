@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./LoginCustomer.scss";
 import { Box, Button, Modal, Typography } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../authentication/AuthProvider";
 import { userLogin } from "../../../utils/axios/customer";
 import { toast } from "react-toastify";
@@ -31,6 +31,23 @@ function LoginCustomer() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const auth = useAuth();
+
+  const handleSignUp = () => {
+    navigate("/register");
+  }
+
+  const handleSalesStaffNavigate = () => {
+    navigate("/login-sales-staff");
+  }
+
+  const handleDeliveryStaffNavigate = () => {
+    navigate("/login-delivery-staff");
+  }
+
+  const handleManagerNavigate = () => {
+    navigate("/login-manager")
+  }
+
   function handleEmailChange(e) {
     setEmail(e.target.value);
   }
@@ -64,40 +81,25 @@ function LoginCustomer() {
           <Button
             variant="outlined"
             style={{ backgroundColor: "#C3F4FD" }}
+            onClick={() => handleDeliveryStaffNavigate()}
           >
-            <Typography>
-              <Link
-                to={"/login-delivery-staff"}
-                sx={{ textDecoration: 'none', color: 'inherit', cursor: 'default' }}
-              >Delivery Staff
-              </Link>
-            </Typography>
+            <Typography>Delivery Staff</Typography>
           </Button>
 
           <Button
             variant="outlined"
             style={{ backgroundColor: "#C3F4FD" }}
+            onClick={() => handleSalesStaffNavigate()}
           >
-            <Typography>
-              <Link
-                to={"/login-sales-staff"}
-                sx={{ textDecoration: 'none', color: 'inherit', cursor: 'default' }}
-              >Sales Staff
-              </Link>
-            </Typography>
+            <Typography>Sales Staff</Typography>
           </Button>
 
           <Button
             variant="outlined"
             style={{ backgroundColor: "#C3F4FD" }}
+            onClick={() => handleManagerNavigate()}
           >
-            <Typography>
-              <Link
-                to={"/login-admin"}
-                sx={{ textDecoration: 'none', color: 'inherit', cursor: 'default' }}
-              >Manager
-              </Link>
-            </Typography>
+            <Typography>Manager</Typography>
           </Button>
         </Box>
       </Modal>
@@ -106,7 +108,7 @@ function LoginCustomer() {
           <h3 className="text-center">
             <strong>Login</strong>
           </h3>
-          
+
           <input
             type="email"
             placeholder="Email"
@@ -126,8 +128,20 @@ function LoginCustomer() {
           </div>
 
           <div className="form__bottom">
-            <Typography><Link to={"/register"}>Sign up here</Link></Typography>
-            <Typography onClick={handleOpen}>Are you with us ?</Typography>
+            <Button
+              variant="outlined"
+              style={{ backgroundColor: "#C3F4FD" }}
+              onClick={() => handleDeliveryStaffNavigate()}
+            >
+              <Typography onClick={handleSignUp} style={{ fontSize: "12px" }}>Sign Up here</Typography>
+            </Button>
+            <Button
+              variant="outlined"
+              style={{ backgroundColor: "#C3F4FD" }}
+              onClick={() => handleDeliveryStaffNavigate()}
+            >
+              <Typography onClick={handleOpen} style={{ fontSize: "12px" }}>Are you with us ?</Typography>
+            </Button>
           </div>
         </div>
       </div>
