@@ -16,6 +16,7 @@ function Sidebar() {
 
     const [selectedItem, setSelectedItem] = useState(null);
     const dataItemList = [
+        "Manager",
         "Customer",
         "Delivery Staff",
         // "Rating",
@@ -30,7 +31,6 @@ function Sidebar() {
         // "File",
         // "Fish",
         // "License",
-        // "Manager",
         // "News",
         "Orders",
     ];

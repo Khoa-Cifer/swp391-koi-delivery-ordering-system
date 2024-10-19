@@ -78,7 +78,7 @@ function CompletedOrder() {
     <div className="customer-home-order-list">
       {orders && orders.length > 0 ? (
         <>
-          <SearchBox>
+          <SearchBox >
             <div className="form-group">
               <input
                 style={{
@@ -106,11 +106,9 @@ function CompletedOrder() {
                 className="form-input"
               />
             </div>
-          </SearchBox>
+          </SearchBox >
 
-          {orders &&
-            orders.map &&
-            orders.map((order) => (
+          {filteredOrders && filteredOrders.map && filteredOrders.map((order) => (
               <>
                 <Box
                   sx={{ ...commonStyles, borderRadius: "16px" }}
@@ -186,7 +184,9 @@ function CompletedOrder() {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {filteredOrders.fishes && filteredOrders.fishes.map && filteredOrders.fishes.map((fish) => (
+                          {order.fishes &&
+                            order.fishes.map &&
+                            order.fishes.map((fish) => (
                               <TableRow key={fish.id}>
                                 <TableCell>{fish.id}</TableCell>
                                 <TableCell>{fish.name}</TableCell>
