@@ -48,7 +48,6 @@ import SalesStaffEditProfile from "./pages/SalesStaff/SalesStaffEditProfile/Sale
 import DeliveryOrderHome from "./pages/DeliveryStaff/DeliveryOrderHome/DeliveryOrderHome";
 import GettingOrderDeliveryStaff from "./pages/DeliveryStaff/DeliveryOrderHome/GettingOrderDeliveryStaff";
 import AvailableToDelivery from "./pages/DeliveryStaff/DeliveryOrderHome/AvailableToDelivery";
-import DeliveringOrder from "./pages/Customer/CustomerHome/pages/DeliveringOrder";
 import AvailableToGet from "./pages/DeliveryStaff/DeliveryOrderHome/AvailableToGet";
 import DeliveryOrderDetail from "./pages/DeliveryStaff/DeliveryOrderDetail/DeliveryOrderDetail";
 import DeliveryFishDetail from "./pages/DeliveryStaff/DeliveryFishDetail/DeliveryFishDetail";
@@ -56,6 +55,7 @@ import WaitingForConfirm from "./pages/public/WatingForConfirm/WatingForConfirm"
 import RegistrationSuccess from "./pages/public/RegistrationSuccess/RegistrationSuccess";
 import FishPayment from "./pages/Customer/FishCreateOrder/pages/FishPayment";
 import CustomerCreateFish from "./pages/Customer/FishCreateOrder/CustomerCreateFish";
+import DeliveringOrder from "./pages/DeliveryStaff/DeliveryOrderHome/DeliveringOrder";
 
 function App() {
   // eslint-disable-next-line react/prop-types
