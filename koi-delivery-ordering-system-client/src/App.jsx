@@ -54,6 +54,8 @@ import DeliveryOrderDetail from "./pages/DeliveryStaff/DeliveryOrderDetail/Deliv
 import DeliveryFishDetail from "./pages/DeliveryStaff/DeliveryFishDetail/DeliveryFishDetail";
 import WaitingForConfirm from "./pages/public/WatingForConfirm/WatingForConfirm";
 import RegistrationSuccess from "./pages/public/RegistrationSuccess/RegistrationSuccess";
+import FishPayment from "./pages/Customer/FishCreateOrder/pages/FishPayment";
+import CustomerCreateFish from "./pages/Customer/FishCreateOrder/CustomerCreateFish";
 
 function App() {
   // eslint-disable-next-line react/prop-types
