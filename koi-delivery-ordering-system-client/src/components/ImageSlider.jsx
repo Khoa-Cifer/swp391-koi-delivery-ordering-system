@@ -15,7 +15,7 @@ const ImageSlider = ({ fishInfo, images, onImageChange }) => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: false,
-    // autoplaySpeed: 5000,
+    autoplaySpeed: 5000,
     cssEase: "linear",
     afterChange: (current) => setCurrentIndex(current), // Set the current index on image change
   };
@@ -23,7 +23,6 @@ const ImageSlider = ({ fishInfo, images, onImageChange }) => {
   useEffect(() => {
     if (fishInfo) {
       if (onImageChange && fishInfo[currentIndex]) {
-        // eslint-disable-next-line react/prop-types
         const currentFish = fishInfo[currentIndex]; // Get the fish id based on current index
         onImageChange(currentFish); // Send the fish id to the parent component
       }
