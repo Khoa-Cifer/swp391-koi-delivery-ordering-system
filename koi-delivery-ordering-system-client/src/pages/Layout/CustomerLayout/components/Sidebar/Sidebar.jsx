@@ -1,4 +1,4 @@
-import { Avatar, ListItem, ListItemText, styled, Typography } from "@mui/material";
+import { Avatar, Divider, ListItem, ListItemText, styled, Typography } from "@mui/material";
 import { List } from "antd";
 import "./customer_sidebar.scss";
 import { useNavigate } from "react-router-dom";
@@ -82,6 +82,9 @@ function Sidebar() {
               onClick={handleOpenEditProfile}
             />
           </ListItem>
+          
+          <Divider style={{ marginBottom: "5%" }}>Orders</Divider>
+
           <ListItem className="button">
             <ListItemText
               primary="Create Order"

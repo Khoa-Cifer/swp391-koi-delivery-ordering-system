@@ -1,4 +1,4 @@
-import { Avatar, ListItem, ListItemText, styled, Typography } from "@mui/material";
+import { Avatar, Divider, ListItem, ListItemText, styled, Typography } from "@mui/material";
 import { List } from "antd";
 import "./sales_sidebar.scss";
 import { useEffect, useState } from "react";
@@ -69,6 +69,8 @@ function Sidebar() {
               primary="Profile"
             />
           </ListItem>
+          <Divider style={{ marginBottom: "5%" }}>Orders</Divider>
+          
           <ListItem className="button">
             <ListItemText
               primary="Posted Order"
