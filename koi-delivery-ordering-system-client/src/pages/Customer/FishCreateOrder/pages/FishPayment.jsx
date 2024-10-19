@@ -1,25 +1,13 @@
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { createFishOrderInfo } from "../../../../utils/axios/fish";
-import { createLicenseFiles, createLicenseOrderInfo } from "../../../../utils/axios/license";
-import { calculateOrderPrice } from "../../../../utils/axios/order";
+import { updateOrderStatus } from "../../../../utils/axios/order";
 import { paymentOpenGateway, logPaymentHistory, getPaymentHistory } from "../../../../utils/axios/payment";
 import { jwtDecode } from "jwt-decode";
 
 function FishPayment() {
+  const { orderId } = useParams();
   const location = useLocation();
-  const navigate = useNavigate();
-  const { fishEntries, submittedLicense, orderId } = location.state;
-  const [totalPrice, setTotalPrice] = useState(0);
-
-  useEffect(() => {
-    const calculateTotalPrice = () => {
-      const total = fishEntries.reduce((sum, fish) => sum + parseFloat(fish.price), 0);
-      setTotalPrice(total);
-    };
-    calculateTotalPrice();
-  }, [fishEntries]);
+  const { state } = location;
 
   const handlePayment = async () => {
     const token = localStorage.getItem("token");
@@ -30,8 +18,8 @@ function FishPayment() {
     }
 
     try {
-      const paymentResponse = await logPaymentHistory(customerId, orderId, Math.floor(totalPrice));
-      const paymentOpen = await paymentOpenGateway(customerId, Math.floor(totalPrice), "NCB");
+      const paymentResponse = await logPaymentHistory(customerId, orderId, Math.floor(state));
+      const paymentOpen = await paymentOpenGateway(customerId, Math.floor(state), "NCB");
 
       if (paymentOpen) {
         let paymentWindow = window.open(paymentOpen.paymentUrl, "_blank");
@@ -42,9 +30,11 @@ function FishPayment() {
             if (paymentResponse) {
               const paymentCheck = await getPaymentHistory(paymentResponse.id);
               if (paymentCheck.paymentStatus) {
-                await addFishAndLicenses();
-                toast.success("Payment successful. Fish added to the order.");
-                navigate(`/customer-home`);
+                const postedStatus = 1;
+                const updateStatusResponse = await updateOrderStatus(orderId, postedStatus);
+                if (updateStatusResponse) {
+                  toast.success("Payment successful. Fish added to the order.");
+                }
               } else {
                 toast.error("Payment failed or cancelled.");
               }
@@ -60,48 +50,10 @@ function FishPayment() {
     }
   };
 
-  const addFishAndLicenses = async () => {
-    try {
-      for (const fish of fishEntries) {
-        const fishData = await createFishOrderInfo(
-          fish.name,
-          fish.age,
-          fish.size,
-          fish.weight,
-          fish.price,
-          fish.file,
-          orderId
-        );
-
-        if (submittedLicense[fishEntries.indexOf(fish)]) {
-          const license = submittedLicense[fishEntries.indexOf(fish)];
-          const licenseData = await createLicenseOrderInfo(
-            license.name,
-            license.description,
-            new Date(license.date).toISOString(),
-            fishData
-          );
-
-          const fileList = Object.keys(license)
-            .filter((key) => key.startsWith("file-"))
-            .map((key) => license[key]);
-
-          await createLicenseFiles(licenseData, fileList);
-        }
-      }
-
-      await calculateOrderPrice(orderId);
-    } catch (error) {
-      console.error("Error adding fish and licenses:", error);
-      toast.error("An error occurred while adding fish and licenses");
-    }
-  };
-
   return (
     <div>
       <h2>Payment for Fish Order</h2>
-      <p>Total Price: {totalPrice} VND</p>
-      <button onClick={handlePayment}>Proceed to Payment</button>
+      <button onClick={() => handlePayment()}>Proceed to Payment</button>
     </div>
   );
 }

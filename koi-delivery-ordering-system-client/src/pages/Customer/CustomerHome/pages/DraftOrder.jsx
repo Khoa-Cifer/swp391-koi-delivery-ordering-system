@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Box, Button, Modal, Paper, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getOrdersByStatusAndCustomerId, updateOrderStatus } from "../../../../utils/axios/order";
+import { deleteOrderById, getOrdersByStatusAndCustomerId } from "../../../../utils/axios/order";
 import dateTimeConvert from "../../../../components/utils";
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
@@ -114,8 +114,7 @@ function DraftOrder({ customerId }) {
 
     async function handleDeleteOrderConfirm() {
         try {
-            const abortedOrderStatus = 9;
-            const response = await updateOrderStatus(selectedOrderId, abortedOrderStatus);
+            const response = await deleteOrderById(selectedOrderId);
             if (response) {
                 toast("Delete order successfully");
                 fetchDraftOrder();

@@ -35,3 +35,12 @@ export async function getPaymentHistory(paymentId) {
         console.log(error);
     }
 }
+
+export async function getSuccessPaymentHistoryByOrder(orderId) {
+    try {
+        const response = await axiosClient.get(`payment-history/get-payment-history-by-order-id/${orderId}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}

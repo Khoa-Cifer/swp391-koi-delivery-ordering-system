@@ -32,10 +32,10 @@ public class PaymentHistoryServiceImpl implements IPaymentHistoryService {
     @Override
     public PaymentHistory logPaymentHistory(double amount, Long orderId, Long customerId) {
         Optional<Order> order = orderRepository.findById(orderId);
-        Optional<PaymentHistory> checkPaymentExist = paymentHistoryRepository.checkExistPaymentHistory(order.get().getId());
-        if (checkPaymentExist.isPresent()) {
-            return checkPaymentExist.get(); //return if exist to avoid error;
-        }
+//        Optional<PaymentHistory> checkPaymentExist = paymentHistoryRepository.checkExistPaymentHistory(order.get().getId());
+//        if (checkPaymentExist.isPresent()) {
+//            return checkPaymentExist.get(); //return if exist to avoid error;
+//        }
         PaymentHistory paymentHistory = new PaymentHistory();
         paymentHistory.setAmount(amount);
         Optional<Customer> customer = customerRepository.findById(customerId);
@@ -54,5 +54,10 @@ public class PaymentHistoryServiceImpl implements IPaymentHistoryService {
         PaymentHistory foundPaymentHistory = orderPaymentHistories.get(0);
         foundPaymentHistory.setPaymentStatus(true);
         paymentHistoryRepository.save(foundPaymentHistory);
+    }
+
+    @Override
+    public List<PaymentHistory> getPaymentHistoryByOrder(Long orderId) {
+        return paymentHistoryRepository.getPaymentHistoryByOrderId(orderId);
     }
 }
