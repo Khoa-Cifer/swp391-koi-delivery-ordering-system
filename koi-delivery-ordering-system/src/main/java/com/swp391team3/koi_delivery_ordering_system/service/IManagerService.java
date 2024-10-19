@@ -9,7 +9,7 @@ import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestRegist
 public interface IManagerService {
     List<Manager> getAllManager();
     Optional<Manager> getManagerById(Long id);
-    Manager updateManager(Long id, String email, String phoneNumber);
+    Manager updateManager(Long id, String email, String username, String phoneNumber);
     void deleteManagerById(Long id);
     boolean managerLogin(String email, String password);
     String createNewManager(UserRequestRegisterDTO request);

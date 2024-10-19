@@ -30,12 +30,13 @@ public class ManagerServiceImpl implements IManagerService{
     }
 
     @Override
-    public Manager updateManager(Long id, String email, String phoneNumber) {
+    public Manager updateManager(Long id, String email, String username, String phoneNumber) {
         Optional<Manager> existingManager = managerRepository.findById(id);
         if (existingManager.isPresent()) {
             Manager updatedManager = existingManager.get();
             updatedManager.setEmail(email);
             updatedManager.setPhoneNumber(phoneNumber);
+            updatedManager.setUsername(username);
             return managerRepository.save(updatedManager);
         } else {
             throw new RuntimeException("Manager not found");

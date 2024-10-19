@@ -106,7 +106,7 @@ function LoginCustomer() {
       <div className="wraper">
         <div className="login__form">
           <h3 className="text-center">
-            <strong>Login</strong>
+            <strong>Login as Customer</strong>
           </h3>
 
           <input
