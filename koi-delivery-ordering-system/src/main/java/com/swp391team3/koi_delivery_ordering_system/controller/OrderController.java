@@ -143,6 +143,15 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The order does not exist");
         }
     }
-
+    @PostMapping("/accept-order/{id}")
+    public ResponseEntity<?> acceptOrder(@PathVariable Long id) {
+        boolean createOrderDelivering = orderService.acceptOrder(id);
+        return ResponseEntity.ok(createOrderDelivering);
+    }
+    @PostMapping("/confirm-order/{id}")
+    public ResponseEntity<?> confirmOrder(@PathVariable Long id) {
+        boolean createOrderDelivering = orderService.confirmOrder(id);
+        return ResponseEntity.ok(createOrderDelivering);
+    }
 
 }

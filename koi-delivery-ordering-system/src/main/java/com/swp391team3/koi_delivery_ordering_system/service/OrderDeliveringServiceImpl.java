@@ -71,17 +71,18 @@ public class OrderDeliveringServiceImpl implements IOrderDeliveringService {
         Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(deliveryStaffId);
         if (optionalOrder.isPresent() && optionalDeliveryStaff.isPresent()) {
             Order order = optionalOrder.get();
-            orderService.updateOrderStatus(orderId, orderStatus.ORDER_GETTING);
-            DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
-            generateOrderGetting(order, deliveryStaff);
+            if(orderService.updateOrderStatus(orderId, orderStatus.ORDER_GETTING)) {
+                DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
+                generateOrderGetting(order, deliveryStaff);
 
-            //send mail
-            EmailDetailDTO emailDetail = new EmailDetailDTO();
-            emailDetail.setReceiver((Object) deliveryStaff);
-            emailDetail.setSubject("The Order "+ orderId +" Is Getting By "+ deliveryStaff.getUsername());
-            emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
-            emailService.sendEmail(emailDetail, 2);
-            return true;
+                //send mail
+                EmailDetailDTO emailDetail = new EmailDetailDTO();
+                emailDetail.setReceiver((Object) deliveryStaff);
+                emailDetail.setSubject("The Order " + orderId + " Is Getting By " + deliveryStaff.getUsername());
+                emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
+                emailService.sendEmail(emailDetail, 2);
+                return true;
+            }
         }
         return false;
     }
@@ -117,24 +118,25 @@ public class OrderDeliveringServiceImpl implements IOrderDeliveringService {
         Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(deliveryStaffId);
         if (optionalOrder.isPresent() && optionalDeliveryStaff.isPresent()) {
             Order order = optionalOrder.get();
-            orderService.updateOrderStatus(orderId, orderStatus.DELIVERING);
-            DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
-            generateOrderDelivering(order, deliveryStaff);
-            Customer customer = optionalOrder.get().getCustomer();
+            if(orderService.updateOrderStatus(orderId, orderStatus.DELIVERING)) {
+                DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
+                generateOrderDelivering(order, deliveryStaff);
+                Customer customer = optionalOrder.get().getCustomer();
 
-            //send mail for delivery staff
-            EmailDetailDTO emailDetail = new EmailDetailDTO();
-            emailDetail.setReceiver((Object) deliveryStaff);
-            emailDetail.setSubject("The Order "+ orderId +" Is Delivering By "+ deliveryStaff.getUsername());
-            emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
-            emailService.sendEmail(emailDetail, 4);
+                //send mail for delivery staff
+                EmailDetailDTO emailDetail = new EmailDetailDTO();
+                emailDetail.setReceiver((Object) deliveryStaff);
+                emailDetail.setSubject("The Order " + orderId + " Is Delivering By " + deliveryStaff.getUsername());
+                emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
+                emailService.sendEmail(emailDetail, 4);
 
-            //send mail for delivery staff
-            emailDetail.setReceiver((Object) customer);
-            emailDetail.setSubject("Order " + order.getId() + " Is Being Delivered To You");
-            emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
-            emailService.sendEmail(emailDetail, 5);
-            return true;
+                //send mail for customer
+                emailDetail.setReceiver((Object) customer);
+                emailDetail.setSubject("Order " + order.getId() + " Is Being Delivered To You");
+                emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
+                emailService.sendEmail(emailDetail, 5);
+                return true;
+            }
         }
         return false;
     }

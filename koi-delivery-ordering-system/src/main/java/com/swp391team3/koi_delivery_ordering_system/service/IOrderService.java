@@ -36,4 +36,7 @@ public interface IOrderService {
                                        String destinationAddress, String destinationLongitude, String destinationLatitude,
                                        String senderAddress, String senderLongitude, String senderLatitude);
 
+    boolean acceptOrder(Long orderId);
+
+    boolean confirmOrder(Long orderId);
 }

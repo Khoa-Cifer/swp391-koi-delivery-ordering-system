@@ -475,5 +475,47 @@ public class OrderServiceImpl implements IOrderService {
         }
         return distancePrice + koiPrice;
     }
+    @Override
+    public boolean acceptOrder(Long orderId) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            if (updateOrderStatus(orderId, orderStatus.ORDER_ACCEPTED)) {
+
+                Customer customer = optionalOrder.get().getCustomer();
+
+                //send mail for customer
+                EmailDetailDTO emailDetail = new EmailDetailDTO();
+                emailDetail.setReceiver((Object) customer);
+                emailDetail.setSubject("Order " + order.getId() + " Is Accepted");
+                emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
+                emailService.sendEmail(emailDetail, 6);
+
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean confirmOrder(Long orderId) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            if(updateOrderStatus(orderId, orderStatus.ORDER_CONFIRMED)) {
+
+                Customer customer = optionalOrder.get().getCustomer();
+
+                //send mail for customer
+                EmailDetailDTO emailDetail = new EmailDetailDTO();
+                emailDetail.setReceiver((Object) customer);
+                emailDetail.setSubject("Order " + order.getId() + " Is Confirmed");
+                emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
+                emailService.sendEmail(emailDetail, 7);
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
