@@ -15,10 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("api/auth")
@@ -74,9 +72,25 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/register")
-    public String register(@RequestBody UserRequestRegisterDTO request) {
-        return customerService.customerRegister(request.getEmail(), request.getPassword(), request.getUsername(), request.getPhoneNumber());
+
+    @GetMapping("/register")
+    public RedirectView register(@RequestParam String email) {
+//        return ResponseEntity.ok(customerService.customerRegister(email, password, username, phoneNumber));
+        boolean result = customerService.customerConfirm(email);
+        if (result) {
+            try {
+                return new RedirectView("http://localhost:5173/registration-success");
+            } catch (Exception e) {
+                return new RedirectView("http://localhost:5173/404");
+            }
+        } else {
+            return new RedirectView("http://localhost:5173/404");
+        }
+    }
+
+    @PostMapping("/register-confirmation")
+    public ResponseEntity<?> registerConfirmation(@RequestBody UserRequestRegisterDTO request) {
+        return ResponseEntity.ok(customerService.registrationConfirm(request));
     }
 
     @PostMapping("/createNewManager")

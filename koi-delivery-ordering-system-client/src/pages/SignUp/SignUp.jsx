@@ -31,8 +31,23 @@ const SignUp = () => {
       const username = formData.username;
       const password = formData.password;
       const phoneNumber = formData.phoneNumber;
-      const data = await userRegister(email, username, password, phoneNumber);
-      toast(data);
+
+      const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailPattern.test(email)) {
+        toast("Please enter a valid email address.");
+        setIsLoading(false); // Stop loading spinner if validation fails
+        return; // Stop the form submission process
+      }
+
+      const response = await userRegister(email, username, password, phoneNumber);
+      if (response) {
+        toast("Registration successfully");
+        setTimeout(() => {
+          navigate("/waiting-for-confirmation");  // Replace with your desired route
+        }, 2000);
+      } else {
+        toast("This email already exists");
+      }
     } catch (error) {
       console.error("Error while receiving the order:", error);
       toast("An error occurred while processing request.");

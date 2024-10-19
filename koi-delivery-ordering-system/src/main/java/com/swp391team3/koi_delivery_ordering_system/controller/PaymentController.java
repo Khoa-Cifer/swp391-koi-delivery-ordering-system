@@ -58,9 +58,8 @@ public class PaymentController {
 
         try {
             return new RedirectView("http://localhost:5173" + "/payment-success" + "?amount=" + modifiedAmount + "&date=" + payDate + "&transactionNo=" + transactionNo);
-
         } catch (Exception e) {
-            return new RedirectView("http://localhost:5173");
+            return new RedirectView("http://localhost:5173/404");
         }
     }
 

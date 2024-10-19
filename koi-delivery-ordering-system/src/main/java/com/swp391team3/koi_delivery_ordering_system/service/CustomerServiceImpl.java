@@ -3,6 +3,7 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailService;
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.model.File;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestRegisterDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.EmailDetailDTO;
 import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
@@ -26,31 +27,14 @@ public class CustomerServiceImpl implements ICustomerService {
     private final IFileService fileService;
 
     @Override
-    public String customerRegister(String email, String password, String username, String phoneNumber) {
-        Customer newCustomer = new Customer();
-        newCustomer.setEmail(email);
-
-        boolean emailDuplicatedCheck = customerRepository.existsByEmail(email);
-        if (emailDuplicatedCheck) {
-            return "This email already exists";
+    public boolean customerConfirm(String email) {
+        Customer foundCustomer = getCustomerByEmail(email);
+        if (foundCustomer != null) {
+            foundCustomer.setActiveStatus(true);
+            customerRepository.save(foundCustomer);
+            return true;
         }
-
-        String encodedPassword = passwordEncoder.encode(password);
-        newCustomer.setPassword(encodedPassword);
-
-        newCustomer.setUsername(username);
-        newCustomer.setPhoneNumber(phoneNumber);
-
-        customerRepository.save(newCustomer);
-
-//        mail sending
-        EmailDetailDTO emailDetail = new EmailDetailDTO();
-        emailDetail.setReceiver((Object) newCustomer);
-        emailDetail.setSubject("Welcome to KOI DELIVERY SYSTEM! We're glad you're here");
-        emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
-        emailService.sendEmail(emailDetail, 1);
-
-        return "Register successfully";
+        return false;
     }
 
     @Override
@@ -147,5 +131,33 @@ public class CustomerServiceImpl implements ICustomerService {
             return fileService.updateFileInFileSystem(customer.get().getFile().getId(), file);
         }
         return "";
+    }
+
+    @Override
+    public boolean registrationConfirm(UserRequestRegisterDTO request) {
+        Customer newCustomer = new Customer();
+        newCustomer.setEmail(request.getEmail());
+
+        boolean emailDuplicatedCheck = customerRepository.existsByEmail(request.getEmail());
+        if (emailDuplicatedCheck) {
+            return false;
+        }
+
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        newCustomer.setPassword(encodedPassword);
+
+        newCustomer.setUsername(request.getUsername());
+        newCustomer.setPhoneNumber(request.getPhoneNumber());
+        newCustomer.setActiveStatus(false);
+//        http://localhost:5173" + "/payment-success" + "?amount=" + modifiedAmount + "&date=" + payDate + "&
+
+        customerRepository.save(newCustomer);
+
+        EmailDetailDTO emailDetail = new EmailDetailDTO();
+        emailDetail.setReceiver((Object) newCustomer);
+        emailDetail.setSubject("Welcome to KOI DELIVERY SYSTEM! We're glad you're here");
+        emailDetail.setLink("http://localhost:8080/api/auth/register?email=" + newCustomer.getEmail());
+        emailService.sendEmail(emailDetail, 1);
+        return true;
     }
 }
