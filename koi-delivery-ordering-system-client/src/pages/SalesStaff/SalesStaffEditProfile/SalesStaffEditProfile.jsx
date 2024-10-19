@@ -32,13 +32,13 @@ function SalesStaffEditProfile() {
         const customerInfo = jwtDecode(token);
         salestaffId = customerInfo.sub.substring(2);
     }
-    
+
     useEffect(() => {
         async function fetchUserData() {
             const userData = JSON.parse(localStorage.getItem("userData"));
             setUser(userData);
             const customer = await getCustomerById(salestaffId);
-            if(customer.file) {
+            if (customer.file) {
                 const imageResponse = await getFileByFileId(customer.file.id);;
                 const imgUrl = URL.createObjectURL(imageResponse);
                 setImagePreview(imgUrl);
@@ -65,6 +65,10 @@ function SalesStaffEditProfile() {
 
     const handleConfirmPasswordChange = (e) => {
         setConfirmPassword(e.target.value);
+    }
+
+    function handleSalesStaffHomeNavigation() {
+        navigate("/sales-staff-home");
     }
 
     async function handleSubmit() {
@@ -204,7 +208,7 @@ function SalesStaffEditProfile() {
 
                             </Grid>
                             <Box sx={{ mt: 3, display: "flex", gap: "16px" }}>
-                                <Button variant="outlined" onClick={handleSubmit} fullWidth>
+                                <Button variant="outlined" onClick={() => handleSalesStaffHomeNavigation()} fullWidth>
                                     Cancel
                                 </Button>
                                 {user.email && user.username && user.phoneNumber &&

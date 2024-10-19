@@ -66,6 +66,10 @@ function DeliveryStaffEditProfile() {
         setConfirmPassword(e.target.value);
     }
 
+    function handleDeliveryStaffHomeNavigation() {
+        navigate("/delivery-order-home");
+    }
+
     async function handleSubmit() {
         let response = null;
         if (updatePassword === false) {
@@ -203,7 +207,7 @@ function DeliveryStaffEditProfile() {
 
                             </Grid>
                             <Box sx={{ mt: 3, display: "flex", gap: "16px" }}>
-                                <Button variant="outlined" onClick={handleSubmit} fullWidth>
+                                <Button variant="outlined" onClick={() => handleDeliveryStaffHomeNavigation()} fullWidth>
                                     Cancel
                                 </Button>
                                 {delivery_staff.email && delivery_staff.username && delivery_staff.phoneNumber &&

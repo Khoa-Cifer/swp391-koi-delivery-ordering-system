@@ -228,7 +228,7 @@ function MainContent() {
         <div className="details-row">
           <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             <Grid item xs={6}>
-              <Item>Create Date: {dateTimeConvert(state.createdDate)}</Item>
+              <Item>Create Dated: {dateTimeConvert(state.createdDate)}</Item>
             </Grid>
             <Grid item xs={6}>
               <Item>Expected Finish Date: {dateTimeConvert(state.expectedFinishDate)}</Item>

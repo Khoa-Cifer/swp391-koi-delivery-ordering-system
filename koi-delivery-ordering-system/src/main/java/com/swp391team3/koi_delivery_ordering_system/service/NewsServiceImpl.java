@@ -54,4 +54,23 @@ public class NewsServiceImpl implements INewsService {
         newsRepository.save(news);
         return true;
     }
+
+    @Override
+    public boolean updateNews(Long newsId, Long salesStaffId, String title, String description, MultipartFile file) throws IOException {
+        Optional<News> oldNews = newsRepository.findById(newsId);
+        if (oldNews.isPresent()) {
+            if (oldNews.get().getCreatedBy().getId() != salesStaffId) {
+                return false;
+            }
+            oldNews.get().setTitle(title);
+            oldNews.get().setDescription(description);
+            fileService.updateFileInFileSystem(oldNews.get().getFile().getId(), file);
+        }
+        return false;
+    }
+
+    @Override
+    public List<News> getNewsCreatedBySalesStaff(Long salesStaffId) {
+        return newsRepository.getNewsBySalesStaff(salesStaffId);
+    }
 }
