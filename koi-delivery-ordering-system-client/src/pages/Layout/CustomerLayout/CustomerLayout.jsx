@@ -13,7 +13,7 @@ function CustomerLayout() {
                 {/* Main Content */}
                 <Box
                     component="main"
-                    sx={{ flexGrow: 1, p: 2, mt: "64px", display: "flex" }}
+                    sx={{ flexGrow: 1, p: 2, mt: "32px", display: "flex" }}
                 >
                     <Sidebar />
                     <Outlet />

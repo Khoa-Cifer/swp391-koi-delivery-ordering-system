@@ -127,6 +127,8 @@ function App() {
               <Route path="/customer-create-order" element={<CustomerPrivateRoute element={<CustomerCreateOrder />} />} />
               <Route path="/customer-edit-profile" element={<CustomerPrivateRoute element={<CustomerEditProfile />} />} />
               <Route path="/customer-edit-order/:id" element={<CustomerPrivateRoute element={<CustomerEditOrder />} />} />
+              <Route path="/customer-create-order/:id" element={<CustomerPrivateRoute element={<CustomerCreateFish />} />} />
+              <Route path="/order-fish-payment/:id" element={<FishPayment />} />
               <Route path="/customer-edit-order/:id/order-conclusion-info" element={<CustomerPrivateRoute element={<OrderFinalInfo />} />} />
             </Route>
 

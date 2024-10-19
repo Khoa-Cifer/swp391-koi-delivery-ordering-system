@@ -172,14 +172,14 @@ export async function getAllOrders() {
   }
 }
 
-// export async function deleteOrderById(id, orderStatus) {
-//   try {
-//     const response = await axiosClient.delete(`orders/deleteOrderById/${id}/${orderStatus}`);
-//     return response.data;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+export async function deleteOrderById(id) {
+  try {
+    const response = await axiosClient.delete(`orders/deleteOrderById/${id}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export async function updateGeneralOrderInfo(
   orderId,
