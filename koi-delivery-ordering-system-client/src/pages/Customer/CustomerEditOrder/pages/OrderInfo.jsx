@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { Box, styled } from "@mui/material";
 import { useCallback, useState } from "react";
@@ -35,7 +36,7 @@ function OrderInfo({ order }) {
     const [expectedFinishDate, setExpectedFinishDate] = useState(new Date(order.expectedFinishDate));
     const [selectedButton, setSelectedButton] = useState(0);
     const [updated, setUpdated] = useState(false);
-    const [extraInfo, setExtraInfo] = useState(false);
+    const [orderId, setOrderId] = useState(false);
 
     const navigate = useNavigate();
 
@@ -102,9 +103,7 @@ function OrderInfo({ order }) {
     }
 
     function handleConclusion() {
-        navigate(`/customer-edit-order/${order.id}/order-conclusion-info`, {
-            state: extraInfo,
-        })
+        navigate(`/customer-edit-order/${order.id}/order-conclusion-info`)
     }
 
     async function handleSubmit() {
@@ -127,14 +126,12 @@ function OrderInfo({ order }) {
             )
 
             if (response) {
-                setExtraInfo(response);
+                setOrderId(response);
                 toast("Update successfully, please conclude your update and pay the extra money");
                 setUpdated(true);
             } else {
                 toast("Unsupported Area");
             }
-
-            // eslint-disable-next-line no-unused-vars
         } catch (e) {
             toast("unexpected error has been occurred")
         }
@@ -224,7 +221,8 @@ function OrderInfo({ order }) {
                     <Button
                         onClick={() => handleButtonClick(1)}
                         style={{
-                            backgroundColor: selectedButton === 1 ? 'blue' : '',
+                            backgroundColor: selectedButton === 1 ? 'aqua' : '#C4F3FD',
+                            color: selectedButton === 1 ? 'white' : 'black'
                         }}
                     >
                         Select Address for Receiver

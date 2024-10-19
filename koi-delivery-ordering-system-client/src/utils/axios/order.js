@@ -59,7 +59,7 @@ export async function getOrderById(orderId) {
 export async function calculateOrderPrice(orderId) {
   try {
     const response = await axiosClient.post(`orders/calculatePrice/${orderId}`);
-    console.log(response.data);
+    return response.data;
   } catch (error) {
     console.log(error);
   }

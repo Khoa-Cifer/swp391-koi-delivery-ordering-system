@@ -15,8 +15,8 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
+  deleteOrderById,
   getOrdersByStatusAndCustomerId,
-  updateOrderStatus,
 } from "../../../../utils/axios/order";
 import dateTimeConvert from "../../../../components/utils";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
@@ -91,9 +91,8 @@ function PostedOrder({ customerId }) {
     
   };
 
-
   const handleOpenAddFishPage = (order) => {
-    navigate(`/customer-create-order/${order.id}`, {
+    navigate(`/customer-add-fish/${order.id}`, {
       state: order,
     }); 
   };
@@ -112,8 +111,6 @@ function PostedOrder({ customerId }) {
     }
   }
 
- 
-  
   useEffect(() => {
     fetchPostedOrder();
   }, []);
@@ -140,10 +137,8 @@ function PostedOrder({ customerId }) {
 
   async function handleDeleteOrderConfirm() {
     try {
-      const abortedOrderStatus = 9;
-      const response = await updateOrderStatus(
+      const response = await deleteOrderById(
         selectedOrderId,
-        abortedOrderStatus
       );
       if (response) {
         toast("Delete order successfully");

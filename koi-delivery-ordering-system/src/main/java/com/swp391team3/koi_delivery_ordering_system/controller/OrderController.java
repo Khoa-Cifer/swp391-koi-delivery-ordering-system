@@ -5,11 +5,9 @@ import com.swp391team3.koi_delivery_ordering_system.requestDto.FinishOrderUpdate
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderListFilteredRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderSalesStaffCheckingRequestDTO;
-import com.swp391team3.koi_delivery_ordering_system.responseDto.UpdateOrderResponseDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -125,7 +123,7 @@ public class OrderController {
             Order order = optionalOrder.get();
 
             if (order.getOrderStatus() == orderStatus.DRAFT || order.getOrderStatus() == orderStatus.POSTED) {
-                UpdateOrderResponseDTO updatedOrder = orderService.updateOrder(
+                Long updatedOrderId = orderService.updateOrder(
                         orderId,
                         request.getName(),
                         request.getDescription(),
@@ -137,7 +135,7 @@ public class OrderController {
                         request.getSenderLongitude(),
                         request.getSenderLatitude()
                 );
-                return ResponseEntity.ok(updatedOrder);
+                return ResponseEntity.ok(updatedOrderId);
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot edit order with status other than DRAFT or POSTED");
             }

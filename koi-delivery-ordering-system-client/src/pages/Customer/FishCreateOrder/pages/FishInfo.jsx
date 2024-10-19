@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Box, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import License from "../utils/License";
@@ -9,7 +10,7 @@ import {
   createLicenseOrderInfo,
 } from "../../../../utils/axios/license";
 import { calculateOrderPrice } from "../../../../utils/axios/order";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const CustomBoxContainer = styled(Box)(() => ({
   display: "flex",
@@ -17,14 +18,36 @@ const CustomBoxContainer = styled(Box)(() => ({
 }));
 
 function FishInfo({ order }) {
-  
+  const navigate = useNavigate();
+  const [previewUrl, setPreviewUrl] = useState([]);
   // State for managing fish entries
   const [fishEntries, setFishEntries] = useState([
     { name: "", age: "", size: "", weight: "", price: "", file: null },
   ]);
   const [licenseForms, setLicenseForms] = useState([]);
   const [submittedLicense, setSubmittedLicense] = useState({});
-  const [totalAddedFishes, setTotalAddedFishes] = useState(0);
+  const [fishCreate, setFishCreate] = useState(false);
+
+  useEffect(() => {
+    const updatedPreviewUrls = [...previewUrl]; // Clone the existing previewUrl array
+
+    for (let i = 0; i < fishEntries.length; i++) {
+      if (!fishEntries[i].file) {
+        continue; // Skip if no file for this entry
+      }
+
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        updatedPreviewUrls[i] = reader.result; // Set preview for this fish entry
+
+        // Update the previewUrl state with the new array
+        setPreviewUrl([...updatedPreviewUrls]);
+      };
+
+      reader.readAsDataURL(fishEntries[i].file);
+    }
+  }, [fishEntries]);
 
   const handleLicenseChange = (e, index) => {
     const { name, value, files } = e.target;
@@ -57,12 +80,12 @@ function FishInfo({ order }) {
     setLicenseForms([...licenseForms, licenseForms.length]);
   };
 
-  const addNewFishEntry = () => {
-    setFishEntries([
-      ...fishEntries,
-      { name: "", age: "", size: "", weight: "", price: "", file: null },
-    ]);
-  };
+  // const addNewFishEntry = () => {
+  //   setFishEntries([
+  //     ...fishEntries,
+  //     { name: "", age: "", size: "", weight: "", price: "", file: null },
+  //   ]);
+  // };
 
   const handleFishChange = (index, e) => {
     const { name, value, files } = e.target;
@@ -90,23 +113,20 @@ function FishInfo({ order }) {
     });
   };
 
-
-
-
-
   async function handleSubmit() {
     const fishDataList = [];
-   
-    Navigate(`/order-fish-payment/${order.id}`, {
-      state: {
-        fishEntries,
-        submittedLicense,
-        orderId: order.id
-      }
-    });
-    
+
+    // Navigate(`/order-fish-payment/${order.id}`, {
+    //   state: {
+    //     fishEntries,
+    //     submittedLicense,
+    //     orderId: order.id
+    //   }
+    // });
+
+    let response;
     for (const fish of fishEntries) {
-      const fishData = await createFishOrderInfo(
+      response = await createFishOrderInfo(
         fish.name,
         fish.age,
         fish.size,
@@ -115,22 +135,26 @@ function FishInfo({ order }) {
         fish.file,
         order.id
       );
-      fishDataList.push(fishData);
     }
 
     const submittedLicenseArray = Object.values(submittedLicense);
-
-    if (fishDataList.length > 0) {
+    if (response) {
       let licenseData;
 
       if (submittedLicenseArray.length > 0) {
         for (let i = 0; i < submittedLicenseArray.length; i++) {
+          console.log(submittedLicenseArray[i].name);
+          console.log(submittedLicenseArray[i]);
+
+          console.log(fishDataList[i]);
+          console.log(fishDataList);
           licenseData = await createLicenseOrderInfo(
             submittedLicenseArray[i].name,
             submittedLicenseArray[i].description,
             new Date(submittedLicenseArray[i].date).toISOString(),
-            fishDataList[i] // Link license to the respective fish order
+            response
           );
+          console.log(licenseData);
           const fileList = Object.keys(submittedLicenseArray[i])
             .filter((key) => key.startsWith("file-"))
             .map((key) => submittedLicenseArray[i][key]);
@@ -142,12 +166,22 @@ function FishInfo({ order }) {
           }
         }
         if (licenseData) {
-          toast("Added Fish and its License to the order successfully");
+          const paymentResponse = await calculateOrderPrice(order.id);
+          if (paymentResponse) {
+            toast("Added Fish and its License to the order successfully");
+            setFishCreate(true);
+          }
         } else {
           toast("Unexpected error has occurred");
         }
       } else {
-        toast("Added Fish to the order successfully");
+        const paymentResponse = await calculateOrderPrice(order.id);
+        if (paymentResponse) {
+          toast("Add Fish to the order successfully");
+          setFishCreate(true);
+        } else {
+          toast("Unexpected error has occurred");
+        }
       }
 
       setSubmittedLicense({});
@@ -155,14 +189,13 @@ function FishInfo({ order }) {
         { name: "", age: "", size: "", weight: "", price: "", file: null },
       ]); // Reset to one empty fish entry
       setLicenseForms([]);
-      setTotalAddedFishes(totalAddedFishes + fishDataList.length);
-      await calculateOrderPrice(order.id);
     } else {
       toast("Unexpected error has occurred");
     }
+  }
 
-    
-
+  const handlePaymentNavigation = () => {
+    navigate(`/customer-edit-order/${order.id}/order-conclusion-info`)
   }
 
   return (
@@ -234,19 +267,34 @@ function FishInfo({ order }) {
             </div>
           ))}
           <div style={{ display: "flex", gap: "10px" }}>
-            <button className="form-button" onClick={() => addNewFishEntry()}>
-              Add Another Fish
-            </button>
+            {/* <button className="form-button" onClick={() => addNewFishEntry()}>
+              Add Fish
+            </button> */}
 
-            <button className="form-button" onClick={addNewLicenseForm}>
+            <button className="form-button" onClick={addNewLicenseForm} style={{ width: "50%" }}>
               Add License
             </button>
 
-            <button className="form-button" onClick={() => handleSubmit()}>
+            <button className="form-button" onClick={() => handleSubmit()} style={{ width: "50%" }}>
               Submit
             </button>
           </div>
+
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            {fishCreate && (
+              <button className="form-button" onClick={() => handlePaymentNavigation()} style={{ width: "60%", marginTop: "10px" }}>
+                Make your payment
+              </button>
+            )}
+          </div>
         </div>
+
+        <div >
+          {previewUrl && previewUrl.map && previewUrl.map((url, index) => (
+            <img key={index} src={url} alt="Preview" style={{ maxWidth: "40vw", marginBottom: "20px" }} />
+          ))}
+        </div>
+
       </CustomBoxContainer>
 
       {licenseForms.map((index) => (

@@ -54,6 +54,8 @@ import DeliveryOrderDetail from "./pages/DeliveryStaff/DeliveryOrderDetail/Deliv
 import DeliveryFishDetail from "./pages/DeliveryStaff/DeliveryFishDetail/DeliveryFishDetail";
 import WaitingForConfirm from "./pages/public/WatingForConfirm/WatingForConfirm";
 import RegistrationSuccess from "./pages/public/RegistrationSuccess/RegistrationSuccess";
+import CustomerCreateFish from "./pages/Customer/FishCreateOrder/CustomerCreateFish";
+import FishPayment from "./pages/Customer/FishCreateOrder/pages/FishPayment";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -127,7 +129,7 @@ function App() {
               <Route path="/customer-create-order" element={<CustomerPrivateRoute element={<CustomerCreateOrder />} />} />
               <Route path="/customer-edit-profile" element={<CustomerPrivateRoute element={<CustomerEditProfile />} />} />
               <Route path="/customer-edit-order/:id" element={<CustomerPrivateRoute element={<CustomerEditOrder />} />} />
-              <Route path="/customer-create-order/:id" element={<CustomerPrivateRoute element={<CustomerCreateFish />} />} />
+              <Route path="/customer-add-fish/:id" element={<CustomerPrivateRoute element={<CustomerCreateFish />} />} />
               <Route path="/order-fish-payment/:id" element={<FishPayment />} />
               <Route path="/customer-edit-order/:id/order-conclusion-info" element={<CustomerPrivateRoute element={<OrderFinalInfo />} />} />
             </Route>

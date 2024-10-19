@@ -205,7 +205,8 @@ function OrderInfo({ orderId, formStepData }) {
                     <Button
                         onClick={() => handleButtonClick(1)}
                         style={{
-                            backgroundColor: selectedButton === 1 ? 'blue' : '',
+                            backgroundColor: selectedButton === 1 ? 'aqua' : '#C4F3FD',
+                            color: selectedButton === 1 ? 'white' : 'black'
                         }}
                     >
                         Select Address for Receiver
