@@ -3,7 +3,14 @@ import { useEffect, useState } from "react";
 import { getOrdersByStatus } from "../../../../utils/axios/order";
 import dateTimeConvert from "../../../../components/utils";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import { deleteNewsById, getAllNews } from "../../../../utils/axios/news";
 import { getFileByFileId } from "../../../../utils/axios/file";
 import ToastUtil from "../../../../components/toastContainer";
@@ -16,8 +23,8 @@ function MainContent() {
   const [news, setNews] = useState([]);
   const [visibleNewsCount, setVisibleNewsCount] = useState(4);
 
-  const [openDialog, setOpenDialog] = useState(false);  // State to control dialog visibility
-  const [selectedNewsId, setSelectedNewsId] = useState(null);  // State to track which news to delete
+  const [openDialog, setOpenDialog] = useState(false); // State to control dialog visibility
+  const [selectedNewsId, setSelectedNewsId] = useState(null); // State to track which news to delete
 
   const navigate = useNavigate();
 
@@ -75,20 +82,20 @@ function MainContent() {
   // Handle the opening of the delete confirmation dialog
   const handleOpenDialog = (newsId) => {
     setSelectedNewsId(newsId);
-    setOpenDialog(true); 
+    setOpenDialog(true);
   };
 
   // Handle the closing of the dialog without deleting
   const handleCloseDialog = () => {
-    setOpenDialog(false);  
+    setOpenDialog(false);
   };
 
   // Handle delete confirmation and refresh news
   const handleConfirmDelete = async () => {
     try {
       await deleteNewsById(selectedNewsId);
-      setOpenDialog(false); 
-      fetchNews();  
+      setOpenDialog(false);
+      await fetchNews();
       toast.success("Delete successfully!");
     } catch (error) {
       console.error("Error deleting news:", error);
@@ -105,12 +112,18 @@ function MainContent() {
     setVisibleNewsCount((prevCount) => prevCount + 4);
   };
 
+  const handleEdit = (newsId) => {
+    navigate(`/news-sales-staff/${newsId}`);
+  };
+
   return (
     <div className="main-content-container">
       <ToastUtil />
       <div className="news-container-sale">
         <div className="New">
-          <strong>News</strong>
+          <h2>
+            <strong>News</strong>
+          </h2>
         </div>
 
         <div className="news-container">
@@ -129,10 +142,12 @@ function MainContent() {
                     ellipsis={{
                       rows: 3,
                       expandable: false,
-                      symbol: '...',
+                      symbol: "...",
                     }}
                   >
-                    <div dangerouslySetInnerHTML={{ __html: newsItem.description }} />
+                    <div
+                      dangerouslySetInnerHTML={{ __html: newsItem.description }}
+                    />
                   </Paragraph>
 
                   <div className="news-footer">
@@ -154,7 +169,7 @@ function MainContent() {
                         variant="outlined"
                         color="secondary"
                         size="small"
-                        onClick={() => handleOpenDialog(newsItem.id)}  // Open confirmation dialog
+                        onClick={() => handleOpenDialog(newsItem.id)} // Open confirmation dialog
                         className="delete-btn"
                       >
                         Delete

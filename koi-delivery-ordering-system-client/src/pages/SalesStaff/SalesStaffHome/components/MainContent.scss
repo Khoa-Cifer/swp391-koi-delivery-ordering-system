@@ -1,8 +1,6 @@
 .main-content-container {
   .news-container-sale,
   .order-container-sale {
-    margin-top: 3%;
-
     .news-grid,
     .order-grid {
       display: grid;
@@ -12,6 +10,9 @@
       margin: 2% 5% 2% 5%;
     }
 
+    .New{
+      margin-left: 5%;
+    }
     .news-item,
     .order-item {
       background: #fff;

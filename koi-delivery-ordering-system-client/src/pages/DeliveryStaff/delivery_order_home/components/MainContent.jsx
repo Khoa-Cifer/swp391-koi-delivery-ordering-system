@@ -81,6 +81,8 @@ const MainContent = () => {
   };
   return (
     <div className="delivery-order-container">
+
+      <div className="google-map"><h2>Google map</h2></div>
       <div className="map-container">
         <GoogleMap mapContainerStyle={containerStyle} zoom={10} center={center}>
           {directions && <DirectionsRenderer directions={directions} />}
