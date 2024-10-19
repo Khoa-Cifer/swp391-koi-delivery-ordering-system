@@ -127,6 +127,8 @@ function App() {
               <Route path="/customer-create-order" element={<CustomerPrivateRoute element={<CustomerCreateOrder />} />} />
               <Route path="/customer-edit-profile" element={<CustomerPrivateRoute element={<CustomerEditProfile />} />} />
               <Route path="/customer-edit-order/:id" element={<CustomerPrivateRoute element={<CustomerEditOrder />} />} />
+              <Route path="/customer-create-order/:id" element={<CustomerPrivateRoute element={<CustomerCreateFish />} />} />
+              <Route path="/order-fish-payment/:id" element={<FishPayment />} />
               <Route path="/customer-edit-order/:id/order-conclusion-info" element={<CustomerPrivateRoute element={<OrderFinalInfo />} />} />
             </Route>
 
@@ -153,6 +155,7 @@ function App() {
               <Route path="/sales-order-detail/:id" element={<SalesStaffPrivateRoute element={<SalesOrderDetail />} />} />
               <Route path="/sales-order-detail/:id/sales-fish-detail" element={<SalesStaffPrivateRoute element={<SalesFishDetail />} />} />
               <Route path="/news-sales-staff" element={<SalesStaffPrivateRoute element={<SalesStaffNews />} />} />
+              <Route path="/news-sales-staff/:id" element={<SalesStaffPrivateRoute element={<SalesStaffNews />} />} />
             </Route>
 
             <Route path="/payment-success" element={<AllowedRoute element={<PaymentSuccess />} />} />
