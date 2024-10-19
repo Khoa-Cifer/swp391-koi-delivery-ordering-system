@@ -43,7 +43,6 @@ function Sidebar() {
     fetchUserData();
   }, [])
 
-
   const handleOpenCreateOrder = () => {
     navigate("customer-create-order");
   }

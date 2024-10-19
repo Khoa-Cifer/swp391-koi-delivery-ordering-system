@@ -10,7 +10,6 @@ const CustomTypo = styled(Typography)(() => ({
     margin: "10px",
 }));
 
-// eslint-disable-next-line react/prop-types
 function Sidebar() {
     const navigate = useNavigate();
 

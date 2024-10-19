@@ -4,9 +4,9 @@ import "./delivery_staff_sidebar.scss";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import default_avatar from "../../../../../assets/default-avatar.jpg";
-import { getCustomerById } from "../../../../../utils/axios/customer";
 import { jwtDecode } from "jwt-decode";
 import { getFileByFileId } from "../../../../../utils/axios/file";
+import { getDeliveryStaffById } from "../../../../../utils/axios/deliveryStaff";
 
 const InfoHeader = styled(Typography)(() => ({
   margin: "0px",
@@ -28,7 +28,7 @@ function Sidebar() {
 
   useEffect(() => {
     async function fetchUserData() {
-      const customer = await getCustomerById(deliveryStaffId);
+      const customer = await getDeliveryStaffById(deliveryStaffId);
       if (customer.file) {
         const imageResponse = await getFileByFileId(customer.file.id);;
         const imgUrl = URL.createObjectURL(imageResponse);
