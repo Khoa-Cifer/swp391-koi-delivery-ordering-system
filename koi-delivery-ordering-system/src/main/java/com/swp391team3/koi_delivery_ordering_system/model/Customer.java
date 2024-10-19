@@ -32,7 +32,7 @@ public class Customer implements UserDetails {
     private String phoneNumber;
 
     @Column(columnDefinition = "boolean default true")
-    private boolean activeStatus = true;
+    private boolean activeStatus;
 
     @OneToOne
     @JoinColumn(name = "avatar_id", referencedColumnName = "id")

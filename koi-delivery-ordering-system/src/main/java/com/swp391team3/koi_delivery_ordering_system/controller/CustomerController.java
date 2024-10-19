@@ -20,7 +20,6 @@ import java.util.Optional;
 public class CustomerController {
     private final ICustomerService customerService;
 
-
     // Get all customers
     //PASSED
     @GetMapping("/getAllCustomers")
@@ -39,7 +38,7 @@ public class CustomerController {
 
     // Get customer by email
     //PASSED
-    @GetMapping("/email")
+    @GetMapping("/get-customer-by-email")
     public ResponseEntity<Customer> getCustomerByEmail(@RequestParam String email) {
         Customer customer = customerService.getCustomerByEmail(email);
         if (customer != null) {
