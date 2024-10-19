@@ -1,10 +1,10 @@
+/* eslint-disable react/prop-types */
 import { Box, Paper, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getOrdersByStatus } from "../../../../utils/axios/order";
+import { getOrdersByStatusAndCustomerId } from "../../../../utils/axios/order";
 import dateTimeConvert from "../../../../components/utils";
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import ToastUtil from "../../../../components/toastContainer";
 
 const commonStyles = {
     bgcolor: 'background.paper',
@@ -24,7 +24,7 @@ const SearchBox = styled(Box)(() => ({
     gap: "30px"
 }));
 
-function GettingOrder() {
+function GettingOrder({ customerId }) {
     const [orders, setOrders] = useState();
     const [filteredOrders, setFilteredOrders] = useState([]); // Filtered orders for display
     const [expandedOrderId, setExpandedOrderId] = useState(null); // To track expanded orders
@@ -39,7 +39,7 @@ function GettingOrder() {
     useEffect(() => {
         const gettingOrderStatus = 3;
         async function fetchGettingOrder() {
-            const response = await getOrdersByStatus(gettingOrderStatus);
+            const response = await getOrdersByStatusAndCustomerId(customerId, gettingOrderStatus);
             if (response) {
                 setOrders(response);
                 setFilteredOrders(response);
@@ -144,7 +144,7 @@ function GettingOrder() {
                                     <div className="order-text-info">
                                         <div>
                                             <OrderInfoHeader>Price</OrderInfoHeader>
-                                            <Typography>{Math.floor(order.price)}</Typography>
+                                            <Typography>{Math.floor(order.price).toLocaleString()}</Typography>
                                         </div>
                                         <div>
                                             <OrderInfoHeader>Tracking Id</OrderInfoHeader>
@@ -205,7 +205,6 @@ function GettingOrder() {
             ) : (
                 <Typography>No order found</Typography>
             )}
-            <ToastUtil />
         </div>
     )
 }

@@ -74,6 +74,19 @@ export async function getOrdersByStatus(orderStatus) {
   }
 }
 
+export async function getOrdersByStatusAndCustomerId(customerId, status) {
+  try {
+    const response = await axiosClient.get(`orders/get-orders-filtered`, {
+      params: {
+        customerId, status
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function updateOrderStatus(orderId, status) {
   try {
     const response = await axiosClient.post(

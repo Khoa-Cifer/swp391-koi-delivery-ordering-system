@@ -13,4 +13,6 @@ public interface INewsService {
     Optional<News> getNewsById(Long id);
     void deleteNewsById(Long id);
     public boolean createNews(String title, String description, Long salesStaffId, MultipartFile file);
+    public boolean updateNews(Long salesStaffId, Long newsId, String title, String description, MultipartFile file) throws IOException;
+    public List<News> getNewsCreatedBySalesStaff(Long salesStaffId);
 }

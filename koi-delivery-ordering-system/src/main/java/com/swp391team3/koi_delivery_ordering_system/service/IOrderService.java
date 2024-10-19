@@ -3,6 +3,7 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 import com.swp391team3.koi_delivery_ordering_system.model.*;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.FinishOrderUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderListFilteredRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.responseDto.UpdateOrderResponseDTO;
 
 import java.util.Date;
@@ -19,6 +20,8 @@ public interface IOrderService {
 
     boolean updateOrderStatus(Long id, int status);
     List<Order> getOrderByStatus(int status);
+
+    List<Order> getOrderByStatusFilteredByCustomer(OrderListFilteredRequestDTO request);
 
     double calculateOrderPrice(Long id);
 

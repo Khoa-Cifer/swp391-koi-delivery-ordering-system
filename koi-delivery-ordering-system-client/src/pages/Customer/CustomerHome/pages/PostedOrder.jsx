@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   Box,
   Paper,
@@ -14,10 +15,9 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
-  getOrdersByStatus,
+  getOrdersByStatusAndCustomerId,
   updateOrderStatus,
 } from "../../../../utils/axios/order";
-import ToastUtil from "../../../../components/toastContainer";
 import dateTimeConvert from "../../../../components/utils";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import RestoreFromTrashIcon from "@mui/icons-material/RestoreFromTrash";
@@ -25,6 +25,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import ToastUtil from "../../../../components/toastContainer";
 
 const commonStyles = {
   bgcolor: "background.paper",
@@ -44,11 +45,11 @@ const SearchBox = styled(Box)(() => ({
   gap: "30px"
 }));
 
-const searchInputStyle = {
-  width: "100px", // Adjust width for smaller search inputs
-  boxSizing: "border-box",
-  padding: "8px", // Add some padding to ensure usability
-};
+// const searchInputStyle = {
+//   width: "100px", // Adjust width for smaller search inputs
+//   boxSizing: "border-box",
+//   padding: "8px", // Add some padding to ensure usability
+// };
 
 const modalStyle = {
   position: "absolute",
@@ -62,7 +63,7 @@ const modalStyle = {
   borderRadius: 2,
 };
 
-function PostedOrder() {
+function PostedOrder({ customerId }) {
   const [orders, setOrders] = useState();
   const [filteredOrders, setFilteredOrders] = useState([]); // Filtered orders for display
   const [expandedOrderId, setExpandedOrderId] = useState(null); // To track expanded orders
@@ -95,7 +96,7 @@ function PostedOrder() {
 
   const postedOrderStatus = 1;
   async function fetchPostedOrder() {
-    const response = await getOrdersByStatus(postedOrderStatus);
+    const response = await getOrdersByStatusAndCustomerId(customerId, postedOrderStatus);
     if (response) {
       setOrders(response);
       setFilteredOrders(response);
@@ -211,7 +212,7 @@ function PostedOrder() {
               />
             </div>
           </SearchBox >
-          
+
           {filteredOrders &&
             filteredOrders.map &&
             filteredOrders.map((order) => (
@@ -257,7 +258,7 @@ function PostedOrder() {
                   <div className="order-text-info">
                     <div>
                       <OrderInfoHeader>Price</OrderInfoHeader>
-                      <Typography>{Math.floor(order.price)}</Typography>
+                      <Typography>{Math.floor(order.price).toLocaleString()}</Typography>
                     </div>
                     <div>
                       <OrderInfoHeader>Tracking Id</OrderInfoHeader>
@@ -345,6 +346,7 @@ function PostedOrder() {
       ) : (
         <Typography>No order found</Typography>
       )}
+      <ToastUtil />
     </div>
   );
 }

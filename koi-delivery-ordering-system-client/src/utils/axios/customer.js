@@ -17,7 +17,7 @@ export async function userLogin(email, password, userType) {
 
 export async function userRegister(email, username, password, phoneNumber) {
     try {
-        const response = await axiosClient.post("auth/register",
+        const response = await axiosClient.post("auth/register-confirmation",
             {
                 email,
                 username,

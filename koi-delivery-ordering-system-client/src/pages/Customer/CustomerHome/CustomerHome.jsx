@@ -1,4 +1,4 @@
-import { Box, styled, Tab, Tabs } from "@mui/material";
+import { Box, Tab, Tabs } from "@mui/material";
 import PropTypes from 'prop-types';
 import { useState } from "react";
 import PostedOrder from "./pages/PostedOrder";
@@ -7,10 +7,11 @@ import DraftOrder from "./pages/DraftOrder";
 import GettingOrder from "./pages/GettingOrder";
 import DeliveringOrder from "./pages/DeliveringOrder";
 import CompletedOrder from "./pages/CompletedOrder";
+import { jwtDecode } from "jwt-decode";
 
-const CustomTab = styled(Tab)(() => ({
-    maxWidth: "20%"
-}));
+// const CustomTab = styled(Tab)(() => ({
+//     maxWidth: "20%"
+// }));
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -45,6 +46,13 @@ function a11yProps(index) {
 function CustomerHome() {
     const [value, setValue] = useState(1);
 
+    const token = localStorage.getItem("token");
+    let customerId;
+    if (token) {
+        const customerInfo = jwtDecode(token);
+        customerId = customerInfo.sub.substring(2);
+    }
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -62,19 +70,19 @@ function CustomerHome() {
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
-                    <DraftOrder />
+                    <DraftOrder customerId={customerId}/>
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
-                    <PostedOrder />
+                    <PostedOrder customerId={customerId}/>
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
-                    <GettingOrder />
+                    <GettingOrder customerId={customerId}/>
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={3}>
-                    <DeliveringOrder />
+                    <DeliveringOrder customerId={customerId}/>
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={4}>
-                    <CompletedOrder />
+                    <CompletedOrder customerId={customerId}/>
                 </CustomTabPanel>
             </Box>
         </div>

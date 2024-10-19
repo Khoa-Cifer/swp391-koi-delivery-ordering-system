@@ -1,16 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/home/Home";
-import SignUp from "./pages/register/register";
+import SignUp from "./pages/SignUp/SignUp";
 import DeliveryStaffHome from "./pages/DeliveryStaff/home_delivery/Delivery_staff/DeliveryStaffHome";
 import AuthProvider from "./authentication/AuthProvider";
 import PrivateRoute from "./authentication/PrivateRoute";
-import DeliveryOrderHome from "./pages/DeliveryStaff/delivery_order_home/DeliveryOrderHome";
-import LoginCustomer from "./pages/login/LoginCustomer/LoginCustomer";
-import LoginSaleStaff from "./pages/login/LoginSaleStaff/LoginSaleStaff";
-import LoginDeliveryStaff from "./pages/login/LoginDeliveryStaff/LoginDeliveryStaff";
-import DeliveryOrderDetail from "./pages/DeliveryStaff/delivery_order_detail/DeliveryOrderDetail";
-import DeliveryFishDetail from "./pages/DeliveryStaff/delivery_fish_detail/DeliveryFishDetail";
-import LoginAdmin from "./pages/login/LoginAdmin/LoginAdmin";
+import LoginCustomer from "./pages/Login/LoginCustomer/LoginCustomer";
+import LoginSaleStaff from "./pages/Login/LoginSaleStaff/LoginSaleStaff";
+import LoginDeliveryStaff from "./pages/Login/LoginDeliveryStaff/LoginDeliveryStaff";
+import LoginManager from "./pages/Login/LoginManager/LoginManager";
 import PostedOrderSalesStaff from "./pages/SalesStaff/OrderSalesStaff/PostedOrderSalesStaff";
 import CustomerLayout from "./pages/Layout/CustomerLayout/CustomerLayout";
 import CustomerEditProfile from "./pages/Customer/CustomerEditProfile/CustomerEditProfile";
@@ -36,10 +33,6 @@ import "./App.css"
 import PaymentRate from "./pages/Manager/SystemData/PaymentRate/PaymentRate";
 import ReceivedOrderSalesStaff from "./pages/SalesStaff/OrderSalesStaff/ReceivedOrderSalesStaff";
 import CustomerEditOrder from "./pages/Customer/CustomerEditOrder/CustomerEditOrder";
-import GettingOrderDeliveryStaff from "./pages/DeliveryStaff/delivery_order_home/GettingOrderDeliveryStaff";
-import AvailableToDelivery from "./pages/DeliveryStaff/delivery_order_home/AvailableToDelivery";
-import DeliveringOrder from "./pages/DeliveryStaff/delivery_order_home/DeliveringOrder";
-import AvailableToGet from "./pages/DeliveryStaff/delivery_order_home/AvailableToGet";
 import SalesStaffNews from "./pages/SalesStaff/SalesStaffNews/SalesStaffNews"
 import Page404 from "./pages/DefaultError/404";
 import Transaction from "./pages/Manager/SystemData/Transaction/Transaction";
@@ -52,6 +45,15 @@ import OrderFinalInfo from "./pages/Customer/CustomerEditOrder/pages/OrderFinalI
 import ContactPage from "./pages/public/Contact/Contact";
 import DeliveryStaffEditProfile from "./pages/DeliveryStaff/DeliveryStaffEditProfile/DeliveryStaffEditProfile";
 import SalesStaffEditProfile from "./pages/SalesStaff/SalesStaffEditProfile/SalesStaffEditProfile";
+import DeliveryOrderHome from "./pages/DeliveryStaff/DeliveryOrderHome/DeliveryOrderHome";
+import GettingOrderDeliveryStaff from "./pages/DeliveryStaff/DeliveryOrderHome/GettingOrderDeliveryStaff";
+import AvailableToDelivery from "./pages/DeliveryStaff/DeliveryOrderHome/AvailableToDelivery";
+import DeliveringOrder from "./pages/Customer/CustomerHome/pages/DeliveringOrder";
+import AvailableToGet from "./pages/DeliveryStaff/DeliveryOrderHome/AvailableToGet";
+import DeliveryOrderDetail from "./pages/DeliveryStaff/DeliveryOrderDetail/DeliveryOrderDetail";
+import DeliveryFishDetail from "./pages/DeliveryStaff/DeliveryFishDetail/DeliveryFishDetail";
+import WaitingForConfirm from "./pages/public/WatingForConfirm/WatingForConfirm";
+import RegistrationSuccess from "./pages/public/RegistrationSuccess/RegistrationSuccess";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -100,8 +102,11 @@ function App() {
             <Route path="/login-customer" element={<LoginCustomer />} />
             <Route path="/login-sales-staff" element={<LoginSaleStaff />} />
             <Route path="/login-delivery-staff" element={<LoginDeliveryStaff />} />
-            <Route path="/login-admin" element={<LoginAdmin />} />
-            
+            <Route path="/login-manager" element={<LoginManager />} />
+
+            <Route path="/waiting-for-confirmation" element={<WaitingForConfirm />} />
+            <Route path="/registration-success" element={<RegistrationSuccess />} />
+
             <Route element={<ManagerLayout />}>
               <Route path="/admin/report" element={<ManagerPrivateRoute element={<Report />} />} />
               <Route path="/admin/dashboard" element={<ManagerPrivateRoute element={<Dashboard />} />} />

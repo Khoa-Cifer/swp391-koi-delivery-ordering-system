@@ -66,6 +66,10 @@ function CustomerEditProfile() {
         setConfirmPassword(e.target.value);
     }
 
+    function handleCustomerHomeNavigation() {
+        navigate("/customer-home");
+    }
+
     async function handleSubmit() {
         let response = null;
         console.log(user);
@@ -204,7 +208,7 @@ function CustomerEditProfile() {
 
                             </Grid>
                             <Box sx={{ mt: 3, display: "flex", gap: "16px" }}>
-                                <Button variant="outlined" onClick={handleSubmit} fullWidth>
+                                <Button variant="outlined" onClick={() => handleCustomerHomeNavigation()} fullWidth>
                                     Cancel
                                 </Button>
                                 {user.email && user.username && user.phoneNumber &&
