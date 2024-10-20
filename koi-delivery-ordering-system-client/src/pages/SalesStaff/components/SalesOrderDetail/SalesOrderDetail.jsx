@@ -7,10 +7,11 @@ import { useCallback, useState } from "react";
 import GreenMarker from "../../../../assets/succeeded.svg"
 import BlueMarker from "../../../../assets/inTransit.svg"
 import RedMarker from "../../../../assets/failed.svg"
-import { updateOrderSalesAction, updateOrderStatus } from "../../../../utils/axios/order";
-import { toast } from "react-toastify";
 import ToastUtil from "../../../../components/toastContainer";
 import { jwtDecode } from "jwt-decode";
+import { acceptOrder, cancelOrder, confirmOrder } from "../../../../utils/axios/order";
+import { toast } from "react-toastify";
+import Spinner from "../../../../components/SpinnerLoading";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#fff',
@@ -32,6 +33,10 @@ const SubmitButton = styled(Button)(() => ({
 function SalesOrderDetail() {
   const location = useLocation();
   const navigate = useNavigate();
+
+  const [updateStatus, setUpdateStatus] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const centerDefault = {
     lat: 10.75,
     lng: 106.6667
@@ -78,45 +83,40 @@ function SalesOrderDetail() {
     lng: parseFloat(state.storage.longitude),
   }
 
-  const cancelledOrderStatus = 8;
-  const acceptedOrderStatus = 2;
-  const confirmedOrderStatus = 5;
-
-  const acceptSales = 0;
-  const confirmSales = 1;
-  const cancelSales = 2;
-
   async function handleAcceptOrder() {
-    const response = await updateOrderStatus(state.id, acceptedOrderStatus, salesId);
-    const salesUpdateOrderResponse = await updateOrderSalesAction(state.id, salesId, acceptSales);
-    if (response && salesUpdateOrderResponse) {
+    setIsLoading(true);
+    const response = await acceptOrder(state.id, salesId);
+    if (response) {
+      setUpdateStatus(true);
       toast("Order accepted");
-      navigate("/sales-staff-home")
     } else {
       toast("Unexpected Error has been occurred");
     }
+    setIsLoading(false);
   }
 
   async function handleConfirmOrder() {
-    const response = await updateOrderStatus(state.id, confirmedOrderStatus, salesId);
-    const salesUpdateOrderResponse = await updateOrderSalesAction(state.id, salesId, confirmSales);
-    if (response && salesUpdateOrderResponse) {
+    setIsLoading(true);
+    const response = await confirmOrder(state.id, salesId);
+    if (response) {
+      setUpdateStatus(true);
       toast("Order confirmed");
-      navigate("/sales-staff-home")
     } else {
       toast("Unexpected Error has been occurred");
     }
+    setIsLoading(false);
   }
 
   async function handleCancelOrder() {
-    const response = await updateOrderStatus(state.id, cancelledOrderStatus);
-    const salesUpdateOrderResponse = await updateOrderSalesAction(state.id, salesId, cancelSales);
-    if (response && salesUpdateOrderResponse) {
+    setIsLoading(true);
+    const response = await cancelOrder(state.id, salesId);
+    if (response) {
+      setUpdateStatus(true);
       toast("Order cancelled");
-      navigate("/sales-staff-home")
     } else {
       toast("Unexpected Error has been occurred");
     }
+    setIsLoading(false);
   }
 
   function handleViewFishDetail() {
@@ -129,6 +129,7 @@ function SalesOrderDetail() {
     <div className="sales-order-details-container">
       {/* Order Details Table */}
       <ToastUtil />
+      {isLoading && <Spinner />}
       <div className="order-name-detail">
         <strong>{state.name}</strong>
       </div>
@@ -242,13 +243,20 @@ function SalesOrderDetail() {
 
           {userData.roleId === 2 && (
             <>
-              <SubmitButton variant="contained" style={{ backgroundColor: "#f44336" }} onClick={() => handleCancelOrder()}>Cancel</SubmitButton>
-              {state.orderStatus === 1 && (
-                <SubmitButton variant="contained" onClick={() => handleAcceptOrder()}>Accept</SubmitButton>
+              {updateStatus ? (
+                <SubmitButton variant="contained" onClick={() => navigate("/sales-staff-home")}>Back to home page</SubmitButton>
+              ) : (
+                <>
+                  <SubmitButton variant="contained" style={{ backgroundColor: "#f44336" }} onClick={() => handleCancelOrder()}>Cancel</SubmitButton>
+                  {state.orderStatus === 1 && (
+                    <SubmitButton variant="contained" onClick={() => handleAcceptOrder()}>Accept</SubmitButton>
+                  )}
+                  {state.orderStatus === 4 && (
+                    <SubmitButton variant="contained" onClick={() => handleConfirmOrder()}>Confirm</SubmitButton>
+                  )}
+                </>
               )}
-              {state.orderStatus === 4 && (
-                <SubmitButton variant="contained" onClick={() => handleConfirmOrder()}>Confirm</SubmitButton>
-              )}
+
             </>
           )}
         </Box>

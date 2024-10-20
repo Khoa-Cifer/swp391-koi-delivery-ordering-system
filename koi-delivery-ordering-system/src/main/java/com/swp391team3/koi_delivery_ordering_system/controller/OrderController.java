@@ -1,10 +1,7 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.Order;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.FinishOrderUpdateRequestDTO;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderListFilteredRequestDTO;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderSalesStaffCheckingRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.*;
 import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import lombok.RequiredArgsConstructor;
@@ -86,10 +83,10 @@ public class OrderController {
         return ResponseEntity.ok(orderService.updateOrderStatus(id, status));
     }
 
-    @PutMapping("/updateOrderSales")
-    public ResponseEntity<?> updateOrderSalesAction(@RequestBody OrderSalesStaffCheckingRequestDTO request) {
-        return ResponseEntity.ok(orderService.updateOrderSalesAction(request.getOrderId(), request.getSalesId(), request.getActionStatus()));
-    }
+//    @PutMapping("/updateOrderSales")
+//    public ResponseEntity<?> updateOrderSalesAction(@RequestBody OrderSalesStaffCheckingRequestDTO request) {
+//        return ResponseEntity.ok(orderService.updateOrderSalesAction(request.getOrderId(), request.getSalesId(), request.getActionStatus()));
+//    }
 
     @GetMapping("/recommendOrdersForDelivery/{deliveryStaffId}")
     public ResponseEntity<?> recommendOrdersForDelivery(@PathVariable Long deliveryStaffId) {
@@ -140,15 +137,22 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The order does not exist");
         }
     }
-    @PostMapping("/accept-order/{id}")
-    public ResponseEntity<?> acceptOrder(@PathVariable Long id) {
-        boolean createOrderDelivering = orderService.acceptOrder(id);
-        return ResponseEntity.ok(createOrderDelivering);
-    }
-    @PostMapping("/confirm-order/{id}")
-    public ResponseEntity<?> confirmOrder(@PathVariable Long id) {
-        boolean createOrderDelivering = orderService.confirmOrder(id);
+
+    @PutMapping("/accept-order")
+    public ResponseEntity<?> acceptOrder(@RequestBody SalesCheckOrderRequestDTO request) {
+        boolean createOrderDelivering = orderService.acceptOrder(request.getOrderId(), request.getSalesId());
         return ResponseEntity.ok(createOrderDelivering);
     }
 
+    @PutMapping("/confirm-order")
+    public ResponseEntity<?> confirmOrder(@RequestBody SalesCheckOrderRequestDTO request) {
+        boolean createOrderDelivering = orderService.confirmOrder(request.getOrderId(), request.getSalesId());
+        return ResponseEntity.ok(createOrderDelivering);
+    }
+
+    @PutMapping("/cancel-order")
+    public ResponseEntity<?> cancelOrder(@RequestBody SalesCheckOrderRequestDTO request) {
+        boolean createOrderDelivering = orderService.cancelOrder(request.getOrderId(), request.getSalesId());
+        return ResponseEntity.ok(createOrderDelivering);
+    }
 }

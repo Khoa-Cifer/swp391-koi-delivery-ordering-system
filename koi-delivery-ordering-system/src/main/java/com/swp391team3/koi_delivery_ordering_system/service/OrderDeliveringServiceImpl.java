@@ -78,8 +78,8 @@ public class OrderDeliveringServiceImpl implements IOrderDeliveringService {
                 //send mail
                 EmailDetailDTO emailDetail = new EmailDetailDTO();
                 emailDetail.setReceiver((Object) deliveryStaff);
-                emailDetail.setSubject("The Order " + orderId + " Is Getting By " + deliveryStaff.getUsername());
-                emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
+                emailDetail.setSubject("You have receive " + order.getName() + " to get.");
+                emailDetail.setLink("http://localhost:5173");
                 emailService.sendEmail(emailDetail, 2);
                 return true;
             }
@@ -126,14 +126,14 @@ public class OrderDeliveringServiceImpl implements IOrderDeliveringService {
                 //send mail for delivery staff
                 EmailDetailDTO emailDetail = new EmailDetailDTO();
                 emailDetail.setReceiver((Object) deliveryStaff);
-                emailDetail.setSubject("The Order " + orderId + " Is Delivering By " + deliveryStaff.getUsername());
-                emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
+                emailDetail.setSubject("You have receive " + order.getName() + " to delivery.");
+                emailDetail.setLink("http://localhost:5173");
                 emailService.sendEmail(emailDetail, 4);
 
                 //send mail for customer
                 emailDetail.setReceiver((Object) customer);
-                emailDetail.setSubject("Order " + order.getId() + " Is Being Delivered To You");
-                emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
+                emailDetail.setSubject("Order " + order.getId() + " is being delivered to you");
+                emailDetail.setLink("http://localhost:5173");
                 emailService.sendEmail(emailDetail, 5);
                 return true;
             }
