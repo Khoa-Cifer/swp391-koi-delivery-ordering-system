@@ -52,10 +52,7 @@ public class OrderController {
 
     @DeleteMapping("/deleteOrderById/{id}")
     public ResponseEntity<?> deleteOrderById(@PathVariable Long id) {
-        if(orderService.deleteOrderById(id)){
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order can not be deleted.");
+        return ResponseEntity.ok(orderService.deleteOrderById(id));
     }
 
     @GetMapping("/getOrderByStatus/{status}")
