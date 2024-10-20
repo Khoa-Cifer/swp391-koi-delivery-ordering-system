@@ -400,8 +400,16 @@ public class OrderServiceImpl implements IOrderService {
                     boolean updateResult = deliveryStaffService.updateDeliveryStaffLocation(deliveryStaffDTO);
 
                     if (updateResult) {
-                        orderDeliveringService.finishDelivering(orderDeliveringResult.getId());
-                        result = true;
+                        if(orderDeliveringService.finishDelivering(orderDeliveringResult.getId())) {
+                            //get sales staff confirm
+                            SalesStaff salesStaff = foundOrder.get().getSalesStaffConfirmation();
+                            //send mail for sales staff
+                            EmailDetailDTO emailDetail = new EmailDetailDTO();
+                            emailDetail.setReceiver((Object) salesStaff);
+                            emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered to the customer");
+                            emailService.sendEmail(emailDetail, 8);
+                            result = true;
+                        }
                     }
                 }
             }

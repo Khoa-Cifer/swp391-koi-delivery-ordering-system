@@ -54,6 +54,10 @@ public class EmailService {
                 template = templateEngine.process("accept-customer-template", context);
             } else if (type == typeMail.CONFIRM_CUSTOMER_TEMPLATE) {
                 template = templateEngine.process("confirm-customer-template", context);
+            } else if (type == typeMail.COMPLETE_SALES_STAFF_TEMPLATE){
+                template = templateEngine.process("complete-salesStaff-template", context);
+            } else if (type == typeMail.FAILED_CUSTOMER_TEMPLATE) {
+                template = templateEngine.process("fail-customer-template", context);
             }
 
             //Creating a simple mail message
