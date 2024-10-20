@@ -105,7 +105,6 @@ function PostedOrder({ customerId }) {
   const handleDeleteFish = (fishId) => {
     setSelectedFishId(fishId);
     setFishModalOpen(true);
-    console.log(fishId);
   }
 
   const handleDeleteFishConfirm = async () => {
