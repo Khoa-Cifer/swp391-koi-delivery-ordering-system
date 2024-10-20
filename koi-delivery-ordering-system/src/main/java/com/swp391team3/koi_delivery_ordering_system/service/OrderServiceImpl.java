@@ -400,8 +400,16 @@ public class OrderServiceImpl implements IOrderService {
                     boolean updateResult = deliveryStaffService.updateDeliveryStaffLocation(deliveryStaffDTO);
 
                     if (updateResult) {
-                        orderDeliveringService.finishDelivering(orderDeliveringResult.getId());
-                        result = true;
+                        if(orderDeliveringService.finishDelivering(orderDeliveringResult.getId())) {
+                            //get sales staff confirm
+                            SalesStaff salesStaff = foundOrder.get().getSalesStaffConfirmation();
+                            //send mail for sales staff
+                            EmailDetailDTO emailDetail = new EmailDetailDTO();
+                            emailDetail.setReceiver((Object) salesStaff);
+                            emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered to the customer");
+                            emailService.sendEmail(emailDetail, 8);
+                            result = true;
+                        }
                     }
                 }
             }
@@ -474,6 +482,48 @@ public class OrderServiceImpl implements IOrderService {
             distancePrice = distancePrice * paymentRateService.getPaymentServiceById(priceBoard.PRICE_RATE_FOREIGN_ID).get().getRate();
         }
         return distancePrice + koiPrice;
+    }
+    @Override
+    public boolean acceptOrder(Long orderId) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            if (updateOrderStatus(orderId, orderStatus.ORDER_ACCEPTED)) {
+
+                Customer customer = optionalOrder.get().getCustomer();
+
+                //send mail for customer
+                EmailDetailDTO emailDetail = new EmailDetailDTO();
+                emailDetail.setReceiver((Object) customer);
+                emailDetail.setSubject("Order " + order.getId() + " Is Accepted");
+                emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
+                emailService.sendEmail(emailDetail, 6);
+
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean confirmOrder(Long orderId) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            if(updateOrderStatus(orderId, orderStatus.ORDER_CONFIRMED)) {
+
+                Customer customer = optionalOrder.get().getCustomer();
+
+                //send mail for customer
+                EmailDetailDTO emailDetail = new EmailDetailDTO();
+                emailDetail.setReceiver((Object) customer);
+                emailDetail.setSubject("Order " + order.getId() + " Is Confirmed");
+                emailDetail.setLink("http://localhost:8080/swagger-ui/index.html");
+                emailService.sendEmail(emailDetail, 7);
+                return true;
+            }
+        }
+        return false;
     }
 
 }
