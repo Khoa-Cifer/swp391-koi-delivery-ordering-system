@@ -12,9 +12,12 @@ import {
   GoogleMap,
   DirectionsRenderer,
   useJsApiLoader,
+  Marker,
 } from "@react-google-maps/api";
 import { getOrderByTrackingId } from "../../../utils/axios/order"; // Ensure this function is defined to fetch order data
 import { useNavigate } from "react-router-dom";
+import CurrentPosition from "../../../assets/delivery-current.svg"
+import dateTimeConvert from "../../../components/utils";
 
 const containerStyle = {
   width: "100%",
@@ -33,8 +36,21 @@ const TrackingOrder = () => {
   const [trackingId, setTrackingId] = useState("");
   const [orderData, setOrderData] = useState(null);
   const [distance, setDistance] = useState("");
-
+  const [isShowAll, setIsShowAll] = useState(false);
+  const [currentDelivery, setCurrentDelivery] = useState();
   const navigate = useNavigate();
+
+  const orderStatusLabels = {
+    0: "Draft",
+    1: "Posted",
+    2: "Accepted",
+    3: "Getting",
+    4: "Received",
+    5: "Confirmed",
+    6: "Delivering",
+    7: "Completed",
+    8: "Failed",
+  };
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
@@ -43,11 +59,32 @@ const TrackingOrder = () => {
   const handleSearch = async () => {
     if (trackingId) {
       try {
-          const order = await getOrderByTrackingId(trackingId);
+        const order = await getOrderByTrackingId(trackingId);
         console.log("Order data:", order);
-        setOrderData(order);
-        setOrigin(order.senderAddress);
-        setDestination(order.destinationAddress);
+
+        if (order) {
+          if (order.orderStatus === 0 || order.orderStatus === 8 || order.orderStatus === 9) {
+            setOrderData(null);
+            setCurrentDelivery(null);
+            setOrigin("");
+            setDestination("");
+          }
+          setOrderData(order);
+          if (order.orderDeliveringSet && order.orderDeliveringSet.length > 0) {
+            const availableOrderDelivering = order.orderDeliveringSet.reduce((prev, current) => {
+              return (prev.id > current.id) ? prev : current;
+            });
+            setCurrentDelivery(availableOrderDelivering);
+          }
+
+          setOrigin(order.senderAddress);
+          setDestination(order.destinationAddress);
+        } else {
+          setOrderData(null);
+          setCurrentDelivery(null);
+          setOrigin("");
+          setDestination("");
+        }
       } catch (error) {
         console.error("Error fetching order:", error);
       }
@@ -74,6 +111,8 @@ const TrackingOrder = () => {
           }
         }
       );
+    } else {
+      setDirections(null);
     }
   }, [origin, destination]);
 
@@ -156,6 +195,18 @@ const TrackingOrder = () => {
             zoom={10}
             center={center}
           >
+            {currentDelivery &&
+              <Marker
+                position={{
+                  lat: parseFloat(currentDelivery.latitude),
+                  lng: parseFloat(currentDelivery.longitude)
+                }}
+                icon={{
+                  url: CurrentPosition,
+                }}
+              >
+              </Marker>
+            }
             {directions && <DirectionsRenderer directions={directions} />}
           </GoogleMap>
 
@@ -173,17 +224,47 @@ const TrackingOrder = () => {
                 zIndex: 1,
                 maxWidth: "300px",
               }}
+
+              onClick={() => setIsShowAll(!isShowAll)}
             >
-              <Typography variant="h6">Order Details</Typography>
-              <Typography variant="body2">
-                <strong>Sender:</strong> {orderData.senderAddress}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Receiver:</strong> {orderData.destinationAddress}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Distance:</strong> {distance}
-              </Typography>
+              {isShowAll ? (
+                <>
+                  {/* .toLocaleString() */}
+                  <Typography variant="h6">Order Detail</Typography>
+                  <Typography variant="body2">
+                    <strong>Expected finish date:</strong> {dateTimeConvert(orderData.expectedFinishDate)}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Price:</strong> {`${Math.floor(orderData.price).toLocaleString()} VND`}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Order status:</strong> {orderStatusLabels[orderData.orderStatus]}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Sender:</strong> {orderData.senderAddress}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Receiver:</strong> {orderData.destinationAddress}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Distance:</strong> {distance}
+                  </Typography>
+                </>
+              ) : (
+                <>
+                  <Typography variant="h6">Order Detail</Typography>
+                  <Typography variant="body2">
+                    <strong>Sender:</strong> {orderData.senderAddress}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Receiver:</strong> {orderData.destinationAddress}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Distance:</strong> {distance}
+                  </Typography>
+                </>
+              )}
+
             </Box>
           )}
         </Box>

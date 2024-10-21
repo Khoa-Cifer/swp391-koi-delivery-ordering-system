@@ -162,7 +162,7 @@ const Report = () => {
         <Grid item xs={12} md={4}>
           <StatCard
             title="Total Revenue"
-            value={`$${Math.floor(dataRevenue)}`} // Format revenue to two decimal places
+            value={`${Math.floor(dataRevenue).toLocaleString()} VND`} // Format revenue to two decimal places
             icon={<HelpCircle className="w-5 h-5 text-green-500" />}
             color="#c8e6c9"
             textColor="#2e7d32"
