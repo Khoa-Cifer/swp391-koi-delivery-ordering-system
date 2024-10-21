@@ -67,7 +67,7 @@ const OrderCard = ({ orders }) => {
           </div>
         </div>
       ) : (
-        <p>No orders found</p>
+        <p>No order found</p>
       )}
     </div>
   );

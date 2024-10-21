@@ -15,8 +15,8 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
+  deleteOrderById,
   getOrdersByStatusAndCustomerId,
-  updateOrderStatus,
 } from "../../../../utils/axios/order";
 import dateTimeConvert from "../../../../components/utils";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
@@ -81,12 +81,20 @@ function PostedOrder({ customerId }) {
   const handleClick = (orderId) => {
     // Toggle the visibility of the order table by setting the orderId
     setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
+    
   };
 
   const handleOpenEditPage = (order) => {
     navigate(`/customer-edit-order/${order.id}`, {
       state: order,
     });
+    
+  };
+
+  const handleOpenAddFishPage = (order) => {
+    navigate(`/customer-add-fish/${order.id}`, {
+      state: order,
+    }); 
   };
 
   const handleDeleteOrder = (orderId) => {
@@ -129,10 +137,8 @@ function PostedOrder({ customerId }) {
 
   async function handleDeleteOrderConfirm() {
     try {
-      const abortedOrderStatus = 9;
-      const response = await updateOrderStatus(
+      const response = await deleteOrderById(
         selectedOrderId,
-        abortedOrderStatus
       );
       if (response) {
         toast("Delete order successfully");
@@ -304,38 +310,44 @@ function PostedOrder({ customerId }) {
                       </TableHead>
                       <TableBody>
                         {order.fishes &&
+                          order.fishes.map &&
                           order.fishes.map((fish) => (
                             <TableRow key={fish.id}>
                               <TableCell>{fish.id}</TableCell>
                               <TableCell>{fish.name}</TableCell>
                               <TableCell>{fish.price}</TableCell>
                               <TableCell>{fish.size}</TableCell>
-                              {fish.status === 1 && (
-                                <TableCell sx={{ color: "red" }}>
-                                  Good
-                                </TableCell>
+                              {fish.status === 0 && (
+                                <TableCell>Unknown</TableCell>
                               )}
-                              {fish.status === 2 && (
-                                <TableCell sx={{ color: "orange" }}>
-                                  Sick
-                                </TableCell>
-                              )}
-                              {fish.status === 3 && (
-                                <TableCell sx={{ color: "green" }}>
-                                  Dead
-                                </TableCell>
-                              )}
+                              {fish.status === 1 && <TableCell>Good</TableCell>}
+                              {fish.status === 2 && <TableCell>Sick</TableCell>}
+                              {fish.status === 3 && <TableCell>Dead</TableCell>}
                               <TableCell>{fish.weight}</TableCell>
                               <TableCell>
-                                <Button
-                                  variant="outlined"
-                                  endIcon={<MoreHorizIcon />}
-                                >
-                                  Detail
-                                </Button>
+                                <div className="button-icon">
+                                  <MoreHorizIcon />
+                                </div>
                               </TableCell>
                             </TableRow>
                           ))}
+                        {/* Add "+" button below the fish list */}
+                        <TableRow>
+                          <TableCell colSpan={7} align="center">
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={() => handleOpenAddFishPage(order)} // Correct
+                              style={{
+                                fontSize: "25px",
+                                padding: "5px 20px",
+                                borderRadius: "50%",
+                              }}
+                            >
+                              +
+                            </Button>
+                          </TableCell>
+                        </TableRow>
                       </TableBody>
                     </Table>
                   </TableContainer>

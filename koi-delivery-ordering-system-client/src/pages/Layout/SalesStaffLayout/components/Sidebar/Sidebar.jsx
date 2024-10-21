@@ -1,10 +1,12 @@
-import { Avatar, ListItem, ListItemText, styled, Typography } from "@mui/material";
+import { Avatar, Divider, ListItem, ListItemText, styled, Typography } from "@mui/material";
 import { List } from "antd";
 import "./sales_sidebar.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import default_avatar from "../../../../../assets/default-avatar.jpg";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { getFileByFileId } from "../../../../../utils/axios/file";
+import { getSalesStaffById } from "../../../../../utils/axios/salesStaff";
 
 const InfoHeader = styled(Typography)(() => ({
   margin: "0px",
@@ -17,11 +19,25 @@ function Sidebar() {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
-  let salesStaffInfo
+  let salesStaffInfo;
+  let salesStaffId;
   if (token) {
     salesStaffInfo = jwtDecode(token);
-    // salesStaffId = salesStaffInfo.sub.substring(2);
+    salesStaffId = salesStaffInfo.sub.substring(2);
   }
+
+  useEffect(() => {
+    async function fetchUserData() {
+      const customer = await getSalesStaffById(salesStaffId);
+      if (customer.file) {
+        const imageResponse = await getFileByFileId(customer.file.id);;
+        const imgUrl = URL.createObjectURL(imageResponse);
+        setImagePreview(imgUrl);
+      }
+      // const imageResponse = await getFileByFileId();
+    }
+    fetchUserData();
+  }, [])
 
   return (
     <div className="sidebar-body-sales">
@@ -53,6 +69,8 @@ function Sidebar() {
               primary="Profile"
             />
           </ListItem>
+          <Divider style={{ marginBottom: "5%" }}>Orders</Divider>
+          
           <ListItem className="button">
             <ListItemText
               primary="Posted Order"

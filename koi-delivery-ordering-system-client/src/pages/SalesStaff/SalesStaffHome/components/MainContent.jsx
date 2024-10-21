@@ -3,124 +3,247 @@ import { useEffect, useState } from "react";
 import { getOrdersByStatus } from "../../../../utils/axios/order";
 import dateTimeConvert from "../../../../components/utils";
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
+import { deleteNewsById, getAllNews } from "../../../../utils/axios/news";
+import { getFileByFileId } from "../../../../utils/axios/file";
+import ToastUtil from "../../../../components/toastContainer";
+import { toast } from "react-toastify";
+import Paragraph from "antd/es/typography/Paragraph";
 
 function MainContent() {
-  const [postedOrder, setPostedOrder] = useState();
-  const [receivedOrder, setReceivedOrder] = useState();
+  const [postedOrder, setPostedOrder] = useState([]);
+  const [receivedOrder, setReceivedOrder] = useState([]);
+  const [news, setNews] = useState([]);
+  const [visibleNewsCount, setVisibleNewsCount] = useState(4);
+
+  const [openDialog, setOpenDialog] = useState(false); // State to control dialog visibility
+  const [selectedNewsId, setSelectedNewsId] = useState(null); // State to track which news to delete
+
   const navigate = useNavigate();
 
-  const newsData = [
-    {
-      category: "ECOMMERCE",
-      title: "How to Use the Ezbuy Japan App to Send Goods…",
-      description:
-        "Are you living in Japan and looking to send goods abroad? With just a few simple steps, you can easily manage cross-border shipping using the Ezbuy...",
-      imageUrl:
-        "https://img2.thuthuatphanmem.vn/uploads/2019/03/07/hinh-anh-ca-koi-buom-dep_111106426.png",
-      author: "Macy",
-      date: "2024-08-01",
-    },
-    {
-      category: "B2B Trading",
-      title: "B2B Purchase Negotiation Service from Japan for…",
-      description:
-        "For international enterprises, importing goods from Japan in large quantities is an urgent and frequent need. However, this process comes with many challeng...",
-      imageUrl:
-        "https://img2.thuthuatphanmem.vn/uploads/2019/03/07/hinh-anh-ca-koi-buom-dep_111106426.png",
-      author: "Macy",
-      date: "2024-04-09",
-    },
-    {
-      category: "Shipping",
-      title: "Professional Japanese White Pine Shipping Service to The…",
-      description:
-        "Japanese pine stands out as one of the most sought-after trees among plant enthusiasts due to its imposing and robust beauty. However, acquiring these...",
-      imageUrl:
-        "https://img2.thuthuatphanmem.vn/uploads/2019/03/07/hinh-anh-ca-koi-buom-dep_111106426.png",
-      author: "Macy",
-      date: "2024-04-06",
-    },
-  ];
+  const postedStatus = 1; // Status for posted orders
+  const receivedStatus = 4; // Status for received orders
 
-  const postedStatus = 1;
-  const receivedStatus = 4;
+  // Fetch news data with image
+  const fetchNews = async () => {
+    try {
+      const response = await getAllNews();
+
+      if (response && response.length > 0) {
+        const fileIds = response.map((newsItem) => newsItem.file.id);
+
+        if (fileIds.length > 0) {
+          const filePromises = fileIds.map(async (fileId) => {
+            const fileResponse = await getFileByFileId(fileId);
+            return URL.createObjectURL(fileResponse);
+          });
+
+          const imageUrls = await Promise.all(filePromises);
+
+          const newsWithImages = response.map((newsItem, index) => ({
+            ...newsItem,
+            imageUrl: imageUrls[index],
+          }));
+
+          setNews(newsWithImages);
+        }
+      } else {
+        setNews([]);
+      }
+    } catch (error) {
+      console.error("Error fetching news data:", error);
+    }
+  };
 
   useEffect(() => {
-    async function fetchOrderData() {
-      const postedOrderResponse = await getOrdersByStatus(postedStatus);
-      const receivedOrderResponse = await getOrdersByStatus(receivedStatus);
-      setPostedOrder(postedOrderResponse);
-      setReceivedOrder(receivedOrderResponse);
-    }
+    fetchNews();
+  }, []);
+
+  useEffect(() => {
+    const fetchOrderData = async () => {
+      try {
+        const postedOrderResponse = await getOrdersByStatus(postedStatus);
+        const receivedOrderResponse = await getOrdersByStatus(receivedStatus);
+        setPostedOrder(postedOrderResponse);
+        setReceivedOrder(receivedOrderResponse);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
 
     fetchOrderData();
-  }, [])
+  }, []);
+
+  // Handle the opening of the delete confirmation dialog
+  const handleOpenDialog = (newsId) => {
+    setSelectedNewsId(newsId);
+    setOpenDialog(true);
+  };
+
+  // Handle the closing of the dialog without deleting
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  // Handle delete confirmation and refresh news
+  const handleConfirmDelete = async () => {
+    try {
+      await deleteNewsById(selectedNewsId);
+      setOpenDialog(false);
+      await fetchNews();
+      toast.success("Delete successfully!");
+    } catch (error) {
+      console.error("Error deleting news:", error);
+    }
+  };
 
   const handleViewDetail = (order) => {
     navigate(`/sales-order-detail/${order.id}`, {
-      state: order
-    })
-  }
+      state: order,
+    });
+  };
+
+  const handleViewMoreNews = () => {
+    setVisibleNewsCount((prevCount) => prevCount + 4);
+  };
+
+  const handleEdit = (newsId) => {
+    navigate(`/news-sales-staff/${newsId}`);
+  };
 
   return (
     <div className="main-content-container">
+      <ToastUtil />
       <div className="news-container-sale">
         <div className="New">
-          <strong>News</strong>
+          <h2>
+            <strong>News</strong>
+          </h2>
         </div>
 
         <div className="news-container">
           <div className="news-grid">
-            {newsData.map((news, index) => (
+            {news.slice(0, visibleNewsCount).map((newsItem, index) => (
               <div key={index} className="news-item">
                 <img
-                  src={news.imageUrl}
-                  alt={news.title}
+                  src={newsItem.imageUrl}
+                  alt={newsItem.title}
                   className="news-image"
                 />
                 <div className="news-content">
-                  <span className="news-category">{news.category}</span>
-                  <h3 className="news-title">{news.title}</h3>
-                  <p className="news-description">{news.description}</p>
+                  <h3 className="news-title">{newsItem.title}</h3>
+
+                  <Paragraph
+                    ellipsis={{
+                      rows: 3,
+                      expandable: false,
+                      symbol: "...",
+                    }}
+                  >
+                    <div
+                      dangerouslySetInnerHTML={{ __html: newsItem.description }}
+                    />
+                  </Paragraph>
+
                   <div className="news-footer">
-                    <span className="news-author">{news.author}</span>
-                    <span className="news-date">{news.date}</span>
+                    <span className="news-date">
+                      {new Date(newsItem.createdDate).toLocaleDateString()}
+                    </span>
+
+                    <div className="card-actions">
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        onClick={() => handleEdit(newsItem.id)}
+                        className="edit-btn"
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        size="small"
+                        onClick={() => handleOpenDialog(newsItem.id)} // Open confirmation dialog
+                        className="delete-btn"
+                      >
+                        Delete
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="view-more">
-            <a href="#">View more →</a>
-          </div>
+          {visibleNewsCount < news.length && (
+            <div className="view-more">
+              <Button onClick={handleViewMoreNews}>View more →</Button>
+            </div>
+          )}
         </div>
       </div>
 
+      {/* Confirmation Dialog */}
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Confirm Deletion"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this news item?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleConfirmDelete} color="secondary" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Orders section (not modified) */}
       <div className="order-container-sale">
-        {/* Waiting for accepted order */}
-        {postedOrder && postedOrder.length > 0 && (
+        {postedOrder.length > 0 && (
           <div className="order-container">
             <div className="order">
               <strong>Waiting For Accepted Order</strong>
             </div>
             <div className="order-card">
-              {postedOrder && postedOrder.map && postedOrder.map((order, index) => {
-                if (index >= 3) return null;
-                return (
-                  <div key={order.id} className="order-item">
-                    <div className="order-content">
-                      <h3 className="order-title">{order.name}</h3>
-                      <p className="order-description">Created Date: {dateTimeConvert(order.createdDate)}</p>
-                      <p className="order-description">Expected Finish Date: {dateTimeConvert(order.expectedFinishDate)}</p>
-                      <div className="order-footer">
-                        <Button variant="contained" onClick={() => handleViewDetail(order)}>Detail</Button>
-                      </div>
+              {postedOrder.slice(0, 3).map((order) => (
+                <div key={order.id} className="order-item">
+                  <div className="order-content">
+                    <h3 className="order-title">{order.name}</h3>
+                    <p className="order-description">
+                      Created Date: {dateTimeConvert(order.createdDate)}
+                    </p>
+                    <p className="order-description">
+                      Expected Finish Date:{" "}
+                      {dateTimeConvert(order.expectedFinishDate)}
+                    </p>
+                    <div className="order-footer">
+                      <Button
+                        variant="contained"
+                        onClick={() => handleViewDetail(order)}
+                      >
+                        Detail
+                      </Button>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
 
             <div className="view-more">
@@ -129,32 +252,36 @@ function MainContent() {
           </div>
         )}
 
-        <div className="gap">
+        <div className="gap"></div>
 
-        </div>
-
-        {/* Waiting for confirm to delivery order */}
-        {receivedOrder && receivedOrder.length > 0 && (
+        {receivedOrder.length > 0 && (
           <div className="order-container">
             <div className="order">
               <strong>Waiting For Confirm Order</strong>
             </div>
             <div className="order-card">
-              {receivedOrder && receivedOrder.map && receivedOrder.map((order, index) => {
-                if (index >= 3) return null;
-                return (
-                  <div key={order.id} className="order-item">
-                    <div className="order-content">
-                      <h3 className="order-title">{order.name}</h3>
-                      <p className="order-description">Created Date: {dateTimeConvert(order.createdDate)}</p>
-                      <p className="order-description">Expected Finish Date: {dateTimeConvert(order.expectedFinishDate)}</p>
-                      <div className="order-footer">
-                        <Button variant="contained" onClick={() => handleViewDetail(order)}>Detail</Button>
-                      </div>
+              {receivedOrder.slice(0, 3).map((order) => (
+                <div key={order.id} className="order-item">
+                  <div className="order-content">
+                    <h3 className="order-title">{order.name}</h3>
+                    <p className="order-description">
+                      Created Date: {dateTimeConvert(order.createdDate)}
+                    </p>
+                    <p className="order-description">
+                      Expected Finish Date:{" "}
+                      {dateTimeConvert(order.expectedFinishDate)}
+                    </p>
+                    <div className="order-footer">
+                      <Button
+                        variant="contained"
+                        onClick={() => handleViewDetail(order)}
+                      >
+                        Detail
+                      </Button>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
 
             <div className="view-more">
@@ -163,7 +290,7 @@ function MainContent() {
           </div>
         )}
       </div>
-    </div >
+    </div>
   );
 }
 

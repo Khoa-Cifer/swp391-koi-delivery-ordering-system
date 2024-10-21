@@ -10,4 +10,5 @@ public interface IPaymentHistoryService {
     Optional<PaymentHistory> getPaymentHistoryById(Long id);
     PaymentHistory logPaymentHistory(double amount, Long orderId, Long customerId);
     void confirmPaymentHistory(Long customerId, double amount);
+    List<PaymentHistory> getPaymentHistoryByOrder(Long orderId);
 }

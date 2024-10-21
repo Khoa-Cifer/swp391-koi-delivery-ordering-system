@@ -1,10 +1,19 @@
 import axiosClient from "../axios";
 
-const prefixAdminSalesStaff = "salesStaff/";
+const prefixSalesStaff = "salesStaff/";
 
 export async function getAllSalesStaff() {
     try {
-        const response = await axiosClient.get(prefixAdminSalesStaff + "getAllSalesStaff");
+        const response = await axiosClient.get(prefixSalesStaff + "getAllSalesStaff");
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function getSalesStaffById(id) {
+    try {
+        const response = await axiosClient.get(prefixSalesStaff + `getSalesStaffById/${id}`);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -13,7 +22,7 @@ export async function getAllSalesStaff() {
 
 export async function createSalesStaff(email, username, phoneNumber) {
     try {
-        const response = await axiosClient.post(prefixAdminSalesStaff + "createSalesStaff",
+        const response = await axiosClient.post(prefixSalesStaff + "createSalesStaff",
             {
                 email,
                 username,
@@ -28,7 +37,7 @@ export async function createSalesStaff(email, username, phoneNumber) {
 
 export async function salesStaffUpdateProfile(id, email, username, phoneNumber, password) {
     try {
-        const response = await axiosClient.put(prefixAdminSalesStaff + "updateSalesStaffProfile",
+        const response = await axiosClient.put(prefixSalesStaff + "updateSalesStaffProfile",
             {
                 id,
                 email,
@@ -45,7 +54,7 @@ export async function salesStaffUpdateProfile(id, email, username, phoneNumber, 
 
 export async function salesStaffUpdateProfileImage(id, file) {
     try {
-        const response = await axiosClient.put(prefixAdminSalesStaff + `updateSalesStaffAvatar/${id}`, {
+        const response = await axiosClient.put(prefixSalesStaff + `updateSalesStaffAvatar/${id}`, {
             file
         }, {
             headers: {

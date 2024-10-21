@@ -82,7 +82,7 @@ function Header() {
                         src={imagePreview}
                         onClick={handleMenuOpen}
                         alt="avatar"
-                        style={{ width: "5vw", height: "10vh", marginRight: "30px" }}
+                        style={{ width: "4vw", height: "8vh", marginRight: "30px" }}
                     />
                     <Menu
                         style={{ marginTop: "40px" }}

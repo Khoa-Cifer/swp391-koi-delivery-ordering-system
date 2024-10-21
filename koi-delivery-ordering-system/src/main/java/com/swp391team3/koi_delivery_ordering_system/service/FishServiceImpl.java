@@ -92,6 +92,8 @@ public class FishServiceImpl implements IFishService {
             newFish.setLicenses(null);
             newFish.setStatus(fishStatus.GOOD);
             fishRepository.save(newFish);
+            foundedOrder.get().setOrderStatus(orderStatus.DRAFT);
+            orderRepository.save(foundedOrder.get());
             return newFish.getId();
         } catch (Exception e) {
             System.out.println(e);

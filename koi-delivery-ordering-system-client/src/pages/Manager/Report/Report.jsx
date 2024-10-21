@@ -3,7 +3,7 @@ import StatCard from "./components/Card/ReportCard";
 import Table from "./components/Card/Table";
 import { Box, Grid, Paper, Typography, TablePagination } from "@mui/material";
 import { HelpCircle } from "lucide-react";
-import { getAllOrders, getOrdersByStatus } from "../../../utils/axios/order";
+import { getOrdersByStatus } from "../../../utils/axios/order";
 import { getAllDeliveryStaff } from "../../../utils/axios/deliveryStaff";
 import {
   getDeliverystaffReporById,
@@ -24,14 +24,12 @@ const Report = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const responses = await getAllOrders([]);
+        const completedOrderStatus = 8;
+        const responses = await getOrdersByStatus(completedOrderStatus);
         const prices = responses.map((order) => order.price);
 
         // Calculate total revenue
         const totalRevenue = prices.reduce((sum, price) => sum + price, 0);
-
-        console.log(totalRevenue);
-
         setDataRevenue(totalRevenue); // Set total revenue here
       } catch (error) {
         console.error("Error fetching data", error);

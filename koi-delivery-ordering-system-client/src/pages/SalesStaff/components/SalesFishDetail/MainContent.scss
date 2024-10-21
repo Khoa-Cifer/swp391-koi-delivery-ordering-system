@@ -2,11 +2,10 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
 
   /* Slider section styling */
   .slider-container {
-    width: 40vw;
+    width: 45vw;
     height: 40vh;
     background-color: #C3F4FD;
     border-radius: 20px;
@@ -23,7 +22,6 @@
     height: auto;
     min-height: 400px; /* Ensure there's enough space for the images */
     overflow: hidden;
-    margin: 0 auto;
     background-color: #C3F4FD;
   }
   .card-container {

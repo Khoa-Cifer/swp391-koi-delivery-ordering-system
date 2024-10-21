@@ -40,7 +40,9 @@ public class AuthController {
             if (status) {
                 foundUserStatus = userType;
                 Customer foundCustomer = customerService.getCustomerByEmail(request.getEmail());
-                response = tokenService.generateToken(foundCustomer);
+                if (foundCustomer.isActiveStatus()) {
+                    response = tokenService.generateToken(foundCustomer);
+                }
             }
         } else if (userType == 2) {
             boolean status = salesStaffService.salesStaffLogin(request.getEmail(), request.getPassword());

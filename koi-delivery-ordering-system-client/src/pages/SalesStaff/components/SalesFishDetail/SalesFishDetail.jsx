@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./MainContent.scss";
 import { Button, Card, Flex, Typography } from "antd";
 import { useEffect, useState } from "react";
@@ -22,12 +22,14 @@ const modalStyle = {
 const SalesFishDetail = () => {
   const location = useLocation();
   const { state } = location;
+  const navigate = useNavigate();
+
   const [imagePreviews, setImagePreviews] = useState([]);
   const [licenseImage, setLicenseImage] = useState([]);
   const [fish, setFish] = useState();
   const [selectedFishLicenses, setSelectedFishLicenses] = useState([]);
   const [open, setOpen] = useState(false);
-  
+
   function handleSlider(e) {
     setFish(e);
   }
@@ -78,7 +80,6 @@ const SalesFishDetail = () => {
 
   useEffect(() => {
     if (fish) {
-      console.log(fish.licenses);
       if (fish.licenses && fish.licenses.length > 0) {
         if (Array.isArray(fish.licenses) && fish.licenses.length > 0) {
           setSelectedFishLicenses(fish.licenses);
@@ -95,80 +96,155 @@ const SalesFishDetail = () => {
     width: 300,
   };
 
+  const handleGoBack = () => {
+    navigate(-1); // This will take you to the previous page
+  };
+
   return state && (
-    <div className="main-content-license-sale">
-      <div className="slider-container">
-        <ImageSlider fishInfo={state.fishes} images={imagePreviews} onImageChange={e => handleSlider(e)} />
-      </div>
+    <Box style={{ display: "flex" }}>
+      <div className="main-content-license-sale">
+        <div className="slider-container">
+          <ImageSlider fishInfo={state.fishes} images={imagePreviews} onImageChange={e => handleSlider(e)} />
+        </div>
 
-      <Link className="link" to={`/sales-staff-home`}>Go back</Link>
-
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
-        <Box sx={modalStyle}>
-          <div className="slider-container">
-            <ImageSlider fishInfo={null} images={licenseImage} onImageChange={e => handleSlider(e)} />
-          </div>
+        <Box sx={{ maxWidth: 180, marginTop: "20px" }}>
+          <Button type="primary" onClick={() => handleGoBack()}>
+            Go back
+          </Button>
         </Box>
-      </Modal>
 
-      <div className="card-container">
-        {selectedFishLicenses && selectedFishLicenses.map && selectedFishLicenses.map((license, index) => {
-          if (index >= 3) return null;
-          return (
-            <Card
-              key={index}
-              hoverable
-              style={cardStyle}
-              styles={{
-                body: {
-                  padding: 0,
-                  overflow: "hidden",
-                },
-              }}
-            >
-              <Flex
-                vertical
-                align="flex-end"
-                justify="space-around"
-                style={{
-                  padding: 32,
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+        >
+          <Box sx={modalStyle}>
+            <div className="slider-container">
+              <ImageSlider fishInfo={null} images={licenseImage} onImageChange={e => handleSlider(e)} />
+            </div>
+          </Box>
+        </Modal>
+
+        <div className="card-container">
+          {selectedFishLicenses && selectedFishLicenses.map && selectedFishLicenses.map((license, index) => {
+            if (index >= 3) return null;
+            return (
+              <Card
+                key={index}
+                hoverable
+                style={cardStyle}
+                styles={{
+                  body: {
+                    padding: 0,
+                    overflow: "hidden",
+                  },
                 }}
               >
-                <Typography
-                  level={5}
-                  style={{ width: "100%" }}
-                  ellipsis={{ rows: 4 }}
+                <Flex
+                  vertical
+                  align="flex-end"
+                  justify="space-around"
+                  style={{
+                    padding: 32,
+                  }}
                 >
-                  {license.name}
-                </Typography>
-                <Typography.Title
-                  level={5}
-                  style={{ width: "100%" }}
-                  ellipsis={{ rows: 4 }}
-                >
-                  {license.description}
-                </Typography.Title>
-                <Button type="primary" onClick={() => handleLicenseImages(license)}>
-                  View Image
-                </Button>
-                <Typography
-                  level={5}
-                  style={{ width: "100%" }}
-                  ellipsis={{ rows: 4 }}
-                >
-                  Date of issue {dateTimeConvert(license.dateOfIssue)}
-                </Typography>
-              </Flex>
-            </Card>
-          )
-        })}
+                  <Typography
+                    level={5}
+                    style={{ width: "100%" }}
+                    ellipsis={{ rows: 4 }}
+                  >
+                    {license.name}
+                  </Typography>
+                  <Typography.Title
+                    level={5}
+                    style={{ width: "100%" }}
+                    ellipsis={{ rows: 4 }}
+                  >
+                    {license.description}
+                  </Typography.Title>
+                  <Button type="primary" onClick={() => handleLicenseImages(license)}>
+                    View Image
+                  </Button>
+                  <Typography
+                    level={5}
+                    style={{ width: "100%" }}
+                    ellipsis={{ rows: 4 }}
+                  >
+                    Date of issue {dateTimeConvert(license.dateOfIssue)}
+                  </Typography>
+                </Flex>
+              </Card>
+            )
+          })}
+        </div>
       </div>
-    </div>
+
+      {fish && (
+        <div>
+          <div className="form-container">
+            <div className="form">
+              <div className="form-group">
+                <input
+                  placeholder="Name"
+                  type="text"
+                  name="name"
+                  className="form-input"
+                  value={fish.name}
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  placeholder="Age"
+                  type="text"
+                  name="text"
+                  className="form-input"
+                  value={fish.age}
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  placeholder="Size"
+                  type="text"
+                  name="text"
+                  className="form-input"
+                  value={fish.size}
+                  readOnly
+                />
+              </div>
+
+              <div className="form-group">
+                <input
+                  placeholder="Weight"
+                  type="text"
+                  name="text"
+                  className="form-input"
+                  value={fish.weight}
+                  readOnly
+                />
+              </div>
+
+              <div className="form-group">
+                <input
+                  placeholder="status"
+                  type="text"
+                  name="text"
+                  className="form-input"
+                  value={
+                    fish.status === 1 ? "Good" :
+                      fish.status === 2 ? "Sick" :
+                        fish.status === 3 ? "Dead" :
+                          ""
+                  }
+                  readOnly
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </Box>
+
   );
 };
 

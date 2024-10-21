@@ -1,13 +1,14 @@
 import { Box, Button, Grid, styled, TextField, Typography } from "@mui/material";
 import ToastUtil from "../../../../components/toastContainer";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { getOrderById, postOrder } from "../../../../utils/axios/order";
 import { getFileByFileId } from "../../../../utils/axios/file";
-import { getPaymentHistory, logPaymentHistory, paymentOpenGateway } from "../../../../utils/axios/payment";
+import { getPaymentHistory, getSuccessPaymentHistoryByOrder, logPaymentHistory, paymentOpenGateway } from "../../../../utils/axios/payment";
 import { toast } from "react-toastify";
 import dateTimeConvert from "../../../../components/utils";
+import Spinner from "../../../../components/SpinnerLoading";
 
 const SubmitButton = styled(Button)(() => ({
     padding: "10px 80px"
@@ -15,13 +16,13 @@ const SubmitButton = styled(Button)(() => ({
 
 // eslint-disable-next-line react/prop-types
 function OrderFinalInfo() {
-    const location = useLocation();
-    const { state } = location;
-    
+    const { id } = useParams();
     const [postedData, setPostedData] = useState();
     const [fishOrderData, setFishOrderData] = useState([]);
     const [fishFiles, setFishFiles] = useState([]);
     const [paymentSuccess, setPaymentSuccess] = useState(false);
+    const [paidOrder, setPaidOrder] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -34,40 +35,67 @@ function OrderFinalInfo() {
 
     useEffect(() => {
         async function fetchData() {
-            const postedOrder = await getOrderById(state.orderId);
-            setPostedData(postedOrder);
-            setFishOrderData(postedOrder.fishes);
+            console.log(id);
+            setIsLoading(true); // Set loading to true at the start of the operation
 
-            const fileIds = postedOrder.fishes.map(fish => fish.file.id);
-            if (fileIds && fileIds.length > 0) {
-                const fishFilesPromises = fileIds.map(async fileId => {
-                    const response = await getFileByFileId(fileId);
-                    return URL.createObjectURL(response); // Create Object URL from response blob
-                });
+            try {
+                const postedOrder = await getOrderById(id);
+                setPostedData(postedOrder);
+                setFishOrderData(postedOrder.fishes);
 
-                const fishFilesArray = await Promise.all(fishFilesPromises);
-                setFishFiles(fishFilesArray);
+                const fileIds = postedOrder.fishes.map(fish => fish.file.id);
+                if (fileIds.length > 0) {
+                    const fishFilesPromises = fileIds.map(async fileId => {
+                        const response = await getFileByFileId(fileId);
+                        return URL.createObjectURL(response); // Create Object URL from response blob
+                    });
+
+                    const fishFilesArray = await Promise.all(fishFilesPromises);
+                    setFishFiles(fishFilesArray);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                // Handle error (e.g., set an error state or show a message)
+            } finally {
+                setIsLoading(false); // Set loading to false once all operations are complete
             }
         }
 
         fetchData();
+    }, []);
 
+    useEffect(() => {
         async function checkOrder() {
-            if (Math.floor(state.price) === 0) {
+            const paymentResponse = await getSuccessPaymentHistoryByOrder(id);
+            let sumPrice = 0;
+            paymentResponse.forEach(paymentHistory => {
+                setPaidOrder(prevPaidOrder => prevPaidOrder + paymentHistory.amount);
+                sumPrice = sumPrice + paymentHistory.amount;
+            });
+
+            if (postedData.price === sumPrice) {
                 setPaymentSuccess(true);
-                const response = await postOrder(state.orderId);
+                const response = await postOrder(id);
                 if (response) {
                     toast("Order posted successfully");
                 }
             }
+
+            setIsLoading(false);
         }
 
-        checkOrder();
-    }, []);
+        if (postedData) {
+            checkOrder();
+        }
+    }, [postedData])
+
+    if (isLoading) {
+        return <Spinner />; // Show a loading indicator while the checkOrder is processing
+    }
 
     async function handleUpdateOrder() {
-        const paymentResponse = await logPaymentHistory(customerId, state.orderId, Math.floor(state.price));
-        const paymentOpen = await paymentOpenGateway(customerId, Math.floor(state.price), "NCB");
+        const paymentResponse = await logPaymentHistory(customerId, id, (postedData.price - paidOrder));
+        const paymentOpen = await paymentOpenGateway(customerId, Math.floor(postedData.price - paidOrder), "NCB");
 
         if (paymentOpen) {
             let paymentWindow = window.open(paymentOpen.paymentUrl, "_blank");
@@ -79,7 +107,7 @@ function OrderFinalInfo() {
                     if (paymentResponse) {
                         const paymentCheck = await getPaymentHistory(paymentResponse.id);
                         if (paymentCheck.paymentStatus) {
-                            const response = await postOrder(state.orderId);
+                            const response = await postOrder(id);
                             if (response) {
                                 toast("Order posted successfully");
                                 setPaymentSuccess(true);
@@ -196,7 +224,7 @@ function OrderFinalInfo() {
                                 fullWidth
                                 type=""
                                 label="Extra Price"
-                                value={`${Math.floor(state.price)} VND`}
+                                value={`${(postedData.price - paidOrder) < 0 ? 0 : (postedData.price - paidOrder)} VND`}
                                 InputProps={{
                                     readOnly: true,
                                 }}
@@ -224,22 +252,27 @@ function OrderFinalInfo() {
                             </Grid>
                         ))}
                     </Grid>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginTop: "30px"
-                        }}>
-                        {paymentSuccess ? (
-                            <SubmitButton variant="contained" onClick={() => navigate("/customer-home")}>Back to Home Page</SubmitButton>
-                        ) : (
-                            <SubmitButton variant="contained" onClick={handleUpdateOrder}>Post as Order</SubmitButton>
-                        )}
-                    </Box>
+                    {(postedData.price - paidOrder) <= 0 ? (
+                        <SubmitButton variant="contained" onClick={() => navigate("/customer-home")}>Back to Home Page</SubmitButton>
+                    ) : (
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                marginTop: "30px"
+                            }}>
+                            {paymentSuccess ? (
+                                <SubmitButton variant="contained" onClick={() => navigate("/customer-home")}>Back to Home Page</SubmitButton>
+                            ) : (
+                                <SubmitButton variant="contained" onClick={handleUpdateOrder}>Post as Order</SubmitButton>
+                            )}
+                        </Box>
+                    )}
                 </Box>
-            )}
-        </Box>
+            )
+            }
+        </Box >
     );
 }
 

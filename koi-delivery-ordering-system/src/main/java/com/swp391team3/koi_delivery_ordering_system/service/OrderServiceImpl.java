@@ -4,7 +4,6 @@ import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailServi
 import com.swp391team3.koi_delivery_ordering_system.model.*;
 import com.swp391team3.koi_delivery_ordering_system.repository.*;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.*;
-import com.swp391team3.koi_delivery_ordering_system.responseDto.UpdateOrderResponseDTO;
 import com.swp391team3.koi_delivery_ordering_system.utils.PriceBoard;
 import com.swp391team3.koi_delivery_ordering_system.utils.Utilities;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
@@ -118,39 +117,42 @@ public class OrderServiceImpl implements IOrderService {
         boolean result = false;
         Optional<Order> optionalOrder = getOrderById(id);
         if (optionalOrder.isPresent()) {
-            Order order = optionalOrder.get();
-            int currentStatus = order.getOrderStatus();
-            if(currentStatus == orderStatus.DRAFT || currentStatus == orderStatus.POSTED) {
-                Set<Fish> fishes = order.getFishes();
-                if (fishes != null) {
-                    for (Fish fish : fishes) {
-                        Set<License> licenses = fish.getLicenses();
-                        if (licenses != null) {
-                            for (License license : licenses) {
-                                Set<LicenseFile> licenseFiles = licenseFileRepository.findAll().stream()
-                                        .filter(licenseFile1 -> licenseFile1.getLicense().equals(license))
-                                        .collect(Collectors.toSet());
-                                if (licenseFiles != null) {
-                                    for (LicenseFile licenseFile : licenseFiles) {
-                                        Long licenseFileId = licenseFile.getFile().getId();
-                                        fileService.deleteFile(licenseFileId);
-                                    }
-                                    licenseFileRepository.deleteAll(licenseFiles);
-                                }
-                                licenseRepository.delete(license);
-                            }
-                        }
-                        fishRepository.delete(fish);
-                        if (fish.getFile() != null) {
-                            fileRepository.delete(fish.getFile());
-                            fileService.deleteFile(fish.getFile().getId());
-                        }
-                    }
-                }
-                orderRepository.deleteById(id);
-                result = true;
-                return result;
-            } else return result;
+            optionalOrder.get().setOrderStatus(orderStatus.ABORTED_BY_CUSTOMER);
+            orderRepository.save(optionalOrder.get());
+            result = true;
+//            Order order = optionalOrder.get();
+//            int currentStatus = order.getOrderStatus();
+//            if(currentStatus == orderStatus.DRAFT || currentStatus == orderStatus.POSTED) {
+//                Set<Fish> fishes = order.getFishes();
+//                if (fishes != null) {
+//                    for (Fish fish : fishes) {
+//                        Set<License> licenses = fish.getLicenses();
+//                        if (licenses != null) {
+//                            for (License license : licenses) {
+//                                Set<LicenseFile> licenseFiles = licenseFileRepository.findAll().stream()
+//                                        .filter(licenseFile1 -> licenseFile1.getLicense().equals(license))
+//                                        .collect(Collectors.toSet());
+//                                if (licenseFiles != null) {
+//                                    for (LicenseFile licenseFile : licenseFiles) {
+//                                        Long licenseFileId = licenseFile.getFile().getId();
+//                                        fileService.deleteFile(licenseFileId);
+//                                    }
+//                                    licenseFileRepository.deleteAll(licenseFiles);
+//                                }
+//                                licenseRepository.delete(license);
+//                            }
+//                        }
+//                        fishRepository.delete(fish);
+//                        if (fish.getFile() != null) {
+//                            fileRepository.delete(fish.getFile());
+//                            fileService.deleteFile(fish.getFile().getId());
+//                        }
+//                    }
+//                }
+//                orderRepository.deleteById(id);
+//                result = true;
+//                return result;
+//            } else return result;
         }
         return result;
     }
@@ -292,7 +294,7 @@ public class OrderServiceImpl implements IOrderService {
     public double calculateOrderPrice(Long id) {
         Optional<Order> order = getOrderById(id);
         double price = calculateOrderPriceUtils(id);
-        order.get().setPrice(price);
+        order.get().setPrice(Math.floor(price));
         orderRepository.save(order.get());
         return price;
     }
@@ -426,7 +428,7 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public UpdateOrderResponseDTO updateOrder(Long orderId, String name, String description, Date expectedFinishDate,
+    public Long updateOrder(Long orderId, String name, String description, Date expectedFinishDate,
                                               String destinationAddress, String destinationLongitude, String destinationLatitude,
                                               String senderAddress, String senderLongitude, String senderLatitude) {
 
@@ -443,19 +445,14 @@ public class OrderServiceImpl implements IOrderService {
         order.setSenderAddress(senderAddress);
         order.setSenderLongitude(senderLongitude);
         order.setSenderLatitude(senderLatitude);
-        order.setOrderStatus(orderStatus.DRAFT);
         double price = calculateOrderPriceUtils(orderId);
-        double extraMoney = 0;
-        UpdateOrderResponseDTO response = new UpdateOrderResponseDTO();
         if (price > order.getPrice()) {
-            extraMoney = price - order.getPrice();
-            order.setPrice(price);
+            order.setPrice(Math.floor(price));
+            order.setOrderStatus(orderStatus.DRAFT);
             orderRepository.save(order);
+            return orderId;
         }
-
-        response.setOrderId(orderId);
-        response.setPrice(extraMoney);
-        return response;
+        return null;
     }
 
     private double getPrice(List<Fish> fishList, Optional<Order> order, double distance) {
