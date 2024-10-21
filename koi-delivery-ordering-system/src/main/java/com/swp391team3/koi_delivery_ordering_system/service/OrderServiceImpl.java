@@ -76,6 +76,7 @@ public class OrderServiceImpl implements IOrderService {
 
             newOrder.setName(dto.getName());
             newOrder.setDescription(dto.getDescription());
+            newOrder.setReceiverEmail(dto.getReceiverEmail());
 
             newOrder.setDestinationAddress(dto.getDestinationAddress());
             newOrder.setDestinationLatitude(dto.getDestinationLatitude());
@@ -508,10 +509,14 @@ public class OrderServiceImpl implements IOrderService {
                 //send mail for customer
                 EmailDetailDTO emailDetail = new EmailDetailDTO();
                 emailDetail.setReceiver((Object) customer);
-                emailDetail.setSubject("Order " + order.getId() + " has been accepted");
+                emailDetail.setSubject("Order " + order.getName() + " has been accepted");
                 emailDetail.setLink("http://localhost:5173");
                 emailService.sendEmail(emailDetail, 6);
 
+                EmailDetailDTO emailDetailDTO = new EmailDetailDTO();
+                emailDetailDTO.setReceiver((Object) order);
+                emailDetailDTO.setSubject("You have " + order.getName() + " is being delivered to you");
+                emailDetailDTO.setLink("http://localhost:5173/tracking-order?trackingId=" + order.getTrackingId());
                 return true;
             }
         }

@@ -33,6 +33,8 @@ public class EmailService {
                 context.setVariable("name", ((Manager) emailDetail.getReceiver()).getEmail());
             } else if (emailDetail.getReceiver() instanceof SalesStaff) {
                 context.setVariable("name", ((SalesStaff) emailDetail.getReceiver()).getEmail());
+            } else if (emailDetail.getReceiver() instanceof Order) {
+                context.setVariable("name", ((Order) emailDetail.getReceiver()).getReceiverEmail());
             } else {
                 throw new IllegalArgumentException("Unknown user type");
             }
@@ -58,6 +60,8 @@ public class EmailService {
                 template = templateEngine.process("complete-salesStaff-template", context);
             } else if (type == typeMail.FAILED_CUSTOMER_TEMPLATE) {
                 template = templateEngine.process("fail-customer-template", context);
+            } else if (type == typeMail.RECEIVER_NOTIFICATION_TEMPLATE) {
+                template = templateEngine.process("receiver-notification-template", context);
             }
 
             //Creating a simple mail message

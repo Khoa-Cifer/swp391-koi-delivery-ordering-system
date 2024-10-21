@@ -18,4 +18,5 @@ public class OrderGeneralInfoRequestDTO {
     private String senderLatitude;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date expectedFinishDate;
+    private String receiverEmail;
 }
