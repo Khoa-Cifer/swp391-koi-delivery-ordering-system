@@ -13,18 +13,19 @@ function Footer() {
           <div className="footer-column">
             <h4>Address</h4>
             <p>
-              〒136-0075 Tokyo, Koto, Shinsuna, 3 Chome-10-8, 1F Warehouse 3
+            No. 2 Nguyen Binh Khiem, Ben Nghe, District 1, Ho Chi Minh City
             </p>
             <h4>Email</h4>
             <p>
               Direct to CEO:{" "}
-              <a href="mailto:chienlv@ezbuy.jp">chienlv@ezbuy.jp</a>
+              <a href="koideliveringsystemswp@gmail.com">koideliveringsystemswp@gmail.com</a>
             </p>
           </div>
 
           <div className="footer-column">
             <h4>Connect us</h4>
-            <p>Connect with us across social networks</p>
+            <p>Email: koideliveringsystemswp@gmail.com</p>
+            <p>Phone Number: 0868394782</p>
             <div className="social-icons">
               <a href="#"></a>
             </div>
