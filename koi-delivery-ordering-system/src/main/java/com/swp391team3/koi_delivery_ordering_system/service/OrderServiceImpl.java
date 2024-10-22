@@ -77,7 +77,7 @@ public class OrderServiceImpl implements IOrderService {
             newOrder.setName(dto.getName());
             newOrder.setDescription(dto.getDescription());
             newOrder.setReceiverEmail(dto.getReceiverEmail());
-            savedOrder.setReceiverPhoneNumber(dto.getReceiverPhoneNumber());
+            newOrder.setReceiverPhoneNumber(dto.getReceiverPhoneNumber());
 
             newOrder.setDestinationAddress(dto.getDestinationAddress());
             newOrder.setDestinationLatitude(dto.getDestinationLatitude());
@@ -411,7 +411,7 @@ public class OrderServiceImpl implements IOrderService {
                             //get sales staff confirm
                             System.out.println("Test 3" + updateResult);
 
-                            SalesStaff salesStaff = foundOrder.get().getSalesStaffConfirmation();
+                            SalesStaff salesStaff = foundOrder.get().getSalesStaffAccept();
                             //send mail for sales staff
                             EmailDetailDTO emailDetail = new EmailDetailDTO();
                             emailDetail.setReceiver((Object) salesStaff);
