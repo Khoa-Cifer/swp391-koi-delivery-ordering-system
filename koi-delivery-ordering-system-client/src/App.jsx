@@ -56,6 +56,8 @@ import RegistrationSuccess from "./pages/public/RegistrationSuccess/Registration
 import FishPayment from "./pages/Customer/FishCreateOrder/pages/FishPayment";
 import CustomerCreateFish from "./pages/Customer/FishCreateOrder/CustomerCreateFish";
 import DeliveringOrder from "./pages/DeliveryStaff/DeliveryOrderHome/DeliveringOrder";
+import Allnews from "./pages/public/News/Allnews";
+import NewsDetail from "./pages/public/News/NewsDetail";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -108,6 +110,9 @@ function App() {
 
             <Route path="/waiting-for-confirmation" element={<WaitingForConfirm />} />
             <Route path="/registration-success" element={<RegistrationSuccess />} />
+
+            <Route path="/news" element={<Allnews />} />
+            <Route path="/news/:id" element={<NewsDetail />} />
 
             <Route element={<ManagerLayout />}>
               <Route path="/admin/report" element={<ManagerPrivateRoute element={<Report />} />} />

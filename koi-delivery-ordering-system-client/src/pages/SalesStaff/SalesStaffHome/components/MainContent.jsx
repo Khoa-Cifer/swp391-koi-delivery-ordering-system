@@ -112,10 +112,7 @@ function MainContent() {
 
   const handleViewMoreNews = () => {
     setVisibleNewsCount((prevCount) => prevCount + 4);
-  };
-
-  const handleEdit = (newsId) => {
-    navigate(`/news-sales-staff/${newsId}`);
+    navigate("/news");
   };
 
   return (
@@ -130,6 +127,9 @@ function MainContent() {
 
         <div className="news-container">
           <div className="news-grid">
+
+
+            
             {news.slice(0, visibleNewsCount).map((newsItem, index) => (
               <div key={index} className="news-item">
                 <img
@@ -160,15 +160,6 @@ function MainContent() {
                     <div className="card-actions">
                       <Button
                         variant="outlined"
-                        color="primary"
-                        size="small"
-                        onClick={() => handleEdit(newsItem.id)}
-                        className="edit-btn"
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="outlined"
                         color="secondary"
                         size="small"
                         onClick={() => handleOpenDialog(newsItem.id)} // Open confirmation dialog
@@ -184,7 +175,7 @@ function MainContent() {
           </div>
 
           {visibleNewsCount < news.length && (
-            <div className="view-more">
+            <div className="card-view-more">
               <Button onClick={handleViewMoreNews}>View more →</Button>
             </div>
           )}
