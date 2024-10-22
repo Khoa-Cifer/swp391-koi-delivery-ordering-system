@@ -4,41 +4,50 @@ import { getAllNews } from "../../../../utils/axios/news";
 import { getFileByFileId } from "../../../../utils/axios/file";
 import dateTimeConvert from "../../../../components/utils";
 import Paragraph from "antd/es/typography/Paragraph";
+import { useNavigate } from "react-router-dom";
 
 function HomeContent() {
-  const [expanded, setExpanded] = useState(false);
-  const handleToggle = () => {
-    setExpanded(!expanded);
-  };
+  const navigate = useNavigate();
   const [content, setContent] = useState([]);
   const [files, setFiles] = useState("");
-  const [visibleCount, setVisibleCount] = useState(4);
+  const [visibleCount, setVisibleCount] = useState(3);
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const response = await getAllNews();
-        setContent(response);
+        const response = await getAllNews();  // Lấy dữ liệu content từ API
+        setContent(response);                 // Cập nhật state content
       } catch (error) {
         console.error("Error fetching content", error);
       }
+    };
+  
+    fetchContent();  // Gọi hàm fetchContent khi component được mount
+  }, []); 
 
-      if (content && content.length > 0) {
-        const fishFilesPromises = content.map(async (file) => {
-          const response = await getFileByFileId(file.file.id);
-          return URL.createObjectURL(response); // Create Object URL from response blob
-        });
 
-        const fishFilesArray = await Promise.all(fishFilesPromises);
-        setFiles(fishFilesArray);
-        console.log(files);
+  useEffect(() => {
+    const fetchFiles = async () => {
+      if (content && content.length > 0) {  // Kiểm tra nếu content có dữ liệu
+        try {
+          const fishFilesPromises = content.map(async (file) => {
+            const response = await getFileByFileId(file.file.id);  // Lấy file dựa trên file id
+            return URL.createObjectURL(response);  // Tạo URL từ file blob để hiển thị ảnh
+          });
+  
+          const fishFilesArray = await Promise.all(fishFilesPromises);  // Đợi tất cả files được tải
+          setFiles(fishFilesArray);  // Cập nhật state files
+        } catch (error) {
+          console.error("Error fetching files", error);
+        }
       }
     };
-
-    fetchContent();
-  }, []);
+  
+    fetchFiles();  
+  }, [content]);
 
   const handleViewMore = () => {
-    setVisibleCount((prevCount) => prevCount + 4); // Show 3 more items each time
+    setVisibleCount((prevCount) => prevCount + 3);
+    navigate("/news");
   };
 
   const newsData = [
@@ -292,38 +301,26 @@ function HomeContent() {
                     )}
 
                     <div className="news-content">
+
+                    <h3 className="news-title">{news.title}</h3>
                       <div className="news-content">
                         <Paragraph
-                          ellipsis={
-                            !expanded
-                              ? {
-                                  rows: 3,
-                                  expandable: true,
-                                  symbol: "Xem thêm",
-                                }
-                              : false
-                          }
+                          ellipsis={{
+                            rows: 3,
+                            symbol: "...",
+                          }}
                         >
                           <div
-                            className="news-description"
                             dangerouslySetInnerHTML={{
                               __html: news.description,
                             }}
                           />
                         </Paragraph>
-                        {expanded && (
-                          <a
-                            onClick={handleToggle}
-                            style={{ color: "#1890ff", cursor: "pointer" }}
-                          >
-                            Ẩn bớt
-                          </a>
-                        )}
                       </div>
 
                       <div className="news-footer">
                         <span className="news-author">
-                          {news.createdBy.username}
+                        { news.createdBy.username}
                         </span>
                         <span className="news-date">
                           {dateTimeConvert(news.createdDate)}
@@ -335,11 +332,9 @@ function HomeContent() {
               )}
             </div>
 
-            {visibleCount < content.length && ( // Only show "View more" if there are more items to show
-              <div className="view-more">
-                <button onClick={handleViewMore}>View more →</button>
-              </div>
-            )}
+            <div className="view-more">
+              <button onClick={handleViewMore}>View more →</button>
+            </div>
           </div>
         </div>
       </div>
