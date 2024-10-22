@@ -94,9 +94,4 @@ public class AuthController {
     public ResponseEntity<?> registerConfirmation(@RequestBody UserRequestRegisterDTO request) {
         return ResponseEntity.ok(customerService.registrationConfirm(request));
     }
-
-    @PostMapping("/createNewManager")
-    public ResponseEntity<?> createNewManager(@RequestBody UserRequestRegisterDTO request) {
-        return ResponseEntity.ok(managerService.createNewManager(request));
-    }
 }

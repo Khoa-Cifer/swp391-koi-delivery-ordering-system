@@ -52,12 +52,8 @@ function Sidebar() {
                 <hr></hr>
             </div>
 
-            <div className="dashboard">
-                <p style={{ margin: "0" }}>DASHBOARD</p>
-            </div>
-
             <div className="admin-users">
-                <CustomTypo>ADMIN USERS</CustomTypo>
+                <CustomTypo>DASHBOARD & REPORT</CustomTypo>
                 <List>
                     {dashboardItemList && dashboardItemList.map && dashboardItemList.map((text) => (
                         <ListItem
