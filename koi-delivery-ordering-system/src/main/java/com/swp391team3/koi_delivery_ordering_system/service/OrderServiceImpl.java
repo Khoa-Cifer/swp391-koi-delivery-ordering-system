@@ -77,6 +77,7 @@ public class OrderServiceImpl implements IOrderService {
             newOrder.setName(dto.getName());
             newOrder.setDescription(dto.getDescription());
             newOrder.setReceiverEmail(dto.getReceiverEmail());
+            savedOrder.setReceiverPhoneNumber(dto.getReceiverPhoneNumber());
 
             newOrder.setDestinationAddress(dto.getDestinationAddress());
             newOrder.setDestinationLatitude(dto.getDestinationLatitude());
@@ -96,6 +97,7 @@ public class OrderServiceImpl implements IOrderService {
             String trackingCode = Utilities.generateOrderCode("OD", savedOrder.getId());
             savedOrder.setTrackingId(trackingCode);
             savedOrder.setStorage(nearestStorage);
+
             orderRepository.save(newOrder);
             //return order's id for next step
             return savedOrder.getId();

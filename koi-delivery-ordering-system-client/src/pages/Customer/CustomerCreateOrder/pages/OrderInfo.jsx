@@ -34,6 +34,8 @@ function OrderInfo({ orderId, formStepData }) {
     const [receiverCoordinates, setReceiverCoordinates] = useState({ lat: null, lng: null });
     const [expectedFinishDate, setExpectedFinishDate] = useState(null);
     const [selectedButton, setSelectedButton] = useState(0);
+    const [receiverEmail, setReceiverEmail] = useState();
+    const [receiverPhoneNumber, setReceiverPhoneNumber] = useState();
 
     const onMapClick = useCallback((e) => {
         const lat = e.latLng.lat();
@@ -97,8 +99,18 @@ function OrderInfo({ orderId, formStepData }) {
         setOrderDescription(e.target.value);
     }
 
+    function handleReceiverEmailChange(e) {
+        setReceiverEmail(e.target.value);
+    }
+    
+    function handleReceiverPhoneNumberChange(e) {
+        setReceiverPhoneNumber(e.target.value);
+    }
+    
     async function handleSubmit() {
-        if (!orderName || !orderDescription || !receiverAddress) {
+        if (!orderName || !orderDescription || !receiverAddress || !senderAddress || !expectedFinishDate
+            || !receiverEmail || !receiverPhoneNumber
+        ) {
             toast("All fields are required");
             return;
         }
@@ -112,7 +124,9 @@ function OrderInfo({ orderId, formStepData }) {
                 senderAddress,
                 senderCoordinates.lng,
                 senderCoordinates.lat,
-                new Date(expectedFinishDate).toISOString()
+                new Date(expectedFinishDate).toISOString(),
+                receiverEmail,
+                receiverPhoneNumber
             )
             // const filter = await filterOrder(response);
             if (response) {
@@ -181,6 +195,28 @@ function OrderInfo({ orderId, formStepData }) {
                             onChange={e => handleReceiverAddressChange(e)}
                             value={receiverAddress}
                             readOnly
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <input
+                            placeholder="Receiver Email"
+                            type="text"
+                            name="text"
+                            className="form-input"
+                            onChange={e => handleReceiverEmailChange(e)}
+                            value={receiverEmail}
+                        />
+                    </div>
+                    
+                    <div className="form-group">
+                        <input
+                            placeholder="Receiver Phone Number"
+                            type="text"
+                            name="text"
+                            className="form-input"
+                            onChange={e => handleReceiverPhoneNumberChange(e)}
+                            value={receiverPhoneNumber}
                         />
                     </div>
 

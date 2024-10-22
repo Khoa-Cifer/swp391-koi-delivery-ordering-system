@@ -39,10 +39,9 @@ public class ManagerController {
         managerService.deleteManagerById(id);
     }
 
-
     //Update Manager
     //
-    @PostMapping("/update-manager-by-id/{id}")
+    @PutMapping("/update-manager-by-id/{id}")
     public ResponseEntity<?> updateManager(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO request) {
         return ResponseEntity.ok(managerService.updateManager(id, request.getEmail(), request.getUsername(), request.getPhoneNumber()));
     }

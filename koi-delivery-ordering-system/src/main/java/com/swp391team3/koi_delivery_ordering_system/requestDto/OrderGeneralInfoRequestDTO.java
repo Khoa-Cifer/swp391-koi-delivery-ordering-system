@@ -19,4 +19,5 @@ public class OrderGeneralInfoRequestDTO {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date expectedFinishDate;
     private String receiverEmail;
+    private String receiverPhoneNumber;
 }
