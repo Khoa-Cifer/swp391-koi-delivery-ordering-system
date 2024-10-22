@@ -182,7 +182,7 @@ function OrderFinalInfo({ orderId }) {
                                 fullWidth
                                 type=""
                                 label="Price"
-                                value={`$${Math.floor(postedData.price).toLocaleString()}`}
+                                value={`${Math.floor(postedData.price).toLocaleString()} VND`}
                                 InputProps={{
                                     readOnly: true,
                                 }}

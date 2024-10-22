@@ -141,7 +141,7 @@ function DeliveryStaff() {
                         cancelText="No"
                     >
                         <Button type="link" danger={record.activeStatus}>
-                            {record.activeStatus ? "Delete" : "Enable"}
+                            {record.activeStatus ? "Disable" : "Enable"}
                         </Button>
                     </Popconfirm>
                 </Space>

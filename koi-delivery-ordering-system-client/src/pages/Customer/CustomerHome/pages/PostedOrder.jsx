@@ -12,6 +12,8 @@ import {
   Typography,
   Modal,
   Button,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
@@ -26,6 +28,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../../components/toastContainer";
+import { deleteFishById } from "../../../../utils/axios/fish";
 
 const commonStyles = {
   bgcolor: "background.paper",
@@ -69,11 +72,27 @@ function PostedOrder({ customerId }) {
   const [expandedOrderId, setExpandedOrderId] = useState(null); // To track expanded orders
   const [searchTrackingId, setSearchTrackingId] = useState(""); // For search by order ID
   const [searchOrderName, setSearchOrderName] = useState(""); // For search by customer name
-  const [open, setOpen] = useState(false);
+  const [orderModalOpen, setOrderModalOpen] = useState(false);
+  const [fishModalOpen, setFishModalOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedFishId, setSelectedFishId] = useState(null);
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleDropdownClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  // Close the menu
+  const handleDropdownClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleCloseOrderModal = () => {
+    setOrderModalOpen(false);
+  };
+
+  const handleCloseFishrModal = () => {
+    setFishModalOpen(false);
   };
 
   const navigate = useNavigate();
@@ -81,25 +100,40 @@ function PostedOrder({ customerId }) {
   const handleClick = (orderId) => {
     // Toggle the visibility of the order table by setting the orderId
     setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
-    
   };
+
+  const handleDeleteFish = (fishId) => {
+    setSelectedFishId(fishId);
+    setFishModalOpen(true);
+  }
+
+  const handleDeleteFishConfirm = async () => {
+    const response = await deleteFishById(selectedFishId);
+    if (response) {
+      toast("Delete fish successfully");
+      fetchPostedOrder();
+      setOrderModalOpen(false);
+    } else {
+      toast("Unexpected error has been occured");
+    }
+  }
 
   const handleOpenEditPage = (order) => {
     navigate(`/customer-edit-order/${order.id}`, {
       state: order,
     });
-    
+
   };
 
   const handleOpenAddFishPage = (order) => {
     navigate(`/customer-add-fish/${order.id}`, {
       state: order,
-    }); 
+    });
   };
 
   const handleDeleteOrder = (orderId) => {
     setSelectedOrderId(orderId);
-    setOpen(true);
+    setOrderModalOpen(true);
   };
 
   const postedOrderStatus = 1;
@@ -143,7 +177,7 @@ function PostedOrder({ customerId }) {
       if (response) {
         toast("Delete order successfully");
         fetchPostedOrder();
-        setOpen(false);
+        setOrderModalOpen(false);
       } else {
         toast("Unexpected error has been occured");
       }
@@ -160,8 +194,8 @@ function PostedOrder({ customerId }) {
   return (
     <div className="customer-home-order-list">
       <Modal
-        open={open}
-        onClose={handleClose}
+        open={orderModalOpen}
+        onClose={handleCloseOrderModal}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
@@ -173,7 +207,7 @@ function PostedOrder({ customerId }) {
               fontSize: "20px",
             }}
           >
-            Are you sure about this?
+            Are you sure about delete this order ?
           </Typography>
           <div style={{ margin: "20px" }}></div>
           <Button
@@ -181,6 +215,34 @@ function PostedOrder({ customerId }) {
             color="primary"
             style={{ width: "100%" }}
             onClick={() => handleDeleteOrderConfirm()}
+          >
+            Confirm
+          </Button>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={fishModalOpen}
+        onClose={handleCloseFishrModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Typography
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              fontSize: "20px",
+            }}
+          >
+            Are you sure about delete this fish ?
+          </Typography>
+          <div style={{ margin: "20px" }}></div>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ width: "100%" }}
+            onClick={() => handleDeleteFishConfirm()}
           >
             Confirm
           </Button>
@@ -324,10 +386,15 @@ function PostedOrder({ customerId }) {
                               {fish.status === 2 && <TableCell>Sick</TableCell>}
                               {fish.status === 3 && <TableCell>Dead</TableCell>}
                               <TableCell>{fish.weight}</TableCell>
-                              <TableCell>
-                                <div className="button-icon">
-                                  <MoreHorizIcon />
-                                </div>
+                              <TableCell><div className="button-icon" onClick={(e) => handleDropdownClick(e)}><MoreHorizIcon /></div>
+                                <Menu
+                                  anchorEl={anchorEl}
+                                  open={Boolean(anchorEl)}
+                                  onClose={() => handleDropdownClose()}
+                                >
+                                  <MenuItem onClick={() => handleDeleteFish(fish.id)}>Delete Fish</MenuItem>
+                                  {/* <MenuItem onClick={() => handleViewLicense()}>View License</MenuItem> */}
+                                </Menu>
                               </TableCell>
                             </TableRow>
                           ))}

@@ -34,6 +34,7 @@ public class Order {
     private String senderLatitude;
     private double price;
     private int orderStatus;
+    private String receiverEmail;
 
     @ManyToOne
     @JoinColumn(name = "storage_id")

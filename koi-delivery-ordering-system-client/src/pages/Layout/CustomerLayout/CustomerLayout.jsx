@@ -9,6 +9,8 @@ function CustomerLayout() {
             sx={{
                 display: "flex",
                 flexDirection: "column",
+                minHeight: "100vh"
+                
             }}
         >
             {/* Fixed Header */}
@@ -25,7 +27,12 @@ function CustomerLayout() {
                 <Header />
             </Box>
 
-            <Box sx={{ display: "flex", flex: 1, pt: "10%" }}>
+            <Box sx={{
+                display: "flex",
+                flex: 1,
+                pt: "10%",
+                background: "#E6F9FD",
+            }}>
                 {/* Fixed Sidebar */}
                 <Box
                     sx={{
