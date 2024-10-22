@@ -76,6 +76,7 @@ public class OrderServiceImpl implements IOrderService {
 
             newOrder.setName(dto.getName());
             newOrder.setDescription(dto.getDescription());
+            newOrder.setReceiverEmail(dto.getReceiverEmail());
 
             newOrder.setDestinationAddress(dto.getDestinationAddress());
             newOrder.setDestinationLatitude(dto.getDestinationLatitude());
@@ -338,26 +339,26 @@ public class OrderServiceImpl implements IOrderService {
         return onGoingOrder;
     }
 
-    @Override
-    public boolean updateOrderSalesAction(Long orderId, Long salesId, int action) {
-        Optional<Order> foundedOrder = getOrderById(orderId);
-        Optional<SalesStaff> foundedSalesStaff = salesStaffService.getSalesStaffById(salesId);
-        switch(action) {
-            case 0:
-                foundedOrder.get().setSalesStaffAccept(foundedSalesStaff.get());
-                break;
-            case 1:
-                foundedOrder.get().setSalesStaffConfirmation(foundedSalesStaff.get());
-                break;
-            case 2:
-                foundedOrder.get().setSalesStaffCancellation(foundedSalesStaff.get());
-                break;
-            default:
-                return false;
-        }
-        orderRepository.save(foundedOrder.get());
-        return true;
-    }
+//    @Override
+//    public boolean updateOrderSalesAction(Long orderId, Long salesId, int action) {
+//        Optional<Order> foundedOrder = getOrderById(orderId);
+//        Optional<SalesStaff> foundedSalesStaff = salesStaffService.getSalesStaffById(salesId);
+//        switch(action) {
+//            case 0:
+//                foundedOrder.get().setSalesStaffAccept(foundedSalesStaff.get());
+//                break;
+//            case 1:
+//                foundedOrder.get().setSalesStaffConfirmation(foundedSalesStaff.get());
+//                break;
+//            case 2:
+//                foundedOrder.get().setSalesStaffCancellation(foundedSalesStaff.get());
+//                break;
+//            default:
+//                return false;
+//        }
+//        orderRepository.save(foundedOrder.get());
+//        return true;
+//    }
 
     @Override
     public Optional<Order> getOrderByTrackingId(String trackingId) {
@@ -391,6 +392,8 @@ public class OrderServiceImpl implements IOrderService {
 
                 OrderDelivering orderDeliveringResult = orderDeliveringService.updateDeliveringInfo(dto);
                 if (orderDeliveringResult != null) {
+                    System.out.println("Test 1" + orderDeliveringResult);
+
                     DeliveryStaffLocationUpdateRequestDTO deliveryStaffDTO = new DeliveryStaffLocationUpdateRequestDTO();
                     deliveryStaffDTO.setId(foundDeliveryStaff.get().getId());
                     deliveryStaffDTO.setAddress(foundStorage.get().getAddress());
@@ -400,27 +403,42 @@ public class OrderServiceImpl implements IOrderService {
                     boolean updateResult = deliveryStaffService.updateDeliveryStaffLocation(deliveryStaffDTO);
 
                     if (updateResult) {
-                        orderDeliveringService.finishDelivering(orderDeliveringResult.getId());
-                        result = true;
+                        System.out.println("Test 2" + updateResult);
+                        boolean finishResult = orderDeliveringService.finishDelivering(orderDeliveringResult.getId());
+                        if (finishResult) {
+                            //get sales staff confirm
+                            System.out.println("Test 3" + updateResult);
+
+                            SalesStaff salesStaff = foundOrder.get().getSalesStaffConfirmation();
+                            //send mail for sales staff
+                            EmailDetailDTO emailDetail = new EmailDetailDTO();
+                            emailDetail.setReceiver((Object) salesStaff);
+                            emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered to the customer");
+                            emailService.sendEmail(emailDetail, 8);
+                            result = true;
+                        }
                     }
                 }
             }
+            System.out.println("Resykt is : " + result);
+            if (result) {
+                //get customer
+                Customer customer = foundOrder.get().getCustomer();
+                //send mail
+                EmailDetailDTO emailDetail = new EmailDetailDTO();
+                emailDetail.setReceiver((Object) customer);
+                emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered");
+                foundOrder.get().setFinishDate(new Date());
+                orderRepository.save(foundOrder.get());
+                emailDetail.setLink("http://localhost:5173" + "/invoice" +
+                        "?orderId=" + foundOrder.get().getId() +
+                        "&userId=" + customer.getId() +
+                        "&username=" + customer.getUsername() +
+                        "&email=" + customer.getEmail() +
+                        "&phoneNumber=" + customer.getPhoneNumber());
+                emailService.sendEmail(emailDetail, 3);
+            }
 
-            //get customer
-            Customer customer = foundOrder.get().getCustomer();
-            //send mail
-            EmailDetailDTO emailDetail = new EmailDetailDTO();
-            emailDetail.setReceiver((Object) customer);
-            emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered");
-            foundOrder.get().setFinishDate(new Date());
-            orderRepository.save(foundOrder.get());
-            emailDetail.setLink("http://localhost:5173" + "/invoice" +
-                    "?orderId=" + foundOrder.get().getId() +
-                    "&userId=" + customer.getId() +
-                    "&username=" + customer.getUsername() +
-                    "&email=" + customer.getEmail() +
-                    "&phoneNumber=" + customer.getPhoneNumber());
-            emailService.sendEmail(emailDetail, 3);
             return result;
         } catch (Exception e) {
             return false;
@@ -476,4 +494,80 @@ public class OrderServiceImpl implements IOrderService {
         return distancePrice + koiPrice;
     }
 
+    @Override
+    public boolean acceptOrder(Long orderId, Long salesId) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        Optional<SalesStaff> optionalSalesStaff = salesStaffService.getSalesStaffById(salesId);
+
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            if (updateOrderStatus(orderId, orderStatus.ORDER_ACCEPTED)) {
+                order.setSalesStaffAccept(optionalSalesStaff.get());
+                orderRepository.save(order);
+                Customer customer = optionalOrder.get().getCustomer();
+
+                //send mail for customer
+                EmailDetailDTO emailDetail = new EmailDetailDTO();
+                emailDetail.setReceiver((Object) customer);
+                emailDetail.setSubject("Order " + order.getName() + " has been accepted");
+                emailDetail.setLink("http://localhost:5173");
+                emailService.sendEmail(emailDetail, 6);
+
+                EmailDetailDTO emailDetailDTO = new EmailDetailDTO();
+                emailDetailDTO.setReceiver((Object) order);
+                emailDetailDTO.setSubject("You have " + order.getName() + " is being delivered to you");
+                emailDetailDTO.setLink("http://localhost:5173/tracking-order?trackingId=" + order.getTrackingId());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean confirmOrder(Long orderId, Long salesId) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        Optional<SalesStaff> optionalSalesStaff = salesStaffService.getSalesStaffById(salesId);
+
+        if (optionalOrder.isPresent() && optionalSalesStaff.isPresent()) {
+            Order order = optionalOrder.get();
+            if(updateOrderStatus(orderId, orderStatus.ORDER_CONFIRMED)) {
+                order.setSalesStaffConfirmation(optionalSalesStaff.get());
+                orderRepository.save(order);
+                Customer customer = optionalOrder.get().getCustomer();
+
+                //send mail for customer
+                EmailDetailDTO emailDetail = new EmailDetailDTO();
+                emailDetail.setReceiver((Object) customer);
+                emailDetail.setSubject("Order " + order.getId() + " has been confirmed");
+                emailDetail.setLink("http://localhost:5173");
+                emailService.sendEmail(emailDetail, 7);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean cancelOrder(Long orderId, Long salesId) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        Optional<SalesStaff> optionalSalesStaff = salesStaffService.getSalesStaffById(salesId);
+
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            if(updateOrderStatus(orderId, orderStatus.FAILED)) {
+                order.setSalesStaffCancellation(optionalSalesStaff.get());
+                orderRepository.save(order);
+                Customer customer = optionalOrder.get().getCustomer();
+
+                //send mail for customer
+                EmailDetailDTO emailDetail = new EmailDetailDTO();
+                emailDetail.setReceiver((Object) customer);
+                emailDetail.setSubject("Order " + order.getId() + " has been cancelled");
+                emailDetail.setLink("http://localhost:5173");
+                emailService.sendEmail(emailDetail, 9);
+                return true;
+            }
+        }
+        return false;
+    }
 }

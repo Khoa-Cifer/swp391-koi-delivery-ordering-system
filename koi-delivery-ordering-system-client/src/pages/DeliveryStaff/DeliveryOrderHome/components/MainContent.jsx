@@ -103,7 +103,7 @@ const MainContent = () => {
                   if (index >= 3) return null;
                   return (
                     <div className="order-card" key={order.id}>
-                      <h5 className="card-title">Order {order.name}</h5>
+                      <h5 className="card-title">{order.name}</h5>
                       <p className="card-text">
                         Created Date: {dateTimeConvert(order.createdDate)}
                       </p>

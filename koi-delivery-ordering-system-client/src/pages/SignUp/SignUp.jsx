@@ -102,10 +102,15 @@ const SignUp = () => {
           />
         </div>
 
-        <button onClick={handleSubmit} className="signup-btn">
-          Sign Up
-        </button>
-
+        {formData.email === "" || formData.password === "" || formData.phoneNumber === "" || formData.username === "" ? (
+          <button disabled className="signup-btn">
+            Sign Up
+          </button>
+        ) : (
+          <button onClick={handleSubmit} className="signup-btn">
+            Sign Up
+          </button>
+        )}
         <p className="login-link">
           Already have an account? <Link to={"/login-customer"}>Login here</Link>
         </p>

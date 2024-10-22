@@ -60,6 +60,7 @@ function MainContent() {
   const [currentLocation, setCurrentLocation] = useState({ lat: null, lng: null });
   const [address, setAddress] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [updateStatus, setUpdateStatus] = useState(false);
 
   const onLoad = useCallback(function callback(map) {
     setMap(map)
@@ -126,7 +127,7 @@ function MainContent() {
 
       if (response) {
         toast("Order information updated");
-        navigate("/delivery-order-home")
+        setUpdateStatus(true);
       } else {
         toast("Unexpected error occurred");
       }
@@ -146,7 +147,7 @@ function MainContent() {
 
       if (response) {
         toast("Order information updated");
-        navigate("/delivery-order-home")
+        setUpdateStatus(true);
       } else {
         toast("Unexpected error occurred");
       }
@@ -189,9 +190,10 @@ function MainContent() {
           return (prev.id > current.id) ? prev : current;
         });
         const response = await finishOrder(state.id, availableOrderDelivering.id, deliveryStaffId, state.storage.id, processType);
+        console.log(response);
         if (response) {
           toast("Order Finish");
-          navigate("/delivery-order-home");
+          setUpdateStatus(true);
         } else {
           toast("Unexpected Error has been occurred");
         }
@@ -220,6 +222,7 @@ function MainContent() {
       {/* Order Details Table */}
       <ToastUtil />
       {isLoading && <Spinner />}
+
       <div className="order-name-detail">
         <strong>{state.name}</strong>
       </div>
@@ -342,33 +345,39 @@ function MainContent() {
 
           {userData.roleId === 3 && (
             <>
-              <SubmitButton variant="contained" style={{ backgroundColor: "#f44336" }} onClick={() => handleCancelOrder()}>Cancel</SubmitButton>
-              {state.orderStatus === 3 && (
-                state.orderDeliveringSet && state.orderDeliveringSet.length > 0 && (
-                  <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep(0)}>
-                    Getting Complete
-                  </SubmitButton>
-                )
-              )}
+              {updateStatus ? (
+                <SubmitButton variant="contained" onClick={() => navigate("/delivery-order-home")}>Back to home page</SubmitButton>
+              ) : (
+                <>
+                  <SubmitButton variant="contained" style={{ backgroundColor: "#f44336" }} onClick={() => handleCancelOrder()}>Cancel</SubmitButton>
+                  {state.orderStatus === 3 && (
+                    state.orderDeliveringSet && state.orderDeliveringSet.length > 0 && (
+                      <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep(0)}>
+                        Getting Complete
+                      </SubmitButton>
+                    )
+                  )}
 
-              {state.orderStatus === 6 && (
-                state.orderDeliveringSet && state.orderDeliveringSet.length > 0 && (
-                  <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep(1)}>
-                    Delivering Complete
-                  </SubmitButton>
-                )
-              )}
+                  {state.orderStatus === 6 && (
+                    state.orderDeliveringSet && state.orderDeliveringSet.length > 0 && (
+                      <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep(1)}>
+                        Delivering Complete
+                      </SubmitButton>
+                    )
+                  )}
 
-              {state.orderStatus === 2 && (
-                <SubmitButton variant="contained" onClick={() => handleReceiveOrder()}>
-                  Get This Order
-                </SubmitButton>
-              )}
+                  {state.orderStatus === 2 && (
+                    <SubmitButton variant="contained" onClick={() => handleReceiveOrder()}>
+                      Get This Order
+                    </SubmitButton>
+                  )}
 
-              {state.orderStatus === 5 && (
-                <SubmitButton variant="contained" onClick={() => handleDeliveryOrder()}>
-                  Delivery This Order
-                </SubmitButton>
+                  {state.orderStatus === 5 && (
+                    <SubmitButton variant="contained" onClick={() => handleDeliveryOrder()}>
+                      Delivery This Order
+                    </SubmitButton>
+                  )}
+                </>
               )}
             </>
           )}

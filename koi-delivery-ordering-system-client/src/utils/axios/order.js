@@ -98,18 +98,18 @@ export async function updateOrderStatus(orderId, status) {
   }
 }
 
-export async function updateOrderSalesAction(orderId, salesId, actionStatus) {
-  try {
-    const response = await axiosClient.put("orders/updateOrderSales", {
-      orderId,
-      salesId,
-      actionStatus,
-    });
-    return response.data;
-  } catch (error) {
-    console.log(error);
-  }
-}
+// export async function updateOrderSalesAction(orderId, salesId, actionStatus) {
+//   try {
+//     const response = await axiosClient.put("orders/updateOrderSales", {
+//       orderId,
+//       salesId,
+//       actionStatus,
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
 export async function getOrdersRecommendedForDeliveryStaff(deliveryStaffId) {
   try {
@@ -212,6 +212,39 @@ export async function updateGeneralOrderInfo(
       senderLatitude,
       expectedFinishDate,
     });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function acceptOrder(orderId, salesId) {
+  try {
+    const response = await axiosClient.put("orders/accept-order", {
+      orderId, salesId
+    })
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function confirmOrder(orderId, salesId) {
+  try {
+    const response = await axiosClient.put("orders/confirm-order", {
+      orderId, salesId
+    })
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function cancelOrder(orderId, salesId) {
+  try {
+    const response = await axiosClient.put("orders/cancel-order", {
+      orderId, salesId
+    })
     return response.data;
   } catch (error) {
     console.log(error);

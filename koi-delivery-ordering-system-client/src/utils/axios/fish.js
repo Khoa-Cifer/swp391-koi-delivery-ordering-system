@@ -9,6 +9,15 @@ export async function getFishesByOrderId(orderId) {
     }
 }
 
+export async function deleteFishById(fishId) {
+    try {
+        const response = await axiosClient.delete(`fishes/delete-fish/${fishId}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export async function createFishOrderInfo(
     fishName,
     fishAge,

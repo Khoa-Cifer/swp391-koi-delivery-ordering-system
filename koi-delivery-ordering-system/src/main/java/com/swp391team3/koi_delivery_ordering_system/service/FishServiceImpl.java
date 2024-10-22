@@ -44,34 +44,29 @@ public class FishServiceImpl implements IFishService {
         boolean result = false;
         Fish fish = fishRepository.findById(id)
                 .orElse(null);
-        Order order = orderRepository.findAll().stream()
-                .filter(order1 -> order1.getFishes().equals(fish))
-                .findFirst().orElse(null);
-        if (order.getOrderStatus() == orderStatus.DRAFT || order.getOrderStatus() == orderStatus.POSTED) {
-            if (fish != null) {
-                Set<License> licenses = fish.getLicenses();
-                if (licenses != null) {
-                    for (License license : licenses) {
-                        Set<LicenseFile> licenseFiles = licenseFileRepository.findAll().stream()
-                                .filter(licenseFile1 -> licenseFile1.getLicense().equals(license))
-                                .collect(Collectors.toSet());
-                        if (licenseFiles != null) {
-                            for (LicenseFile licenseFile : licenseFiles) {
-                                Long licenseFileId = licenseFile.getFile().getId();
-                                fileService.deleteFile(licenseFileId);
-                            }
-                            licenseFileRepository.deleteAll(licenseFiles);
+        if (fish != null) {
+            Set<License> licenses = fish.getLicenses();
+            if (licenses != null) {
+                for (License license : licenses) {
+                    Set<LicenseFile> licenseFiles = licenseFileRepository.findAll().stream()
+                            .filter(licenseFile1 -> licenseFile1.getLicense().equals(license))
+                            .collect(Collectors.toSet());
+                    if (licenseFiles != null) {
+                        for (LicenseFile licenseFile : licenseFiles) {
+                            Long licenseFileId = licenseFile.getFile().getId();
+                            fileService.deleteFile(licenseFileId);
                         }
-                        licenseRepository.delete(license);
+                        licenseFileRepository.deleteAll(licenseFiles);
                     }
+                    licenseRepository.delete(license);
                 }
-                fishRepository.delete(fish);
-                if (fish.getFile() != null) {
-                    fileRepository.delete(fish.getFile());
-                    fileService.deleteFile(fish.getFile().getId());
-                }
-                result = true;
             }
+            fishRepository.delete(fish);
+            if (fish.getFile() != null) {
+                fileRepository.delete(fish.getFile());
+                fileService.deleteFile(fish.getFile().getId());
+            }
+            result = true;
         }
         return result;
     }

@@ -27,7 +27,7 @@ public interface IOrderService {
     List<Order> findOrdersForDelivery(Long id);
     List<Order> onGoingOrdersForDelivery(Long id, int deliveryProcessType, int orderStatus);
 
-    boolean updateOrderSalesAction(Long orderId, Long salesId, int action);
+//    boolean updateOrderSalesAction(Long orderId, Long salesId, int action);
     Optional<Order> getOrderByTrackingId(String trackingId);
 
     boolean finishOrder(FinishOrderUpdateRequestDTO request);
@@ -36,4 +36,9 @@ public interface IOrderService {
                                        String destinationAddress, String destinationLongitude, String destinationLatitude,
                                        String senderAddress, String senderLongitude, String senderLatitude);
 
+    boolean acceptOrder(Long orderId, Long salesId);
+
+    boolean confirmOrder(Long orderId, Long salesId);
+
+    boolean cancelOrder(Long orderId, Long salesId);
 }

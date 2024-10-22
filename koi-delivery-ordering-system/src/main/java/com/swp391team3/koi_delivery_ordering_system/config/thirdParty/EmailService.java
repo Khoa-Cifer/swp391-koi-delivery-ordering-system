@@ -33,6 +33,8 @@ public class EmailService {
                 context.setVariable("name", ((Manager) emailDetail.getReceiver()).getEmail());
             } else if (emailDetail.getReceiver() instanceof SalesStaff) {
                 context.setVariable("name", ((SalesStaff) emailDetail.getReceiver()).getEmail());
+            } else if (emailDetail.getReceiver() instanceof Order) {
+                context.setVariable("name", ((Order) emailDetail.getReceiver()).getReceiverEmail());
             } else {
                 throw new IllegalArgumentException("Unknown user type");
             }
@@ -42,15 +44,24 @@ public class EmailService {
             String template = templateEngine.process("welcome-template", context);
             if(type == typeMail.WELCOME_TEMPLATE) {
                 template = templateEngine.process("welcome-template", context);
-            } else if (type == typeMail.GETTING_TEMPLATE) {
-                template = templateEngine.process("getting-template", context);
-                context.setVariable("link", emailDetail.getLink());
-            } else if (type == typeMail.COMPLETE_DELIVERY_TEMPLATE) {
-                template = templateEngine.process("complete-delivery-template", context);
-            } else if (type == typeMail.DELIVERY_STAFF_DELIVERING_TEMPLATE){
-                template = templateEngine.process("deliverystaff-delivering-template", context);
-            } else if (type == typeMail.CUSTOMER_DELIVERING_TEMPLATE){
-                template = templateEngine.process("customer-delivering-template", context);
+            } else if (type == typeMail.GETTING_DELIVERY_STAFF_TEMPLATE) {
+                template = templateEngine.process("getting-deliveryStaff-template", context);
+            } else if (type == typeMail.COMPLETE_CUSTOMER_TEMPLATE) {
+                template = templateEngine.process("complete-customer-template", context);
+            } else if (type == typeMail.DELIVERING_DELIVERY_STAFF_TEMPLATE){
+                template = templateEngine.process("delivering-deliveryStaff-template", context);
+            } else if (type == typeMail.DELIVERING_CUSTOMER_TEMPLATE){
+                template = templateEngine.process("delivering-customer-template", context);
+            } else if (type == typeMail.ACCEPT_CUSTOMER_TEMPLATE){
+                template = templateEngine.process("accept-customer-template", context);
+            } else if (type == typeMail.CONFIRM_CUSTOMER_TEMPLATE) {
+                template = templateEngine.process("confirm-customer-template", context);
+            } else if (type == typeMail.COMPLETE_SALES_STAFF_TEMPLATE){
+                template = templateEngine.process("complete-salesStaff-template", context);
+            } else if (type == typeMail.FAILED_CUSTOMER_TEMPLATE) {
+                template = templateEngine.process("fail-customer-template", context);
+            } else if (type == typeMail.RECEIVER_NOTIFICATION_TEMPLATE) {
+                template = templateEngine.process("receiver-notification-template", context);
             }
 
             //Creating a simple mail message
@@ -59,17 +70,18 @@ public class EmailService {
 
             //Setting up necessary details
             mimeMessageHelper.setFrom("koideliveringsystemswp@gmail.com");
-            if(emailDetail.getReceiver() instanceof Customer){
-                mimeMessageHelper.setTo(((Customer) emailDetail.getReceiver()).getEmail());
-            } else if(emailDetail.getReceiver() instanceof DeliveryStaff){
-                mimeMessageHelper.setTo(((DeliveryStaff) emailDetail.getReceiver()).getEmail());
-            } else if(emailDetail.getReceiver() instanceof Manager){
-                mimeMessageHelper.setTo(((Manager) emailDetail.getReceiver()).getEmail());
-            } else if (emailDetail.getReceiver() instanceof SalesStaff) {
-                mimeMessageHelper.setTo(((SalesStaff) emailDetail.getReceiver()).getEmail());
-            } else {
-                throw new IllegalArgumentException("Unknown user type");
-            }
+//            if(emailDetail.getReceiver() instanceof Customer){
+//                mimeMessageHelper.setTo(((Customer) emailDetail.getReceiver()).getEmail());
+//            } else if(emailDetail.getReceiver() instanceof DeliveryStaff){
+//                mimeMessageHelper.setTo(((DeliveryStaff) emailDetail.getReceiver()).getEmail());
+//            } else if(emailDetail.getReceiver() instanceof Manager){
+//                mimeMessageHelper.setTo(((Manager) emailDetail.getReceiver()).getEmail());
+//            } else if (emailDetail.getReceiver() instanceof SalesStaff) {
+//                mimeMessageHelper.setTo(((SalesStaff) emailDetail.getReceiver()).getEmail());
+//            } else {
+//                throw new IllegalArgumentException("Unknown user type");
+//            }
+            mimeMessageHelper.setTo((String) context.getVariable("name"));
             mimeMessageHelper.setText(template, true);
             mimeMessageHelper.setSubject(emailDetail.getSubject());
 
