@@ -77,6 +77,7 @@ public class OrderServiceImpl implements IOrderService {
             newOrder.setName(dto.getName());
             newOrder.setDescription(dto.getDescription());
             newOrder.setReceiverEmail(dto.getReceiverEmail());
+
             newOrder.setReceiverPhoneNumber(dto.getReceiverPhoneNumber());
 
             newOrder.setDestinationAddress(dto.getDestinationAddress());
@@ -394,7 +395,6 @@ public class OrderServiceImpl implements IOrderService {
 
                 OrderDelivering orderDeliveringResult = orderDeliveringService.updateDeliveringInfo(dto);
                 if (orderDeliveringResult != null) {
-                    System.out.println("Test 1" + orderDeliveringResult);
 
                     DeliveryStaffLocationUpdateRequestDTO deliveryStaffDTO = new DeliveryStaffLocationUpdateRequestDTO();
                     deliveryStaffDTO.setId(foundDeliveryStaff.get().getId());
@@ -405,24 +405,32 @@ public class OrderServiceImpl implements IOrderService {
                     boolean updateResult = deliveryStaffService.updateDeliveryStaffLocation(deliveryStaffDTO);
 
                     if (updateResult) {
-                        System.out.println("Test 2" + updateResult);
                         boolean finishResult = orderDeliveringService.finishDelivering(orderDeliveringResult.getId());
                         if (finishResult) {
-                            //get sales staff confirm
-                            System.out.println("Test 3" + updateResult);
-
-                            SalesStaff salesStaff = foundOrder.get().getSalesStaffAccept();
-                            //send mail for sales staff
-                            EmailDetailDTO emailDetail = new EmailDetailDTO();
-                            emailDetail.setReceiver((Object) salesStaff);
-                            emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered to the customer");
-                            emailService.sendEmail(emailDetail, 8);
-                            result = true;
+                            //get sales staff
+                            SalesStaff salesStaff = null;
+                            if (request.getProcessType() == 0) {
+                                salesStaff = foundOrder.get().getSalesStaffAccept();
+                                //send mail for sales staff
+                                EmailDetailDTO emailDetail = new EmailDetailDTO();
+                                emailDetail.setReceiver((Object) salesStaff);
+                                emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered to the customer");
+                                emailService.sendEmail(emailDetail, 8);
+                                result = true;
+                            } else if (request.getProcessType() == 1) {
+                                salesStaff = foundOrder.get().getSalesStaffConfirmation();
+                                //send mail for sales staff
+                                EmailDetailDTO emailDetail = new EmailDetailDTO();
+                                emailDetail.setReceiver((Object) salesStaff);
+                                emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered to the customer");
+                                emailService.sendEmail(emailDetail, 8);
+                                result = true;
+                            }
                         }
                     }
                 }
             }
-            System.out.println("Resykt is : " + result);
+
             if (result) {
                 //get customer
                 Customer customer = foundOrder.get().getCustomer();
