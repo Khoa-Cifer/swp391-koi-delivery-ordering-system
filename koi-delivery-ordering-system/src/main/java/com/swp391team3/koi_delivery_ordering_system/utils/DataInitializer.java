@@ -33,6 +33,10 @@ public class DataInitializer implements CommandLineRunner {
         servicePriceBase.setDescription("Price Base");
         servicePriceBase.setRate(10000.0);
 
+        PaymentService serviceFishRate = new PaymentService();
+        serviceFishRate.setDescription("Price for each koi fish");
+        serviceFishRate.setRate(5000.0);
+
         PaymentService servicePriceRateDomestic = new PaymentService();
         servicePriceRateDomestic.setDescription("Price Rate for Domestic Service");
         servicePriceRateDomestic.setRate(1.0);
@@ -41,14 +45,11 @@ public class DataInitializer implements CommandLineRunner {
         servicePriceRateForeign.setDescription("Price Rate for Foreign Service");
         servicePriceRateForeign.setRate(1.5);
 
-        PaymentService serviceFishRate = new PaymentService();
-        serviceFishRate.setDescription("Price for each koi fish");
-        serviceFishRate.setRate(5000.0);
-
         paymentServiceRepository.save(servicePriceBase);
+        paymentServiceRepository.save(serviceFishRate);
+
         paymentServiceRepository.save(servicePriceRateDomestic);
         paymentServiceRepository.save(servicePriceRateForeign);
-        paymentServiceRepository.save(serviceFishRate);
     }
 
     private void initManager() {
