@@ -62,6 +62,8 @@ public class EmailService {
                 template = templateEngine.process("fail-customer-template", context);
             } else if (type == typeMail.RECEIVER_NOTIFICATION_TEMPLATE) {
                 template = templateEngine.process("receiver-notification-template", context);
+            } else if (type == typeMail.RECEIVE_SALES_STAFF_TEMPLATE) {
+                template = templateEngine.process("receive-salesStaff-template", context);
             }
 
             //Creating a simple mail message
