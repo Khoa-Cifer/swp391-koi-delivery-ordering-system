@@ -28,6 +28,7 @@ public class DeliveryStaff implements UserDetails {
     private String username;
     @Column(unique = true, nullable = false)
     private String email;
+    @JsonIgnore
     private String password;
     private String address;
     private String latitude;

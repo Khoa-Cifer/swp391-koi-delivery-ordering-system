@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestCreationDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestRegisterDTO;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -62,7 +63,7 @@ public class ManagerServiceImpl implements IManagerService{
     }
 
     @Override
-    public String createNewManager(UserRequestRegisterDTO request) {
+    public String createNewManager(StaffRequestCreationDTO request) {
         Manager newManager = new Manager();
         boolean emailDuplicatedCheck = managerRepository.existsByEmail(request.getEmail());
 
@@ -72,7 +73,8 @@ public class ManagerServiceImpl implements IManagerService{
 
         newManager.setEmail(request.getEmail());
         newManager.setPhoneNumber(request.getPhoneNumber());
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        String defaultPassword = "12345678";
+        String encodedPassword = passwordEncoder.encode(defaultPassword);
         newManager.setPassword(encodedPassword);
         newManager.setUsername(request.getUsername());
         managerRepository.save(newManager);

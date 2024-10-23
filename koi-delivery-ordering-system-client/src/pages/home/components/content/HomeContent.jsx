@@ -285,7 +285,7 @@ function HomeContent() {
           </p>
           <div className="news-container">
             <div className="news-grid">
-              {content.slice(0, visibleCount).map(
+              {content.length > 0 && content.slice(0, visibleCount).map(
                 (
                   news,
                   index // Use visibleCount to determine how many to show

@@ -78,6 +78,8 @@ public class OrderServiceImpl implements IOrderService {
             newOrder.setDescription(dto.getDescription());
             newOrder.setReceiverEmail(dto.getReceiverEmail());
 
+            newOrder.setReceiverPhoneNumber(dto.getReceiverPhoneNumber());
+
             newOrder.setDestinationAddress(dto.getDestinationAddress());
             newOrder.setDestinationLatitude(dto.getDestinationLatitude());
             newOrder.setDestinationLongitude(dto.getDestinationLongitude());
@@ -96,6 +98,7 @@ public class OrderServiceImpl implements IOrderService {
             String trackingCode = Utilities.generateOrderCode("OD", savedOrder.getId());
             savedOrder.setTrackingId(trackingCode);
             savedOrder.setStorage(nearestStorage);
+
             orderRepository.save(newOrder);
             //return order's id for next step
             return savedOrder.getId();
@@ -392,7 +395,6 @@ public class OrderServiceImpl implements IOrderService {
 
                 OrderDelivering orderDeliveringResult = orderDeliveringService.updateDeliveringInfo(dto);
                 if (orderDeliveringResult != null) {
-                    System.out.println("Test 1" + orderDeliveringResult);
 
                     DeliveryStaffLocationUpdateRequestDTO deliveryStaffDTO = new DeliveryStaffLocationUpdateRequestDTO();
                     deliveryStaffDTO.setId(foundDeliveryStaff.get().getId());
@@ -403,24 +405,31 @@ public class OrderServiceImpl implements IOrderService {
                     boolean updateResult = deliveryStaffService.updateDeliveryStaffLocation(deliveryStaffDTO);
 
                     if (updateResult) {
-                        System.out.println("Test 2" + updateResult);
                         boolean finishResult = orderDeliveringService.finishDelivering(orderDeliveringResult.getId());
                         if (finishResult) {
-                            //get sales staff confirm
-                            System.out.println("Test 3" + updateResult);
-
-                            SalesStaff salesStaff = foundOrder.get().getSalesStaffConfirmation();
-                            //send mail for sales staff
-                            EmailDetailDTO emailDetail = new EmailDetailDTO();
-                            emailDetail.setReceiver((Object) salesStaff);
-                            emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered to the customer");
-                            emailService.sendEmail(emailDetail, 8);
-                            result = true;
+                            //get sales staff
+                            SalesStaff salesStaff = null;
+                            if (request.getProcessType() == 0) {
+                                salesStaff = foundOrder.get().getSalesStaffAccept();
+                                //send mail for sales staff
+                                EmailDetailDTO emailDetail = new EmailDetailDTO();
+                                emailDetail.setReceiver((Object) salesStaff);
+                                emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered to the storage");
+                                emailService.sendEmail(emailDetail, 11);
+                            } else if (request.getProcessType() == 1) {
+                                salesStaff = foundOrder.get().getSalesStaffConfirmation();
+                                //send mail for sales staff
+                                EmailDetailDTO emailDetail = new EmailDetailDTO();
+                                emailDetail.setReceiver((Object) salesStaff);
+                                emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered to the customer");
+                                emailService.sendEmail(emailDetail, 8);
+                                result = true;
+                            }
                         }
                     }
                 }
             }
-            System.out.println("Resykt is : " + result);
+
             if (result) {
                 //get customer
                 Customer customer = foundOrder.get().getCustomer();
@@ -439,7 +448,7 @@ public class OrderServiceImpl implements IOrderService {
                 emailService.sendEmail(emailDetail, 3);
             }
 
-            return result;
+            return true;
         } catch (Exception e) {
             return false;
         }
@@ -517,6 +526,7 @@ public class OrderServiceImpl implements IOrderService {
                 emailDetailDTO.setReceiver((Object) order);
                 emailDetailDTO.setSubject("You have " + order.getName() + " is being delivered to you");
                 emailDetailDTO.setLink("http://localhost:5173/tracking-order?trackingId=" + order.getTrackingId());
+                emailService.sendEmail(emailDetail, 10);
                 return true;
             }
         }

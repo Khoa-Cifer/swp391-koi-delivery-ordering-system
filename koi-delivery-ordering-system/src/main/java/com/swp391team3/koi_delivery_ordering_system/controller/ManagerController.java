@@ -1,6 +1,7 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.Manager;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestCreationDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestUpdateDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestRegisterDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IManagerService;
@@ -17,6 +18,12 @@ import java.util.Optional;
 @RequestMapping("/api/manager")
 public class ManagerController {
     private final IManagerService managerService;
+
+    @PostMapping("/create-manager")
+    public ResponseEntity<?> createDeliveryStaff(@RequestBody StaffRequestCreationDTO request) {
+        String result = managerService.createNewManager(request);
+        return ResponseEntity.ok(result);
+    }
 
     //Get All Managers
     //PASSED
@@ -39,10 +46,9 @@ public class ManagerController {
         managerService.deleteManagerById(id);
     }
 
-
     //Update Manager
     //
-    @PostMapping("/update-manager-by-id/{id}")
+    @PutMapping("/update-manager-by-id/{id}")
     public ResponseEntity<?> updateManager(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO request) {
         return ResponseEntity.ok(managerService.updateManager(id, request.getEmail(), request.getUsername(), request.getPhoneNumber()));
     }

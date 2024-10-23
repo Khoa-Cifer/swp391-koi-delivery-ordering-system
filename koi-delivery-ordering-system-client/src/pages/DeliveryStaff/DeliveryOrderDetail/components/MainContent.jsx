@@ -129,7 +129,7 @@ function MainContent() {
         toast("Order information updated");
         setUpdateStatus(true);
       } else {
-        toast("Unexpected error occurred");
+        toast("Unexpected error has been occurred");
       }
 
     } catch (error) {
@@ -149,7 +149,7 @@ function MainContent() {
         toast("Order information updated");
         setUpdateStatus(true);
       } else {
-        toast("Unexpected error occurred");
+        toast("Unexpected error has been occurred");
       }
 
     } catch (error) {

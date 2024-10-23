@@ -10,7 +10,9 @@ export async function createGeneralOrderInfo(
   senderAddress,
   senderLongitude,
   senderLatitude,
-  expectedFinishDate
+  expectedFinishDate,
+  receiverEmail,
+  receiverPhoneNumber
 ) {
   try {
     const token = localStorage.getItem("token");
@@ -30,6 +32,8 @@ export async function createGeneralOrderInfo(
       senderLongitude,
       senderLatitude,
       expectedFinishDate,
+      receiverEmail,
+      receiverPhoneNumber
     });
     return response.data;
   } catch (error) {
