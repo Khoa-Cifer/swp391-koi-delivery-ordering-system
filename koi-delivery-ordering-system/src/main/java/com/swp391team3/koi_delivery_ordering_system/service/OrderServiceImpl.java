@@ -414,9 +414,8 @@ public class OrderServiceImpl implements IOrderService {
                                 //send mail for sales staff
                                 EmailDetailDTO emailDetail = new EmailDetailDTO();
                                 emailDetail.setReceiver((Object) salesStaff);
-                                emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered to the customer");
-                                emailService.sendEmail(emailDetail, 8);
-                                result = true;
+                                emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered to the storage");
+                                emailService.sendEmail(emailDetail, 11);
                             } else if (request.getProcessType() == 1) {
                                 salesStaff = foundOrder.get().getSalesStaffConfirmation();
                                 //send mail for sales staff
@@ -449,7 +448,7 @@ public class OrderServiceImpl implements IOrderService {
                 emailService.sendEmail(emailDetail, 3);
             }
 
-            return result;
+            return true;
         } catch (Exception e) {
             return false;
         }

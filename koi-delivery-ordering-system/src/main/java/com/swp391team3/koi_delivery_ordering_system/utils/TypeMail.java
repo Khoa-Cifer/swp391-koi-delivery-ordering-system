@@ -14,4 +14,5 @@ public class TypeMail {
     public final int COMPLETE_SALES_STAFF_TEMPLATE = 8;
     public final int FAILED_CUSTOMER_TEMPLATE = 9;
     public final int RECEIVER_NOTIFICATION_TEMPLATE = 10;
+    public final int RECEIVE_SALES_STAFF_TEMPLATE = 11;
 }
