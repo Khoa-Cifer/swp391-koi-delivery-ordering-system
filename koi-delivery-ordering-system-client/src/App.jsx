@@ -59,6 +59,7 @@ import DeliveringOrder from "./pages/DeliveryStaff/DeliveryOrderHome/DeliveringO
 import Allnews from "./pages/public/News/Allnews";
 import NewsDetail from "./pages/public/News/NewsDetail";
 import Manager from "./pages/Manager/SystemData/Manager/manager";
+import SupportPage from "./pages/public/SupportPage";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -111,7 +112,7 @@ function App() {
 
             <Route path="/waiting-for-confirmation" element={<WaitingForConfirm />} />
             <Route path="/registration-success" element={<RegistrationSuccess />} />
-
+            <Route path="/support-page" element={<SupportPage />} />
             <Route path="/news" element={<Allnews />} />
             <Route path="/news/:id" element={<NewsDetail />} />
 

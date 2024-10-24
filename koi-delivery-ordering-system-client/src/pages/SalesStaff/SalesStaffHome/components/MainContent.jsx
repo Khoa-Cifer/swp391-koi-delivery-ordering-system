@@ -115,6 +115,10 @@ function MainContent() {
     navigate("/news");
   };
 
+  const handleNewsClick = (newsItem) => {
+    navigate(`/news/${newsItem.id}`, { state: newsItem });
+  };
+
   return (
     <div className="main-content-container">
       <ToastUtil />
@@ -127,15 +131,15 @@ function MainContent() {
 
         <div className="news-container">
           <div className="news-grid">
-
-
-            
             {news.slice(0, visibleNewsCount).map((newsItem, index) => (
               <div key={index} className="news-item">
+                {/* Chuyển logic onClick sang phần tử ảnh */}
                 <img
                   src={newsItem.imageUrl}
                   alt={newsItem.title}
                   className="news-image"
+                  style={{ cursor: "pointer" }} // Thêm pointer để người dùng biết ảnh có thể được click
+                  onClick={() => handleNewsClick(newsItem)} // Khi ấn vào ảnh thì chuyển sang trang detail
                 />
                 <div className="news-content">
                   <h3 className="news-title">{newsItem.title}</h3>
@@ -162,7 +166,7 @@ function MainContent() {
                         variant="outlined"
                         color="secondary"
                         size="small"
-                        onClick={() => handleOpenDialog(newsItem.id)} // Open confirmation dialog
+                        onClick={() => handleOpenDialog(newsItem.id)}
                         className="delete-btn"
                       >
                         Delete

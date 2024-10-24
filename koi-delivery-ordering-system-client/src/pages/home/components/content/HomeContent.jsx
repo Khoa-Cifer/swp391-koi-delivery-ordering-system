@@ -8,48 +8,52 @@ import { useNavigate } from "react-router-dom";
 
 function HomeContent() {
   const navigate = useNavigate();
-  const [content, setContent] = useState([]);
-  const [files, setFiles] = useState("");
+  const [news, setNews] = useState([]);
   const [visibleCount, setVisibleCount] = useState(3);
-  useEffect(() => {
-    const fetchContent = async () => {
-      try {
-        const response = await getAllNews();  // Lấy dữ liệu content từ API
-        setContent(response);                 // Cập nhật state content
-      } catch (error) {
-        console.error("Error fetching content", error);
-      }
-    };
-  
-    fetchContent();  // Gọi hàm fetchContent khi component được mount
-  }, []); 
+  const fetchNews = async () => {
+    try {
+      const response = await getAllNews();
 
+      if (response && response.length > 0) {
+        const fileIds = response.map((newsItem) => newsItem.file.id);
 
-  useEffect(() => {
-    const fetchFiles = async () => {
-      if (content && content.length > 0) {  // Kiểm tra nếu content có dữ liệu
-        try {
-          const fishFilesPromises = content.map(async (file) => {
-            const response = await getFileByFileId(file.file.id);  // Lấy file dựa trên file id
-            return URL.createObjectURL(response);  // Tạo URL từ file blob để hiển thị ảnh
+        if (fileIds.length > 0) {
+          const filePromises = fileIds.map(async (fileId) => {
+            const fileResponse = await getFileByFileId(fileId);
+            return URL.createObjectURL(fileResponse);
           });
-  
-          const fishFilesArray = await Promise.all(fishFilesPromises);  // Đợi tất cả files được tải
-          setFiles(fishFilesArray);  // Cập nhật state files
-        } catch (error) {
-          console.error("Error fetching files", error);
+
+          const imageUrls = await Promise.all(filePromises);
+
+          const newsWithImages = response.map((newsItem, index) => ({
+            ...newsItem,
+            imageUrl: imageUrls[index],
+          }));
+
+          setNews(newsWithImages);
         }
+      } else {
+        setNews([]);
       }
-    };
-  
-    fetchFiles();  
-  }, [content]);
+    } catch (error) {
+      console.error("Error fetching news data:", error);
+    }
+  };
+
+  const handleNewsClick = (newsItem) => {
+    navigate(`/news/${newsItem.id}`, { state: newsItem });
+  };
+
+  useEffect(() => {
+    fetchNews();
+  }, []);
 
   const handleViewMore = () => {
     setVisibleCount((prevCount) => prevCount + 3);
     navigate("/news");
   };
 
+  // eslint-disable-next-line no-unused-vars
   const newsData = [
     {
       category: "ECOMMERCE",
@@ -285,51 +289,44 @@ function HomeContent() {
           </p>
           <div className="news-container">
             <div className="news-grid">
-              {content.length > 0 && content.slice(0, visibleCount).map(
-                (
-                  news,
-                  index // Use visibleCount to determine how many to show
-                ) => (
-                  <div key={index} className="news-item">
-                    {files[index] && (
-                      <img
-                        alt={news.title}
-                        src={files[index]}
-                        width="100%"
-                        height="230px"
+              {news.slice(0, visibleCount).map((newsItem, index) => (
+                <div key={index} className="news-item">
+                  {/* Chuyển logic onClick sang phần tử ảnh */}
+                  <img
+                    src={newsItem.imageUrl}
+                    alt={newsItem.title}
+                    className="news-image"
+                    style={{ cursor: "pointer" }} // Thêm pointer để người dùng biết ảnh có thể được click
+                    onClick={() => handleNewsClick(newsItem)} // Khi ấn vào ảnh thì chuyển sang trang detail
+                  />
+                  <div className="news-content">
+                    <h3 className="news-title">{newsItem.title}</h3>
+
+                    <Paragraph
+                      ellipsis={{
+                        rows: 3,
+                        expandable: false,
+                        symbol: "...",
+                      }}
+                    >
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: newsItem.description,
+                        }}
                       />
-                    )}
+                    </Paragraph>
 
-                    <div className="news-content">
-
-                    <h3 className="news-title">{news.title}</h3>
-                      <div className="news-content">
-                        <Paragraph
-                          ellipsis={{
-                            rows: 3,
-                            symbol: "...",
-                          }}
-                        >
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html: news.description,
-                            }}
-                          />
-                        </Paragraph>
-                      </div>
-
-                      <div className="news-footer">
-                        <span className="news-author">
-                        { news.createdBy.username}
-                        </span>
-                        <span className="news-date">
-                          {dateTimeConvert(news.createdDate)}
-                        </span>
-                      </div>
+                    <div className="news-footer">
+                      <span className="news-author">
+                        {newsItem.createdBy.username}
+                      </span>
+                      <span className="news-date">
+                        {new Date(newsItem.createdDate).toLocaleDateString()}
+                      </span>
                     </div>
                   </div>
-                )
-              )}
+                </div>
+              ))}
             </div>
 
             <div className="view-more">
