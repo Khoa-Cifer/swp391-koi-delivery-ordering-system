@@ -525,8 +525,8 @@ public class OrderServiceImpl implements IOrderService {
                 EmailDetailDTO emailDetailDTO = new EmailDetailDTO();
                 emailDetailDTO.setReceiver((Object) order);
                 emailDetailDTO.setSubject("You have " + order.getName() + " is being delivered to you");
-                emailDetailDTO.setLink("http://localhost:5173/tracking-order?trackingId=" + order.getTrackingId());
-                emailService.sendEmail(emailDetail, 10);
+                emailDetailDTO.setLink(order.getTrackingId());
+                emailService.sendEmail(emailDetailDTO, 10);
                 return true;
             }
         }

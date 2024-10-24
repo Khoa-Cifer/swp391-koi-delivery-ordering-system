@@ -108,19 +108,23 @@ function Manager() {
       key: "id",
       render: (id, record) => (
         <Space size="middle">
-          <Button type="link" onClick={() => handleEdit(record)}>
-            Edit
-          </Button>
-          <Popconfirm
-            title="Are you sure to delete this manager?"
-            onConfirm={() => handleDelete(id)}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button type="link" danger>
-              Delete
-            </Button>
-          </Popconfirm>
+          {record.id !== 1 && (
+            <>
+              <Button type="link" onClick={() => handleEdit(record)}>
+                Edit
+              </Button>
+              <Popconfirm
+                title="Are you sure to delete this manager?"
+                onConfirm={() => handleDelete(id)}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button type="link" danger>
+                  Delete
+                </Button>
+              </Popconfirm>
+            </>
+          )}
         </Space>
       ),
     },

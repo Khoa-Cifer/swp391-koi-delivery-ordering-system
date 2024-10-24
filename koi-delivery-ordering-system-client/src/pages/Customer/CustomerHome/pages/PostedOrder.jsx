@@ -102,9 +102,13 @@ function PostedOrder({ customerId }) {
     setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
   };
 
-  const handleDeleteFish = (fishId) => {
-    setSelectedFishId(fishId);
-    setFishModalOpen(true);
+  const handleDeleteFish = (fishId, order) => {
+    if (order.fishes.length > 1) {
+      setSelectedFishId(fishId);
+      setFishModalOpen(true);
+    } else {
+      toast("An order can not have empty fish");
+    }
   }
 
   const handleDeleteFishConfirm = async () => {
@@ -112,7 +116,7 @@ function PostedOrder({ customerId }) {
     if (response) {
       toast("Delete fish successfully");
       fetchPostedOrder();
-      setOrderModalOpen(false);
+      setFishModalOpen(false);
     } else {
       toast("Unexpected error has been occured");
     }
@@ -392,7 +396,7 @@ function PostedOrder({ customerId }) {
                                   open={Boolean(anchorEl)}
                                   onClose={() => handleDropdownClose()}
                                 >
-                                  <MenuItem onClick={() => handleDeleteFish(fish.id)}>Delete Fish</MenuItem>
+                                  <MenuItem onClick={() => handleDeleteFish(fish.id, order)}>Delete Fish</MenuItem>
                                   {/* <MenuItem onClick={() => handleViewLicense()}>View License</MenuItem> */}
                                 </Menu>
                               </TableCell>

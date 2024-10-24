@@ -19,11 +19,12 @@
                                     <td class="content-block" style="font-size: 16px; color: #333;">
                                         <p>Hi <strong>[[${name}]]</strong>,</p>
                                         <p>We have received an order which will be delivered to you by us</p>
+                                        <p>Your order's Id is [[${link}]]</p>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="content-block" style="text-align: center; padding: 20px 0;">
-                                        <a th:href="${link}" style="display: inline-block; font-size: 16px; color: #ffffff; background-color: #f1556c; padding: 12px 24px; border-radius: 5px; text-decoration: none; font-weight: bold;">Track your Order</a>
+                                        <a href="http://localhost:5173/tracking-order" style="display: inline-block; font-size: 16px; color: #ffffff; background-color: #f1556c; padding: 12px 24px; border-radius: 5px; text-decoration: none; font-weight: bold;">Track your Order</a>
                                     </td>
                                 </tr>
                                 </tbody>

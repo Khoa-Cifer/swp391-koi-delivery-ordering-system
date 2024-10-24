@@ -11,11 +11,18 @@ import {
 } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import { getAllPaymentRateService, updateRateById } from "../../../../utils/axios/rate";
+import { styled } from "@mui/material";
 
 const { Title } = Typography;
 
+const Header = styled(Typography)(() => ({
+    fontSize: "24px"
+}));
+
+
 function PaymentRate() {
-    const [paymentServiceData, setPaymentServiceData] = useState([]);
+    const [paymentServiceBaseData, setPaymentServiceBaseData] = useState([]);
+    const [paymentServiceRateData, setPaymentServiceRateData] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [serviceRate, setServiceRate] = useState("");
     const [currentId, setCurrentId] = useState(null);
@@ -23,7 +30,11 @@ function PaymentRate() {
     const fetchPaymentRateService = async () => {
         const fetchedData = await getAllPaymentRateService();
         if (fetchedData) {
-            setPaymentServiceData(fetchedData);
+            const firstHalf = fetchedData.slice(0, 2); // First 2 items
+            const secondHalf = fetchedData.slice(2); // Remaining items
+
+            setPaymentServiceBaseData(firstHalf);
+            setPaymentServiceRateData(secondHalf);
         }
     };
 
@@ -90,13 +101,21 @@ function PaymentRate() {
                 <Title level={2} style={{ marginTop: 0 }}>Payment Rate Board</Title>
             </div>
 
+            <Header>Price Base</Header>
             <Table
-                dataSource={paymentServiceData}
+                dataSource={paymentServiceBaseData}
                 columns={columns}
                 rowKey="id"
                 style={{ marginTop: "25px" }}
             />
 
+            <Header>Price Rate</Header>
+            <Table
+                dataSource={paymentServiceRateData}
+                columns={columns}
+                rowKey="id"
+                style={{ marginTop: "25px" }}
+            />
             {/* Modal for editing rate */}
             <Modal
                 title={`Edit Rate`}
