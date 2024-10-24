@@ -1,230 +1,228 @@
 import { useEffect, useState } from "react";
-import { Button, Input, Modal, Table, Typography, Space, Popconfirm, notification } from "antd";
-import { createDeliveryStaff, disableDeliveryStaffById, enableDeliveryStaffById, getAllDeliveryStaff, managerEditDeliveryStaffProfile } from "../../../../utils/axios/deliveryStaff";
+import { Table, Modal, Button, Input, Typography, notification, Popconfirm, Space, } from "antd";
+import "react-toastify/dist/ReactToastify.css";
 import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";
+import { createManagers, deleteManagerById, editManagerProfile, getAllManagers } from "../../../../utils/axios/manager";
 
 const { Title } = Typography;
 
-function DeliveryStaff() {
-    const [ManagerData, setManagerData] = useState([]);
-    const [createModalOpen, setCreateModalOpen] = useState(false);
-    const [editModalOpen, setEditModalOpen] = useState(false);
-    const [editingManager, setEditingManager] = useState(null);
-    const [email, setEmail] = useState("");
-    const [username, setUsername] = useState("");
-    const [phoneNumber, setPhoneNumber] = useState("");
+function Manager() {
+  const [managerData, setManagerData] = useState([]);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingManager, setManager] = useState(null);
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
-    const handleOpen = () => setCreateModalOpen(true);
-    const handleClose = () => {
-        setCreateModalOpen(false);
-        setEditModalOpen(false);
-        setEditingManager(null);
-        setEmail("");
-        setUsername("");
-        setPhoneNumber("");
-    };
-
-    async function fetchManagers() {
-        const fetchedData = await getAllManagers();
-        if (fetchedData) {
-            setManagerData(fetchedData);
-        }
+  const fetchManagers = async () => {
+    const fetchedData = await getAllManagers();
+    if (fetchedData) {
+      setManagerData(fetchedData);
     }
+  };
 
-    useEffect(() => {
-        fetchManagers();
-    }, []);
+  useEffect(() => {
+    fetchManagers();
+  }, []);
 
-    const handleCreateManagers = async () => {
-        const response = await createManagers(email, username, phoneNumber);
-        notification.info({ message: response });
-        await fetchManagers();
-        setCreateModalOpen(false);
-    };
+  const handleCreateManagers = async () => {
+    const response = await createManagers(email, username, phoneNumber);
+    notification.info({ message: response });
+    await fetchManagers();
+    setIsCreateModalOpen(false);
+  };
 
-    async function handleEditDeliveryStaff() {
-        if (editingManager) {
-            const message = await managerEditDeliveryStaffProfile(editingManager, username, email, phoneNumber);
-            toast(message);
-            fetchManagers();
-        }
-        handleClose();
+  const handleClose = () => {
+    setIsCreateModalOpen(false);
+    setIsEditModalOpen(false);
+    setManager(null);
+    setEmail("");
+    setUsername("");
+    setPhoneNumber("");
+  };
+
+  async function handleEditManagers() {
+    if (editingManager) {
+      const response = await editManagerProfile(
+        editingManager,
+        username,
+        email,
+        phoneNumber
+      );
+      if (response) {
+        toast("Edit manager successfully");
+      } else {
+        toast("Unexpected error has been occurred");
+      }
+      fetchManagers();
     }
+    handleClose();
+  }
 
-    function handleEdit(record) {
-        setEditingManager(record);
-        setEditModalOpen(true);
+  const handleDelete = async (id) => {
+    try {
+      const response = await deleteManagerById(id);
+      if (response) {
+        toast.success("Manager deleted successfully");
+        await fetchManagers(); // Refresh the table data after deletion
+      } else {
+        toast.error("Failed to delete the manager");
+      }
+    } catch (error) {
+      console.error("Error deleting manager:", error);
+      toast.error("An error occurred while deleting the manager");
     }
+  };
 
-    const handleDisableDeliveryStaff = async (id) => {
-        try {
-            await disableManagerById(id); // Call the API to delete the staff
-            toast("Delivery Staff disabled successfully"); // Notify the user
-            await fetchManagers(); // Refresh the list after deletion
-        } catch (err) {
-            console.error(err);
-            toast.error("Failed to disable customer"); // Notify if there's an error
-        }
-    };
+  function handleEdit(record) {
+    setManager(record);
+    setIsEditModalOpen(true);
+  }
 
-    const handleEnableDeliveryStaff = async (id) => {
-        try {
-            await enableDeliveryStaffById(id); // Call the API to delete the staff
-            toast("Delivery Staff enabled successfully"); // Notify the user
-            await fetchDeliveryStaffs(); // Refresh the list after deletion
-        } catch (err) {
-            console.error(err);
-            toast.error("Failed to enable customer"); // Notify if there's an error
-        }
-    };
+  function handleCreate() {
+    setIsCreateModalOpen(true);
+  }
 
-    const columns = [
-        {
-            title: "Id",
-            dataIndex: "id",
-            key: "id",
-        },
-        {
-            title: "Username",
-            dataIndex: "username",
-            key: "username",
-        },
-        {
-            title: "Email",
-            dataIndex: "email",
-            key: "email",
-        },
-        {
-            title: "Address",
-            dataIndex: "address",
-            key: "address",
-        },
-        {
-            title: "Longitude",
-            dataIndex: "longitude",
-            key: "longitude",
-        },
-        {
-            title: "Latitude",
-            dataIndex: "latitude",
-            key: "latitude",
-        },
-        {
-            title: "Phone Number",
-            dataIndex: "phoneNumber",
-            key: "phoneNumber",
-        },
-        {
-            title: "Action",
-            dataIndex: "id",
-            key: "id",
-            render: (id, record) => (
-                <Space size="middle">
-                    <Button type="link" onClick={() => handleEdit(id)}>
-                        Edit
-                    </Button>
-                    <Popconfirm
-                        title={
-                            record.activeStatus
-                                ? "Are you sure to disable this delivery staff?"
-                                : "Are you sure to enable this delivery staff?"
-                        }
-                        onConfirm={() => {
-                            if (record.activeStatus) {
-                                handleDisableDeliveryStaff(id); // Handle delete if enabled
-                            } else {
-                                handleEnableDeliveryStaff(id); // Handle enabling if disabled
-                            }
-                        }}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Button type="link" danger={record.activeStatus}>
-                            {record.activeStatus ? "Delete" : "Enable"}
-                        </Button>
-                    </Popconfirm>
-                </Space>
-            ),
-        },
-    ];
+  const columns = [
+    {
+      title: "Id",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: "Username",
+      dataIndex: "username",
+      key: "username",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Phone Number",
+      dataIndex: "phoneNumber",
+      key: "phoneNumber",
+    },
+    {
+      title: "Action",
+      dataIndex: "id",
+      key: "id",
+      render: (id, record) => (
+        <Space size="middle">
+          <Button type="link" onClick={() => handleEdit(record)}>
+          Edit
+        </Button>
+        <Popconfirm
+          title="Are you sure to delete this manager?"
+          onConfirm={() => handleDelete(id)}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Button type="link" danger>
+            Delete
+          </Button>
+        </Popconfirm>
+        </Space>
+      ),
+    },
+  ];
 
-    return (
-        <div>
-            <ToastUtil />
-            <div className="dashboard-info">
-                <Title level={2} style={{ marginTop: 0 }}>Delivery Staff</Title>
-            </div>
-            <div>
-                <Space style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
-                    <Button type="primary" onClick={handleOpen}>
-                        Create New Delivery Staff
-                    </Button>
-                </Space>
+  return (
+    <div>
+      <ToastUtil />
+      <div className="dashboard-info">
+        <Title level={2} style={{ marginTop: 0 }}>
+          Manager
+        </Title>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginBottom: "20px",
+        }}
+      >
+        <Button type="primary" onClick={() => handleCreate(true)}>
+          Create New Manager
+        </Button>
+      </div>
 
-            </div>
-            <Table
-                dataSource={deliveryStaffData}
-                columns={columns}
-                rowKey="id"
-                pagination={{ pageSize: 5 }}
-            />
+      <Table
+        dataSource={managerData}
+        columns={columns}
+        rowKey="id"
+        pagination={{ pageSize: 5 }} // Adjust as needed
+      />
 
-            <Modal
-                title={"Create New Delivery Staff"}
-                visible={createModalOpen}
-                onCancel={handleClose}
-                onOk={() => handleCreateDeliveryStaff()}
-                okButtonProps={{ disabled: !username || !email }} // Disable OK button if fields are empty
-            >
-                <Input
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    style={{ marginBottom: 16 }}
-                />
-                <Input
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    style={{ marginBottom: 16 }}
-                />
-                <Input
-                    placeholder="Phone number"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    style={{ marginBottom: 16 }}
-                />
-            </Modal>
+      <Modal
+        title="Create New Manager"
+        visible={isCreateModalOpen}
+        onCancel={() => setIsCreateModalOpen(false)}
+        footer={[
+          <Button key="back" onClick={() => setIsCreateModalOpen(false)}>
+            Cancel
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            onClick={handleCreateManagers}
+            disabled={!username || !email} // Disable if either is empty
+          >
+            Submit
+          </Button>,
+        ]}
+      >
+        <Input
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          style={{ marginBottom: "10px" }}
+        />
+        <Input
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          style={{ marginBottom: "10px" }}
+        />
+        <Input
+          placeholder="Phone Number"
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+          style={{ marginBottom: "10px" }}
+        />
+      </Modal>
 
-            <Modal
-                title={"Edit Delivery Staff"}
-                visible={editModalOpen}
-                onCancel={handleClose}
-                onOk={() => handleEditDeliveryStaff()}
-                okButtonProps={{ disabled: !username || !email }} // Disable OK button if fields are empty
-            >
-                <Input
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    style={{ marginBottom: 16 }}
-                />
-                <Input
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    style={{ marginBottom: 16 }}
-                />
-                <Input
-                    placeholder="Phone number"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    style={{ marginBottom: 16 }}
-                />
-            </Modal>
-        </div>
-    );
+      <Modal
+        title={"Edit Manager"}
+        visible={isEditModalOpen}
+        onCancel={handleClose}
+        onOk={() => handleEditManagers()}
+        okButtonProps={{ disabled: !username || !email }} // Disable OK button if fields are empty
+      >
+        <Input
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          style={{ marginBottom: 16 }}
+        />
+        <Input
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          style={{ marginBottom: 16 }}
+        />
+        <Input
+          placeholder="Phone number"
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+          style={{ marginBottom: 16 }}
+        />
+      </Modal>
+    </div>
+  );
 }
 
-export default DeliveryStaff;
+export default Manager;

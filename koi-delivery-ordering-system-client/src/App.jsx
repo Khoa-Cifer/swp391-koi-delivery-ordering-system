@@ -58,6 +58,7 @@ import CustomerCreateFish from "./pages/Customer/FishCreateOrder/CustomerCreateF
 import DeliveringOrder from "./pages/DeliveryStaff/DeliveryOrderHome/DeliveringOrder";
 import Allnews from "./pages/public/News/Allnews";
 import NewsDetail from "./pages/public/News/NewsDetail";
+import Manager from "./pages/Manager/SystemData/Manager/manager";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -117,6 +118,7 @@ function App() {
             <Route element={<ManagerLayout />}>
               <Route path="/admin/report" element={<ManagerPrivateRoute element={<Report />} />} />
               <Route path="/admin/dashboard" element={<ManagerPrivateRoute element={<Dashboard />} />} />
+              <Route path="/admin/manager" element={<ManagerPrivateRoute element={<Manager />} />} />
               <Route path="/admin/storage" element={<ManagerPrivateRoute element={<Storage />} />} />
               <Route path="/admin/customer" element={<ManagerPrivateRoute element={<Customer />} />} />
               <Route path="/admin/delivery-staff" element={<ManagerPrivateRoute element={<DeliveryStaff />} />} />
