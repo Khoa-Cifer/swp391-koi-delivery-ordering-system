@@ -11,7 +11,7 @@ function Manager() {
   const [managerData, setManagerData] = useState([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editingManager, setManager] = useState(null);
+  const [editingManager, setEditingManager] = useState(null);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -37,7 +37,7 @@ function Manager() {
   const handleClose = () => {
     setIsCreateModalOpen(false);
     setIsEditModalOpen(false);
-    setManager(null);
+    setEditingManager(null);
     setEmail("");
     setUsername("");
     setPhoneNumber("");
@@ -46,7 +46,7 @@ function Manager() {
   async function handleEditManagers() {
     if (editingManager) {
       const response = await editManagerProfile(
-        editingManager,
+        editingManager.id,
         username,
         email,
         phoneNumber
@@ -63,13 +63,9 @@ function Manager() {
 
   const handleDelete = async (id) => {
     try {
-      const response = await deleteManagerById(id);
-      if (response) {
-        toast.success("Manager deleted successfully");
-        await fetchManagers(); // Refresh the table data after deletion
-      } else {
-        toast.error("Failed to delete the manager");
-      }
+      await deleteManagerById(id);
+      toast.success("Manager deleted successfully");
+      await fetchManagers();
     } catch (error) {
       console.error("Error deleting manager:", error);
       toast.error("An error occurred while deleting the manager");
@@ -77,7 +73,7 @@ function Manager() {
   };
 
   function handleEdit(record) {
-    setManager(record);
+    setEditingManager(record);
     setIsEditModalOpen(true);
   }
 
@@ -113,18 +109,18 @@ function Manager() {
       render: (id, record) => (
         <Space size="middle">
           <Button type="link" onClick={() => handleEdit(record)}>
-          Edit
-        </Button>
-        <Popconfirm
-          title="Are you sure to delete this manager?"
-          onConfirm={() => handleDelete(id)}
-          okText="Yes"
-          cancelText="No"
-        >
-          <Button type="link" danger>
-            Delete
+            Edit
           </Button>
-        </Popconfirm>
+          <Popconfirm
+            title="Are you sure to delete this manager?"
+            onConfirm={() => handleDelete(id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="link" danger>
+              Delete
+            </Button>
+          </Popconfirm>
         </Space>
       ),
     },

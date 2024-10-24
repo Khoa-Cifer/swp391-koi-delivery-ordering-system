@@ -46,7 +46,7 @@ function SalesStaff() {
   async function handleEditSalesStaff() {
     if (editingSalesStaff) {
       const response = await managerEditSalesStaffProfile(
-        editingSalesStaff,
+        editingSalesStaff.id,
         username,
         email,
         phoneNumber
@@ -119,7 +119,7 @@ function SalesStaff() {
       key: "id",
       render: (id, record) => (
         <Space size="middle">
-          <Button type="link" onClick={() => handleEdit(id)}>
+          <Button type="link" onClick={() => handleEdit(record)}>
             Edit
           </Button>
           <Popconfirm
