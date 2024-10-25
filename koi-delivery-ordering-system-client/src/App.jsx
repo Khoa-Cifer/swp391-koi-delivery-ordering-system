@@ -60,6 +60,7 @@ import Allnews from "./pages/public/News/Allnews";
 import NewsDetail from "./pages/public/News/NewsDetail";
 import Manager from "./pages/Manager/SystemData/Manager/manager";
 import SupportPage from "./pages/public/SupportPage";
+import DraftOrderDetail from "./pages/Customer/OrderDetail/DraftOrderDetail/DraftOrderDetail";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -140,6 +141,7 @@ function App() {
               <Route path="/customer-add-fish/:id" element={<CustomerPrivateRoute element={<CustomerCreateFish />} />} />
               <Route path="/order-fish-payment/:id" element={<FishPayment />} />
               <Route path="/customer-edit-order/:id/order-conclusion-info" element={<CustomerPrivateRoute element={<OrderFinalInfo />} />} />
+              <Route path="/customer-draft-orders" element={<DraftOrderDetail />} />
             </Route>
 
             <Route path="/delivery-staff-home" element={<DeliveryStaffPrivateRoute element={<DeliveryStaffHome />} />} />

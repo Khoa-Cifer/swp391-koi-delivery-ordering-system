@@ -1,4 +1,4 @@
-import { Avatar, Divider, ListItem, ListItemText, styled, Typography } from "@mui/material";
+import { Avatar, Collapse, Divider, ListItemButton, ListItemText, styled, Typography } from "@mui/material";
 import { List } from "antd";
 import "./customer_sidebar.scss";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import default_avatar from "../../../../../assets/default-avatar.jpg";
 import { getCustomerById } from "../../../../../utils/axios/customer";
 import { jwtDecode } from "jwt-decode";
 import { getFileByFileId } from "../../../../../utils/axios/file";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 const InfoHeader = styled(Typography)(() => ({
   margin: "0px",
@@ -19,6 +20,11 @@ const InfoHeader = styled(Typography)(() => ({
 function Sidebar() {
   const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState(default_avatar);
+  const [open, setOpen] = useState(false);
+
+  const handleToggleOrders = () => {
+    setOpen(!open);
+  };
 
   const handleOpenEditProfile = () => {
     navigate("/customer-edit-profile")
@@ -75,27 +81,70 @@ function Sidebar() {
 
       <div className="list-function">
         <List>
-          <ListItem className="button">
+          <ListItemButton className="button">
             <ListItemText
               primary="Home"
               onClick={handleOpenHome}
             />
-          </ListItem>
-          <ListItem className="button">
+          </ListItemButton>
+          <ListItemButton className="button">
             <ListItemText
               primary="Profile"
               onClick={handleOpenEditProfile}
             />
-          </ListItem>
-          
+          </ListItemButton>
+
           <Divider style={{ margin: "16px 0" }}>Orders</Divider>
 
-          <ListItem className="button">
-            <ListItemText
-              primary="Create Order"
-              onClick={handleOpenCreateOrder}
-            />
-          </ListItem>
+          <ListItemButton className="button" onClick={handleOpenCreateOrder}>
+            <ListItemText primary="Create Order" />
+          </ListItemButton>
+
+          <ListItemButton
+            className="button"
+            style={{ backgroundColor: "#1e4fa9" }}
+            sx={{ justifyContent: 'flex-start' }}
+            onClick={handleToggleOrders}
+          >
+            <ListItemText primary="Order List" />
+            {open ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItemButton
+                className="button"
+                sx={{ pl: 4, justifyContent: 'flex-start' }}
+                onClick={() => navigate("/customer-draft-orders")}
+              >
+                <ListItemText primary="Draft Orders" sx={{ textAlign: 'left' }} />
+              </ListItemButton>
+
+              <ListItemButton
+                className="button"
+                sx={{ pl: 4, justifyContent: 'flex-start' }}
+                onClick={handleOpenCreateOrder}
+              >
+                <ListItemText primary="Posted Orders" sx={{ textAlign: 'left' }} />
+              </ListItemButton>
+
+              <ListItemButton
+                className="button"
+                sx={{ pl: 4, justifyContent: 'flex-start' }}
+                onClick={handleOpenCreateOrder}
+              >
+                <ListItemText primary="Getting Orders" sx={{ textAlign: 'left' }} />
+              </ListItemButton>
+
+              <ListItemButton
+                className="button"
+                sx={{ pl: 4, justifyContent: 'flex-start' }}
+                onClick={handleOpenCreateOrder}
+              >
+                <ListItemText primary="Complete Orders" sx={{ textAlign: 'left' }} />
+              </ListItemButton>
+            </List>
+          </Collapse>
         </List>
       </div>
     </div>

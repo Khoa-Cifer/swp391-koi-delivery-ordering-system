@@ -510,7 +510,8 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public boolean acceptOrder(Long orderId, Long salesId) {
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
-        // Optional<SalesStaff> optionalSalesStaff = salesStaffService.getSalesStaffById(salesId);
+        // Optional<SalesStaff> optionalSalesStaff =
+        // salesStaffService.getSalesStaffById(salesId);
 
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
@@ -572,7 +573,8 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public boolean cancelOrder(Long orderId, Long salesId) {
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
-        // Optional<SalesStaff> optionalSalesStaff = salesStaffService.getSalesStaffById(salesId);
+        // Optional<SalesStaff> optionalSalesStaff =
+        // salesStaffService.getSalesStaffById(salesId);
 
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
@@ -580,16 +582,18 @@ public class OrderServiceImpl implements IOrderService {
                 boolean logResult = orderActionLogService.logOrderAction(UserType.SALES_STAFF_ROLE_ID, salesId,
                         ActionType.CANCEL, order);
                 // order.setSalesStaffCancellation(optionalSalesStaff.get());
-                orderRepository.save(order);
-                Customer customer = optionalOrder.get().getCustomer();
+                // orderRepository.save(order);
+                if (logResult) {
+                    Customer customer = optionalOrder.get().getCustomer();
 
-                // send mail for customer
-                EmailDetailDTO emailDetail = new EmailDetailDTO();
-                emailDetail.setReceiver((Object) customer);
-                emailDetail.setSubject("Order " + order.getId() + " has been cancelled");
-                emailDetail.setLink("http://localhost:5173");
-                emailService.sendEmail(emailDetail, 9);
-                return true;
+                    // send mail for customer
+                    EmailDetailDTO emailDetail = new EmailDetailDTO();
+                    emailDetail.setReceiver((Object) customer);
+                    emailDetail.setSubject("Order " + order.getId() + " has been cancelled");
+                    emailDetail.setLink("http://localhost:5173");
+                    emailService.sendEmail(emailDetail, 9);
+                    return true;
+                }
             }
         }
         return false;
