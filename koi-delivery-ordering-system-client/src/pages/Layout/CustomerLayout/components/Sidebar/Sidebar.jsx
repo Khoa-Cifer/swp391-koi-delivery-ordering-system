@@ -12,6 +12,8 @@ const InfoHeader = styled(Typography)(() => ({
   margin: "0px",
   color: "#252c6d",
   fontSize: "12px",
+  fontWeight: 600,
+  marginTop: "8px"
 }));
 
 function Sidebar() {
@@ -32,16 +34,19 @@ function Sidebar() {
 
   useEffect(() => {
     async function fetchUserData() {
-      const customer = await getCustomerById(customerId);
-      if (customer.file) {
-        const imageResponse = await getFileByFileId(customer.file.id);;
-        const imgUrl = URL.createObjectURL(imageResponse);
-        setImagePreview(imgUrl);
+      try {
+        const customer = await getCustomerById(customerId);
+        if (customer.file) {
+          const imageResponse = await getFileByFileId(customer.file.id);
+          const imgUrl = URL.createObjectURL(imageResponse);
+          setImagePreview(imgUrl);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
       }
-      // const imageResponse = await getFileByFileId();
     }
     fetchUserData();
-  }, [])
+  }, [customerId]);
 
   const handleOpenCreateOrder = () => {
     navigate("customer-create-order");
@@ -63,9 +68,9 @@ function Sidebar() {
 
       <div className="profile">
         <InfoHeader>Username</InfoHeader>
-        <Typography>{customerInfo.userData.username}</Typography>
+        <Typography variant="body1">{customerInfo.userData.username}</Typography>
         <InfoHeader>Email</InfoHeader>
-        <Typography>{customerInfo.userData.email}</Typography>
+        <Typography variant="body1">{customerInfo.userData.email}</Typography>
       </div>
 
       <div className="list-function">
@@ -83,7 +88,7 @@ function Sidebar() {
             />
           </ListItem>
           
-          <Divider style={{ marginBottom: "5%" }}>Orders</Divider>
+          <Divider style={{ margin: "16px 0" }}>Orders</Divider>
 
           <ListItem className="button">
             <ListItemText
@@ -91,12 +96,6 @@ function Sidebar() {
               onClick={handleOpenCreateOrder}
             />
           </ListItem>
-          {/* <ListItem className="button">
-            <ListItemText primary="Navigate To Wallet Page" />
-          </ListItem>
-          <ListItem className="button">
-            <ListItemText primary="Contact Support" />
-          </ListItem> */}
         </List>
       </div>
     </div>

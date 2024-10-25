@@ -72,8 +72,7 @@ function Header() {
 
             <div className="function">
                 <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }}><strong>Home</strong></Button>
-                <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }}><strong>About</strong></Button>
-                <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }}><strong>Contact</strong></Button>
+                <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }}><strong>Support</strong></Button>
             </div>
 
             <div className="logo">
@@ -82,7 +81,7 @@ function Header() {
                         src={imagePreview}
                         onClick={handleMenuOpen}
                         alt="avatar"
-                        style={{ width: "5vw", height: "10vh", marginRight: "30px" }}
+                        style={{ width: "4vw", height: "8vh", marginRight: "30px" }}
                     />
                     <Menu
                         style={{ marginTop: "40px" }}

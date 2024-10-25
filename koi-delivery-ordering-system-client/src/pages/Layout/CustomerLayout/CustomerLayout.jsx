@@ -1,4 +1,5 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import ListIcon from "@mui/icons-material/List";
 import Header from "./components/Header/Header";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
@@ -10,7 +11,6 @@ function CustomerLayout() {
                 display: "flex",
                 flexDirection: "column",
                 minHeight: "100vh"
-                
             }}
         >
             {/* Fixed Header */}
@@ -37,7 +37,7 @@ function CustomerLayout() {
                 <Box
                     sx={{
                         position: "fixed",
-                        top: "10%",
+                        top: "12%",
                         left: "1%",
                         width: "20%",
                         height: "90%",
@@ -53,9 +53,17 @@ function CustomerLayout() {
                     sx={{
                         flexGrow: 1,
                         ml: "20%",
-                        mt: -5
+                        mt: -7
                     }}
                 >
+                    {/* Adding the OrderList title with an icon */}
+                    <Box sx={{ display: "flex", alignItems: "center", mb: 2, color:"blue"}} >
+                        <ListIcon sx={{ mr: 0.5, ml:1}} />
+                        <Typography variant="h6" >
+                            Order List
+                        </Typography>
+                    </Box>
+
                     <Outlet />
                 </Box>
             </Box>
