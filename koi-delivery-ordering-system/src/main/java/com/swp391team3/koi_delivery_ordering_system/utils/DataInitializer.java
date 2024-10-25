@@ -15,7 +15,6 @@ public class DataInitializer implements CommandLineRunner {
     private final PaymentServiceRepository paymentServiceRepository;
     private final ManagerRepository managerRepository;
     private final PasswordEncoder passwordEncoder;
-    private final PriceBoard priceBoard;
 
     @Override
     public void run(String... args) throws Exception {

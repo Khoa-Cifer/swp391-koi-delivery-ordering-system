@@ -1,26 +1,28 @@
 package com.swp391team3.koi_delivery_ordering_system.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
-
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "file")
-public class File {
+@Entity
+@Table(name = "order_action_log")
+public class OrderActionLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private Date createdTime;
-    private String type;
-    private String filePath;
-//    private int versionCopy = 0;
+    private int roleId;
+    private Long userId;
+    private int actionType;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 }

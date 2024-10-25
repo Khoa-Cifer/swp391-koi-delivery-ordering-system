@@ -6,8 +6,6 @@ import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderFishInfoRequ
 import com.swp391team3.koi_delivery_ordering_system.utils.FishStatus;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -36,6 +36,7 @@ public class Order {
     private int orderStatus;
     private String receiverEmail;
     private String receiverPhoneNumber;
+    private String cancelReason;
 
     @ManyToOne
     @JoinColumn(name = "storage_id")
@@ -49,17 +50,8 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private Set<OrderDelivering> orderDeliveringSet;
 
-    @ManyToOne
-    @JoinColumn(name = "sales_accept_id")
-    private SalesStaff salesStaffAccept;
-
-    @ManyToOne
-    @JoinColumn(name = "sales_confirm_id")
-    private SalesStaff salesStaffConfirmation;
-
-    @ManyToOne
-    @JoinColumn(name = "sales_cancel_id")
-    private SalesStaff salesStaffCancellation;
+    @OneToMany(mappedBy = "order")
+    private Set<OrderActionLog> orderActionLogs;
 
     @OneToOne(mappedBy = "ratedFor")
     @JsonIgnore
