@@ -13,9 +13,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class OrderActionLogServiceImpl implements IOrderActionLogService {
-    private OrderActionLogRepository orderActionLogRepository;
-    private ISalesStaffService salesStaffService;
-    private IDeliveryStaffService deliveryStaffService;
+    private final OrderActionLogRepository orderActionLogRepository;
+    private final ISalesStaffService salesStaffService;
+    private final IDeliveryStaffService deliveryStaffService;
 
     @Override
     public boolean logOrderAction(int roleId, Long userId, int actionType, Order order) {

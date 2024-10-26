@@ -150,8 +150,8 @@ public class OrderController {
     }
 
     @PutMapping("/cancel-order")
-    public ResponseEntity<?> cancelOrder(@RequestBody SalesCheckOrderRequestDTO request) {
-        boolean createOrderDelivering = orderService.cancelOrder(request.getOrderId(), request.getSalesId());
+    public ResponseEntity<?> cancelOrder(@RequestBody StaffCancelOrderRequestDTO request) throws Exception {
+        boolean createOrderDelivering = orderService.cancelOrder(request);
         return ResponseEntity.ok(createOrderDelivering);
     }
 }

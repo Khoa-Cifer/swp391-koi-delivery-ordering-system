@@ -571,19 +571,31 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public boolean cancelOrder(Long orderId, Long salesId) {
-        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+    public boolean cancelOrder(StaffCancelOrderRequestDTO request) throws Exception {
+        Optional<Order> optionalOrder = orderRepository.findById(request.getOrderId());
         // Optional<SalesStaff> optionalSalesStaff =
         // salesStaffService.getSalesStaffById(salesId);
 
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
-            if (updateOrderStatus(orderId, orderStatus.FAILED)) {
-                boolean logResult = orderActionLogService.logOrderAction(UserType.SALES_STAFF_ROLE_ID, salesId,
-                        ActionType.CANCEL, order);
+            if (updateOrderStatus(request.getOrderId(), orderStatus.FAILED)) {
+                boolean logResult = false;
+                if (request.getUserType() == UserType.SALES_STAFF_ROLE_ID) {
+                    logResult = orderActionLogService.logOrderAction(UserType.SALES_STAFF_ROLE_ID, request.getUserId(),
+                            ActionType.CANCEL, order);
+                } else if (request.getUserType() == UserType.DELIVERY_STAFF_ROLE_ID) {
+                    logResult = orderActionLogService.logOrderAction(UserType.DELIVERY_STAFF_ROLE_ID, request.getUserId(),
+                            ActionType.CANCEL, order);
+                } else {
+                    throw new Exception("Undefined user type");
+                }
+
                 // order.setSalesStaffCancellation(optionalSalesStaff.get());
                 // orderRepository.save(order);
                 if (logResult) {
+                    order.setCancelReason(request.getCancelReason());
+                    orderRepository.save(order);
+
                     Customer customer = optionalOrder.get().getCustomer();
 
                     // send mail for customer
