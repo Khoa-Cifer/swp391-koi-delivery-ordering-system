@@ -126,6 +126,10 @@ function OrderDetailComponent({ orders }) {
         }
     }
 
+    function handleConclusion(order) {
+        navigate(`/customer-edit-order/${order.id}/order-conclusion-info`)
+    }
+
     const handleOpenEditPage = (order) => {
         if (order.fishes && order.fishes.length > 0) {
             navigate(`/customer-edit-order/${order.id}`, {
@@ -222,6 +226,11 @@ function OrderDetailComponent({ orders }) {
 
             {(currentOrder.orderStatus === 0 || currentOrder.orderStatus === 1) && (
                 <Box style={{ display: "flex", justifyContent: "flex-end", marginRight: "100px" }}>
+                    {currentOrder.orderStatus === 0 ? (
+                        <Button onClick={() => handleConclusion(currentOrder)}>Make your payment</Button>
+                    ) : (
+                        <Button disabled>Make your payment</Button>
+                    )}
                     <Button onClick={() => handleOpenEditPage(currentOrder)}>Edit</Button>
                     <Button onClick={() => handleDeleteOrder(currentOrder.id)}>Delete</Button>
                 </Box>
