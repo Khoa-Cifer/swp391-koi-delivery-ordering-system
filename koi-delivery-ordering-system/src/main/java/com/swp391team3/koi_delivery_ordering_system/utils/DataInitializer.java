@@ -30,11 +30,11 @@ public class DataInitializer implements CommandLineRunner {
     private void initPaymentService() {
         PaymentService servicePriceBase = new PaymentService();
         servicePriceBase.setDescription("Price Base");
-        servicePriceBase.setRate(10000.0);
+        servicePriceBase.setRate(15000.0);
 
         PaymentService serviceFishRate = new PaymentService();
         serviceFishRate.setDescription("Price for each koi fish");
-        serviceFishRate.setRate(5000.0);
+        serviceFishRate.setRate(10000.0);
 
         PaymentService servicePriceRateDomestic = new PaymentService();
         servicePriceRateDomestic.setDescription("Price Rate for Domestic Service");

@@ -80,7 +80,7 @@ public class OrderServiceImpl implements IOrderService {
 
             newOrder.setExpectedFinishDate(dto.getExpectedFinishDate());
 
-            newOrder.setOrderStatus(orderStatus.DRAFT); // 0 is not used, 1 is completed
+            newOrder.setOrderStatus(orderStatus.ABORTED_BY_CUSTOMER); // 0 is not used, 1 is completed
             // Created date
             newOrder.setCreatedDate(new Date());
             Order savedOrder = orderRepository.save(newOrder);

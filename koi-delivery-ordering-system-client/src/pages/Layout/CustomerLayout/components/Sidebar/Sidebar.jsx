@@ -123,7 +123,7 @@ function Sidebar() {
               <ListItemButton
                 className="button"
                 sx={{ pl: 4, justifyContent: 'flex-start' }}
-                onClick={handleOpenCreateOrder}
+                onClick={() => navigate("/customer-posted-orders")}
               >
                 <ListItemText primary="Posted Orders" sx={{ textAlign: 'left' }} />
               </ListItemButton>
@@ -131,7 +131,7 @@ function Sidebar() {
               <ListItemButton
                 className="button"
                 sx={{ pl: 4, justifyContent: 'flex-start' }}
-                onClick={handleOpenCreateOrder}
+                onClick={() => navigate("/customer-getting-orders")}
               >
                 <ListItemText primary="Getting Orders" sx={{ textAlign: 'left' }} />
               </ListItemButton>
@@ -139,7 +139,15 @@ function Sidebar() {
               <ListItemButton
                 className="button"
                 sx={{ pl: 4, justifyContent: 'flex-start' }}
-                onClick={handleOpenCreateOrder}
+                onClick={() => navigate("/customer-delivering-orders")}
+              >
+                <ListItemText primary="Delivering Orders" sx={{ textAlign: 'left' }} />
+              </ListItemButton>
+
+              <ListItemButton
+                className="button"
+                sx={{ pl: 4, justifyContent: 'flex-start' }}
+                onClick={() => navigate("/customer-complete-orders")}
               >
                 <ListItemText primary="Complete Orders" sx={{ textAlign: 'left' }} />
               </ListItemButton>

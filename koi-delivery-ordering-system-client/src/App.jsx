@@ -61,6 +61,10 @@ import NewsDetail from "./pages/public/News/NewsDetail";
 import Manager from "./pages/Manager/SystemData/Manager/manager";
 import SupportPage from "./pages/public/SupportPage";
 import DraftOrderDetail from "./pages/Customer/OrderDetail/DraftOrderDetail/DraftOrderDetail";
+import PostedOrderDetail from "./pages/Customer/OrderDetail/PostedOrderDetail/PostedOrderDetail";
+import GettingOrderDetail from "./pages/Customer/OrderDetail/GettingOrderDetail/GettingOrderDetail";
+import DeliveringOrderDetail from "./pages/Customer/OrderDetail/DeliveringOrderDetail/DeliveringOrderDetail";
+import CompletedOrderDetail from "./pages/Customer/OrderDetail/CompletedOrderDetail/CompletedOrderDetail";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -141,7 +145,11 @@ function App() {
               <Route path="/customer-add-fish/:id" element={<CustomerPrivateRoute element={<CustomerCreateFish />} />} />
               <Route path="/order-fish-payment/:id" element={<FishPayment />} />
               <Route path="/customer-edit-order/:id/order-conclusion-info" element={<CustomerPrivateRoute element={<OrderFinalInfo />} />} />
-              <Route path="/customer-draft-orders" element={<DraftOrderDetail />} />
+              <Route path="/customer-draft-orders" element={<CustomerPrivateRoute element={<DraftOrderDetail />} />} />
+              <Route path="/customer-posted-orders" element={<CustomerPrivateRoute element={<PostedOrderDetail />} />} />
+              <Route path="/customer-getting-orders" element={<CustomerPrivateRoute element={<GettingOrderDetail />} />} />
+              <Route path="/customer-delivering-orders" element={<CustomerPrivateRoute element={<DeliveringOrderDetail />} />} />
+              <Route path="/customer-complete-orders" element={<CustomerPrivateRoute element={<CompletedOrderDetail />} />} />
             </Route>
 
             <Route path="/delivery-staff-home" element={<DeliveryStaffPrivateRoute element={<DeliveryStaffHome />} />} />
