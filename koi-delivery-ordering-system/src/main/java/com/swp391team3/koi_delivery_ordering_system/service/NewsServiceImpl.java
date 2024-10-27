@@ -4,7 +4,6 @@ import com.swp391team3.koi_delivery_ordering_system.model.File;
 import com.swp391team3.koi_delivery_ordering_system.model.News;
 import com.swp391team3.koi_delivery_ordering_system.repository.NewsRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.SalesStaffRepository;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.NewsRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

@@ -1,6 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./MainContent.scss";
-import { Box, Button, Grid, Paper, styled } from "@mui/material";
+import { Box, Button, Grid, Modal, Paper, styled, TextField, Typography } from "@mui/material";
 import dateTimeConvert from "../../../../components/utils";
 import { GoogleMap, Marker, Polyline } from "@react-google-maps/api";
 import { useCallback, useState } from "react";
@@ -29,6 +29,18 @@ const Item = styled(Paper)(({ theme }) => ({
 const SubmitButton = styled(Button)(() => ({
   padding: "10px 50px"
 }))
+
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 300,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 2,
+};
 
 function SalesOrderDetail() {
   const location = useLocation();
@@ -60,10 +72,16 @@ function SalesOrderDetail() {
   const [center, setCenter] = useState(centerDefault);
   const { state } = location;
   const [map, setMap] = useState(null);
+  const [orderModalOpen, setOrderModalOpen] = useState(false);
+  const [cancelReason, setCancelReason] = useState("");
 
   const onLoad = useCallback(function callback(map) {
     setMap(map)
   }, [])
+
+  const handleCloseOrderModal = () => {
+    setOrderModalOpen(false);
+  };
 
   const onUnmount = useCallback(function callback(map) {
     setMap(null)
@@ -107,12 +125,18 @@ function SalesOrderDetail() {
     setIsLoading(false);
   }
 
-  async function handleCancelOrder() {
+  function handleCancelOrder() {
+    setOrderModalOpen(true);
+  }
+
+  async function handleCancelOrderConfirm() {
     setIsLoading(true);
-    const response = await cancelOrder(state.id, salesId);
+    const salesUserType = 2;
+    const response = await cancelOrder(state.id, salesId, salesUserType, cancelReason);
     if (response) {
       setUpdateStatus(true);
-      toast("Order cancelled");
+      toast("Order cancelled successfully");
+      setOrderModalOpen(false);
     } else {
       toast("Unexpected Error has been occurred");
     }
@@ -130,6 +154,43 @@ function SalesOrderDetail() {
       {/* Order Details Table */}
       <ToastUtil />
       {isLoading && <Spinner />}
+
+      <Modal
+        open={orderModalOpen}
+        onClose={handleCloseOrderModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Typography
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              fontSize: "20px",
+            }}
+          >
+            Why this order is not valid ?
+          </Typography>
+          <div style={{ margin: "20px" }}></div>
+          <TextField
+            fullWidth
+            label="Cancel Reason"
+            type=""
+            value={cancelReason}
+            onChange={(e) => setCancelReason(e.target.value)}
+          />
+          <div style={{ margin: "20px" }}></div>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ width: "100%" }}
+            onClick={() => handleCancelOrderConfirm()}
+          >
+            Confirm
+          </Button>
+        </Box>
+      </Modal>
+
       <div className="order-name-detail">
         <strong>{state.name}</strong>
       </div>

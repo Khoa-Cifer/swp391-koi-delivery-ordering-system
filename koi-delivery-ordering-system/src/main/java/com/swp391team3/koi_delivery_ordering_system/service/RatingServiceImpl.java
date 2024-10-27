@@ -9,7 +9,6 @@ import com.swp391team3.koi_delivery_ordering_system.repository.RatingRepository;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.CustomerFeedbackRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Date;
 import java.util.List;

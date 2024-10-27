@@ -4,9 +4,7 @@ import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailServi
 import com.swp391team3.koi_delivery_ordering_system.model.*;
 import com.swp391team3.koi_delivery_ordering_system.repository.*;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.*;
-import com.swp391team3.koi_delivery_ordering_system.utils.PriceBoard;
-import com.swp391team3.koi_delivery_ordering_system.utils.Utilities;
-import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
+import com.swp391team3.koi_delivery_ordering_system.utils.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -29,26 +27,21 @@ public class OrderServiceImpl implements IOrderService {
     private final IOrderDeliveringService orderDeliveringService;
     private final IDeliveryStaffService deliveryStaffService;
     private final IPaymentRateService paymentRateService;
-    private final LicenseRepository licenseRepository;
-    private final FishRepository fishRepository;
-    private final LicenseFileRepository licenseFileRepository;
-    private final FileRepository fileRepository;
-    private final IFileService fileService;
+    private final IOrderActionLogService orderActionLogService;
 
     @Autowired
-    public OrderServiceImpl
-            (OrderRepository orderRepository,
-             CustomerRepository customerRepository,
-             OrderStatus orderStatus, IStorageService storageService,
-             IFishService fishService, PriceBoard priceBoard, DeliveryStaffRepository deliveryStaffRepository,
-             ISalesStaffService salesStaffService, EmailService emailService,
-             @Lazy IOrderDeliveringService orderDeliveringService,
-             IDeliveryStaffService deliveryStaffService, IPaymentRateService paymentRateService,
-             LicenseRepository licenseRepository, FishRepository fishRepository,
-             LicenseFileRepository licenseFileRepository, FileRepository fileRepository,
-             IFileService fileService
-            ) {
-        this.fileService = fileService;
+    public OrderServiceImpl(OrderRepository orderRepository,
+            CustomerRepository customerRepository,
+            OrderStatus orderStatus, IStorageService storageService,
+            IFishService fishService, PriceBoard priceBoard, DeliveryStaffRepository deliveryStaffRepository,
+            ISalesStaffService salesStaffService, EmailService emailService,
+            @Lazy IOrderDeliveringService orderDeliveringService,
+            IDeliveryStaffService deliveryStaffService, IPaymentRateService paymentRateService,
+            LicenseRepository licenseRepository, FishRepository fishRepository,
+            LicenseFileRepository licenseFileRepository, FileRepository fileRepository,
+            IFileService fileService,
+            IOrderActionLogService orderActionLogService) {
+        this.orderActionLogService = orderActionLogService;
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.orderStatus = orderStatus;
@@ -61,14 +54,11 @@ public class OrderServiceImpl implements IOrderService {
         this.orderDeliveringService = orderDeliveringService;
         this.deliveryStaffService = deliveryStaffService;
         this.paymentRateService = paymentRateService;
-        this.licenseRepository = licenseRepository;
-        this.fishRepository = fishRepository;
-        this.licenseFileRepository = licenseFileRepository;
-        this.fileRepository = fileRepository;
     }
 
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
-        Storage nearestStorage = filterOrderToStorage(dto.getSenderLatitude(), dto.getSenderLongitude(), dto.getSenderAddress());
+        Storage nearestStorage = filterOrderToStorage(dto.getSenderLatitude(), dto.getSenderLongitude(),
+                dto.getSenderAddress());
         if (nearestStorage != null) {
             Order newOrder = new Order();
             Optional<Customer> orderCreator = customerRepository.findById(dto.getCustomerId());
@@ -90,17 +80,17 @@ public class OrderServiceImpl implements IOrderService {
 
             newOrder.setExpectedFinishDate(dto.getExpectedFinishDate());
 
-            newOrder.setOrderStatus(orderStatus.DRAFT); //0 is not used, 1 is completed
-            //Created date
+            newOrder.setOrderStatus(orderStatus.ABORTED_BY_CUSTOMER); // 0 is not used, 1 is completed
+            // Created date
             newOrder.setCreatedDate(new Date());
             Order savedOrder = orderRepository.save(newOrder);
-            //Based on the order's id, generate the tracking code
+            // Based on the order's id, generate the tracking code
             String trackingCode = Utilities.generateOrderCode("OD", savedOrder.getId());
             savedOrder.setTrackingId(trackingCode);
             savedOrder.setStorage(nearestStorage);
 
             orderRepository.save(newOrder);
-            //return order's id for next step
+            // return order's id for next step
             return savedOrder.getId();
         }
         return null;
@@ -124,39 +114,40 @@ public class OrderServiceImpl implements IOrderService {
             optionalOrder.get().setOrderStatus(orderStatus.ABORTED_BY_CUSTOMER);
             orderRepository.save(optionalOrder.get());
             result = true;
-//            Order order = optionalOrder.get();
-//            int currentStatus = order.getOrderStatus();
-//            if(currentStatus == orderStatus.DRAFT || currentStatus == orderStatus.POSTED) {
-//                Set<Fish> fishes = order.getFishes();
-//                if (fishes != null) {
-//                    for (Fish fish : fishes) {
-//                        Set<License> licenses = fish.getLicenses();
-//                        if (licenses != null) {
-//                            for (License license : licenses) {
-//                                Set<LicenseFile> licenseFiles = licenseFileRepository.findAll().stream()
-//                                        .filter(licenseFile1 -> licenseFile1.getLicense().equals(license))
-//                                        .collect(Collectors.toSet());
-//                                if (licenseFiles != null) {
-//                                    for (LicenseFile licenseFile : licenseFiles) {
-//                                        Long licenseFileId = licenseFile.getFile().getId();
-//                                        fileService.deleteFile(licenseFileId);
-//                                    }
-//                                    licenseFileRepository.deleteAll(licenseFiles);
-//                                }
-//                                licenseRepository.delete(license);
-//                            }
-//                        }
-//                        fishRepository.delete(fish);
-//                        if (fish.getFile() != null) {
-//                            fileRepository.delete(fish.getFile());
-//                            fileService.deleteFile(fish.getFile().getId());
-//                        }
-//                    }
-//                }
-//                orderRepository.deleteById(id);
-//                result = true;
-//                return result;
-//            } else return result;
+            // Order order = optionalOrder.get();
+            // int currentStatus = order.getOrderStatus();
+            // if(currentStatus == orderStatus.DRAFT || currentStatus == orderStatus.POSTED)
+            // {
+            // Set<Fish> fishes = order.getFishes();
+            // if (fishes != null) {
+            // for (Fish fish : fishes) {
+            // Set<License> licenses = fish.getLicenses();
+            // if (licenses != null) {
+            // for (License license : licenses) {
+            // Set<LicenseFile> licenseFiles = licenseFileRepository.findAll().stream()
+            // .filter(licenseFile1 -> licenseFile1.getLicense().equals(license))
+            // .collect(Collectors.toSet());
+            // if (licenseFiles != null) {
+            // for (LicenseFile licenseFile : licenseFiles) {
+            // Long licenseFileId = licenseFile.getFile().getId();
+            // fileService.deleteFile(licenseFileId);
+            // }
+            // licenseFileRepository.deleteAll(licenseFiles);
+            // }
+            // licenseRepository.delete(license);
+            // }
+            // }
+            // fishRepository.delete(fish);
+            // if (fish.getFile() != null) {
+            // fileRepository.delete(fish.getFile());
+            // fileService.deleteFile(fish.getFile().getId());
+            // }
+            // }
+            // }
+            // orderRepository.deleteById(id);
+            // result = true;
+            // return result;
+            // } else return result;
         }
         return result;
     }
@@ -277,7 +268,8 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public List<Order> getOrderByStatusFilteredByCustomer(OrderListFilteredRequestDTO request) {
-        List<Order> orders = orderRepository.findByOrderStatusAndCustomerId(request.getCustomerId(), request.getStatus());
+        List<Order> orders = orderRepository.findByOrderStatusAndCustomerId(request.getCustomerId(),
+                request.getStatus());
         return orders;
     }
 
@@ -288,8 +280,7 @@ public class OrderServiceImpl implements IOrderService {
                 Double.parseDouble(order.get().getSenderLatitude()),
                 Double.parseDouble(order.get().getSenderLongitude()),
                 Double.parseDouble(order.get().getDestinationLatitude()),
-                Double.parseDouble(order.get().getDestinationLongitude())
-        );
+                Double.parseDouble(order.get().getDestinationLongitude()));
 
         return getPrice(fishList, order, distance);
     }
@@ -306,7 +297,7 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public List<Order> findOrdersForDelivery(Long id) {
         Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(id);
-        if(optionalDeliveryStaff.isPresent()) {
+        if (optionalDeliveryStaff.isPresent()) {
             DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
 
             List<Order> orders = orderRepository.findByOrderStatus(2);
@@ -317,12 +308,11 @@ public class OrderServiceImpl implements IOrderService {
                             Double.parseDouble(deliveryStaff.getLongitude()),
                             Double.parseDouble(order.getSenderLatitude()),
                             Double.parseDouble(order.getSenderLongitude())) <= 40)
-                    .sorted(Comparator.comparingDouble(order ->
-                            Utilities.calculateDistance(
-                                    Double.parseDouble(deliveryStaff.getLatitude()),
-                                    Double.parseDouble(deliveryStaff.getLongitude()),
-                                    Double.parseDouble(order.getSenderLatitude()),
-                                    Double.parseDouble(order.getSenderLongitude()))))
+                    .sorted(Comparator.comparingDouble(order -> Utilities.calculateDistance(
+                            Double.parseDouble(deliveryStaff.getLatitude()),
+                            Double.parseDouble(deliveryStaff.getLongitude()),
+                            Double.parseDouble(order.getSenderLatitude()),
+                            Double.parseDouble(order.getSenderLongitude()))))
                     .limit(5)
                     .collect(Collectors.toList());
 
@@ -336,32 +326,35 @@ public class OrderServiceImpl implements IOrderService {
         List<Order> gettingOrder = getOrderByStatus(orderStatus);
         List<Order> onGoingOrder = new ArrayList<>();
         for (int i = 0; i < gettingOrder.size(); i++) {
-            Optional<Order> foundOrder = orderRepository.findOrderByDeliveryStaffId(id, gettingOrder.get(i).getId(), deliveryProcessType);
+            Optional<Order> foundOrder = orderRepository.findOrderByDeliveryStaffId(id, gettingOrder.get(i).getId(),
+                    deliveryProcessType);
             foundOrder.ifPresent(onGoingOrder::add);
         }
         return onGoingOrder;
     }
 
-//    @Override
-//    public boolean updateOrderSalesAction(Long orderId, Long salesId, int action) {
-//        Optional<Order> foundedOrder = getOrderById(orderId);
-//        Optional<SalesStaff> foundedSalesStaff = salesStaffService.getSalesStaffById(salesId);
-//        switch(action) {
-//            case 0:
-//                foundedOrder.get().setSalesStaffAccept(foundedSalesStaff.get());
-//                break;
-//            case 1:
-//                foundedOrder.get().setSalesStaffConfirmation(foundedSalesStaff.get());
-//                break;
-//            case 2:
-//                foundedOrder.get().setSalesStaffCancellation(foundedSalesStaff.get());
-//                break;
-//            default:
-//                return false;
-//        }
-//        orderRepository.save(foundedOrder.get());
-//        return true;
-//    }
+    // @Override
+    // public boolean updateOrderSalesAction(Long orderId, Long salesId, int action)
+    // {
+    // Optional<Order> foundedOrder = getOrderById(orderId);
+    // Optional<SalesStaff> foundedSalesStaff =
+    // salesStaffService.getSalesStaffById(salesId);
+    // switch(action) {
+    // case 0:
+    // foundedOrder.get().setSalesStaffAccept(foundedSalesStaff.get());
+    // break;
+    // case 1:
+    // foundedOrder.get().setSalesStaffConfirmation(foundedSalesStaff.get());
+    // break;
+    // case 2:
+    // foundedOrder.get().setSalesStaffCancellation(foundedSalesStaff.get());
+    // break;
+    // default:
+    // return false;
+    // }
+    // orderRepository.save(foundedOrder.get());
+    // return true;
+    // }
 
     @Override
     public Optional<Order> getOrderByTrackingId(String trackingId) {
@@ -375,13 +368,16 @@ public class OrderServiceImpl implements IOrderService {
 
             Optional<Storage> foundStorage = storageService.getStorageById(request.getStorageId());
             Optional<Order> foundOrder = getOrderById(request.getOrderId());
-            Optional<OrderDelivering> foundOrderDelivering = orderDeliveringService.getOrderDeliveringById(request.getOrderDeliveringId());
-            Optional<DeliveryStaff> foundDeliveryStaff = deliveryStaffService.getDeliveryStaffById(request.getDeliveryStaffId());
+            Optional<OrderDelivering> foundOrderDelivering = orderDeliveringService
+                    .getOrderDeliveringById(request.getOrderDeliveringId());
+            Optional<DeliveryStaff> foundDeliveryStaff = deliveryStaffService
+                    .getDeliveryStaffById(request.getDeliveryStaffId());
 
             boolean updatedOrder = false;
 
             if (request.getProcessType() == 0) {
-                updatedOrder = updateOrderStatus(foundOrder.get().getId(), orderStatus.ORDER_RECEIVED);;
+                updatedOrder = updateOrderStatus(foundOrder.get().getId(), orderStatus.ORDER_RECEIVED);
+                ;
             } else if (request.getProcessType() == 1) {
                 updatedOrder = updateOrderStatus(foundOrder.get().getId(), orderStatus.COMPLETE);
             }
@@ -407,21 +403,27 @@ public class OrderServiceImpl implements IOrderService {
                     if (updateResult) {
                         boolean finishResult = orderDeliveringService.finishDelivering(orderDeliveringResult.getId());
                         if (finishResult) {
-                            //get sales staff
+                            // get sales staff
                             SalesStaff salesStaff = null;
                             if (request.getProcessType() == 0) {
-                                salesStaff = foundOrder.get().getSalesStaffAccept();
-                                //send mail for sales staff
+                                // salesStaff = foundOrder.get().getSalesStaffAccept();
+                                salesStaff = orderActionLogService.getSalesStaff(UserType.SALES_STAFF_ROLE_ID,
+                                        foundOrder.get().getId(), ActionType.ACCEPT);
+                                // send mail for sales staff
                                 EmailDetailDTO emailDetail = new EmailDetailDTO();
                                 emailDetail.setReceiver((Object) salesStaff);
-                                emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered to the storage");
+                                emailDetail.setSubject("Order " + foundOrder.get().getName()
+                                        + " has been successfully delivered to the storage");
                                 emailService.sendEmail(emailDetail, 11);
                             } else if (request.getProcessType() == 1) {
-                                salesStaff = foundOrder.get().getSalesStaffConfirmation();
-                                //send mail for sales staff
+                                // salesStaff = foundOrder.get().getSalesStaffConfirmation();
+                                // send mail for sales staff
+                                salesStaff = orderActionLogService.getSalesStaff(UserType.SALES_STAFF_ROLE_ID,
+                                        foundOrder.get().getId(), ActionType.CONFIRM);
                                 EmailDetailDTO emailDetail = new EmailDetailDTO();
                                 emailDetail.setReceiver((Object) salesStaff);
-                                emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered to the customer");
+                                emailDetail.setSubject("Order " + foundOrder.get().getName()
+                                        + " has been successfully delivered to the customer");
                                 emailService.sendEmail(emailDetail, 8);
                                 result = true;
                             }
@@ -431,9 +433,9 @@ public class OrderServiceImpl implements IOrderService {
             }
 
             if (result) {
-                //get customer
+                // get customer
                 Customer customer = foundOrder.get().getCustomer();
-                //send mail
+                // send mail
                 EmailDetailDTO emailDetail = new EmailDetailDTO();
                 emailDetail.setReceiver((Object) customer);
                 emailDetail.setSubject("Order " + foundOrder.get().getName() + " has been successfully delivered");
@@ -456,12 +458,10 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public Long updateOrder(Long orderId, String name, String description, Date expectedFinishDate,
-                                              String destinationAddress, String destinationLongitude, String destinationLatitude,
-                                              String senderAddress, String senderLongitude, String senderLatitude) {
+            String destinationAddress, String destinationLongitude, String destinationLatitude,
+            String senderAddress, String senderLongitude, String senderLatitude) {
 
-        Order order = orderRepository.findById(orderId).orElseThrow(() ->
-                new RuntimeException("Order not found")
-        );
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
 
         order.setName(name);
         order.setDescription(description);
@@ -488,17 +488,21 @@ public class OrderServiceImpl implements IOrderService {
         String senderCountry = senderAddress[senderAddress.length - 1].trim();
         String receiverCountry = receiverAddress[receiverAddress.length - 1].trim();
         boolean distanceCheck = Utilities.compareCountry(senderCountry, receiverCountry);
-//        double distancePrice = priceBoard.PRICE_BASE * distance;
-        double distancePrice = paymentRateService.getPaymentServiceById(priceBoard.PRICE_BASE_ID).get().getRate() * distance;
-//        double koiPrice = priceBoard.BOX_PRICE * numberOfBoxes;
-        double koiPrice = paymentRateService.getPaymentServiceById(priceBoard.PRICE_RATE_KOI).get().getRate() * fishList.size();
+        // double distancePrice = priceBoard.PRICE_BASE * distance;
+        double distancePrice = paymentRateService.getPaymentServiceById(priceBoard.PRICE_BASE_ID).get().getRate()
+                * distance;
+        // double koiPrice = priceBoard.BOX_PRICE * numberOfBoxes;
+        double koiPrice = paymentRateService.getPaymentServiceById(priceBoard.PRICE_RATE_KOI).get().getRate()
+                * fishList.size();
 
         if (distanceCheck) {
-//            distancePrice = distancePrice * priceBoard.PRICE_RATE_DOMESTIC;
-            distancePrice = distancePrice * paymentRateService.getPaymentServiceById(priceBoard.PRICE_RATE_DOMESTIC_ID).get().getRate();
+            // distancePrice = distancePrice * priceBoard.PRICE_RATE_DOMESTIC;
+            distancePrice = distancePrice
+                    * paymentRateService.getPaymentServiceById(priceBoard.PRICE_RATE_DOMESTIC_ID).get().getRate();
         } else {
-//            distancePrice = distancePrice * priceBoard.PRICE_RATE_FOREIGN;
-            distancePrice = distancePrice * paymentRateService.getPaymentServiceById(priceBoard.PRICE_RATE_FOREIGN_ID).get().getRate();
+            // distancePrice = distancePrice * priceBoard.PRICE_RATE_FOREIGN;
+            distancePrice = distancePrice
+                    * paymentRateService.getPaymentServiceById(priceBoard.PRICE_RATE_FOREIGN_ID).get().getRate();
         }
         return distancePrice + koiPrice;
     }
@@ -506,28 +510,33 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public boolean acceptOrder(Long orderId, Long salesId) {
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
-        Optional<SalesStaff> optionalSalesStaff = salesStaffService.getSalesStaffById(salesId);
+        // Optional<SalesStaff> optionalSalesStaff =
+        // salesStaffService.getSalesStaffById(salesId);
 
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
             if (updateOrderStatus(orderId, orderStatus.ORDER_ACCEPTED)) {
-                order.setSalesStaffAccept(optionalSalesStaff.get());
-                orderRepository.save(order);
-                Customer customer = optionalOrder.get().getCustomer();
+                // order.setSalesStaffAccept(optionalSalesStaff.get());
+                // orderRepository.save(order);
+                boolean logResult = orderActionLogService.logOrderAction(UserType.SALES_STAFF_ROLE_ID, salesId,
+                        ActionType.ACCEPT, order);
+                if (logResult) {
+                    Customer customer = optionalOrder.get().getCustomer();
 
-                //send mail for customer
-                EmailDetailDTO emailDetail = new EmailDetailDTO();
-                emailDetail.setReceiver((Object) customer);
-                emailDetail.setSubject("Order " + order.getName() + " has been accepted");
-                emailDetail.setLink("http://localhost:5173");
-                emailService.sendEmail(emailDetail, 6);
+                    // send mail for customer
+                    EmailDetailDTO emailDetail = new EmailDetailDTO();
+                    emailDetail.setReceiver((Object) customer);
+                    emailDetail.setSubject("Order " + order.getName() + " has been accepted");
+                    emailDetail.setLink("http://localhost:5173");
+                    emailService.sendEmail(emailDetail, 6);
 
-                EmailDetailDTO emailDetailDTO = new EmailDetailDTO();
-                emailDetailDTO.setReceiver((Object) order);
-                emailDetailDTO.setSubject("You have " + order.getName() + " is being delivered to you");
-                emailDetailDTO.setLink(order.getTrackingId());
-                emailService.sendEmail(emailDetailDTO, 10);
-                return true;
+                    EmailDetailDTO emailDetailDTO = new EmailDetailDTO();
+                    emailDetailDTO.setReceiver((Object) order);
+                    emailDetailDTO.setSubject("You have " + order.getName() + " is being delivered to you");
+                    emailDetailDTO.setLink(order.getTrackingId());
+                    emailService.sendEmail(emailDetailDTO, 10);
+                    return true;
+                }
             }
         }
         return false;
@@ -540,42 +549,63 @@ public class OrderServiceImpl implements IOrderService {
 
         if (optionalOrder.isPresent() && optionalSalesStaff.isPresent()) {
             Order order = optionalOrder.get();
-            if(updateOrderStatus(orderId, orderStatus.ORDER_CONFIRMED)) {
-                order.setSalesStaffConfirmation(optionalSalesStaff.get());
-                orderRepository.save(order);
-                Customer customer = optionalOrder.get().getCustomer();
+            if (updateOrderStatus(orderId, orderStatus.ORDER_CONFIRMED)) {
+                // order.setSalesStaffConfirmation(optionalSalesStaff.get());
+                // orderRepository.save(order);
+                boolean logResult = orderActionLogService.logOrderAction(UserType.SALES_STAFF_ROLE_ID, salesId,
+                        ActionType.CONFIRM, order);
+                if (logResult) {
+                    Customer customer = optionalOrder.get().getCustomer();
 
-                //send mail for customer
-                EmailDetailDTO emailDetail = new EmailDetailDTO();
-                emailDetail.setReceiver((Object) customer);
-                emailDetail.setSubject("Order " + order.getId() + " has been confirmed");
-                emailDetail.setLink("http://localhost:5173");
-                emailService.sendEmail(emailDetail, 7);
-                return true;
+                    // send mail for customer
+                    EmailDetailDTO emailDetail = new EmailDetailDTO();
+                    emailDetail.setReceiver((Object) customer);
+                    emailDetail.setSubject("Order " + order.getId() + " has been confirmed");
+                    emailDetail.setLink("http://localhost:5173");
+                    emailService.sendEmail(emailDetail, 7);
+                    return true;
+                }
             }
         }
         return false;
     }
 
     @Override
-    public boolean cancelOrder(Long orderId, Long salesId) {
-        Optional<Order> optionalOrder = orderRepository.findById(orderId);
-        Optional<SalesStaff> optionalSalesStaff = salesStaffService.getSalesStaffById(salesId);
+    public boolean cancelOrder(StaffCancelOrderRequestDTO request) throws Exception {
+        Optional<Order> optionalOrder = orderRepository.findById(request.getOrderId());
+        // Optional<SalesStaff> optionalSalesStaff =
+        // salesStaffService.getSalesStaffById(salesId);
 
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
-            if(updateOrderStatus(orderId, orderStatus.FAILED)) {
-                order.setSalesStaffCancellation(optionalSalesStaff.get());
-                orderRepository.save(order);
-                Customer customer = optionalOrder.get().getCustomer();
+            if (updateOrderStatus(request.getOrderId(), orderStatus.FAILED)) {
+                boolean logResult = false;
+                if (request.getUserType() == UserType.SALES_STAFF_ROLE_ID) {
+                    logResult = orderActionLogService.logOrderAction(UserType.SALES_STAFF_ROLE_ID, request.getUserId(),
+                            ActionType.CANCEL, order);
+                } else if (request.getUserType() == UserType.DELIVERY_STAFF_ROLE_ID) {
+                    logResult = orderActionLogService.logOrderAction(UserType.DELIVERY_STAFF_ROLE_ID, request.getUserId(),
+                            ActionType.CANCEL, order);
+                } else {
+                    throw new Exception("Undefined user type");
+                }
 
-                //send mail for customer
-                EmailDetailDTO emailDetail = new EmailDetailDTO();
-                emailDetail.setReceiver((Object) customer);
-                emailDetail.setSubject("Order " + order.getId() + " has been cancelled");
-                emailDetail.setLink("http://localhost:5173");
-                emailService.sendEmail(emailDetail, 9);
-                return true;
+                // order.setSalesStaffCancellation(optionalSalesStaff.get());
+                // orderRepository.save(order);
+                if (logResult) {
+                    order.setCancelReason(request.getCancelReason());
+                    orderRepository.save(order);
+
+                    Customer customer = optionalOrder.get().getCustomer();
+
+                    // send mail for customer
+                    EmailDetailDTO emailDetail = new EmailDetailDTO();
+                    emailDetail.setReceiver((Object) customer);
+                    emailDetail.setSubject("Order " + order.getId() + " has been cancelled");
+                    emailDetail.setLink("http://localhost:5173");
+                    emailService.sendEmail(emailDetail, 9);
+                    return true;
+                }
             }
         }
         return false;

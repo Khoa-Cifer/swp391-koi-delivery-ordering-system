@@ -244,10 +244,10 @@ export async function confirmOrder(orderId, salesId) {
   }
 }
 
-export async function cancelOrder(orderId, salesId) {
+export async function cancelOrder(orderId, userId, userType, cancelReason) {
   try {
     const response = await axiosClient.put("orders/cancel-order", {
-      orderId, salesId
+      orderId, userId, userType, cancelReason
     })
     return response.data;
   } catch (error) {

@@ -42,18 +42,6 @@ public class SalesStaff implements UserDetails {
     @JsonIgnore
     private Set<News> news;
 
-    @OneToMany(mappedBy = "salesStaffAccept")
-    @JsonIgnore
-    private Set<Order> orders;
-
-    @OneToMany(mappedBy = "salesStaffConfirmation")
-    @JsonIgnore
-    private Set<Order> ordersConfirmed;
-
-    @OneToMany(mappedBy = "salesStaffCancellation")
-    @JsonIgnore
-    private Set<Order> ordersCancelled;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
