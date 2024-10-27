@@ -423,7 +423,7 @@ public class OrderServiceImpl implements IOrderService {
                                 EmailDetailDTO emailDetail = new EmailDetailDTO();
                                 emailDetail.setReceiver((Object) salesStaff);
                                 emailDetail.setSubject("Order " + foundOrder.get().getName()
-                                        + " has been successfully delivered to the customer");
+                                        + " has been successfully delivered to the receiver");
                                 emailService.sendEmail(emailDetail, 8);
                                 result = true;
                             }

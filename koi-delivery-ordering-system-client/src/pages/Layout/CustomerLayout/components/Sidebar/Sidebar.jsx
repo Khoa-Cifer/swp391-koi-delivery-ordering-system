@@ -17,7 +17,7 @@ const InfoHeader = styled(Typography)(() => ({
   marginTop: "8px"
 }));
 
-function Sidebar() {
+function Sidebar({ pageHeaderInfo }) {
   const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState(default_avatar);
   const [open, setOpen] = useState(false);
@@ -28,6 +28,7 @@ function Sidebar() {
 
   const handleOpenEditProfile = () => {
     navigate("/customer-edit-profile")
+    pageHeaderInfo("Edit")
   }
 
   const token = localStorage.getItem("token");
@@ -56,10 +57,37 @@ function Sidebar() {
 
   const handleOpenCreateOrder = () => {
     navigate("customer-create-order");
+    pageHeaderInfo("Create Order");
   }
 
   const handleOpenHome = () => {
     navigate("customer-home");
+    pageHeaderInfo("")
+  }
+
+  const handleDraftOrderPageNavigate = () => {
+    navigate("/customer-draft-orders");
+    pageHeaderInfo("Draft Orders")
+  }
+
+  const handlePostedOrderPageNavigate = () => {
+    navigate("/customer-posted-orders");
+    pageHeaderInfo("Posted Orders");
+  }
+
+  const handleGettingOrderPageNavigate = () => {
+    navigate("/customer-getting-orders");
+    pageHeaderInfo("Getting Orders");
+  }
+
+  const handleDeliveringOrderPageNavigate = () => {
+    navigate("/customer-delivering-orders");
+    pageHeaderInfo("Delivering Orders");
+  }
+
+  const handleCompleteOrderPageNavigate = () => {
+    navigate("/customer-complete-orders");
+    pageHeaderInfo("Completed Orders");
   }
 
   return customerInfo && (
@@ -115,7 +143,7 @@ function Sidebar() {
               <ListItemButton
                 className="button"
                 sx={{ pl: 4, justifyContent: 'flex-start' }}
-                onClick={() => navigate("/customer-draft-orders")}
+                onClick={() => handleDraftOrderPageNavigate()}
               >
                 <ListItemText primary="Draft Orders" sx={{ textAlign: 'left' }} />
               </ListItemButton>
@@ -123,7 +151,7 @@ function Sidebar() {
               <ListItemButton
                 className="button"
                 sx={{ pl: 4, justifyContent: 'flex-start' }}
-                onClick={() => navigate("/customer-posted-orders")}
+                onClick={() => handlePostedOrderPageNavigate()}
               >
                 <ListItemText primary="Posted Orders" sx={{ textAlign: 'left' }} />
               </ListItemButton>
@@ -131,7 +159,7 @@ function Sidebar() {
               <ListItemButton
                 className="button"
                 sx={{ pl: 4, justifyContent: 'flex-start' }}
-                onClick={() => navigate("/customer-getting-orders")}
+                onClick={() => handleGettingOrderPageNavigate()}
               >
                 <ListItemText primary="Getting Orders" sx={{ textAlign: 'left' }} />
               </ListItemButton>
@@ -139,7 +167,7 @@ function Sidebar() {
               <ListItemButton
                 className="button"
                 sx={{ pl: 4, justifyContent: 'flex-start' }}
-                onClick={() => navigate("/customer-delivering-orders")}
+                onClick={() => handleDeliveringOrderPageNavigate()}
               >
                 <ListItemText primary="Delivering Orders" sx={{ textAlign: 'left' }} />
               </ListItemButton>
@@ -147,7 +175,7 @@ function Sidebar() {
               <ListItemButton
                 className="button"
                 sx={{ pl: 4, justifyContent: 'flex-start' }}
-                onClick={() => navigate("/customer-complete-orders")}
+                onClick={() => handleCompleteOrderPageNavigate()}
               >
                 <ListItemText primary="Complete Orders" sx={{ textAlign: 'left' }} />
               </ListItemButton>

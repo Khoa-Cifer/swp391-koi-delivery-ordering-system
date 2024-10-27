@@ -3,8 +3,15 @@ import ListIcon from "@mui/icons-material/List";
 import Header from "./components/Header/Header";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
+import { useState } from "react";
 
 function CustomerLayout() {
+    const [titleHeader, setTitleHeader] = useState();
+
+    const handlePageHeader = (e) => {
+        setTitleHeader(e);
+    }
+
     return (
         <Box
             sx={{
@@ -41,7 +48,7 @@ function CustomerLayout() {
                         height: "90%",
                     }}
                 >
-                    <Sidebar />
+                    <Sidebar pageHeaderInfo={e => handlePageHeader(e)} />
                 </Box>
 
                 {/* Main Content */}
@@ -54,11 +61,17 @@ function CustomerLayout() {
                     }}
                 >
                     {/* Adding the OrderList title with an icon */}
-                    <Box sx={{ display: "flex", alignItems: "center", mb: 2, color:"blue"}} >
-                        <ListIcon sx={{ mr: 0.5, ml:1}} />
-                        <Typography variant="h6" >
-                            Order List
-                        </Typography>
+                    <Box sx={{ display: "flex", alignItems: "center", mb: 2, color: "blue" }} >
+                        {titleHeader !== "Edit" && (
+                            <>
+                                <ListIcon sx={{ mr: 0.5, ml: 1 }} />
+                                <Typography variant="h6" >
+                                    Order List {titleHeader && titleHeader !== "" && (
+                                        <>{">"} {titleHeader}</>
+                                    )}
+                                </Typography>
+                            </>
+                        )}
                     </Box>
 
                     <Outlet />

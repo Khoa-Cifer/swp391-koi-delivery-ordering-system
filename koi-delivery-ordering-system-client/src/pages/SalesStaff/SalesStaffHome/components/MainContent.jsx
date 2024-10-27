@@ -1,7 +1,6 @@
 import "./MainContent.scss";
 import { useEffect, useState } from "react";
 import { getOrdersByStatus } from "../../../../utils/axios/order";
-import dateTimeConvert from "../../../../components/utils";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Button,
@@ -133,13 +132,12 @@ function MainContent() {
           <div className="news-grid">
             {news.slice(0, visibleNewsCount).map((newsItem, index) => (
               <div key={index} className="news-item">
-                {/* Chuyển logic onClick sang phần tử ảnh */}
                 <img
                   src={newsItem.imageUrl}
                   alt={newsItem.title}
                   className="news-image"
-                  style={{ cursor: "pointer" }} // Thêm pointer để người dùng biết ảnh có thể được click
-                  onClick={() => handleNewsClick(newsItem)} // Khi ấn vào ảnh thì chuyển sang trang detail
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleNewsClick(newsItem)}
                 />
                 <div className="news-content">
                   <h3 className="news-title">{newsItem.title}</h3>
@@ -186,7 +184,6 @@ function MainContent() {
         </div>
       </div>
 
-      {/* Confirmation Dialog */}
       <Dialog
         open={openDialog}
         onClose={handleCloseDialog}
@@ -209,7 +206,6 @@ function MainContent() {
         </DialogActions>
       </Dialog>
 
-      {/* Orders section (not modified) */}
       <div className="order-container-sale">
         {postedOrder.length > 0 && (
           <div className="order-container">
@@ -222,11 +218,18 @@ function MainContent() {
                   <div className="order-content">
                     <h3 className="order-title">{order.name}</h3>
                     <p className="order-description">
-                      Created Date: {dateTimeConvert(order.createdDate)}
+                      Created Date:{" "}
+                      {new Date(order.createdDate).toLocaleString("en-US", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </p>
                     <p className="order-description">
                       Expected Finish Date:{" "}
-                      {dateTimeConvert(order.expectedFinishDate)}
+                      {new Date(order.expectedFinishDate).toLocaleDateString()}
                     </p>
                     <div className="order-footer">
                       <Button
@@ -260,11 +263,18 @@ function MainContent() {
                   <div className="order-content">
                     <h3 className="order-title">{order.name}</h3>
                     <p className="order-description">
-                      Created Date: {dateTimeConvert(order.createdDate)}
+                      Created Date:{" "}
+                      {new Date(order.createdDate).toLocaleString("en-US", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </p>
                     <p className="order-description">
                       Expected Finish Date:{" "}
-                      {dateTimeConvert(order.expectedFinishDate)}
+                      {new Date(order.expectedFinishDate).toLocaleDateString()}
                     </p>
                     <div className="order-footer">
                       <Button
@@ -280,7 +290,7 @@ function MainContent() {
             </div>
 
             <div className="view-more">
-              <a href="#">View more →</a>
+              <Link to={"/posted-order-sales-staff"}>View more →</Link>
             </div>
           </div>
         )}
