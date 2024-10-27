@@ -11,6 +11,7 @@ import com.swp391team3.koi_delivery_ordering_system.service.IDeliveryStaffServic
 import com.swp391team3.koi_delivery_ordering_system.service.IManagerService;
 import com.swp391team3.koi_delivery_ordering_system.service.ISalesStaffService;
 import com.swp391team3.koi_delivery_ordering_system.config.security.TokenService;
+import com.swp391team3.koi_delivery_ordering_system.utils.UserType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,7 @@ public class AuthController {
         int userType = request.getUserType();
         int foundUserStatus = 0;
         String response = null;
-        if (userType == 1) {
+        if (userType == UserType.CUSTOMER_ROLE_ID) {
             boolean status = customerService.customerLogin(request.getEmail(), request.getPassword());
             if (status) {
                 foundUserStatus = userType;
@@ -44,21 +45,21 @@ public class AuthController {
                     response = tokenService.generateToken(foundCustomer);
                 }
             }
-        } else if (userType == 2) {
+        } else if (userType == UserType.SALES_STAFF_ROLE_ID) {
             boolean status = salesStaffService.salesStaffLogin(request.getEmail(), request.getPassword());
             if (status) {
                 foundUserStatus = userType;
                 SalesStaff foundSalesStaff = salesStaffService.getSalesStaffByEmail(request.getEmail());
                 response = tokenService.generateToken(foundSalesStaff);
             }
-        } else if (userType == 3) {
+        } else if (userType == UserType.DELIVERY_STAFF_ROLE_ID) {
             boolean status = deliveryStaffService.deliveryStaffLogin(request.getEmail(), request.getPassword());
             if (status) {
                 foundUserStatus = userType;
                 DeliveryStaff foundDeliveryStaff = deliveryStaffService.getDeliveryStaffByEmail(request.getEmail());
                 response = tokenService.generateToken(foundDeliveryStaff);
             }
-        } else if (userType == 4) {
+        } else if (userType == UserType.MANAGER_ROLE_ID) {
             boolean status = managerService.managerLogin(request.getEmail(), request.getPassword());
             if (status) {
                 foundUserStatus = userType;

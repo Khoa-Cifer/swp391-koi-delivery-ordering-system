@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -21,11 +22,28 @@ public class PaymentRateServiceImpl implements IPaymentRateService {
     @Override
     public boolean updatePaymentServiceRate(Long id, double rate) {
         Optional<PaymentService> foundPaymentService = getPaymentServiceById(id);
+        Map<Long, Double> minRates = Map.of(
+                1L, 15000.0,
+                2L, 10000.0,
+                3L, 1.0,
+                4L, 1.5
+        );
+
+        // Check if the payment service is present and the rate is positive
         if (foundPaymentService.isPresent() && rate > 0) {
-            foundPaymentService.get().setRate(rate);
-            paymentServiceRepository.save(foundPaymentService.get());
-            return true;
+            // Get the minimum rate required for the given id, default to Double.MAX_VALUE if id not found
+            double minRate = minRates.getOrDefault(id, Double.MAX_VALUE);
+            System.out.println("Rate is " +rate);
+            System.out.println(minRate);
+            // Validate the rate against the minimum required rate
+            if (rate >= minRate) {
+                PaymentService paymentService = foundPaymentService.get();
+                paymentService.setRate(rate);
+                paymentServiceRepository.save(paymentService);
+                return true;
+            }
         }
+
         return false;
     }
 

@@ -1,7 +1,6 @@
 package com.swp391team3.koi_delivery_ordering_system.service;
 
 import com.swp391team3.koi_delivery_ordering_system.model.License;
-import com.swp391team3.koi_delivery_ordering_system.model.LicenseFile;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.FishLicenseRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.LicenseFileRequestDTO;
 import org.springframework.web.multipart.MultipartFile;

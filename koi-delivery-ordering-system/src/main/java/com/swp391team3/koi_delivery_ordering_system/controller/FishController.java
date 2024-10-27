@@ -1,30 +1,20 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.model.Fish;
-import com.swp391team3.koi_delivery_ordering_system.model.Order;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderFishInfoRequestDTO;
-import com.swp391team3.koi_delivery_ordering_system.service.IFileService;
 import com.swp391team3.koi_delivery_ordering_system.service.IFishService;
-import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
-import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
-
 @RestController
 @RequestMapping("api/fishes")
 @RequiredArgsConstructor
 public class FishController {
     private final IFishService fishService;
-    private final IOrderService orderService;
-    private final OrderStatus orderStatus;
-    private final IFileService fileService;
 
     //Get All Fish
     @GetMapping("/getAllFishes")

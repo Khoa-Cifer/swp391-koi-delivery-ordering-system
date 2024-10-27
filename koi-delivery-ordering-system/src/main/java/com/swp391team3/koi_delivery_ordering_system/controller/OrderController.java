@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -151,8 +150,8 @@ public class OrderController {
     }
 
     @PutMapping("/cancel-order")
-    public ResponseEntity<?> cancelOrder(@RequestBody SalesCheckOrderRequestDTO request) {
-        boolean createOrderDelivering = orderService.cancelOrder(request.getOrderId(), request.getSalesId());
+    public ResponseEntity<?> cancelOrder(@RequestBody StaffCancelOrderRequestDTO request) throws Exception {
+        boolean createOrderDelivering = orderService.cancelOrder(request);
         return ResponseEntity.ok(createOrderDelivering);
     }
 }

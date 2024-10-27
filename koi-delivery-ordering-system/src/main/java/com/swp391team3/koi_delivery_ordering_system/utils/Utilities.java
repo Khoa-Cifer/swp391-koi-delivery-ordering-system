@@ -1,7 +1,5 @@
 package com.swp391team3.koi_delivery_ordering_system.utils;
 
-import org.springframework.context.annotation.Bean;
-
 public class Utilities {
     private static final double R = 6371.0;
     private static final int CODE_LENGTH = 6; // Total length of numeric part

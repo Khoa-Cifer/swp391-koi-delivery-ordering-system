@@ -91,7 +91,7 @@ function PostedOrder({ customerId }) {
     setOrderModalOpen(false);
   };
 
-  const handleCloseFishrModal = () => {
+  const handleCloseFishModal = () => {
     setFishModalOpen(false);
   };
 
@@ -123,10 +123,13 @@ function PostedOrder({ customerId }) {
   }
 
   const handleOpenEditPage = (order) => {
-    navigate(`/customer-edit-order/${order.id}`, {
-      state: order,
-    });
-
+    if (order.fishes && order.fishes.length > 0) {
+      navigate(`/customer-edit-order/${order.id}`, {
+        state: order,
+      });
+    } else {
+      toast("An order must have at least one fish");
+    }
   };
 
   const handleOpenAddFishPage = (order) => {
@@ -227,7 +230,7 @@ function PostedOrder({ customerId }) {
 
       <Modal
         open={fishModalOpen}
-        onClose={handleCloseFishrModal}
+        onClose={handleCloseFishModal}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >

@@ -42,6 +42,7 @@ public class TokenService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
+    @SuppressWarnings("deprecation")
     public String generateToken(Object user) {
         String userId = null;
         String username = null;

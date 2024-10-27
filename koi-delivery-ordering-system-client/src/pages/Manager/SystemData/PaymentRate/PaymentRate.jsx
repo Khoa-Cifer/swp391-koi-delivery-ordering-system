@@ -45,7 +45,7 @@ function PaymentRate() {
             notification.success({ message: "Update successfully" });
             fetchPaymentRateService();
         } else {
-            notification.error({ message: "Unexpected error has occurred" });
+            notification.error({ message: "Please input a valid rate/price" });
         }
     };
 

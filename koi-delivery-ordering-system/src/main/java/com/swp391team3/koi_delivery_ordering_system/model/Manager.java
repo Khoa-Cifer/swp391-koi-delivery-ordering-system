@@ -1,6 +1,5 @@
 package com.swp391team3.koi_delivery_ordering_system.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,10 +9,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -28,6 +28,7 @@ public class Manager implements UserDetails {
     private String username;
     @Column(unique = true, nullable = false)
     private String email;
+    @JsonIgnore
     private String password;
     private String phoneNumber;
 

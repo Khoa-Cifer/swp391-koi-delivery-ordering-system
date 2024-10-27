@@ -31,17 +31,14 @@ function CustomerLayout() {
                 display: "flex",
                 flex: 1,
                 pt: "10%",
-                background: "#E6F9FD",
             }}>
                 {/* Fixed Sidebar */}
                 <Box
                     sx={{
-                        position: "fixed",
                         top: "12%",
                         left: "1%",
                         width: "20%",
                         height: "90%",
-                        zIndex: 1000,
                     }}
                 >
                     <Sidebar />
@@ -52,8 +49,8 @@ function CustomerLayout() {
                     component="main"
                     sx={{
                         flexGrow: 1,
-                        ml: "20%",
-                        mt: -7
+                        mt: -5,
+                        ml: 5
                     }}
                 >
                     {/* Adding the OrderList title with an icon */}
