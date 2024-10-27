@@ -10,9 +10,9 @@
 
   .order-card {
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap; /* Enable wrapping */
-    margin: 40px;
+    justify-content: flex-start;
+    margin: 20px;
+    gap: 4%;
   }
 
   .order-grid {
@@ -29,9 +29,11 @@
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
-    max-width: 30%; /* Ensure the width is less than 33% */
-    flex: 1 1 30%; /* Allow items to grow and shrink and wrap at 30% */
-    margin-bottom: 20px; /* Add some space between rows */
+    max-width: 30%;
+    flex: 1 1 30%;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-start;
   }
 
   .order-item:hover {

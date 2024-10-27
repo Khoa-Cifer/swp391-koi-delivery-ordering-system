@@ -1,34 +1,47 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./MainContent.scss";
-import { Box, Button, Grid, Modal, Paper, styled, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Modal,
+  Paper,
+  styled,
+  TextField,
+  Typography,
+} from "@mui/material";
 import dateTimeConvert from "../../../../components/utils";
 import { GoogleMap, Marker, Polyline } from "@react-google-maps/api";
 import { useCallback, useState } from "react";
-import GreenMarker from "../../../../assets/succeeded.svg"
-import BlueMarker from "../../../../assets/inTransit.svg"
-import RedMarker from "../../../../assets/failed.svg"
+import GreenMarker from "../../../../assets/succeeded.svg";
+import BlueMarker from "../../../../assets/inTransit.svg";
+import RedMarker from "../../../../assets/failed.svg";
 import ToastUtil from "../../../../components/toastContainer";
 import { jwtDecode } from "jwt-decode";
-import { acceptOrder, cancelOrder, confirmOrder } from "../../../../utils/axios/order";
+import {
+  acceptOrder,
+  cancelOrder,
+  confirmOrder,
+} from "../../../../utils/axios/order";
 import { toast } from "react-toastify";
 import Spinner from "../../../../components/SpinnerLoading";
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#fff',
+  backgroundColor: "#fff",
   ...theme.typography.body2,
   padding: theme.spacing(2),
   color: theme.palette.text.secondary,
-  ...theme.applyStyles('dark', {
-    backgroundColor: '#1A2027',
+  ...theme.applyStyles("dark", {
+    backgroundColor: "#1A2027",
   }),
 
-  minHeight: '48px', // Adjust as needed for desired height
-  lineHeight: '1.5', // Adjust line height for better spacing
+  minHeight: "48px", // Adjust as needed for desired height
+  lineHeight: "1.5", // Adjust line height for better spacing
 }));
 
 const SubmitButton = styled(Button)(() => ({
-  padding: "10px 50px"
-}))
+  padding: "10px 50px",
+}));
 
 const modalStyle = {
   position: "absolute",
@@ -51,7 +64,7 @@ function SalesOrderDetail() {
 
   const centerDefault = {
     lat: 10.75,
-    lng: 106.6667
+    lng: 106.6667,
   };
 
   const { id } = useParams();
@@ -60,7 +73,7 @@ function SalesOrderDetail() {
   const googleMapStyled = {
     width: "100%",
     height: "50vh",
-  }
+  };
 
   const token = localStorage.getItem("token");
   let salesId;
@@ -76,16 +89,16 @@ function SalesOrderDetail() {
   const [cancelReason, setCancelReason] = useState("");
 
   const onLoad = useCallback(function callback(map) {
-    setMap(map)
-  }, [])
+    setMap(map);
+  }, []);
 
   const handleCloseOrderModal = () => {
     setOrderModalOpen(false);
   };
 
   const onUnmount = useCallback(function callback(map) {
-    setMap(null)
-  }, [])
+    setMap(null);
+  }, []);
 
   const senderPosition = {
     lat: parseFloat(state.senderLatitude),
@@ -99,7 +112,7 @@ function SalesOrderDetail() {
   const storagePosition = {
     lat: parseFloat(state.storage.latitude),
     lng: parseFloat(state.storage.longitude),
-  }
+  };
 
   async function handleAcceptOrder() {
     setIsLoading(true);
@@ -132,7 +145,12 @@ function SalesOrderDetail() {
   async function handleCancelOrderConfirm() {
     setIsLoading(true);
     const salesUserType = 2;
-    const response = await cancelOrder(state.id, salesId, salesUserType, cancelReason);
+    const response = await cancelOrder(
+      state.id,
+      salesId,
+      salesUserType,
+      cancelReason
+    );
     if (response) {
       setUpdateStatus(true);
       toast("Order cancelled successfully");
@@ -145,7 +163,7 @@ function SalesOrderDetail() {
 
   function handleViewFishDetail() {
     navigate(`/sales-order-detail/${id}/sales-fish-detail`, {
-      state: state
+      state: state,
     });
   }
 
@@ -197,12 +215,28 @@ function SalesOrderDetail() {
 
       <div className="order-details">
         <div className="details-row">
-          <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          <Grid
+            container
+            rowSpacing={3}
+            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          >
             <Grid item xs={6}>
-              <Item>Create Dated: {dateTimeConvert(state.createdDate)}</Item>
+              <Item>
+                Create Dated:{" "}
+                {new Date(state.createdDate).toLocaleString("en-US", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </Item>
             </Grid>
             <Grid item xs={6}>
-              <Item>Expected Finish Date: {dateTimeConvert(state.expectedFinishDate)}</Item>
+              <Item>
+                Expected Finish Date:{" "}
+                {new Date(state.expectedFinishDate).toLocaleDateString()}
+              </Item>
             </Grid>
             <Grid item xs={6}>
               <Item>Tracking Id: {state.trackingId}</Item>
@@ -213,14 +247,18 @@ function SalesOrderDetail() {
             <Grid item xs={6}>
               <Item>Sender Address: {state.senderAddress}</Item>
             </Grid>
-            <Grid item xs={6} sx={{ height: '100px' }}>
+            <Grid item xs={6} sx={{ height: "100px" }}>
               <Item>Destination Address: {state.destinationAddress}</Item>
             </Grid>
           </Grid>
-
         </div>
         <div className="view-fish">
-          <button className="view-fish-btn" onClick={() => handleViewFishDetail()}>View Fishes</button>
+          <button
+            className="view-fish-btn"
+            onClick={() => handleViewFishDetail()}
+          >
+            View Fishes
+          </button>
         </div>
 
         <GoogleMap
@@ -231,38 +269,36 @@ function SalesOrderDetail() {
           onUnmount={onUnmount}
         >
           <Polyline
-            path={[
-              senderPosition,
-              storagePosition,
-            ]}
+            path={[senderPosition, storagePosition]}
             options={{
               strokeColor: "#041967",
               //strokeOpacity: 0.5,
               strokeWeight: 2,
               geodesic: true,
-              icons: [{
-                // eslint-disable-next-line no-undef
-                icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW },
-                offset: '50%'
-              }]
+              icons: [
+                {
+                  // eslint-disable-next-line no-undef
+                  icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW },
+                  offset: "50%",
+                },
+              ],
             }}
           />
 
           <Polyline
-            path={[
-              storagePosition,
-              receiverPosition,
-            ]}
+            path={[storagePosition, receiverPosition]}
             options={{
               strokeColor: "#041967",
               //strokeOpacity: 0.5,
               strokeWeight: 2,
               geodesic: true,
-              icons: [{
-                // eslint-disable-next-line no-undef
-                icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW },
-                offset: '50%'
-              }]
+              icons: [
+                {
+                  // eslint-disable-next-line no-undef
+                  icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW },
+                  offset: "50%",
+                },
+              ],
             }}
           />
 
@@ -271,22 +307,19 @@ function SalesOrderDetail() {
             icon={{
               url: GreenMarker,
             }}
-          >
-          </Marker>
+          ></Marker>
           <Marker
             position={storagePosition}
             icon={{
               url: BlueMarker,
             }}
-          >
-          </Marker>
+          ></Marker>
           <Marker
             position={receiverPosition}
             icon={{
               url: RedMarker,
             }}
-          >
-          </Marker>
+          ></Marker>
         </GoogleMap>
 
         <div className="order-description">
@@ -295,29 +328,49 @@ function SalesOrderDetail() {
         </div>
         <Box
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             marginTop: "30px",
-            gap: "20px"
-          }}>
-
+            gap: "20px",
+          }}
+        >
           {userData.roleId === 2 && (
             <>
               {updateStatus ? (
-                <SubmitButton variant="contained" onClick={() => navigate("/sales-staff-home")}>Back to home page</SubmitButton>
+                <SubmitButton
+                  variant="contained"
+                  onClick={() => navigate("/sales-staff-home")}
+                >
+                  Back to home page
+                </SubmitButton>
               ) : (
                 <>
-                  <SubmitButton variant="contained" style={{ backgroundColor: "#f44336" }} onClick={() => handleCancelOrder()}>Cancel</SubmitButton>
+                  <SubmitButton
+                    variant="contained"
+                    style={{ backgroundColor: "#f44336" }}
+                    onClick={() => handleCancelOrder()}
+                  >
+                    Cancel
+                  </SubmitButton>
                   {state.orderStatus === 1 && (
-                    <SubmitButton variant="contained" onClick={() => handleAcceptOrder()}>Accept</SubmitButton>
+                    <SubmitButton
+                      variant="contained"
+                      onClick={() => handleAcceptOrder()}
+                    >
+                      Accept
+                    </SubmitButton>
                   )}
                   {state.orderStatus === 4 && (
-                    <SubmitButton variant="contained" onClick={() => handleConfirmOrder()}>Confirm</SubmitButton>
+                    <SubmitButton
+                      variant="contained"
+                      onClick={() => handleConfirmOrder()}
+                    >
+                      Confirm
+                    </SubmitButton>
                   )}
                 </>
               )}
-
             </>
           )}
         </Box>

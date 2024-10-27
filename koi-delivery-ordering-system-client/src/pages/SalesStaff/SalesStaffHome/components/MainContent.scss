@@ -68,6 +68,11 @@
       }
     }
   }
+  .card-view-more{
+    display: flex;
+    justify-content: end;
+    margin-right: 4%;
+  }
 
   .order-container-sale {
     margin-top: 3%;
