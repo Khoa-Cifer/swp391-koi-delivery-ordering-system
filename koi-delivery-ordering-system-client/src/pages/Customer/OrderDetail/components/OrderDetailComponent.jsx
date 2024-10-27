@@ -1,23 +1,29 @@
 /* eslint-disable react/prop-types */
-import { Box, Button, Menu, MenuItem, Modal, Paper, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { Box, Button, Modal, styled, TextField, Typography } from "@mui/material";
 import dateTimeConvert from "../../../../components/utils";
 import { useCallback, useState } from "react";
 import { GoogleMap, Marker, Polyline } from "@react-google-maps/api";
 import BlueMarker from "../../../../assets/inTransit.svg"
 import GreenMarker from "../../../../assets/succeeded.svg"
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../../components/toastContainer";
 import { useNavigate } from "react-router-dom";
 import { deleteFishById } from "../../../../utils/axios/fish";
 import { deleteOrderById } from "../../../../utils/axios/order";
+import { Dropdown, Menu, Space, Table } from "antd";
+import { MoreOutlined } from "@ant-design/icons";
 
 const OrderCard = styled(Box)(() => ({
     backgroundColor: "#C3F4FD",
     borderRadius: "20px",
-    width: "40%",
+    width: "45%",
     padding: "40px 20px",
     border: "1px solid #0264F8"
+}));
+
+const FormBox = styled(Box)(() => ({
+    display: "flex",
+    justifyContent: "space-between"
 }));
 
 const modalStyle = {
@@ -33,7 +39,7 @@ const modalStyle = {
 };
 
 const containerStyle = {
-    width: '50%',
+    width: '100%',
     height: '650px',
 };
 
@@ -50,7 +56,6 @@ function OrderDetailComponent({ orders }) {
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [map, setMap] = useState();
-    const [anchorEl, setAnchorEl] = useState(null);
     const [selectedFishId, setSelectedFishId] = useState(null);
     const [fishModalOpen, setFishModalOpen] = useState(false);
     const [orderModalOpen, setOrderModalOpen] = useState();
@@ -74,10 +79,6 @@ function OrderDetailComponent({ orders }) {
         setMap(null)
     }, [])
 
-    const handleDropdownClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
     const handleCloseFishModal = () => {
         setFishModalOpen(false);
     };
@@ -95,11 +96,6 @@ function OrderDetailComponent({ orders }) {
         navigate(`/customer-add-fish/${order.id}`, {
             state: order,
         });
-    };
-
-    // Close the menu
-    const handleDropdownClose = () => {
-        setAnchorEl(null);
     };
 
     const handleCloseOrderModal = () => {
@@ -164,10 +160,79 @@ function OrderDetailComponent({ orders }) {
 
     const currentOrder = orders[currentIndex];
 
-    return orders && orders.length > 0 && (
-        <Box>
-            <ToastUtil />
+    const columns = [
+        // {
+        //     title: 'Fish Id',
+        //     dataIndex: 'id',
+        //     key: 'id',
+        // },
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+        },
+        {
+            title: 'Price',
+            dataIndex: 'price',
+            key: 'price',
+        },
+        {
+            title: 'Size',
+            dataIndex: 'size',
+            key: 'size',
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            render: (status) => {
+                switch (status) {
+                    case 1:
+                        return 'Good';
+                    case 2:
+                        return 'Sick';
+                    case 3:
+                        return 'Dead';
+                    default:
+                        return 'Unknown';
+                }
+            },
+        },
+        {
+            title: 'Weight',
+            dataIndex: 'weight',
+            key: 'weight',
+        },
+        {
+            title: 'Action',
+            key: 'action',
+            dataIndex: "id",
+            render: (id, record) => (
+                <Space size="middle">
 
+                    <Dropdown
+                        overlay={
+                            <Menu>
+                                {(currentOrder.orderStatus === 0 || currentOrder.orderStatus === 1) && (
+                                    <Button type="link" onClick={() => handleDeleteFish(record.id, currentOrder)}>
+                                        Delete Fish
+                                    </Button>
+                                )}
+                                {/* Add other actions here if needed */}
+                            </Menu>
+                        }
+                        trigger={['click']}
+                    >
+                        <MoreOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
+                    </Dropdown>
+                </Space>
+            ),
+        },
+    ];
+
+    return orders && orders.length > 0 && (
+        <Box className="order-detail-tbl">
+            <ToastUtil />
             <Modal
                 open={orderModalOpen}
                 onClose={handleCloseOrderModal}
@@ -224,26 +289,14 @@ function OrderDetailComponent({ orders }) {
                 </Box>
             </Modal>
 
-            {(currentOrder.orderStatus === 0 || currentOrder.orderStatus === 1) && (
-                <Box style={{ display: "flex", justifyContent: "flex-end", marginRight: "100px" }}>
-                    {currentOrder.orderStatus === 0 ? (
-                        <Button onClick={() => handleConclusion(currentOrder)}>Make your payment</Button>
-                    ) : (
-                        <Button disabled>Make your payment</Button>
-                    )}
-                    <Button onClick={() => handleOpenEditPage(currentOrder)}>Edit</Button>
-                    <Button onClick={() => handleDeleteOrder(currentOrder.id)}>Delete</Button>
-                </Box>
-            )}
-
             <ContentBox>
                 <OrderCard>
                     <div className="form-group">
+                        <Typography>Name</Typography>
                         <OrderInfoField
                             fullWidth
                             type=""
                             value={currentOrder.name}
-                            label="Name"
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -251,11 +304,11 @@ function OrderDetailComponent({ orders }) {
                     </div>
 
                     <div className="form-group">
+                        <Typography>Description</Typography>
                         <OrderInfoField
                             fullWidth
                             type=""
                             value={currentOrder.description}
-                            label="Description"
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -263,11 +316,11 @@ function OrderDetailComponent({ orders }) {
                     </div>
 
                     <div className="form-group">
+                        <Typography>Sender Address</Typography>
                         <OrderInfoField
                             fullWidth
                             type=""
                             value={currentOrder.senderAddress}
-                            label="Sender Address"
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -275,206 +328,186 @@ function OrderDetailComponent({ orders }) {
                     </div>
 
                     <div className="form-group">
+                        <Typography>Receiver Address</Typography>
                         <OrderInfoField
                             fullWidth
                             type=""
                             value={currentOrder.destinationAddress}
-                            label="Receiver Address"
                             InputProps={{
                                 readOnly: true,
                             }}
                         />
                     </div>
 
-                    <div className="form-group">
-                        <OrderInfoField
-                            fullWidth
-                            type=""
-                            value={currentOrder.receiverEmail}
-                            label="Receiver Email"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />
-                    </div>
+                    <FormBox>
 
-                    <div className="form-group">
-                        <OrderInfoField
-                            fullWidth
-                            type=""
-                            value={currentOrder.receiverPhoneNumber}
-                            label="Receiver Phone Number"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <OrderInfoField
-                            fullWidth
-                            type=""
-                            value={dateTimeConvert(currentOrder.createdDate)}
-                            label="Created Date"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />
-                    </div>
-
-                    {currentOrder.finishDate ? (
                         <div className="form-group">
+                            <Typography>Receiver Email</Typography>
                             <OrderInfoField
                                 fullWidth
                                 type=""
-                                value={dateTimeConvert(currentOrder.finishDate)}
-                                label="Finish Date"
+                                value={currentOrder.receiverEmail}
                                 InputProps={{
                                     readOnly: true,
                                 }}
                             />
                         </div>
-                    ) : (
+
                         <div className="form-group">
+                            <Typography>Receiver Phone Number</Typography>
                             <OrderInfoField
                                 fullWidth
                                 type=""
-                                value={dateTimeConvert(currentOrder.expectedFinishDate)}
-                                label="Expected Finish Date"
+                                value={currentOrder.receiverPhoneNumber}
                                 InputProps={{
                                     readOnly: true,
                                 }}
                             />
                         </div>
-                    )}
+                    </FormBox>
+
+                    <FormBox>
+                        <div className="form-group">
+                            <Typography>Created Date</Typography>
+                            <OrderInfoField
+                                fullWidth
+                                type=""
+                                value={dateTimeConvert(currentOrder.createdDate)}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </div>
+
+                        {currentOrder.finishDate ? (
+                            <div className="form-group">
+                                <Typography>Finish Date</Typography>
+                                <OrderInfoField
+                                    fullWidth
+                                    type=""
+                                    value={dateTimeConvert(currentOrder.finishDate)}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                            </div>
+                        ) : (
+                            <div className="form-group">
+                                <Typography>Expected Finish Date</Typography>
+                                <OrderInfoField
+                                    fullWidth
+                                    type=""
+                                    value={dateTimeConvert(currentOrder.expectedFinishDate)}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                            </div>
+                        )}
+                    </FormBox>
                 </OrderCard>
 
-                <GoogleMap
-                    mapContainerStyle={containerStyle}
-                    center={{
-                        lat: parseFloat(currentOrder.storage.latitude),
-                        lng: parseFloat(currentOrder.storage.longitude)
-                    }}
-                    zoom={15}
-                    onLoad={onLoad}
-                    onUnmount={onUnmount}
-                >
-                    { /* Child components, such as markers, info windows, etc. */}
-                    <>
-                        <Marker
-                            position={{
-                                lat: parseFloat(currentOrder.senderLatitude),
-                                lng: parseFloat(currentOrder.senderLongitude),
-                            }}
-                            icon={{
-                                url: GreenMarker,
-                            }}
-                        >
-                        </Marker>
-                        <Marker
-                            position={{
-                                lat: parseFloat(currentOrder.destinationLatitude),
-                                lng: parseFloat(currentOrder.destinationLongitude),
-                            }}
-                            icon={{
-                                url: BlueMarker,
-                            }}
-                        >
-                        </Marker>
+                <Box style={{ width: "45%" }}>
+                    {(currentOrder.orderStatus === 0 || currentOrder.orderStatus === 1) && (
+                        <Box style={{ display: "flex", justifyContent: "flex-end" }}>
+                            {currentOrder.orderStatus === 0 ? (
+                                <Button onClick={() => handleConclusion(currentOrder)}>Make your payment</Button>
+                            ) : (
+                                <Button disabled>Make your payment</Button>
+                            )}
+                            <Button onClick={() => handleOpenEditPage(currentOrder)}>Edit</Button>
+                            <Button onClick={() => handleDeleteOrder(currentOrder.id)}>Delete</Button>
+                        </Box>
+                    )}
 
-                        <Polyline
-                            path={[
-                                {
+                    <GoogleMap
+                        mapContainerStyle={containerStyle}
+                        center={{
+                            lat: parseFloat(currentOrder.storage.latitude),
+                            lng: parseFloat(currentOrder.storage.longitude)
+                        }}
+                        zoom={15}
+                        onLoad={onLoad}
+                        onUnmount={onUnmount}
+                    >
+                        { /* Child components, such as markers, info windows, etc. */}
+                        <>
+                            <Marker
+                                position={{
                                     lat: parseFloat(currentOrder.senderLatitude),
                                     lng: parseFloat(currentOrder.senderLongitude),
-                                },
-                                {
+                                }}
+                                icon={{
+                                    url: GreenMarker,
+                                }}
+                            >
+                            </Marker>
+                            <Marker
+                                position={{
                                     lat: parseFloat(currentOrder.destinationLatitude),
                                     lng: parseFloat(currentOrder.destinationLongitude),
-                                },
-                            ]}
-                            options={{
-                                strokeColor: "#041967",
-                                //strokeOpacity: 0.5,
-                                strokeWeight: 2,
-                                geodesic: true,
-                                icons: [{
-                                    // eslint-disable-next-line no-undef
-                                    icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW },
-                                    offset: '50%'
-                                }]
-                            }}
-                        />
-                    </>
-                </GoogleMap>
+                                }}
+                                icon={{
+                                    url: BlueMarker,
+                                }}
+                            >
+                            </Marker>
+
+                            <Polyline
+                                path={[
+                                    {
+                                        lat: parseFloat(currentOrder.senderLatitude),
+                                        lng: parseFloat(currentOrder.senderLongitude),
+                                    },
+                                    {
+                                        lat: parseFloat(currentOrder.destinationLatitude),
+                                        lng: parseFloat(currentOrder.destinationLongitude),
+                                    },
+                                ]}
+                                options={{
+                                    strokeColor: "#041967",
+                                    //strokeOpacity: 0.5,
+                                    strokeWeight: 2,
+                                    geodesic: true,
+                                    icons: [{
+                                        // eslint-disable-next-line no-undef
+                                        icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW },
+                                        offset: '50%'
+                                    }]
+                                }}
+                            />
+                        </>
+                    </GoogleMap>
+                </Box>
+
             </ContentBox>
 
-            <TableContainer component={Paper} sx={{ mt: 2 }}>
-                <Table aria-label="order-details">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Fish Id</TableCell>
-                            <TableCell>Name</TableCell>
-                            <TableCell>Price</TableCell>
-                            <TableCell>Size</TableCell>
-                            <TableCell>Status</TableCell>
-                            <TableCell>Weight</TableCell>
-                            <TableCell>Action</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {currentOrder.fishes &&
-                            currentOrder.fishes.map &&
-                            currentOrder.fishes.map((fish) => (
-                                <TableRow key={fish.id}>
-                                    <TableCell>{fish.id}</TableCell>
-                                    <TableCell>{fish.name}</TableCell>
-                                    <TableCell>{fish.price}</TableCell>
-                                    <TableCell>{fish.size}</TableCell>
-                                    {fish.status === 0 && (
-                                        <TableCell>Unknown</TableCell>
-                                    )}
-                                    {fish.status === 1 && <TableCell>Good</TableCell>}
-                                    {fish.status === 2 && <TableCell>Sick</TableCell>}
-                                    {fish.status === 3 && <TableCell>Dead</TableCell>}
-                                    <TableCell>{fish.weight}</TableCell>
-                                    <TableCell><div className="button-icon" onClick={(e) => handleDropdownClick(e)}><MoreHorizIcon /></div>
-                                        <Menu
-                                            anchorEl={anchorEl}
-                                            open={Boolean(anchorEl)}
-                                            onClose={() => handleDropdownClose()}
-                                        >
-                                            {(currentOrder.orderStatus === 0 || currentOrder.orderStatus === 1) && (
-                                                <MenuItem onClick={() => handleDeleteFish(fish.id, currentOrder)}>Delete Fish</MenuItem>
-                                            )}
-                                            {/* <MenuItem onClick={() => handleViewLicense()}>View License</MenuItem> */}
-                                        </Menu>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+            <Typography variant="h6" style={{ marginTop: "20px", marginBottom: "10px" }}>Fish Information</Typography>
 
-                        {/* Add "+" button below the fish list */}
-                        {(currentOrder.orderStatus === 0 || currentOrder.orderStatus === 1) && (
-                            <TableRow>
-                                <TableCell colSpan={7} align="center">
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={() => handleOpenAddFishPage(currentOrder)} // Correct
-                                        style={{
-                                            fontSize: "25px",
-                                            padding: "5px 20px",
-                                            borderRadius: "50%",
-                                        }}
-                                    >
-                                        +
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <Table
+                style={{ width: "95%" }}
+                dataSource={currentOrder.fishes || []}
+                columns={columns}
+                rowKey="id"
+                pagination={false}
+            />
+
+            {(currentOrder.orderStatus === 0 || currentOrder.orderStatus === 1) && (
+                <div style={{ textAlign: 'center', marginTop: '16px' }}>
+                    <Button
+                        type="primary"
+                        shape="circle"
+                        size="large"
+                        onClick={() => handleOpenAddFishPage(currentOrder)}
+                        style={{
+                            fontSize: '25px',
+                            padding: '5px 20px',
+                        }}
+                    >
+                        +
+                    </Button>
+                </div>
+            )}
 
             {/* Navigation buttons */}
             <Box display="flex" justifyContent="space-between" marginTop={2}>
