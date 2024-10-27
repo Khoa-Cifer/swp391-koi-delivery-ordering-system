@@ -1,5 +1,4 @@
 import { Button, TextField, Box } from "@mui/material";
-import dateTimeConvert from "../../../../components/utils";
 import "./sales_card.scss";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -47,11 +46,19 @@ const OrderCard = ({ orders }) => {
                 <div className="order-content">
                   <h3 className="order-title">{order.name}</h3>
                   <p className="order-description">
-                    Created Date: {dateTimeConvert(order.createdDate)}
+                    Created Date:{" "}
+                {new Date(order.createdDate).toLocaleString("en-US", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+
                   </p>
                   <p className="order-description">
                     Expected Finish Date:{" "}
-                    {dateTimeConvert(order.expectedFinishDate)}
+                    {new Date(order.expectedFinishDate).toLocaleDateString()}
                   </p>
                   <div className="order-footer">
                     <Button

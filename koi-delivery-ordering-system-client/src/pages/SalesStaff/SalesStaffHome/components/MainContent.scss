@@ -10,6 +10,10 @@
       margin: 2% 5% 2% 5%;
     }
 
+.order-container{
+  margin-left: 6px;
+}
+
     .New{
       margin-left: 5%;
     }
@@ -64,6 +68,11 @@
       }
     }
   }
+  .card-view-more{
+    display: flex;
+    justify-content: end;
+    margin-right: 4%;
+  }
 
   .order-container-sale {
     margin-top: 3%;
@@ -76,8 +85,9 @@
 
     .order-card {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       margin: 20px;
+      gap: 4% ;
     }
 
     .order-grid {
@@ -147,6 +157,7 @@
       display: flex;
       justify-content: flex-end;
       font-size: 1em;
+      margin:0 5% 5% 0 ;
     }
   }
 }
