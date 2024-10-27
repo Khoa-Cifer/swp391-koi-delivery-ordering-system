@@ -98,7 +98,13 @@ function OrderFinalInfo({ orderId }) {
                                 fullWidth
                                 type=""
                                 label="Created Date"
-                                value={dateTimeConvert(postedData.createdDate)}
+                                value={new Date(postedData.createdDate).toLocaleString("en-US", {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}
                                 InputProps={{
                                     readOnly: true,
                                 }}
@@ -110,7 +116,7 @@ function OrderFinalInfo({ orderId }) {
                                 fullWidth
                                 type=""
                                 label="Expect Finish Date"
-                                value={dateTimeConvert(postedData.expectedFinishDate)}
+                                value= {new Date(postedData.expectedFinishDate).toLocaleDateString()}
                                 InputProps={{
                                     readOnly: true,
                                 }}

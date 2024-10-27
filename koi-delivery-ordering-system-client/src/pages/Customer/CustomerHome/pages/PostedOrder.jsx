@@ -20,7 +20,6 @@ import {
   deleteOrderById,
   getOrdersByStatusAndCustomerId,
 } from "../../../../utils/axios/order";
-import dateTimeConvert from "../../../../components/utils";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import RestoreFromTrashIcon from "@mui/icons-material/RestoreFromTrash";
 import EditIcon from "@mui/icons-material/Edit";
@@ -307,14 +306,20 @@ function PostedOrder({ customerId }) {
                     <div>
                       <OrderInfoHeader>Created Date</OrderInfoHeader>
                       <Typography>
-                        {dateTimeConvert(order.createdDate)}
+                      {new Date(order.createdDate).toLocaleString("en-US", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                       </Typography>
                     </div>
 
                     <div>
                       <OrderInfoHeader>Expected Finish Date</OrderInfoHeader>
                       <Typography>
-                        {dateTimeConvert(order.expectedFinishDate)}
+                      {new Date(order.expectedFinishDate).toLocaleDateString()}
                       </Typography>
                     </div>
                   </div>
@@ -333,7 +338,7 @@ function PostedOrder({ customerId }) {
                   <div className="order-text-info">
                     <div>
                       <OrderInfoHeader>Price</OrderInfoHeader>
-                      <Typography>{Math.floor(order.price).toLocaleString()}</Typography>
+                      <Typography>{Math.floor(order.price).toLocaleString()} VND</Typography>
                     </div>
                     <div>
                       <OrderInfoHeader>Tracking Id</OrderInfoHeader>
