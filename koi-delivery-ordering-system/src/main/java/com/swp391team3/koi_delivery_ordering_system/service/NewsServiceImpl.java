@@ -65,6 +65,7 @@ public class NewsServiceImpl implements INewsService {
             oldNews.get().setTitle(title);
             oldNews.get().setDescription(description);
             fileService.updateFileInFileSystem(oldNews.get().getFile().getId(), file);
+            return true;
         }
         return false;
     }
