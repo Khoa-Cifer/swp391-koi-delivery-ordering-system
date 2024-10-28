@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Paper, styled } from "@mui/material";
+import { Box, Button, Grid, Modal, Paper, styled, TextField, Typography } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -12,7 +12,7 @@ import BlueMarker from "../../../../assets/inTransit.svg"
 import RedMarker from "../../../../assets/failed.svg"
 import CurrentPosition from "../../../../assets/delivery-current.svg"
 import { updateDeliveryStaffCurrentLocation } from "../../../../utils/axios/deliveryStaff";
-import { finishOrder } from "../../../../utils/axios/order";
+import { cancelOrder, finishOrder } from "../../../../utils/axios/order";
 import Spinner from "../../../../components/SpinnerLoading";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -31,6 +31,18 @@ const Item = styled(Paper)(({ theme }) => ({
 const SubmitButton = styled(Button)(() => ({
   padding: "10px 50px"
 }))
+
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 300,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 2,
+};
 
 function MainContent() {
   const location = useLocation();
@@ -61,6 +73,8 @@ function MainContent() {
   const [address, setAddress] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [updateStatus, setUpdateStatus] = useState(false);
+  const [cancelReason, setCancelReason] = useState("");
+  const [orderModalOpen, setOrderModalOpen] = useState(false);
 
   const onLoad = useCallback(function callback(map) {
     setMap(map)
@@ -106,6 +120,33 @@ function MainContent() {
       console.log("Geolocation is not available.");
     }
   }, []);
+
+  function handleCancelOrder() {
+    setOrderModalOpen(true);
+  }
+
+  const handleCloseOrderModal = () => {
+    setOrderModalOpen(false);
+  };
+
+  async function handleCancelOrderConfirm() {
+    setIsLoading(true);
+    const deliveryUserType = 3;
+    const response = await cancelOrder(
+      state.id,
+      deliveryStaffId,
+      deliveryUserType,
+      cancelReason
+    );
+    if (response) {
+      setUpdateStatus(true);
+      toast("Order cancelled successfully");
+      setOrderModalOpen(false);
+    } else {
+      toast("Unexpected Error has been occurred");
+    }
+    setIsLoading(false);
+  }
 
   // Function to reverse geocode lat, lng to an address
   const getAddressFromCoordinates = (lat, lng) => {
@@ -207,7 +248,7 @@ function MainContent() {
 
   }
 
-  function handleCancelOrder() {
+  function handleBackPreviousPage() {
     navigate("/delivery-order-home");
   }
 
@@ -222,6 +263,42 @@ function MainContent() {
       {/* Order Details Table */}
       <ToastUtil />
       {isLoading && <Spinner />}
+
+      <Modal
+        open={orderModalOpen}
+        onClose={handleCloseOrderModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Typography
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              fontSize: "20px",
+            }}
+          >
+            Why this order is not valid ?
+          </Typography>
+          <div style={{ margin: "20px" }}></div>
+          <TextField
+            fullWidth
+            label="Cancel Reason"
+            type=""
+            value={cancelReason}
+            onChange={(e) => setCancelReason(e.target.value)}
+          />
+          <div style={{ margin: "20px" }}></div>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ width: "100%" }}
+            onClick={() => handleCancelOrderConfirm()}
+          >
+            Confirm
+          </Button>
+        </Box>
+      </Modal>
 
       <div className="order-name-detail">
         <strong>{state.name}</strong>
@@ -349,20 +426,40 @@ function MainContent() {
                 <SubmitButton variant="contained" onClick={() => navigate("/delivery-order-home")}>Back to home page</SubmitButton>
               ) : (
                 <>
-                  <SubmitButton variant="contained" style={{ backgroundColor: "#f44336" }} onClick={() => handleCancelOrder()}>Cancel</SubmitButton>
+                  <SubmitButton variant="contained" onClick={() => handleBackPreviousPage()}>Back</SubmitButton>
+
                   {state.orderStatus === 3 && (
                     state.orderDeliveringSet && state.orderDeliveringSet.length > 0 && (
-                      <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep(0)}>
-                        Getting Complete
-                      </SubmitButton>
+                      <>
+                        <SubmitButton
+                          variant="contained"
+                          style={{ backgroundColor: "#f44336" }}
+                          onClick={() => handleCancelOrder()}
+                        >
+                          Cancel
+                        </SubmitButton>
+
+                        <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep(0)}>
+                          Getting Complete
+                        </SubmitButton>
+                      </>
                     )
                   )}
 
                   {state.orderStatus === 6 && (
                     state.orderDeliveringSet && state.orderDeliveringSet.length > 0 && (
-                      <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep(1)}>
-                        Delivering Complete
-                      </SubmitButton>
+                      <>
+                        <SubmitButton
+                          variant="contained"
+                          style={{ backgroundColor: "#f44336" }}
+                          onClick={() => handleCancelOrder()}
+                        >
+                          Cancel
+                        </SubmitButton>
+                        <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep(1)}>
+                          Delivering Complete
+                        </SubmitButton>
+                      </>
                     )
                   )}
 

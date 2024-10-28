@@ -353,6 +353,7 @@ function SalesOrderDetail() {
                   >
                     Cancel
                   </SubmitButton>
+                  
                   {state.orderStatus === 1 && (
                     <SubmitButton
                       variant="contained"
