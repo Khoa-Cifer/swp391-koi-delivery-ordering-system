@@ -1,8 +1,18 @@
 /* eslint-disable react/prop-types */
-import { Box, Paper, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import {
+  Box,
+  Paper,
+  styled,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { getOrdersByStatusAndCustomerId } from "../../../../utils/axios/order";
-import dateTimeConvert from "../../../../components/utils";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
@@ -21,7 +31,7 @@ const OrderInfoHeader = styled(Typography)(() => ({
 
 const SearchBox = styled(Box)(() => ({
   display: "flex",
-  gap: "30px"
+  gap: "30px",
 }));
 
 function DeliveringOrder({ customerId }) {
@@ -39,7 +49,10 @@ function DeliveringOrder({ customerId }) {
   useEffect(() => {
     const deliveringOrderStatus = 6;
     async function fetchGettingOrder() {
-      const response = await getOrdersByStatusAndCustomerId(customerId, deliveringOrderStatus);
+      const response = await getOrdersByStatusAndCustomerId(
+        customerId,
+        deliveringOrderStatus
+      );
       if (response) {
         setOrders(response);
         setFilteredOrders(response);
@@ -77,7 +90,7 @@ function DeliveringOrder({ customerId }) {
     <div className="customer-home-order-list">
       {orders && orders.length > 0 ? (
         <>
-          <SearchBox >
+          <SearchBox>
             <div className="form-group">
               <input
                 style={{
@@ -105,119 +118,131 @@ function DeliveringOrder({ customerId }) {
                 className="form-input"
               />
             </div>
-          </SearchBox >
+          </SearchBox>
 
-          {filteredOrders && filteredOrders.map && filteredOrders.map((order) => (
-            <>
-              <Box
-                sx={{ ...commonStyles, borderRadius: "16px" }}
-                className="order-box"
-                key={order.id}
-              >
-                <div className="order-main-info">
-                  <div className="order-text-info">
-                    <div>
-                      <OrderInfoHeader>Name</OrderInfoHeader>
-                      <Typography>{order.name}</Typography>
-                    </div>
+          {filteredOrders &&
+            filteredOrders.map &&
+            filteredOrders.map((order) => (
+              <>
+                <Box
+                  sx={{ ...commonStyles, borderRadius: "16px" }}
+                  className="order-box"
+                  key={order.id}
+                >
+                  <div className="order-main-info">
+                    <div className="order-text-info">
+                      <div>
+                        <OrderInfoHeader>Name</OrderInfoHeader>
+                        <Typography>{order.name}</Typography>
+                      </div>
 
-                    <div>
-                      <OrderInfoHeader>Created Date</OrderInfoHeader>
-                      <Typography>
-                        {dateTimeConvert(order.createdDate)}
-                      </Typography>
-                    </div>
+                      <div>
+                        <OrderInfoHeader>Created Date</OrderInfoHeader>
+                        <Typography>
+                          {new Date(order.createdDate).toLocaleString("en-US", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </Typography>
+                      </div>
 
-                    <div>
-                      <OrderInfoHeader>Expected Finish Date</OrderInfoHeader>
-                      <Typography>
-                        {dateTimeConvert(order.expectedFinishDate)}
-                      </Typography>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div>
-                      <OrderInfoHeader>Sender Address</OrderInfoHeader>
-                      <Typography>{order.senderAddress}</Typography>
-                    </div>
-                    <div>
-                      <OrderInfoHeader>Receiver Address</OrderInfoHeader>
-                      <Typography>{order.destinationAddress}</Typography>
-                    </div>
-                  </div>
-
-                  <div className="order-text-info">
-                    <div>
-                      <OrderInfoHeader>Price</OrderInfoHeader>
-                      <Typography>{Math.floor(order.price).toLocaleString()}</Typography>
-                    </div>
-                    <div>
-                      <OrderInfoHeader>Tracking Id</OrderInfoHeader>
-                      <Typography>{order.trackingId}</Typography>
+                      <div>
+                        <OrderInfoHeader>Expected Finish Date</OrderInfoHeader>
+                        <Typography>
+                          {new Date(
+                            order.expectedFinishDate
+                          ).toLocaleDateString()}
+                        </Typography>
+                      </div>
                     </div>
 
-                    <div className="icon-group">
-                      <div
-                        className="button-icon"
-                        onClick={() => handleClick(order.id)}
-                      >
-                        <MenuOpenIcon />
+                    <div>
+                      <div>
+                        <OrderInfoHeader>Sender Address</OrderInfoHeader>
+                        <Typography>{order.senderAddress}</Typography>
+                      </div>
+                      <div>
+                        <OrderInfoHeader>Receiver Address</OrderInfoHeader>
+                        <Typography>{order.destinationAddress}</Typography>
+                      </div>
+                    </div>
+
+                    <div className="order-text-info">
+                      <div>
+                        <OrderInfoHeader>Price</OrderInfoHeader>
+                        <Typography>
+                          {Math.floor(order.price).toLocaleString()} VND
+                        </Typography>
+                      </div>
+                      <div>
+                        <OrderInfoHeader>Tracking Id</OrderInfoHeader>
+                        <Typography>{order.trackingId}</Typography>
+                      </div>
+
+                      <div className="icon-group">
+                        <div
+                          className="button-icon"
+                          onClick={() => handleClick(order.id)}
+                        >
+                          <MenuOpenIcon />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {expandedOrderId === order.id && (
-                  <TableContainer component={Paper} sx={{ mt: 2 }}>
-                    <Table aria-label="order-details">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Fish Id</TableCell>
-                          <TableCell>Name</TableCell>
-                          <TableCell>Price</TableCell>
-                          <TableCell>Size</TableCell>
-                          <TableCell>Status</TableCell>
-                          <TableCell>Weight</TableCell>
-                          <TableCell>Action</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {order.fishes &&
-                          order.fishes.map &&
-                          order.fishes.map((fish) => (
-                            <TableRow key={fish.id}>
-                              <TableCell>{fish.id}</TableCell>
-                              <TableCell>{fish.name}</TableCell>
-                              <TableCell>{fish.price}</TableCell>
-                              <TableCell>{fish.size}</TableCell>
-                              {fish.status === 0 && (
-                                <TableCell>Unknown</TableCell>
-                              )}
-                              {fish.status === 1 && (
-                                <TableCell>Good</TableCell>
-                              )}
-                              {fish.status === 2 && (
-                                <TableCell>Sick</TableCell>
-                              )}
-                              {fish.status === 3 && (
-                                <TableCell>Dead</TableCell>
-                              )}
-                              <TableCell>{fish.weight}</TableCell>
-                              <TableCell>
-                                <div className="button-icon">
-                                  <MoreHorizIcon />
-                                </div>
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                )}
-              </Box>
-            </>
-          ))}
+                  {expandedOrderId === order.id && (
+                    <TableContainer component={Paper} sx={{ mt: 2 }}>
+                      <Table aria-label="order-details">
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Fish Id</TableCell>
+                            <TableCell>Name</TableCell>
+                            <TableCell>Price</TableCell>
+                            <TableCell>Size</TableCell>
+                            <TableCell>Status</TableCell>
+                            <TableCell>Weight</TableCell>
+                            <TableCell>Action</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {order.fishes &&
+                            order.fishes.map &&
+                            order.fishes.map((fish) => (
+                              <TableRow key={fish.id}>
+                                <TableCell>{fish.id}</TableCell>
+                                <TableCell>{fish.name}</TableCell>
+                                <TableCell>{fish.price}</TableCell>
+                                <TableCell>{fish.size}</TableCell>
+                                {fish.status === 0 && (
+                                  <TableCell>Unknown</TableCell>
+                                )}
+                                {fish.status === 1 && (
+                                  <TableCell>Good</TableCell>
+                                )}
+                                {fish.status === 2 && (
+                                  <TableCell>Sick</TableCell>
+                                )}
+                                {fish.status === 3 && (
+                                  <TableCell>Dead</TableCell>
+                                )}
+                                <TableCell>{fish.weight}</TableCell>
+                                <TableCell>
+                                  <div className="button-icon">
+                                    <MoreHorizIcon />
+                                  </div>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  )}
+                </Box>
+              </>
+            ))}
         </>
       ) : (
         <Typography>No order found</Typography>
