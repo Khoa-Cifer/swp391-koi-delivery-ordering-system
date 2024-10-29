@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -17,6 +18,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("api/payment")
 @RequiredArgsConstructor
+@PreAuthorize("hasAuthority('Manager')")
 public class PaymentController {
     private final IPaymentService paymentService;
     private final IPaymentHistoryService paymentHistoryService;
@@ -24,11 +26,12 @@ public class PaymentController {
 
     //Create Payment
     //SKIPPED
+    @PreAuthorize("hasAnyRole()")
     @GetMapping("/vn-pay/{customerId}")
     public ResponseEntity<?> pay(@PathVariable Long customerId, HttpServletRequest request) {
         return new ResponseEntity<>(paymentService.createVnPayPayment(request, customerId), HttpStatus.OK);
     }
-
+    @PreAuthorize("hasAnyRole()")
     @GetMapping("/vn-pay-callback/{id}")
     public RedirectView paymentCallback(
             @PathVariable(name = "id") Long id,

@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -23,7 +25,6 @@ import io.jsonwebtoken.MalformedJwtException;
 
 import java.io.IOException;
 import java.util.List;
-
 @Component
 public class Filter extends OncePerRequestFilter {
     private final List<String> AUTH_PERMISSION = List.of(
@@ -32,7 +33,7 @@ public class Filter extends OncePerRequestFilter {
             "/swagger-resources/**",
             "/api/auth/login",
             "/api/auth/register",
-            "/**"
+            "/api/auth/register-confirmation"
     );
 
     @Autowired
