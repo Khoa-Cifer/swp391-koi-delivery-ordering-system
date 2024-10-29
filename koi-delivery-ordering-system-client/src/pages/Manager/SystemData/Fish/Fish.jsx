@@ -18,35 +18,56 @@ function Fish() {
     }, []);
 
     const columns = [
+        // {
+        //     title: 'Fish Id',
+        //     dataIndex: 'id',
+        //     key: 'id',
+        // },
         {
-            title: "Id",
-            dataIndex: "id",
-            key: "id",
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
         },
         {
-            title: "Name",
-            dataIndex: "name",
-            key: "name",
+            title: 'Age',
+            dataIndex: 'age',
+            key: 'age',
+            render: (age) => `${age} years old`,
         },
         {
-            title: "Size",
-            dataIndex: "size",
-            key: "size",
+            title: 'Price',
+            dataIndex: 'price',
+            key: 'price',
+            render: (price) => `${price} VND`,
         },
         {
-            title: "Age",
-            dataIndex: "age",
-            key: "age",
+            title: 'Size',
+            dataIndex: 'size',
+            key: 'size',
+            render: (size) => `${size} cm`
         },
         {
-            title: "Weight",
-            dataIndex: "weight",
-            key: "weight",
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            render: (status) => {
+                switch (status) {
+                    case 1:
+                        return 'Good';
+                    case 2:
+                        return 'Sick';
+                    case 3:
+                        return 'Dead';
+                    default:
+                        return 'Unknown';
+                }
+            },
         },
         {
-            title: "Price",
-            dataIndex: "price",
-            key: "price",
+            title: 'Weight',
+            dataIndex: 'weight',
+            key: 'weight',
+            render: (weight) => `${weight} gram`,
         },
     ];
 

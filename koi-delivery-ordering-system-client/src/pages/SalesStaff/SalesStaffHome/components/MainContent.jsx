@@ -123,68 +123,73 @@ function MainContent() {
     <div className="main-content-container">
       <ToastUtil />
       <div className="news-container-sale">
-        <div className="New">
-          <h2>
-            <strong>News</strong>
-          </h2>
-        </div>
+        {news.length > 0 && (
+          <>
+            <div className="New">
+              <h2>
+                <strong>News</strong>
+              </h2>
+            </div>
 
-        <div className="news-container">
-          <div className="news-grid">
-            {news.slice(0, visibleNewsCount).map((newsItem, index) => (
-              <div key={index} className="news-item">
-                <img
-                  src={newsItem.imageUrl}
-                  alt={newsItem.title}
-                  className="news-image"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => handleNewsClick(newsItem)}
-                />
-                <div className="news-content">
-                  <h3 className="news-title">{newsItem.title}</h3>
-
-                  <Paragraph
-                    ellipsis={{
-                      rows: 3,
-                      expandable: false,
-                      symbol: "...",
-                    }}
-                  >
-                    <div
-                      dangerouslySetInnerHTML={{ __html: newsItem.description }}
+            <div className="news-container">
+              <div className="news-grid">
+                {news.slice(0, visibleNewsCount).map((newsItem, index) => (
+                  <div key={index} className="news-item">
+                    <img
+                      src={newsItem.imageUrl}
+                      alt={newsItem.title}
+                      className="news-image"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handleNewsClick(newsItem)}
                     />
-                  </Paragraph>
+                    <div className="news-content">
+                      <h3 className="news-title">{newsItem.title}</h3>
 
-                  <div className="news-footer">
-                    <span className="news-date">
-                    {dateTimeConvert(newsItem.createdDate)}
-
-                      
-                    </span>
-
-                    <div className="card-actions">
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        size="small"
-                        onClick={() => handleOpenDialog(newsItem.id)}
-                        className="delete-btn"
+                      <Paragraph
+                        ellipsis={{
+                          rows: 3,
+                          expandable: false,
+                          symbol: "...",
+                        }}
                       >
-                        Delete
-                      </Button>
+                        <div
+                          dangerouslySetInnerHTML={{ __html: newsItem.description }}
+                        />
+                      </Paragraph>
+
+                      <div className="news-footer">
+                        <span className="news-date">
+                          {dateTimeConvert(newsItem.createdDate)}
+
+
+                        </span>
+
+                        <div className="card-actions">
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            size="small"
+                            onClick={() => handleOpenDialog(newsItem.id)}
+                            className="delete-btn"
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          {visibleNewsCount < news.length && (
-            <div className="card-view-more">
-              <Button onClick={handleViewMoreNews}>View more →</Button>
+              {visibleNewsCount < news.length && (
+                <div className="card-view-more">
+                  <Button onClick={handleViewMoreNews}>View more →</Button>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </>
+        )}
+
       </div>
 
       <Dialog
@@ -226,7 +231,7 @@ function MainContent() {
                     </p>
                     <p className="order-description">
                       Expected Finish Date:{" "}
-                      {dateTimeConvert(order.expectedFinishDate)} 
+                      {dateTimeConvert(order.expectedFinishDate)}
                     </p>
                     <div className="order-footer">
                       <Button

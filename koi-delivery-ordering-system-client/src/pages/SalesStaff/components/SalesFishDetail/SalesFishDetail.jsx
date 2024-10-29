@@ -184,6 +184,7 @@ const SalesFishDetail = () => {
         <div>
           <div className="form-container">
             <div className="form">
+              <Typography>Name</Typography>
               <div className="form-group">
                 <input
                   placeholder="Name"
@@ -193,37 +194,43 @@ const SalesFishDetail = () => {
                   value={fish.name}
                 />
               </div>
+
+              <Typography>Age</Typography>
               <div className="form-group">
                 <input
                   placeholder="Age"
                   type="text"
                   name="text"
                   className="form-input"
-                  value={fish.age}
+                  value={`${fish.age} years old`}
                 />
               </div>
+
+              <Typography>Size</Typography>
               <div className="form-group">
                 <input
                   placeholder="Size"
                   type="text"
                   name="text"
                   className="form-input"
-                  value={fish.size}
+                  value={`${fish.size} cm`}
                   readOnly
                 />
               </div>
 
+              <Typography>Weight</Typography>
               <div className="form-group">
                 <input
                   placeholder="Weight"
                   type="text"
                   name="text"
                   className="form-input"
-                  value={fish.weight}
+                  value={`${fish.weight} gram`}
                   readOnly
                 />
               </div>
 
+              <Typography>Status</Typography>
               <div className="form-group">
                 <input
                   placeholder="status"

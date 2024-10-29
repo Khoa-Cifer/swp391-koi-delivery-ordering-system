@@ -12,6 +12,7 @@ import { deleteFishById } from "../../../../utils/axios/fish";
 import { deleteOrderById } from "../../../../utils/axios/order";
 import { Dropdown, Menu, Space, Table } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
+import "./order_detail_component.scss"
 
 const OrderCard = styled(Box)(() => ({
     backgroundColor: "#C3F4FD",
@@ -172,14 +173,22 @@ function OrderDetailComponent({ orders }) {
             key: 'name',
         },
         {
+            title: 'Age',
+            dataIndex: 'age',
+            key: 'age',
+            render: (age) => `${age} years old`,
+        },
+        {
             title: 'Price',
             dataIndex: 'price',
             key: 'price',
+            render: (price) => `${price} VND`,
         },
         {
             title: 'Size',
             dataIndex: 'size',
             key: 'size',
+            render: (size) => `${size} cm`
         },
         {
             title: 'Status',
@@ -202,6 +211,7 @@ function OrderDetailComponent({ orders }) {
             title: 'Weight',
             dataIndex: 'weight',
             key: 'weight',
+            render: (weight) => `${weight} gram`,
         },
         {
             title: 'Action',
@@ -328,7 +338,7 @@ function OrderDetailComponent({ orders }) {
                     </div>
 
                     <div className="form-group">
-                        <Typography>Receiver Address</Typography>
+                        <Typography>Destination Address</Typography>
                         <OrderInfoField
                             fullWidth
                             type=""

@@ -21,9 +21,8 @@ function Header() {
             </div>
 
             <div className="function">
-                <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }}><strong>Home</strong></Button>
-                <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }}><strong>About</strong></Button>
-                <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }}><strong>Contact</strong></Button>
+                <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }} onClick={() => navigate("/")}><strong>Home</strong></Button>
+                <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }} onClick={() => navigate("/support-page")}><strong>Support</strong></Button>
             </div>
         </div>
     );

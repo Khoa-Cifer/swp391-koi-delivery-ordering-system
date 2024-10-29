@@ -99,7 +99,7 @@ function Sidebar({ pageHeaderInfo }) {
           style={{ width: "7vw", height: "14vh" }}
         />
       </div>
-
+      <Typography style={{textAlign: "center"}}>Customer</Typography>
       <div className="profile">
         <InfoHeader>Username</InfoHeader>
         <Typography variant="body1">{customerInfo.userData.username}</Typography>

@@ -16,7 +16,7 @@ function PaymentHistory() {
         }
         fetchPaymentHistory();
     }, []);
-
+    
     const columns = [
         {
             title: "Id",
@@ -27,6 +27,16 @@ function PaymentHistory() {
             title: "Amount",
             dataIndex: "amount",
             key: "amount",
+        },
+        {
+            title: "Customer Name",
+            render: (record) => record.customer.username, // Access nested property
+            key: "username",
+        },
+        {
+            title: "Order Name",
+            render: (record) => record.order.name, // Access nested property
+            key: "orderName",
         },
     ];
 
