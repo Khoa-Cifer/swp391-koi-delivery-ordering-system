@@ -55,7 +55,7 @@ import WaitingForConfirm from "./pages/public/WatingForConfirm/WatingForConfirm"
 import RegistrationSuccess from "./pages/public/RegistrationSuccess/RegistrationSuccess";
 import FishPayment from "./pages/Customer/FishCreateOrder/pages/FishPayment";
 import CustomerCreateFish from "./pages/Customer/FishCreateOrder/CustomerCreateFish";
-import DeliveringOrder from "./pages/DeliveryStaff/DeliveryOrderHome/DeliveringOrder";
+import DeliveringOrder from "./pages/DeliveryStaff/DeliveryOrderHome/DeliveringOrderDeliveryStaff";
 import Allnews from "./pages/public/News/Allnews";
 import NewsDetail from "./pages/public/News/NewsDetail";
 import Manager from "./pages/Manager/SystemData/Manager/manager";

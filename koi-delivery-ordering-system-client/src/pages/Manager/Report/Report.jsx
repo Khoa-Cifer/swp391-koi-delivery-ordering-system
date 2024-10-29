@@ -6,7 +6,7 @@ import { HelpCircle } from "lucide-react";
 import { getOrdersByStatus } from "../../../utils/axios/order";
 import { getAllDeliveryStaff } from "../../../utils/axios/deliveryStaff";
 import {
-  getDeliverystaffReporById,
+  getDeliveryStaffReporById,
   getTotalOrders,
 } from "../../../utils/axios/report";
 
@@ -14,7 +14,7 @@ const Report = () => {
   // State to hold the fetched data
   const [data, setData] = useState([]);
   const [dataTotalOrders, setDatadataTotalOrder] = useState([]);
-  const [dataDeliveryReport, setdataDeliveryReport] = useState([]);
+  const [dataDeliveryReport, setDataDeliveryReport] = useState([]);
   const [dataRevenue, setDataRevenue] = useState([]);
   const [staffPage, setStaffPage] = useState(0);
   const [staffRowsPerPage, setStaffRowsPerPage] = useState(5);
@@ -58,9 +58,10 @@ const Report = () => {
         const deliveryStaff = await getAllDeliveryStaff();
         const deliveryStaffIds = deliveryStaff.map((staff) => staff.id);
         const responses = await Promise.all(
-          deliveryStaffIds.map((id) => getDeliverystaffReporById(id))
+          deliveryStaffIds.map((id) => getDeliveryStaffReporById(id))
         );
-        setdataDeliveryReport(responses);
+        console.log(responses);
+        setDataDeliveryReport(responses);
       } catch (error) {
         console.error("Error fetching data", error);
       }
@@ -184,7 +185,7 @@ const Report = () => {
               Delivery staff orders
             </Typography>
             <Table
-              headers={["Delivery Staff", "Order failed", "Order complete"]}
+              headers={["Delivery Staff", "Getting Orders", "Delivering Orders"]}
               data={dataDeliveryReport
                 .slice(
                   staffPage * staffRowsPerPage,
@@ -192,8 +193,8 @@ const Report = () => {
                 )
                 .map((item) => [
                   item.deliveryStaffName,
-                  item.totalOrderFailed,
-                  item.totalOrderCompleted,
+                  item.totalGettingOrders,
+                  item.totalDeliveringOrders,
                 ])}
             />
             {/* Pagination for Delivery Staff Table */}
@@ -216,7 +217,7 @@ const Report = () => {
               component="h2"
               sx={{ p: 2, backgroundColor: "#1976d2", color: "white" }}
             >
-              Orders detail
+              Orders Detail
             </Typography>
             <Table
               headers={[

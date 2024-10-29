@@ -7,14 +7,14 @@ function AvailableToGet() {
 
   useEffect(() => {
     const availableToGetStatus = 2;
-    async function fetchPostedOrder() {
+    async function fetchOrder() {
       const response = await getOrdersByStatus(availableToGetStatus);
       if (response) {
         setOrders(response);
       }
     }
 
-    fetchPostedOrder();
+    fetchOrder();
   }, []);
 
   return (

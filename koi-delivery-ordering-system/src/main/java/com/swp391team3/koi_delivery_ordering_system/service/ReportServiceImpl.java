@@ -41,27 +41,27 @@ public class ReportServiceImpl implements IReportService {
 
     @Override
     public DeliveryStaffReportResponseDTO getDeliveryStaffReport(Long deliveryStaffId) {
-        int totalFailed = 0;
-        int totalCompleted = 0;
+        int totalGettingOrders = 0;
+        int totalDeliveringOrders = 0;
         Optional<DeliveryStaff> foundDeliveryStaff = deliveryStaffRepository.findById(deliveryStaffId);
         if (foundDeliveryStaff.isPresent()) {
             List<OrderDelivering> orderDeliveringList = orderDeliveringRepository.getOrderDeliveringByDeliveryStaffId(deliveryStaffId);
             if (!orderDeliveringList.isEmpty()) {
                 for (int i = 0; i < orderDeliveringList.size(); i++) {
-                    Order foundOrder = orderDeliveringList.get(i).getOrder();
-                    if (foundOrder.getOrderStatus() == orderStatus.COMPLETE) {
-                        totalCompleted++;
+                    if (orderDeliveringList.get(i).getDeliveryProcessType() == 0) {
+                        totalGettingOrders++;
                     }
 
-                    if (foundOrder.getOrderStatus() == orderStatus.FAILED) {
-                        totalFailed++;
+                    if (orderDeliveringList.get(i).getDeliveryProcessType() == 1) {
+                        totalDeliveringOrders++;
                     }
                 }
             }
+
             return new DeliveryStaffReportResponseDTO(
                     foundDeliveryStaff.get().getUsername(),
-                    totalFailed,
-                    totalCompleted
+                    totalGettingOrders,
+                    totalDeliveringOrders
             );
         }
         return null;

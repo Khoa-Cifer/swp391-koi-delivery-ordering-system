@@ -3,7 +3,7 @@ import { getOnGoingOrderForDeliveryStaff } from "../../../utils/axios/order";
 import OrderCard from "./OrderCard/OrderCard";
 import { jwtDecode } from "jwt-decode";
 
-function GettingOrderDeliveryStaff() {
+function DeliveringOrder() {
   const [orders, setOrders] = useState();
 
   const token = localStorage.getItem("token");
@@ -14,15 +14,17 @@ function GettingOrderDeliveryStaff() {
   }
 
   useEffect(() => {
-    const gettingOrderStatus = 3;
+    const deliveringOrderStatus = 6;
     async function fetchOrder() {
-      const ongoingGettingOrderResponse = await getOnGoingOrderForDeliveryStaff(
-        deliveryStaffId,
-        0,
-        gettingOrderStatus
-      );
-      if (ongoingGettingOrderResponse) {
-        setOrders(ongoingGettingOrderResponse);
+
+      const ongoingDeliveringOrderResponse =
+        await getOnGoingOrderForDeliveryStaff(
+          deliveryStaffId,
+          1,
+          deliveringOrderStatus
+        );
+      if (ongoingDeliveringOrderResponse) {
+        setOrders(ongoingDeliveringOrderResponse);
       }
     }
 
@@ -34,4 +36,4 @@ function GettingOrderDeliveryStaff() {
   );
 }
 
-export default GettingOrderDeliveryStaff;
+export default DeliveringOrder;
