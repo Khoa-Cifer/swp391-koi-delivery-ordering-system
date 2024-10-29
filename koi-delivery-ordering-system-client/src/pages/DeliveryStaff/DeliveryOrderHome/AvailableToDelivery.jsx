@@ -4,9 +4,6 @@ import OrderCard from "./OrderCard/OrderCard";
 
 function AvailableToDelivery() {
   const [orders, setOrders] = useState();
-  const [filteredOrders, setFilteredOrders] = useState([]); // Filtered orders for display
-  const [searchTrackingId, setSearchTrackingId] = useState(""); // For search by order ID
-  const [searchOrderName, setSearchOrderName] = useState(""); // For search by customer name
 
   useEffect(() => {
     const availableToDeliveryStatus = 5;
@@ -14,7 +11,6 @@ function AvailableToDelivery() {
       const response = await getOrdersByStatus(availableToDeliveryStatus);
       if (response) {
         setOrders(response);
-        setFilteredOrders(response);
       }
     }
 
