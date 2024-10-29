@@ -223,19 +223,13 @@ function SalesOrderDetail() {
             <Grid item xs={6}>
               <Item>
                 Create Dated:{" "}
-                {new Date(state.createdDate).toLocaleString("en-US", {
-                  year: "numeric",
-                  month: "2-digit",
-                  day: "2-digit",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
+                {dateTimeConvert(state.createdDate)}
               </Item>
             </Grid>
             <Grid item xs={6}>
               <Item>
                 Expected Finish Date:{" "}
-                {new Date(state.expectedFinishDate).toLocaleDateString()}
+                {dateTimeConvert(state.expectedFinishDate)}
               </Item>
             </Grid>
             <Grid item xs={6}>

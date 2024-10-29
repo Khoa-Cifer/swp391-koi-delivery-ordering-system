@@ -7,6 +7,7 @@ import { toast } from "react-toastify"; // Import toast for notifications
 import "./Allnews.scss";
 import { jwtDecode } from "jwt-decode"; // Correct the import
 import Header from "../../Layout/SalesStaffLayout/components/Header/Header";
+import dateTimeConvert from "../../../components/utils";
 
 function AllNews() {
   const [news, setNews] = useState([]);
@@ -109,7 +110,7 @@ function AllNews() {
                 </Paragraph>
                 <div className="news-footer">
                   <span className="news-date">
-                    {new Date(newsItem.createdDate).toLocaleDateString()}
+                  {dateTimeConvert(newsItem.createdDate)}
                   </span>
                   <div className="card-actions">
                     <div className="detail-button">

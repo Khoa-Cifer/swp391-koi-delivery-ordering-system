@@ -60,13 +60,13 @@ function MainContent() {
       title: "Created Date",
       dataIndex: "createdDate",
       key: "createdDate",
-      render: (createdDate) => dayjs(createdDate).format("DD/MM/YYYY"), // Định dạng ngày tháng năm
+      render: (createdDate) => dayjs(createdDate).format("YYYY/MM/DD hh:mm"),// Định dạng ngày tháng năm
     },
     {
       title: "Expected Finish Date",
       dataIndex: "expectedFinishDate",
       key: "expectedFinishDate",
-      render: (expectedFinishDate) => dayjs(expectedFinishDate).format("DD/MM/YYYY"), // Định dạng ngày tháng năm
+      render: (expectedFinishDate) => dayjs(expectedFinishDate).format("YYYY/MM/DD"), // Định dạng ngày tháng năm
     },
     {
       title: "Price",

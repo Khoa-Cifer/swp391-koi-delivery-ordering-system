@@ -15,6 +15,7 @@ import { getFileByFileId } from "../../../../utils/axios/file";
 import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";
 import Paragraph from "antd/es/typography/Paragraph";
+import dateTimeConvert from "../../../../components/utils";
 
 function MainContent() {
   const [postedOrder, setPostedOrder] = useState([]);
@@ -156,7 +157,9 @@ function MainContent() {
 
                   <div className="news-footer">
                     <span className="news-date">
-                      {new Date(newsItem.createdDate).toLocaleDateString()}
+                    {dateTimeConvert(newsItem.createdDate)}
+
+                      
                     </span>
 
                     <div className="card-actions">
@@ -219,17 +222,11 @@ function MainContent() {
                     <h3 className="order-title">{order.name}</h3>
                     <p className="order-description">
                       Created Date:{" "}
-                      {new Date(order.createdDate).toLocaleString("en-US", {
-                        year: "numeric",
-                        month: "2-digit",
-                        day: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {dateTimeConvert(order.createdDate)}
                     </p>
                     <p className="order-description">
                       Expected Finish Date:{" "}
-                      {new Date(order.expectedFinishDate).toLocaleDateString()}
+                      {dateTimeConvert(order.expectedFinishDate)} 
                     </p>
                     <div className="order-footer">
                       <Button
@@ -264,17 +261,11 @@ function MainContent() {
                     <h3 className="order-title">{order.name}</h3>
                     <p className="order-description">
                       Created Date:{" "}
-                      {new Date(order.createdDate).toLocaleString("en-US", {
-                        year: "numeric",
-                        month: "2-digit",
-                        day: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {dateTimeConvert(order.createdDate)}
                     </p>
                     <p className="order-description">
                       Expected Finish Date:{" "}
-                      {new Date(order.expectedFinishDate).toLocaleDateString()}
+                      {dateTimeConvert(order.expectedFinishDate)}
                     </p>
                     <div className="order-footer">
                       <Button
