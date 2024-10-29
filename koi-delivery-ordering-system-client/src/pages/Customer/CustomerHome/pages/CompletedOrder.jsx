@@ -1,10 +1,21 @@
 /* eslint-disable react/prop-types */
-import { Box, Paper, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, } from "@mui/material";
+import {
+  Box,
+  Paper,
+  styled,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { getOrdersByStatusAndCustomerId } from "../../../../utils/axios/order";
-import dateTimeConvert from "../../../../components/utils";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import dateTimeConvert from "../../../../components/utils";
 
 const commonStyles = {
   bgcolor: "background.paper",
@@ -40,7 +51,10 @@ function CompletedOrder({ customerId }) {
   useEffect(() => {
     const completedOrderStatus = 7;
     async function fetchGettingOrder() {
-      const response = await getOrdersByStatusAndCustomerId(customerId, completedOrderStatus);
+      const response = await getOrdersByStatusAndCustomerId(
+        customerId,
+        completedOrderStatus
+      );
       if (response) {
         setOrders(response);
         setFilteredOrders(response);
@@ -127,14 +141,14 @@ function CompletedOrder({ customerId }) {
                       <div>
                         <OrderInfoHeader>Created Date</OrderInfoHeader>
                         <Typography>
-                          {dateTimeConvert(order.createdDate)}
+                        {dateTimeConvert(order.createdDate)}
                         </Typography>
                       </div>
 
                       <div>
                         <OrderInfoHeader>Expected Finish Date</OrderInfoHeader>
                         <Typography>
-                          {dateTimeConvert(order.expectedFinishDate)}
+                        {dateTimeConvert(order.expectedFinishDate)}
                         </Typography>
                       </div>
                     </div>
@@ -153,7 +167,9 @@ function CompletedOrder({ customerId }) {
                     <div className="order-text-info">
                       <div>
                         <OrderInfoHeader>Price</OrderInfoHeader>
-                        <Typography>{Math.floor(order.price).toLocaleString()}</Typography>
+                        <Typography>
+                          {Math.floor(order.price).toLocaleString()} VND
+                        </Typography>
                       </div>
                       <div>
                         <OrderInfoHeader>Tracking Id</OrderInfoHeader>
@@ -186,32 +202,34 @@ function CompletedOrder({ customerId }) {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {filteredOrders.fishes && filteredOrders.fishes.map && filteredOrders.fishes.map((fish) => (
-                            <TableRow key={fish.id}>
-                              <TableCell>{fish.id}</TableCell>
-                              <TableCell>{fish.name}</TableCell>
-                              <TableCell>{fish.price}</TableCell>
-                              <TableCell>{fish.size}</TableCell>
-                              {fish.status === 0 && (
-                                <TableCell>Unknown</TableCell>
-                              )}
-                              {fish.status === 1 && (
-                                <TableCell>Good</TableCell>
-                              )}
-                              {fish.status === 2 && (
-                                <TableCell>Sick</TableCell>
-                              )}
-                              {fish.status === 3 && (
-                                <TableCell>Dead</TableCell>
-                              )}
-                              <TableCell>{fish.weight}</TableCell>
-                              <TableCell>
-                                <div className="button-icon">
-                                  <MoreHorizIcon />
-                                </div>
-                              </TableCell>
-                            </TableRow>
-                          ))}
+                          {filteredOrders.fishes &&
+                            filteredOrders.fishes.map &&
+                            filteredOrders.fishes.map((fish) => (
+                              <TableRow key={fish.id}>
+                                <TableCell>{fish.id}</TableCell>
+                                <TableCell>{fish.name}</TableCell>
+                                <TableCell>{fish.price}</TableCell>
+                                <TableCell>{fish.size}</TableCell>
+                                {fish.status === 0 && (
+                                  <TableCell>Unknown</TableCell>
+                                )}
+                                {fish.status === 1 && (
+                                  <TableCell>Good</TableCell>
+                                )}
+                                {fish.status === 2 && (
+                                  <TableCell>Sick</TableCell>
+                                )}
+                                {fish.status === 3 && (
+                                  <TableCell>Dead</TableCell>
+                                )}
+                                <TableCell>{fish.weight}</TableCell>
+                                <TableCell>
+                                  <div className="button-icon">
+                                    <MoreHorizIcon />
+                                  </div>
+                                </TableCell>
+                              </TableRow>
+                            ))}
                         </TableBody>
                       </Table>
                     </TableContainer>

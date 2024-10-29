@@ -110,7 +110,7 @@ function OrderFinalInfo({ orderId }) {
                                 fullWidth
                                 type=""
                                 label="Expect Finish Date"
-                                value={dateTimeConvert(postedData.expectedFinishDate)}
+                                value= {dateTimeConvert(postedData.expectedFinishDate)}
                                 InputProps={{
                                     readOnly: true,
                                 }}

@@ -20,7 +20,6 @@ import {
   deleteOrderById,
   getOrdersByStatusAndCustomerId,
 } from "../../../../utils/axios/order";
-import dateTimeConvert from "../../../../components/utils";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import RestoreFromTrashIcon from "@mui/icons-material/RestoreFromTrash";
 import EditIcon from "@mui/icons-material/Edit";
@@ -29,6 +28,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../../components/toastContainer";
 import { deleteFishById } from "../../../../utils/axios/fish";
+import dateTimeConvert from "../../../../components/utils";
 
 const commonStyles = {
   bgcolor: "background.paper",
@@ -307,14 +307,14 @@ function PostedOrder({ customerId }) {
                     <div>
                       <OrderInfoHeader>Created Date</OrderInfoHeader>
                       <Typography>
-                        {dateTimeConvert(order.createdDate)}
+                      {dateTimeConvert(order.createdDate)}
                       </Typography>
                     </div>
 
                     <div>
                       <OrderInfoHeader>Expected Finish Date</OrderInfoHeader>
                       <Typography>
-                        {dateTimeConvert(order.expectedFinishDate)}
+                      {dateTimeConvert(order.expectedFinishDate)}
                       </Typography>
                     </div>
                   </div>
@@ -333,7 +333,7 @@ function PostedOrder({ customerId }) {
                   <div className="order-text-info">
                     <div>
                       <OrderInfoHeader>Price</OrderInfoHeader>
-                      <Typography>{Math.floor(order.price).toLocaleString()}</Typography>
+                      <Typography>{Math.floor(order.price).toLocaleString()} VND</Typography>
                     </div>
                     <div>
                       <OrderInfoHeader>Tracking Id</OrderInfoHeader>
