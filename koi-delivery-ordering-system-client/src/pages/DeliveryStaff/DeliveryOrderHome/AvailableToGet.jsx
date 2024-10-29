@@ -18,7 +18,10 @@ function AvailableToGet() {
   }, []);
 
   return (
+    <div className="content-container">
+    <h1>Available To Get</h1>
     <OrderCard orders={orders}/>
+  </div>
   );
 }
 

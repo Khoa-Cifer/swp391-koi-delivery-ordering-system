@@ -18,7 +18,10 @@ function AvailableToDelivery() {
   }, []);
 
   return (
+    <div className="content-container">
+    <h1>Available To Delivery</h1>
     <OrderCard orders={orders}/>
+  </div>
   );
 }
 

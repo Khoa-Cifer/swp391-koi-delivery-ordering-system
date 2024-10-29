@@ -18,7 +18,10 @@ function DeliveringOrder() {
   }, []);
 
   return (
+    <div className="content-container">
+    <h1>Delivering Order</h1>
     <OrderCard orders={orders}/>
+  </div>
   );
 }
 

@@ -1,5 +1,5 @@
 .order-container-delivery {
-  margin-top: 3%;
+  margin-top: 2%;
   width: 100%;
 
   .order {
@@ -9,7 +9,7 @@
   }
 
   .order-card {
-    justify-content: space-between;
+    display: flex;
     flex-wrap: wrap; /* Enable wrapping */
     margin: 40px;
   }
@@ -18,19 +18,19 @@
     display: flex;
     justify-content: center;
     gap: 25px;
-    height: auto;
-    margin: 2% 5% 2% 5%;
+    margin: 2% 3% 2% 5%;
   }
 
   .order-item {
-    background: #fff;
+    display: flex;
+    background: white;
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
     transition: transform 0.3s ease;
     max-width: 30%; /* Ensure the width is less than 33% */
     flex: 1 1 30%; /* Allow items to grow and shrink and wrap at 30% */
-    margin-bottom: 20px; /* Add some space between rows */
+    margin: 0 3% 5% 0;    
   }
 
   .order-item:hover {

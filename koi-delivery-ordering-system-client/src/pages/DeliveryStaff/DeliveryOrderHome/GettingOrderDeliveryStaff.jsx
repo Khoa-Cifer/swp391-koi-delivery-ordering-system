@@ -18,7 +18,11 @@ function GettingOrderDeliveryStaff() {
   }, []);
 
   return (
-    <OrderCard orders={orders}/>
+    <div className="content-container">
+      <h1>Getting Order</h1>
+      <OrderCard orders={orders}/>
+    </div>
+    
   );
 }
 
