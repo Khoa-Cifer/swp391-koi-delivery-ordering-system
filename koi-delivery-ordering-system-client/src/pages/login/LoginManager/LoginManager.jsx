@@ -66,7 +66,7 @@ function LoginManager() {
           <button type="submit" onClick={() => handleLogin(4)}>Login</button>
         </div>
 
-        <button className="back-button" onClick={() => handleGoBack()}>&#8592; Go Back</button>
+        <button className="back-button" onClick={() => handleGoBack()}>&#8592; Back to customer login</button>
       </div>
     </div>
   );

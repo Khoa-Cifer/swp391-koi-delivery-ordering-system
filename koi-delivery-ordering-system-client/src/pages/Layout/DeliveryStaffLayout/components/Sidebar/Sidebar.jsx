@@ -48,7 +48,7 @@ function Sidebar() {
           style={{ width: "7vw", height: "14vh" }}
         />
       </div>
-
+      <Typography style={{textAlign: "center"}}>Delivery Staff</Typography>
       <div className="profile">
         <InfoHeader>Username</InfoHeader>
         <Typography>{deliveryStaffInfo.userData.username}</Typography>

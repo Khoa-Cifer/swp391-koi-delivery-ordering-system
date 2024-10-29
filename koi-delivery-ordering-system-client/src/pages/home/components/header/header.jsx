@@ -76,7 +76,7 @@ function Header() {
           SERVICE
         </div>
         <div className="order-tracking navigator" onClick={() => handleOrderTracking()}>ORDER TRACKING</div>
-        <div className="support navigator">SUPPORT</div>
+        <div className="support navigator" onClick={() => navigate("/support-page")}>SUPPORT</div>
       </div>
 
       <div className="header-right">

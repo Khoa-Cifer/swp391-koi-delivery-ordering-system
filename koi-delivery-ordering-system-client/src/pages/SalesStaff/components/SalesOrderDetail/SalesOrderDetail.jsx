@@ -143,22 +143,26 @@ function SalesOrderDetail() {
   }
 
   async function handleCancelOrderConfirm() {
-    setIsLoading(true);
-    const salesUserType = 2;
-    const response = await cancelOrder(
-      state.id,
-      salesId,
-      salesUserType,
-      cancelReason
-    );
-    if (response) {
-      setUpdateStatus(true);
-      toast("Order cancelled successfully");
-      setOrderModalOpen(false);
+    if (cancelReason.length > 0) {
+      setIsLoading(true);
+      const salesUserType = 2;
+      const response = await cancelOrder(
+        state.id,
+        salesId,
+        salesUserType,
+        cancelReason
+      );
+      if (response) {
+        setUpdateStatus(true);
+        toast("Order cancelled successfully");
+        setOrderModalOpen(false);
+      } else {
+        toast("Unexpected Error has been occurred");
+      }
+      setIsLoading(false);
     } else {
-      toast("Unexpected Error has been occurred");
+      toast("Cancel reason must not be empty");
     }
-    setIsLoading(false);
   }
 
   function handleViewFishDetail() {
@@ -243,6 +247,12 @@ function SalesOrderDetail() {
             </Grid>
             <Grid item xs={6} sx={{ height: "100px" }}>
               <Item>Destination Address: {state.destinationAddress}</Item>
+            </Grid>
+            <Grid item xs={6}>
+              <Item>Receiver Email: {state.receiverEmail}</Item>
+            </Grid>
+            <Grid item xs={6} sx={{ height: "100px" }}>
+              <Item>Receiver Phone Number: {state.receiverPhoneNumber}</Item>
             </Grid>
           </Grid>
         </div>
@@ -340,6 +350,8 @@ function SalesOrderDetail() {
                 </SubmitButton>
               ) : (
                 <>
+                  <SubmitButton variant="contained" onClick={() => navigate("/sales-staff-home")}>Back</SubmitButton>
+
                   <SubmitButton
                     variant="contained"
                     style={{ backgroundColor: "#f44336" }}
@@ -347,7 +359,7 @@ function SalesOrderDetail() {
                   >
                     Cancel
                   </SubmitButton>
-                  
+
                   {state.orderStatus === 1 && (
                     <SubmitButton
                       variant="contained"

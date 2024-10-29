@@ -102,11 +102,13 @@ function OrderInfo({ orderId, formStepData }) {
     function handleReceiverEmailChange(e) {
         setReceiverEmail(e.target.value);
     }
-    
+
     function handleReceiverPhoneNumberChange(e) {
-        setReceiverPhoneNumber(e.target.value);
+        const phone = e.target.value.replace(/\D/g, "");
+        const formattedPhone = phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+        setReceiverPhoneNumber(formattedPhone.slice(0, 12));
     }
-    
+
     async function handleSubmit() {
         if (!orderName || !orderDescription || !receiverAddress || !senderAddress || !expectedFinishDate
             || !receiverEmail || !receiverPhoneNumber
@@ -114,6 +116,18 @@ function OrderInfo({ orderId, formStepData }) {
             toast("All fields are required");
             return;
         }
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(receiverEmail)) {
+            toast("Invalid email format");
+            return;
+        }
+
+        if (receiverPhoneNumber.length !== 12) { //contain 2 dash
+            // Check if phone number has exactly 10 digits
+            toast("Phone number must be exactly 10 digits");
+            return;
+        }
+
         try {
             const response = await createGeneralOrderInfo(
                 orderName,
@@ -126,7 +140,7 @@ function OrderInfo({ orderId, formStepData }) {
                 senderCoordinates.lat,
                 new Date(expectedFinishDate).toISOString(),
                 receiverEmail,
-                receiverPhoneNumber
+                receiverPhoneNumber.replace(/-/g, "")
             )
             // const filter = await filterOrder(response);
             if (response) {
@@ -208,7 +222,7 @@ function OrderInfo({ orderId, formStepData }) {
                             value={receiverEmail}
                         />
                     </div>
-                    
+
                     <div className="form-group">
                         <input
                             placeholder="Receiver Phone Number"

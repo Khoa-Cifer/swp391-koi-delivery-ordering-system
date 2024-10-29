@@ -158,7 +158,7 @@ function GettingOrder({ customerId }) {
                         <Typography>{order.senderAddress}</Typography>
                       </div>
                       <div>
-                        <OrderInfoHeader>Receiver Address</OrderInfoHeader>
+                        <OrderInfoHeader>Destination Address</OrderInfoHeader>
                         <Typography>{order.destinationAddress}</Typography>
                       </div>
                     </div>
@@ -191,8 +191,8 @@ function GettingOrder({ customerId }) {
                       <Table aria-label="order-details">
                         <TableHead>
                           <TableRow>
-                            <TableCell>Fish Id</TableCell>
                             <TableCell>Name</TableCell>
+                            <TableCell>Age</TableCell>
                             <TableCell>Price</TableCell>
                             <TableCell>Size</TableCell>
                             <TableCell>Status</TableCell>
@@ -205,10 +205,10 @@ function GettingOrder({ customerId }) {
                             order.fishes.map &&
                             order.fishes.map((fish) => (
                               <TableRow key={fish.id}>
-                                <TableCell>{fish.id}</TableCell>
                                 <TableCell>{fish.name}</TableCell>
-                                <TableCell>{fish.price}</TableCell>
-                                <TableCell>{fish.size}</TableCell>
+                                <TableCell>{fish.age} years old</TableCell>
+                                <TableCell>{fish.price} VND</TableCell>
+                                <TableCell>{fish.size} cm</TableCell>
                                 {fish.status === 0 && (
                                   <TableCell>Unknown</TableCell>
                                 )}
@@ -221,7 +221,7 @@ function GettingOrder({ customerId }) {
                                 {fish.status === 3 && (
                                   <TableCell>Dead</TableCell>
                                 )}
-                                <TableCell>{fish.weight}</TableCell>
+                                <TableCell>{fish.weight} gram</TableCell>
                                 <TableCell>
                                   <div className="button-icon">
                                     <MoreHorizIcon />
