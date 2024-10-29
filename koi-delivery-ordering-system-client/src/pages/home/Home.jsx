@@ -1,6 +1,6 @@
-import Header from "./components/header/Header";
+import Header from "./components/header/headerx";
 import HomeContent from "./components/content/HomeContent";
-import Footer from "./components/footer/Footer";
+import Footer from "./components/footer/footerx";
 
 function Home() {
   return (
