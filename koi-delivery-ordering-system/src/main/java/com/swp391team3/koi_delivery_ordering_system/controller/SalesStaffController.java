@@ -12,6 +12,8 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("api/salesStaff")
 @RequiredArgsConstructor
+@EnableMethodSecurity(prePostEnabled = true)
 public class SalesStaffController {
     private final ISalesStaffService salesStaffService;
 
@@ -32,6 +35,7 @@ public class SalesStaffController {
     //Get All Sales Staff
     //PASSED
     @GetMapping("/getAllSalesStaff")
+    @PreAuthorize("hasAnyAuthority('Manager')")
     public ResponseEntity<?> getAllSalesStaff() {
         return ResponseEntity.ok(salesStaffService.getAllSalesStaff());
     }
@@ -45,16 +49,17 @@ public class SalesStaffController {
 
     //UPDATE SALES STAFF
     //PASSED
+    @PreAuthorize("hasAuthority('SalesStaff')")
     @PutMapping("/updateSalesStaffById/{id}")
     public ResponseEntity<?> updateSalesStaff(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO salesStaff) {
         return ResponseEntity.ok(salesStaffService.updateSalesStaff(id, salesStaff.getUsername(), salesStaff.getEmail(), salesStaff.getPhoneNumber())) ;
     }
-
+    @PreAuthorize("hasAuthority('SalesStaff')")
     @PutMapping("/updateSalesStaffProfile")
     public ResponseEntity<?> updateSalesStaffProfile(@RequestBody UserUpdateRequestDTO request) {
         return ResponseEntity.ok(salesStaffService.salesStaffUpdateProfile(request));
     }
-
+    @PreAuthorize("hasAuthority('SalesStaff')")
     @PutMapping("/updateSalesStaffAvatar/{id}")
     public ResponseEntity<?> updateSalesStaffProfileAvatar(
             @PathVariable("id") Long id,

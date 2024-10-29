@@ -5,6 +5,7 @@ import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderFishInfoRequ
 import com.swp391team3.koi_delivery_ordering_system.service.IFishService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,11 +18,12 @@ public class FishController {
     private final IFishService fishService;
 
     //Get All Fish
+    @PreAuthorize("hasAuthority('Manager')")
     @GetMapping("/getAllFishes")
     public List<Fish> getAllFishes() {
         return fishService.getAllFishs();
     }
-
+    @PreAuthorize("hasAuthority('SalesStaff')")
     @PostMapping(value = "/createFishByOrderId", consumes = "multipart/form-data")
     public Long createFishOrder(
             @RequestParam("fishName") String fishName,
@@ -43,22 +45,22 @@ public class FishController {
         request.setOrderId(orderId);
         return fishService.createFishByOrderId(request);
     }
-
+    @PreAuthorize("hasAnyRole()")
     @GetMapping("/getFishByOrderId/{orderId}")
     public ResponseEntity<List<Fish>> getFishesByOrderId(@PathVariable("orderId") Long orderId) {
         return ResponseEntity.ok(fishService.getFishesByOrderId(orderId));
     }
-
+    @PreAuthorize("hasAuthority('DeliveryStaff' or hasAuthority('SalesStaff'))")
     @PutMapping("/update-fish-status/{id}/{status}")
     public ResponseEntity<?> updateFishStatus(@PathVariable Long id, @PathVariable int status) {
         return ResponseEntity.ok(fishService.updateFishStatus(id, status));
     }
-
+    @PreAuthorize("hasAnyRole()")
     @GetMapping("/getFishById")
     public Fish getFishById(@RequestParam("id") Long id) {
         return fishService.getFishById(id).get();
     }
-
+    @PreAuthorize("hasAuthority('Customer')")
     @DeleteMapping("/delete-fish/{id}")
     public ResponseEntity<?> deleteFish(@PathVariable("id") Long id) {
         return ResponseEntity.ok(fishService.deleteFishById(id));

@@ -13,6 +13,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class DeliveryStaffController {
     private final IDeliveryStaffService deliveryStaffService;
 
+    @PreAuthorize("hasAuthority('Manager')")
     @PostMapping("/createDeliveryStaff")
     public ResponseEntity<?> createDeliveryStaff(@RequestBody StaffRequestCreationDTO request) {
         String result = deliveryStaffService.createDeliveryStaff(request.getEmail(), request.getUsername(), request.getPhoneNumber());
@@ -30,6 +32,7 @@ public class DeliveryStaffController {
 
     //Get All Delivery Staff
     //PASSED
+    @PreAuthorize("hasAuthority('Manager')")
     @GetMapping("/getAllDeliveryStaff")
     public ResponseEntity<?> getAllDeliveryStaff() {
         return ResponseEntity.ok(deliveryStaffService.getAllDeliveryStaffs());
@@ -37,11 +40,12 @@ public class DeliveryStaffController {
 
     //Get Delivery Staff By Id
     //PASSED
+    @PreAuthorize("hasAuthority('Manager') or hasAuthority('DeliveryStaff')")
     @GetMapping("/getDeliveryStaffById/{id}")
     public ResponseEntity<?> getDeliveryStaffById(@PathVariable Long id) {
         return ResponseEntity.ok(deliveryStaffService.getDeliveryStaffById(id));
     }
-
+    @PreAuthorize("hasRole('Manager')")
     @PutMapping("/disable/{id}")
     public ResponseEntity<?> disableDeliveryStaffById(@PathVariable Long id) {
         Optional<DeliveryStaff> deliveryStaff = deliveryStaffService.getDeliveryStaffById(id);
@@ -52,7 +56,7 @@ public class DeliveryStaffController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-
+    @PreAuthorize("hasRole('Manager')")
     @PutMapping("/enable/{id}")
     public ResponseEntity<?> enableDeliveryStaffById(@PathVariable Long id) {
         Optional<DeliveryStaff> deliveryStaff = deliveryStaffService.getDeliveryStaffById(id);
@@ -66,11 +70,12 @@ public class DeliveryStaffController {
 
     //Update Delivery Staff
     //PASSED
+    @PreAuthorize("hasRole('Manager')")
     @PutMapping("/updateDeliveryStaffById/{id}")
     public ResponseEntity<?> updateDeliveryStaff(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO request) {
         return ResponseEntity.ok(deliveryStaffService.updateDeliveryStaffById(id, request.getEmail(), request.getPhoneNumber(), request.getUsername()));
     }
-//    @PostMapping("/startDelivery/{id}")
+    //    @PostMapping("/startDelivery/{id}")
 //    public ResponseEntity<?> startDelivery(@PathVariable Long id, @RequestBody Long driverId) {
 //        if(orderService.startDelivery(id, driverId)){
 //            return ResponseEntity.ok("Delivering order");
@@ -78,17 +83,17 @@ public class DeliveryStaffController {
 //        return ResponseEntity.badRequest().build();
 //    }
 //
-
+    @PreAuthorize("hasAuthority('DeliveryStaff')")
     @PutMapping("/updateDeliveryStaffLocation")
     public ResponseEntity<?> updateDeliveryStaffLocation(@RequestBody DeliveryStaffLocationUpdateRequestDTO request) {
         return ResponseEntity.ok(deliveryStaffService.updateDeliveryStaffLocation(request));
     }
-
-     @PutMapping("/updateDeliveryStaffProfile")
+    @PreAuthorize("hasAuthority('DeliveryStaff')")
+    @PutMapping("/updateDeliveryStaffProfile")
     public ResponseEntity<?> updateCustomerProfile(@RequestBody UserUpdateRequestDTO request) {
         return ResponseEntity.ok(deliveryStaffService.deliveryStaffUpdateProfile(request));
     }
-
+    @PreAuthorize("hasAuthority('DeliveryStaff')")
     @PutMapping("/updateDeliveryStaffAvatar/{id}")
     public ResponseEntity<?> updateCustomerProfileAvatar(
             @PathVariable("id") Long id,
