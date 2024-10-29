@@ -28,6 +28,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../../components/toastContainer";
 import { deleteFishById } from "../../../../utils/axios/fish";
+import dateTimeConvert from "../../../../components/utils";
 
 const commonStyles = {
   bgcolor: "background.paper",
@@ -306,20 +307,14 @@ function PostedOrder({ customerId }) {
                     <div>
                       <OrderInfoHeader>Created Date</OrderInfoHeader>
                       <Typography>
-                      {new Date(order.createdDate).toLocaleString("en-US", {
-                        year: "numeric",
-                        month: "2-digit",
-                        day: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {dateTimeConvert(order.createdDate)}
                       </Typography>
                     </div>
 
                     <div>
                       <OrderInfoHeader>Expected Finish Date</OrderInfoHeader>
                       <Typography>
-                      {new Date(order.expectedFinishDate).toLocaleDateString()}
+                      {dateTimeConvert(order.expectedFinishDate)}
                       </Typography>
                     </div>
                   </div>

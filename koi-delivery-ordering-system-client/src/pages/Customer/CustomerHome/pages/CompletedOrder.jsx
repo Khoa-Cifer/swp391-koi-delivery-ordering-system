@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { getOrdersByStatusAndCustomerId } from "../../../../utils/axios/order";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import dateTimeConvert from "../../../../components/utils";
 
 const commonStyles = {
   bgcolor: "background.paper",
@@ -140,22 +141,14 @@ function CompletedOrder({ customerId }) {
                       <div>
                         <OrderInfoHeader>Created Date</OrderInfoHeader>
                         <Typography>
-                          {new Date(order.createdDate).toLocaleString("en-US", {
-                            year: "numeric",
-                            month: "2-digit",
-                            day: "2-digit",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
+                        {dateTimeConvert(order.createdDate)}
                         </Typography>
                       </div>
 
                       <div>
                         <OrderInfoHeader>Expected Finish Date</OrderInfoHeader>
                         <Typography>
-                          {new Date(
-                            order.expectedFinishDate
-                          ).toLocaleDateString()}
+                        {dateTimeConvert(order.expectedFinishDate)}
                         </Typography>
                       </div>
                     </div>

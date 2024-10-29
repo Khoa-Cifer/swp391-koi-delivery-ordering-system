@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./NewsDetail.scss";
 import Header from "../../Layout/SalesStaffLayout/components/Header/Header";
+import dateTimeConvert from "../../../components/utils";
 
 function NewsDetail() {
   const location = useLocation();
@@ -45,7 +46,7 @@ function NewsDetail() {
 
             <span>Author: {newsDetail.createdBy.username}</span>{" "}
           <p className="news-detail-date">
-            <strong>Created date:</strong> {new Date(newsDetail.createdDate).toLocaleDateString()}
+            <strong>Created date:</strong> {dateTimeConvert(newsDetail.createdDate)}
           </p>
         </div>
       </div>
