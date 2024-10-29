@@ -66,7 +66,7 @@ function Header() {
                     onClick={() => handleHomeBack()}
                     src={logo}
                     alt="Logo"
-                    style={{ width: "180px" }}
+                    style={{ width: "16vw" }}
                 />
             </div>
 
@@ -81,7 +81,7 @@ function Header() {
                         src={imagePreview}
                         onClick={handleMenuOpen}
                         alt="avatar"
-                        style={{ width: "4vw", height: "8vh", marginRight: "30px" }}
+                        style={{ width: "3vw", height: "8vh", marginRight: "30px" }}
                     />
                     <Menu
                         style={{ marginTop: "40px" }}

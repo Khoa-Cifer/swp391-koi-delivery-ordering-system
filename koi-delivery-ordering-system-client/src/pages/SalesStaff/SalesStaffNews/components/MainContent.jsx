@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { createNews } from "../../../../utils/axios/news"; // Chỉ import createNews
 import { Editor } from "@tinymce/tinymce-react";
-import "./Maincontent.scss";
+import "./MainContent.scss";
 import { jwtDecode } from "jwt-decode";
 import { CONSTANT_TINY_MCE_API_KEY } from "../../../../utils/constants";
 import { TextField } from "@mui/material";

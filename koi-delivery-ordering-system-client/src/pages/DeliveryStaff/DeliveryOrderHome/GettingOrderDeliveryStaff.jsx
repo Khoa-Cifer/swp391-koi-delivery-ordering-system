@@ -30,7 +30,10 @@ function GettingOrderDeliveryStaff() {
   }, []);
 
   return (
-    <OrderCard orders={orders} />
+    <div className="content-container">
+      <h1>Getting Orders</h1>
+      <OrderCard orders={orders} />
+    </div>
   );
 }
 

@@ -1,5 +1,5 @@
 import { Box, Button, Divider } from "@mui/material";
-import "./header.scss"
+import "./Header.scss"
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../../../../authentication/AuthProvider";
 
