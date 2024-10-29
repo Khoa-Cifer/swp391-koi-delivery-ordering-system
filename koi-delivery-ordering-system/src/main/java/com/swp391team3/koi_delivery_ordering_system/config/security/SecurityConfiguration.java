@@ -20,11 +20,12 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer :: disable)
+        http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .cors() // Kích hoạt CORS
+                .and()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**")
-                        .permitAll()
+                        .requestMatchers("/**").permitAll() // Cho phép tất cả các yêu cầu
                         .anyRequest().authenticated());
         return http.build();
     }

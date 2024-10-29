@@ -18,7 +18,7 @@ public class StorageController {
     public ResponseEntity<?> createStorage(@RequestBody StorageRequestCreationDTO request) {
         return ResponseEntity.ok(storageService.createStorage(request));
     }
-    @PreAuthorize("hasAuthority('DeliveryStaff')")
+    @PreAuthorize("hasAuthority('Manager')")
     @GetMapping("/getAllStorages")
     public ResponseEntity<?> getAllStorages() {
         return ResponseEntity.ok(storageService.getAllStorages());
