@@ -71,8 +71,8 @@ function Header() {
             </div>
 
             <div className="function">
-                <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }} onClick={() => navigate("/")}><strong>Home</strong></Button>
-                <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }} onClick={() => navigate("/support-page")}><strong>Support</strong></Button>
+                <Button style={{ fontSize: "1em", height: "45px", backgroundColor: "white", color: "rgb(17, 17, 162)" }} onClick={() => navigate("/")}><strong>Home</strong></Button>
+                <Button style={{ fontSize: "1em", height: "45px", backgroundColor: "white", color: "rgb(17, 17, 162)" }} onClick={() => navigate("/support-page")}><strong>Support</strong></Button>
             </div>
 
             <div className="logo">
@@ -81,7 +81,7 @@ function Header() {
                         src={imagePreview}
                         onClick={handleMenuOpen}
                         alt="avatar"
-                        style={{ width: "3vw", height: "8vh", marginRight: "30px" }}
+                        style={{ width: "5vw", height: "8vh", marginRight: "30px" }}
                     />
                     <Menu
                         style={{ marginTop: "40px" }}

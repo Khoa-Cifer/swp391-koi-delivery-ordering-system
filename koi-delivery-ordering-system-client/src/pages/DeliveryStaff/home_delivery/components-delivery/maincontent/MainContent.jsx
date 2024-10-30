@@ -79,7 +79,7 @@ function MainContent() {
   return (
     <div className="orders-container">
       <div className="History">
-        <h2>HISTORY</h2>
+        <h2>Order List</h2>
       </div>
 
       <div className="order-data">

@@ -253,11 +253,11 @@ const MainContent = () => {
                 })}
             </div>
 
-            {onGoingDeliveringOrders.length > 3 && (
+            {/* {onGoingDeliveringOrders.length > 3 && (
               <div className="view-more">
                 <a href="#">View more →</a>
               </div>
-            )}
+            )} */}
           </div>
         )}
 
@@ -295,11 +295,11 @@ const MainContent = () => {
                 })}
             </div>
 
-            {ongoingGettingOrders.length > 3 && (
+            {/* {ongoingGettingOrders.length > 3 && (
               <div className="view-more">
                 <a href="#">View more →</a>
               </div>
-            )}
+            )} */}
           </div>
         )}
 
@@ -337,11 +337,11 @@ const MainContent = () => {
                 })}
             </div>
 
-            {acceptedOrders.length > 3 && (
+            {/* {acceptedOrders.length > 3 && (
               <div className="view-more">
                 <a href="#">View more →</a>
               </div>
-            )}
+            )} */}
           </div>
         )}
 
@@ -379,11 +379,11 @@ const MainContent = () => {
                 })}
             </div>
 
-            {confirmedOrderStatus.length > 3 && (
+            {/* {confirmedOrderStatus.length > 3 && (
               <div className="view-more">
                 <a href="#">View more →</a>
               </div>
-            )}
+            )} */}
           </div>
         )}
       </div>

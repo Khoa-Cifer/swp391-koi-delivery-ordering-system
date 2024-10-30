@@ -18,7 +18,7 @@
     .order-row {
       display: flex;
       flex-grow: 3;
-      flex-wrap: wrap;
+      margin: 0 3% 5% 0;    
     }
 
     .order-card {
@@ -81,8 +81,8 @@
   }
 
   .map-container {
-    width: 63vw;
-    height: 65vh;
+    width: 65vw;
+    height: 50vh;
     background-color: #f1f1f1;
     display: flex;
     border-radius: 20px;
