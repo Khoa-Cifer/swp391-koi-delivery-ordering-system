@@ -33,11 +33,10 @@ function Customer() {
         fetchCustomers();
     }, []);
 
-    console.log(customerData);
-
     async function handleEditCustomers() {
         if (editingCustomer) {
-            const message = await managerEditCustomerProfile(editingCustomer, username, email, phoneNumber);
+            const rawPhoneNumber = phoneNumber.replace(/[^\d]/g, "");
+            const message = await managerEditCustomerProfile(editingCustomer, username, email, rawPhoneNumber);
             toast(message);
             fetchCustomers();
         }
@@ -46,28 +45,43 @@ function Customer() {
 
     function handleEdit(record) {
         setCustomer(record);
+        setUsername(record.username);
+        setEmail(record.email);
+        setPhoneNumber(formatPhoneNumber(record.phoneNumber));
         setEditModalOpen(true);
     }
 
+    const formatPhoneNumber = (value) => {
+        if (!value) return value;
+        const phoneNumber = value.replace(/[^\d]/g, "");
+        const phoneNumberLength = phoneNumber.length;
+
+        if (phoneNumberLength < 4) return phoneNumber;
+        if (phoneNumberLength < 7) {
+            return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3)}`;
+        }
+        return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+    };
+
     const handleDisableCustomer = async (id) => {
         try {
-            await disableCustomerById(id); // Call the API to delete the staff
-            toast("Customer disabled successfully"); // Notify the user
-            await fetchCustomers(); // Refresh the list after deletion
+            await disableCustomerById(id);
+            toast("Customer disabled successfully");
+            await fetchCustomers();
         } catch (err) {
             console.error(err);
-            toast.error("Failed to disable customer"); // Notify if there's an error
+            toast.error("Failed to disable customer");
         }
     };
 
     const handleEnableCustomer = async (id) => {
         try {
-            await enableCustomerById(id); // Call the API to delete the staff
-            toast("Customer enabled successfully"); // Notify the user
-            await fetchCustomers(); // Refresh the list after deletion
+            await enableCustomerById(id);
+            toast("Customer enabled successfully");
+            await fetchCustomers();
         } catch (err) {
             console.error(err);
-            toast.error("Failed to enable customer"); // Notify if there's an error
+            toast.error("Failed to enable customer");
         }
     };
 
@@ -91,6 +105,7 @@ function Customer() {
             title: 'Phone Number',
             dataIndex: 'phoneNumber',
             key: 'phoneNumber',
+            render: (phoneNumber) => formatPhoneNumber(phoneNumber),
         },
         {
             title: "Action",
@@ -98,7 +113,7 @@ function Customer() {
             key: "id",
             render: (id, record) => (
                 <Space size="middle">
-                    <Button type="link" onClick={() => handleEdit(id)}>
+                    <Button type="link" onClick={() => handleEdit(record)}>
                         Edit
                     </Button>
                     <Popconfirm
@@ -109,9 +124,9 @@ function Customer() {
                         }
                         onConfirm={() => {
                             if (record.activeStatus) {
-                                handleDisableCustomer(id); // Handle delete if enabled
+                                handleDisableCustomer(id);
                             } else {
-                                handleEnableCustomer(id); // Handle enabling if disabled
+                                handleEnableCustomer(id);
                             }
                         }}
                         okText="Yes"
@@ -144,7 +159,7 @@ function Customer() {
                 visible={editModalOpen}
                 onCancel={handleClose}
                 onOk={() => handleEditCustomers()}
-                okButtonProps={{ disabled: !username || !email }} // Disable OK button if fields are empty
+                okButtonProps={{ disabled: !username || !email }}
             >
                 <Input
                     placeholder="Username"
@@ -161,7 +176,8 @@ function Customer() {
                 <Input
                     placeholder="Phone number"
                     value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    onChange={(e) => setPhoneNumber(e.target.value.replace(/[^\d]/g, ""))}
+                    onBlur={(e) => setPhoneNumber(formatPhoneNumber(e.target.value))}
                     style={{ marginBottom: 16 }}
                 />
             </Modal>

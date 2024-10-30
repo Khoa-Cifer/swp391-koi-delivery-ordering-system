@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Table, Modal, Button, Input, Typography, notification, Popconfirm, Space, } from "antd";
+import { Table, Modal, Button, Input, Typography, notification, Popconfirm, Space } from "antd";
 import "react-toastify/dist/ReactToastify.css";
 import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";
@@ -28,7 +28,8 @@ function Manager() {
   }, []);
 
   const handleCreateManagers = async () => {
-    const response = await createManagers(email, username, phoneNumber);
+    const rawPhoneNumber = phoneNumber.replace(/[^\d]/g, ""); // Clean the phone number
+    const response = await createManagers(email, username, rawPhoneNumber);
     notification.info({ message: response });
     await fetchManagers();
     setIsCreateModalOpen(false);
@@ -45,16 +46,17 @@ function Manager() {
 
   async function handleEditManagers() {
     if (editingManager) {
+      const rawPhoneNumber = phoneNumber.replace(/[^\d]/g, ""); // Clean the phone number
       const response = await editManagerProfile(
         editingManager.id,
         username,
         email,
-        phoneNumber
+        rawPhoneNumber
       );
       if (response) {
         toast("Edit manager successfully");
       } else {
-        toast("Unexpected error has been occurred");
+        toast("Unexpected error has occurred");
       }
       fetchManagers();
     }
@@ -74,12 +76,27 @@ function Manager() {
 
   function handleEdit(record) {
     setEditingManager(record);
+    setUsername(record.username);
+    setEmail(record.email);
+    setPhoneNumber(record.phoneNumber);
     setIsEditModalOpen(true);
   }
 
   function handleCreate() {
     setIsCreateModalOpen(true);
   }
+
+  const formatPhoneNumber = (value) => {
+    if (!value) return value;
+    const phoneNumber = value.replace(/[^\d]/g, "");
+    const phoneNumberLength = phoneNumber.length;
+
+    if (phoneNumberLength < 4) return phoneNumber;
+    if (phoneNumberLength < 7) {
+      return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3)}`;
+    }
+    return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+  };
 
   const columns = [
     {
@@ -101,6 +118,7 @@ function Manager() {
       title: "Phone Number",
       dataIndex: "phoneNumber",
       key: "phoneNumber",
+      render: (phoneNumber) => formatPhoneNumber(phoneNumber), // Format the phone number for display
     },
     {
       title: "Action",
@@ -145,7 +163,7 @@ function Manager() {
           marginBottom: "20px",
         }}
       >
-        <Button type="primary" onClick={() => handleCreate(true)}>
+        <Button type="primary" onClick={handleCreate}>
           Create New Manager
         </Button>
       </div>
@@ -190,7 +208,8 @@ function Manager() {
         <Input
           placeholder="Phone Number"
           value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
+          onChange={(e) => setPhoneNumber(e.target.value.replace(/[^\d]/g, ""))} // Allow only digits
+          onBlur={(e) => setPhoneNumber(formatPhoneNumber(e.target.value))} // Format on blur
           style={{ marginBottom: "10px" }}
         />
       </Modal>
@@ -217,7 +236,8 @@ function Manager() {
         <Input
           placeholder="Phone number"
           value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
+          onChange={(e) => setPhoneNumber(e.target.value.replace(/[^\d]/g, ""))} // Allow only digits
+          onBlur={(e) => setPhoneNumber(formatPhoneNumber(e.target.value))} // Format on blur
           style={{ marginBottom: 16 }}
         />
       </Modal>
