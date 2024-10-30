@@ -72,7 +72,7 @@ public class DeliveryStaffController {
 
     //Update Delivery Staff
     //PASSED
-    @PreAuthorize("hasAuthority('Manager') or hasAuthority('Manager')")
+    @PreAuthorize("hasAuthority('Manager')")
     @PutMapping("/updateDeliveryStaffById/{id}")
     public ResponseEntity<?> updateDeliveryStaff(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO request) {
         return ResponseEntity.ok(deliveryStaffService.updateDeliveryStaffById(id, request.getEmail(), request.getPhoneNumber(), request.getUsername()));
@@ -91,7 +91,7 @@ public class DeliveryStaffController {
         return ResponseEntity.ok(deliveryStaffService.updateDeliveryStaffLocation(request));
     }
 
-    @PreAuthorize("hasAuthority('DeliveryStaff') or hasAuthority('Manager')")
+    @PreAuthorize("hasAuthority('DeliveryStaff')")
     @PutMapping("/updateDeliveryStaffProfile")
     public ResponseEntity<?> updateCustomerProfile(@RequestBody UserUpdateRequestDTO request) {
         return ResponseEntity.ok(deliveryStaffService.deliveryStaffUpdateProfile(request));
