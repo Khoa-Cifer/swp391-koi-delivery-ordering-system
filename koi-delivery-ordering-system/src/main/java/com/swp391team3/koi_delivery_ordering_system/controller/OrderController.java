@@ -171,4 +171,10 @@ public class OrderController {
         boolean createOrderDelivering = orderService.cancelOrder(request);
         return ResponseEntity.ok(createOrderDelivering);
     }
+
+    @PreAuthorize("hasAuthority('DeliveryStaff')")
+    @PutMapping("/abort-getting-order/{orderId}")
+    public ResponseEntity<?> abortOrder(@PathVariable Long orderId) {
+        return ResponseEntity.ok(orderService.abortOrder(orderId));
+    }
 }

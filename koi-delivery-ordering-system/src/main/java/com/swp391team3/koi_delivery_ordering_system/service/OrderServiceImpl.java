@@ -21,26 +21,24 @@ public class OrderServiceImpl implements IOrderService {
     private final IStorageService storageService;
     private final IFishService fishService;
     private final PriceBoard priceBoard;
-    private final DeliveryStaffRepository deliveryStaffRepository;
     private final ISalesStaffService salesStaffService;
     private final EmailService emailService;
     private final IOrderDeliveringService orderDeliveringService;
     private final IDeliveryStaffService deliveryStaffService;
     private final IPaymentRateService paymentRateService;
     private final IOrderActionLogService orderActionLogService;
+    private final OrderDeliveringRepository orderDeliveringRepository;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
             CustomerRepository customerRepository,
             OrderStatus orderStatus, IStorageService storageService,
-            IFishService fishService, PriceBoard priceBoard, DeliveryStaffRepository deliveryStaffRepository,
+            IFishService fishService, PriceBoard priceBoard,
             ISalesStaffService salesStaffService, EmailService emailService,
             @Lazy IOrderDeliveringService orderDeliveringService,
             IDeliveryStaffService deliveryStaffService, IPaymentRateService paymentRateService,
-            LicenseRepository licenseRepository, FishRepository fishRepository,
-            LicenseFileRepository licenseFileRepository, FileRepository fileRepository,
-            IFileService fileService,
-            IOrderActionLogService orderActionLogService) {
+            IOrderActionLogService orderActionLogService,
+            OrderDeliveringRepository orderDeliveringRepository) {
         this.orderActionLogService = orderActionLogService;
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
@@ -48,12 +46,12 @@ public class OrderServiceImpl implements IOrderService {
         this.storageService = storageService;
         this.fishService = fishService;
         this.priceBoard = priceBoard;
-        this.deliveryStaffRepository = deliveryStaffRepository;
         this.salesStaffService = salesStaffService;
         this.emailService = emailService;
         this.orderDeliveringService = orderDeliveringService;
         this.deliveryStaffService = deliveryStaffService;
         this.paymentRateService = paymentRateService;
+        this.orderDeliveringRepository = orderDeliveringRepository;
     }
 
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
@@ -606,6 +604,21 @@ public class OrderServiceImpl implements IOrderService {
                     emailService.sendEmail(emailDetail, 9);
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean abortOrder(Long orderId) {
+        Optional<Order> foundOrder = orderRepository.findById(orderId);
+        if (foundOrder.isPresent()) {
+            Optional<OrderDelivering> foundOrderDelivering = orderDeliveringRepository.findByOrderIdAndProcessType(orderId, ProcessType.GETTING);
+            if (foundOrderDelivering.isPresent()) {
+                orderDeliveringRepository.delete(foundOrderDelivering.get());
+                foundOrder.get().setOrderStatus(orderStatus.ORDER_ACCEPTED);
+                orderRepository.save(foundOrder.get());
+                return true;
             }
         }
         return false;

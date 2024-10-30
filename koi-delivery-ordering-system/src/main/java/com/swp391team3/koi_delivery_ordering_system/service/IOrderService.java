@@ -42,4 +42,5 @@ public interface IOrderService {
     boolean confirmOrder(Long orderId, Long salesId);
 
     boolean cancelOrder(StaffCancelOrderRequestDTO request) throws Exception;
+    boolean abortOrder(Long orderId);
 }

@@ -12,7 +12,7 @@ import BlueMarker from "../../../../assets/inTransit.svg"
 import RedMarker from "../../../../assets/failed.svg"
 import CurrentPosition from "../../../../assets/delivery-current.svg"
 import { updateDeliveryStaffCurrentLocation } from "../../../../utils/axios/deliveryStaff";
-import { cancelOrder, finishOrder } from "../../../../utils/axios/order";
+import { abortOrder, cancelOrder, finishOrder } from "../../../../utils/axios/order";
 import Spinner from "../../../../components/SpinnerLoading";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -75,6 +75,7 @@ function MainContent() {
   const [updateStatus, setUpdateStatus] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
   const [orderModalOpen, setOrderModalOpen] = useState(false);
+  const [abortOrderModalOpen, setAbortOrderModalOpen] = useState(false);
 
   const onLoad = useCallback(function callback(map) {
     setMap(map)
@@ -123,6 +124,29 @@ function MainContent() {
 
   function handleCancelOrder() {
     setOrderModalOpen(true);
+  }
+
+  function handleAbortOrder() {
+    setAbortOrderModalOpen(true);
+  }
+
+  async function handleAbortOrderConfirm() {
+    setIsLoading(true);
+    const response = await abortOrder(
+      state.id,
+    );
+    if (response) {
+      setUpdateStatus(true);
+      toast("Order abort successfully");
+      setAbortOrderModalOpen(false);
+    } else {
+      toast("Unexpected Error has been occurred");
+    }
+    setIsLoading(false);
+  }
+
+  function handleCloseAbortOrderModal() {
+    setAbortOrderModalOpen(false);
   }
 
   const handleCloseOrderModal = () => {
@@ -263,6 +287,34 @@ function MainContent() {
       {/* Order Details Table */}
       <ToastUtil />
       {isLoading && <Spinner />}
+
+      <Modal
+        open={abortOrderModalOpen}
+        onClose={handleCloseAbortOrderModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Typography
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              fontSize: "20px",
+            }}
+          >
+            Are you sure about this ?
+          </Typography>
+          <div style={{ margin: "20px" }}></div>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ width: "100%" }}
+            onClick={() => handleAbortOrderConfirm()}
+          >
+            Confirm
+          </Button>
+        </Box>
+      </Modal>
 
       <Modal
         open={orderModalOpen}
@@ -434,9 +486,9 @@ function MainContent() {
                         <SubmitButton
                           variant="contained"
                           style={{ backgroundColor: "#f44336" }}
-                          onClick={() => handleCancelOrder()}
+                          onClick={() => handleAbortOrder()}
                         >
-                          Cancel
+                          Abort
                         </SubmitButton>
 
                         <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep(0)}>

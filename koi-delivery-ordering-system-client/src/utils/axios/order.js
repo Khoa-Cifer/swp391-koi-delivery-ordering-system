@@ -254,3 +254,12 @@ export async function cancelOrder(orderId, userId, userType, cancelReason) {
     console.log(error);
   }
 }
+
+export async function abortOrder(orderId) {
+  try {
+    const response = await axiosClient.put(`orders/abort-getting-order/${orderId}`)
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}

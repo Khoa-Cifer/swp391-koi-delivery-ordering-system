@@ -8,6 +8,7 @@ import { jwtDecode } from "jwt-decode";
 
 function Header() {
   const [customerUsername, setCustomerUsername] = useState("");
+  const [userData, setUserData] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
   const auth = useAuth();
@@ -25,15 +26,23 @@ function Header() {
     window.location.reload();
   };
 
-  const token = localStorage.getItem("token");
-  const user = token ? jwtDecode(token) : null;
+
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = token ? jwtDecode(token) : null;
+    setUserData(user);
+    if (user) {
+      setCustomerUsername(user.userData.username);
+    }
+  }, []);
 
   const handleOrderTracking = () => {
     navigate("/tracking-order");
   }
 
   const handleService = () => {
-    const userRole = user.userData.roleId;
+    const userRole = userData.userData.roleId;
     if (userRole) {
       switch (userRole) {
         case 1:
@@ -53,12 +62,6 @@ function Header() {
       }
     }
   };
-
-  useEffect(() => {
-    if (user) {
-      setCustomerUsername(user.userData.username);
-    }
-  }, []);
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;

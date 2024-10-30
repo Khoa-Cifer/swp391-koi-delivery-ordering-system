@@ -24,7 +24,6 @@ public class OrderDeliveringServiceImpl implements IOrderDeliveringService {
     private final OrderDeliveringRepository orderDeliveringRepository;
     private final OrderRepository orderRepository;
     private final DeliveryStaffRepository deliveryStaffRepository;
-    private final ProcessType processType;
     private final OrderStatus orderStatus;
     private final IOrderService orderService;
     private final EmailService emailService;
@@ -42,7 +41,7 @@ public class OrderDeliveringServiceImpl implements IOrderDeliveringService {
         orderDelivering.setCurrentAddress(order.getSenderAddress());
         orderDelivering.setLongitude(order.getSenderLongitude());
         orderDelivering.setLatitude(order.getSenderLatitude());
-        orderDelivering.setDeliveryProcessType(processType.GETTING);
+        orderDelivering.setDeliveryProcessType(ProcessType.GETTING);
 
         orderDeliveringRepository.save(orderDelivering);
     }
@@ -60,7 +59,7 @@ public class OrderDeliveringServiceImpl implements IOrderDeliveringService {
         orderDelivering.setCurrentAddress(order.getSenderAddress());
         orderDelivering.setLongitude(order.getSenderLongitude());
         orderDelivering.setLatitude(order.getSenderLatitude());
-        orderDelivering.setDeliveryProcessType(processType.DELIVERING);
+        orderDelivering.setDeliveryProcessType(ProcessType.DELIVERING);
 
         orderDeliveringRepository.save(orderDelivering);
     }

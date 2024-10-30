@@ -4,6 +4,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProcessType {
-    public final int GETTING = 0;
-    public final int DELIVERING = 1;
+    public static final int GETTING = 0;
+    public static final int DELIVERING = 1;
 }
