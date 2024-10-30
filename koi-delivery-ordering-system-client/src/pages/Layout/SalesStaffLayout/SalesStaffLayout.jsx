@@ -2,8 +2,27 @@ import { Box } from "@mui/material";
 import Header from "./components/Header/Header";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import MainContent from "../../SalesStaff/SalesStaffHome/components/MainContent";
 
 function SalesStaffLayout() {
+  const [titleHeader, setTitleHeader] = useState("");
+
+  useEffect(() => {
+    const storedTitle = localStorage.getItem("titleHeader");
+    if (storedTitle) {
+      setTitleHeader(storedTitle);
+    }
+  }, []);
+
+  // Update local storage only if titleHeader changes
+  const handlePageHeader = (title) => {
+    if (title !== titleHeader) {
+      setTitleHeader(title);
+      localStorage.setItem("titleHeader", title);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -37,18 +56,13 @@ function SalesStaffLayout() {
             zIndex: 1000,
           }}
         >
-          <Sidebar />
+          <Sidebar pageHeaderSales={handlePageHeader} />
+
         </Box>
 
         {/* Main Content */}
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            ml: "20%", // Adjust to the sidebar width
-          }}
-        >
-          <Outlet />
+        <Box component="main" sx={{ flexGrow: 1, ml: "20%" }}>
+          <Outlet context={{ titleHeader }} />
         </Box>
       </Box>
     </Box>

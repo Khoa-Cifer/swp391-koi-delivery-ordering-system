@@ -1,29 +1,24 @@
 import { useEffect, useState } from "react";
 import OrderCard from "./components/OrderCard";
+import { useOutletContext } from "react-router-dom";
 import { getOrdersByStatus } from "../../../utils/axios/order";
 
 function PostedOrderSalesStaff() {
-  const [orders, setOrders] = useState();
-  const [filteredOrders, setFilteredOrders] = useState([]); // Filtered orders for display
-  const [searchTrackingId, setSearchTrackingId] = useState(""); // For search by order ID
-  const [searchOrderName, setSearchOrderName] = useState(""); // For search by customer name
-
+  const [orders, setOrders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
+  const { titleHeader } = useOutletContext();  
   useEffect(() => {
-    const postedOrderStatus = 1;
-    async function fetchPostedOrder() {
-      const response = await getOrdersByStatus(postedOrderStatus);
+    const fetchPostedOrders = async () => {
+      const response = await getOrdersByStatus(1); // postedOrderStatus = 1
       if (response) {
         setOrders(response);
         setFilteredOrders(response);
       }
-    }
-
-    fetchPostedOrder();
+    };
+    fetchPostedOrders();
   }, []);
 
-  return (
-    <OrderCard orders={orders}/>
-  );
+  return <OrderCard orders={filteredOrders} titleHeader={titleHeader} />;
 }
 
 export default PostedOrderSalesStaff;

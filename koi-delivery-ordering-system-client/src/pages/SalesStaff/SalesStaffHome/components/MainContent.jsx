@@ -1,7 +1,7 @@
 import "./MainContent.scss";
 import { useEffect, useState } from "react";
 import { getOrdersByStatus } from "../../../../utils/axios/order";
-import { Link, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import {
   Button,
   Dialog,
@@ -17,7 +17,7 @@ import { toast } from "react-toastify";
 import Paragraph from "antd/es/typography/Paragraph";
 import dateTimeConvert from "../../../../components/utils";
 
-function MainContent() {
+function MainContent({pageHeaderSales}) {
   const [postedOrder, setPostedOrder] = useState([]);
   const [receivedOrder, setReceivedOrder] = useState([]);
   const [news, setNews] = useState([]);
@@ -110,6 +110,17 @@ function MainContent() {
     });
   };
 
+  const handleViewMorePostedOrders = () => {
+    const newTitle = "Pos Orders";
+    pageHeaderSales(newTitle);
+    localStorage.setItem("titleHeader", newTitle);
+    navigate("/posted-order-sales-staff");
+  };
+  const handleViewMoreReceivedOrders = () => {
+    navigate("/received-order-sales-staff");
+    pageHeaderSales("Received Orders");
+  };
+
   const handleViewMoreNews = () => {
     setVisibleNewsCount((prevCount) => prevCount + 4);
     navigate("/news");
@@ -153,15 +164,15 @@ function MainContent() {
                         }}
                       >
                         <div
-                          dangerouslySetInnerHTML={{ __html: newsItem.description }}
+                          dangerouslySetInnerHTML={{
+                            __html: newsItem.description,
+                          }}
                         />
                       </Paragraph>
 
                       <div className="news-footer">
                         <span className="news-date">
                           {dateTimeConvert(newsItem.createdDate)}
-
-
                         </span>
 
                         <div className="card-actions">
@@ -189,7 +200,6 @@ function MainContent() {
             </div>
           </>
         )}
-
       </div>
 
       <Dialog
@@ -226,8 +236,7 @@ function MainContent() {
                   <div className="order-content">
                     <h3 className="order-title">{order.name}</h3>
                     <p className="order-description">
-                      Created Date:{" "}
-                      {dateTimeConvert(order.createdDate)}
+                      Created Date: {dateTimeConvert(order.createdDate)}
                     </p>
                     <p className="order-description">
                       Expected Finish Date:{" "}
@@ -247,7 +256,7 @@ function MainContent() {
             </div>
 
             <div className="view-more">
-              <Link to={"/posted-order-sales-staff"}>View more →</Link>
+              <Button onClick={handleViewMorePostedOrders}>View more →</Button>
             </div>
           </div>
         )}
@@ -265,8 +274,7 @@ function MainContent() {
                   <div className="order-content">
                     <h3 className="order-title">{order.name}</h3>
                     <p className="order-description">
-                      Created Date:{" "}
-                      {dateTimeConvert(order.createdDate)}
+                      Created Date: {dateTimeConvert(order.createdDate)}
                     </p>
                     <p className="order-description">
                       Expected Finish Date:{" "}
@@ -286,7 +294,9 @@ function MainContent() {
             </div>
 
             <div className="view-more">
-              <Link to={"/posted-order-sales-staff"}>View more →</Link>
+              <Button onClick={handleViewMoreReceivedOrders}>
+                View more →
+              </Button>
             </div>
           </div>
         )}

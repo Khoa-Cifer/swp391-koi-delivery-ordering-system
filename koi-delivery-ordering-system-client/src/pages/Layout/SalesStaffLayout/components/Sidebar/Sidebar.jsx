@@ -14,7 +14,7 @@ const InfoHeader = styled(Typography)(() => ({
   fontSize: "12px",
 }));
 
-function Sidebar() {
+function Sidebar( {pageHeaderSales}) {
   const [imagePreview, setImagePreview] = useState(default_avatar);
   const navigate = useNavigate();
 
@@ -38,6 +38,18 @@ function Sidebar() {
     }
     fetchUserData();
   }, [])
+
+
+  const handleOpenPosted = () => {
+    navigate('/posted-order-sales-staff')
+    pageHeaderSales("Posted Order");
+  }
+
+
+  const handleOpenReceived = () => {
+    navigate('/received-order-sales-staff')
+    pageHeaderSales("Received Order");
+  }
 
   return (
     <div className="sidebar-body-sales">
@@ -74,13 +86,15 @@ function Sidebar() {
           <ListItem className="button">
             <ListItemText
               primary="Posted Order"
-              onClick={() => navigate('/posted-order-sales-staff')}
+              onClick={handleOpenPosted}
+              
+
             />
           </ListItem>
           <ListItem className="button">
             <ListItemText
               primary="Received Order"
-              onClick={() => navigate('/received-order-sales-staff')}
+              onClick={handleOpenReceived}
             />
           </ListItem>
           <ListItem className="button">

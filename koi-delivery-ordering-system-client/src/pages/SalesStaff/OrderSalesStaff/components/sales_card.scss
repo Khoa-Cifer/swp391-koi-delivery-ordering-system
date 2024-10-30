@@ -1,5 +1,5 @@
 .order-container-sale {
-  margin-top: 3%;
+  margin-left: 3%;
   width: 100%;
 
   .order {
@@ -10,8 +10,8 @@
 
   .order-card {
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-start;
-    margin: 20px;
     gap: 4%;
   }
 
@@ -29,9 +29,9 @@
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
-    max-width: 30%;
-    flex: 1 1 30%;
-    margin-bottom: 20px;
+    flex: 1 1 calc(30% - 25px);
+    max-width: calc(30% - 25px);
+    margin-bottom: 4%;
     display: flex;
     justify-content: flex-start;
   }
