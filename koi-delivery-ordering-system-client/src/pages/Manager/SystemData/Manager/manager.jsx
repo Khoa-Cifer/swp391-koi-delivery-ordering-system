@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";
 import { createManagers, deleteManagerById, editManagerProfile, getAllManagers } from "../../../../utils/axios/manager";
+import { jwtDecode } from "jwt-decode";
 
 const { Title } = Typography;
 
@@ -22,6 +23,9 @@ function Manager() {
       setManagerData(fetchedData);
     }
   };
+
+  const token = localStorage.getItem("token");
+  const userData = token ? jwtDecode(token) : null;
 
   useEffect(() => {
     fetchManagers();
@@ -108,7 +112,7 @@ function Manager() {
       key: "id",
       render: (id, record) => (
         <Space size="middle">
-          {record.id !== 1 && (
+          {record.id !== 1 && userData.sub === "M_1" && (
             <>
               <Button type="link" onClick={() => handleEdit(record)}>
                 Edit
@@ -200,7 +204,7 @@ function Manager() {
         visible={isEditModalOpen}
         onCancel={handleClose}
         onOk={() => handleEditManagers()}
-        okButtonProps={{ disabled: !username || !email }} // Disable OK button if fields are empty
+        okButtonProps={{ disabled: !username || !email || !phoneNumber }} // Disable OK button if fields are empty
       >
         <Input
           placeholder="Username"

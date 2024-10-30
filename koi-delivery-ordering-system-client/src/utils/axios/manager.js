@@ -41,6 +41,23 @@ export async function editManagerProfile(id, username, email, phoneNumber) {
     }
 }
 
+export async function managerUpdateProfile(id, email, username, phoneNumber, password) {
+    try {
+        const response = await axiosClient.put(`manager/manager-edit-profile`,
+            {
+                id,
+                email,
+                username,
+                phoneNumber,
+                password
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export async function getManagerById(id) {
     try {
         const response = await axiosClient.get(`manager/get-manager-by-id/${id}`);

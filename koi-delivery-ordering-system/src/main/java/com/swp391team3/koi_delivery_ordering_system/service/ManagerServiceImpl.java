@@ -83,4 +83,21 @@ public class ManagerServiceImpl implements IManagerService{
     public Manager getManagerByEmail(String email) {
         return managerRepository.findByEmail(email);
     }
+
+    @Override
+    public boolean editProfile(Long id, String email, String username, String phoneNumber, String password) {
+        Optional<Manager> existingManager = managerRepository.findById(id);
+        if (existingManager.isPresent()) {
+            Manager updatedManager = existingManager.get();
+            updatedManager.setEmail(email);
+            updatedManager.setPhoneNumber(phoneNumber);
+            updatedManager.setUsername(username);
+            String encodedPassword = passwordEncoder.encode(password);
+            updatedManager.setPassword(encodedPassword);
+            managerRepository.save(updatedManager);
+            return true;
+        } else {
+            throw new RuntimeException("Manager not found");
+        }
+    }
 }

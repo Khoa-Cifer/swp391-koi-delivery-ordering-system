@@ -14,4 +14,5 @@ public interface IManagerService {
     boolean managerLogin(String email, String password);
     String createNewManager(StaffRequestCreationDTO request);
     Manager getManagerByEmail(String email);
+    boolean editProfile(Long id, String email, String username, String phoneNumber, String password);
 }

@@ -1,5 +1,6 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
+import com.swp391team3.koi_delivery_ordering_system.requestDto.ManagerEditProfileRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestCreationDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestUpdateDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IManagerService;
@@ -50,5 +51,12 @@ public class ManagerController {
     @PutMapping("/update-manager-by-id/{id}")
     public ResponseEntity<?> updateManager(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO request) {
         return ResponseEntity.ok(managerService.updateManager(id, request.getEmail(), request.getUsername(), request.getPhoneNumber()));
+    }
+
+    @PreAuthorize("hasAuthority('Manager')")
+    @PutMapping("/manager-edit-profile")
+    public ResponseEntity<?> editProfile(@RequestBody ManagerEditProfileRequestDTO request) {
+        return ResponseEntity.ok(managerService.editProfile(request.getId(),
+                request.getEmail(), request.getUsername(), request.getPhoneNumber(), request.getPassword()));
     }
 }
