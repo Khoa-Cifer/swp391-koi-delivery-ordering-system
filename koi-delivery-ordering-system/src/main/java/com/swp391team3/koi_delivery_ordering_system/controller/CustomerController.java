@@ -32,7 +32,7 @@ public class CustomerController {
 
     // Get customer by ID
     //PASSED
-    @PreAuthorize("hasAuthority('Manager') or hasAuthority('SalesStaff') or hasAuthority('DeliveryStaff')")
+    @PreAuthorize("hasAuthority('Manager') or hasAuthority('Customer')")
     @GetMapping("/getCustomerById/{id}")
     public ResponseEntity<?> getCustomerById(@PathVariable Long id) {
         Optional<Customer> customer = customerService.getCustomerById(id);
@@ -41,16 +41,16 @@ public class CustomerController {
 
     // Get customer by email
     //PASSED
-    @PreAuthorize("hasAuthority('Manager') or hasAuthority('SalesStaff')")
-    @GetMapping("/get-customer-by-email")
-    public ResponseEntity<Customer> getCustomerByEmail(@RequestParam String email) {
-        Customer customer = customerService.getCustomerByEmail(email);
-        if (customer != null) {
-            return ResponseEntity.ok(customer);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+//    @PreAuthorize("hasAuthority('Manager') or hasAuthority('SalesStaff')")
+//    @GetMapping("/get-customer-by-email")
+//    public ResponseEntity<Customer> getCustomerByEmail(@RequestParam String email) {
+//        Customer customer = customerService.getCustomerByEmail(email);
+//        if (customer != null) {
+//            return ResponseEntity.ok(customer);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
     // Update customer by ID
     //PASSED
@@ -64,6 +64,7 @@ public class CustomerController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @PreAuthorize("hasAuthority('Manager')")
     @PutMapping("/disable/{id}")
     public ResponseEntity<?> disableCustomerById(@PathVariable Long id) {
@@ -75,6 +76,7 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
     @PreAuthorize("hasAuthority('Manager')")
     @PutMapping("/enable/{id}")
     public ResponseEntity<?> enableCustomerById(@PathVariable Long id) {
@@ -86,11 +88,13 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
     @PreAuthorize("hasAuthority('Customer')")
     @PutMapping("/updateCustomerProfile")
     public ResponseEntity<?> updateCustomerProfile(@RequestBody UserUpdateRequestDTO request) {
         return ResponseEntity.ok(customerService.customerUpdateProfile(request));
     }
+
     @PreAuthorize("hasAuthority('Customer')")
     @PutMapping("/updateCustomerAvatar/{id}")
     public ResponseEntity<?> updateCustomerProfileAvatar(

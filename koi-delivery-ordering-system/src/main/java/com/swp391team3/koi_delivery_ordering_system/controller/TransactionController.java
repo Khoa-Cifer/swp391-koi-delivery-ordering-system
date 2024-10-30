@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/transaction")
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('Manager')")
 public class TransactionController {
     private final ITransactionService transactionService;
 
@@ -21,12 +20,13 @@ public class TransactionController {
     // ) {
     //     return ResponseEntity.ok(transactionService.createTransaction(id, createdDate, amount));
     // }
-    @PreAuthorize("hasAuthority('Customer')")
-    @GetMapping("/get-transactions-by-customer-id/{customerId}")
-    public ResponseEntity<?> getTransactionsByCustomer(@PathVariable Long customerId) {
-        return ResponseEntity.ok(transactionService.getTransactionsByCustomerId(customerId));
-    }
+//    @PreAuthorize("hasAuthority('Customer')")
+//    @GetMapping("/get-transactions-by-customer-id/{customerId}")
+//    public ResponseEntity<?> getTransactionsByCustomer(@PathVariable Long customerId) {
+//        return ResponseEntity.ok(transactionService.getTransactionsByCustomerId(customerId));
+//    }
 
+    @PreAuthorize("hasAuthority('Manager')")
     @GetMapping("/get-all-transactions")
     public ResponseEntity<?> getAllTransactions() {
         return ResponseEntity.ok(transactionService.getAllTransactionsHistory());

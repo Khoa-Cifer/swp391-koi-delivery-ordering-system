@@ -11,20 +11,22 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/order-delivering")
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('Manager')")
 public class OrderDeliveringController {
     private final IOrderDeliveringService orderDeliveringService;
+
     @PreAuthorize("hasAuthority('DeliveryStaff')")
     @PostMapping("/start-getting")
     public ResponseEntity<?> startGetting(@RequestBody OrderDeliveringInfoRequestDTO request) {
         boolean createOrderDelivering = orderDeliveringService.startGetting(request.getOrderId(), request.getDeliveryStaffId());
         return ResponseEntity.ok(createOrderDelivering);
     }
+
     @PreAuthorize("hasAuthority('DeliveryStaff')")
     @PutMapping("/updateOrderDeliveringLocation")
     public ResponseEntity<?> updateOrderDeliveringLocation(@RequestBody OrderDeliveringUpdateInfoRequestDTO request) {
         return ResponseEntity.ok(orderDeliveringService.updateDeliveringInfo(request));
     }
+
     @PreAuthorize("hasAuthority('DeliveryStaff')")
     @PostMapping("/start-delivering")
     public ResponseEntity<?> startDelivering(@RequestBody OrderDeliveringInfoRequestDTO request) {

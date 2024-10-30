@@ -9,6 +9,6 @@ import java.util.Optional;
 public interface IRatingService {
     CustomerFeedbackRequestDTO createRating(CustomerFeedbackRequestDTO request);
     List<Rating> getAllRatings();
-    Optional<Rating> getRatingById(Long id);
-    void deleteRatingById(Long id);
+//    Optional<Rating> getRatingById(Long id);
+//    void deleteRatingById(Long id);
 }

@@ -21,10 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("api/salesStaff")
 @RequiredArgsConstructor
-@EnableMethodSecurity(prePostEnabled = true)
 public class SalesStaffController {
     private final ISalesStaffService salesStaffService;
 
+    @PreAuthorize("hasAuthority('Manager')")
     @PostMapping("/createSalesStaff")
     public ResponseEntity<?> createSalesStaff(@RequestBody StaffRequestCreationDTO request) {
         System.out.println("Result: " + request.getPhoneNumber());
@@ -34,14 +34,15 @@ public class SalesStaffController {
 
     //Get All Sales Staff
     //PASSED
+    @PreAuthorize("hasAuthority('Manager')")
     @GetMapping("/getAllSalesStaff")
-    @PreAuthorize("hasAnyAuthority('Manager')")
     public ResponseEntity<?> getAllSalesStaff() {
         return ResponseEntity.ok(salesStaffService.getAllSalesStaff());
     }
 
     //Get Sale Staff By Id
     //PASSED
+    @PreAuthorize("hasAuthority('SalesStaff')")
     @GetMapping("/getSalesStaffById/{id}")
     public ResponseEntity<?> getSalesStaffById(@PathVariable Long id) {
         return ResponseEntity.ok(salesStaffService.getSalesStaffById(id));
@@ -54,11 +55,13 @@ public class SalesStaffController {
     public ResponseEntity<?> updateSalesStaff(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO salesStaff) {
         return ResponseEntity.ok(salesStaffService.updateSalesStaff(id, salesStaff.getUsername(), salesStaff.getEmail(), salesStaff.getPhoneNumber())) ;
     }
+
     @PreAuthorize("hasAuthority('SalesStaff')")
     @PutMapping("/updateSalesStaffProfile")
     public ResponseEntity<?> updateSalesStaffProfile(@RequestBody UserUpdateRequestDTO request) {
         return ResponseEntity.ok(salesStaffService.salesStaffUpdateProfile(request));
     }
+
     @PreAuthorize("hasAuthority('SalesStaff')")
     @PutMapping("/updateSalesStaffAvatar/{id}")
     public ResponseEntity<?> updateSalesStaffProfileAvatar(
@@ -66,6 +69,8 @@ public class SalesStaffController {
             @RequestParam("file") MultipartFile file) throws IOException {
         return ResponseEntity.ok(salesStaffService.salesStaffUpdateAvatar(id, file));
     }
+
+    @PreAuthorize("hasAuthority('Manager')")
     @PutMapping("/disable/{id}")
     public ResponseEntity<?> disableSalesStaffById(@PathVariable Long id) {
         Optional<SalesStaff> salesStaff = salesStaffService.getSalesStaffById(id);
@@ -77,6 +82,7 @@ public class SalesStaffController {
         }
     }
 
+    @PreAuthorize("hasAuthority('Manager')")
     @PutMapping("/enable/{id}")
     public ResponseEntity<?> enableSalesStaffSalesStaffById(@PathVariable Long id) {
         Optional<SalesStaff> salesStaff = salesStaffService.getSalesStaffById(id);

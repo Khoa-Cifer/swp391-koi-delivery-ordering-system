@@ -45,7 +45,8 @@ public class DeliveryStaffController {
     public ResponseEntity<?> getDeliveryStaffById(@PathVariable Long id) {
         return ResponseEntity.ok(deliveryStaffService.getDeliveryStaffById(id));
     }
-    @PreAuthorize("hasRole('Manager')")
+
+    @PreAuthorize("hasAuthority('Manager')")
     @PutMapping("/disable/{id}")
     public ResponseEntity<?> disableDeliveryStaffById(@PathVariable Long id) {
         Optional<DeliveryStaff> deliveryStaff = deliveryStaffService.getDeliveryStaffById(id);
@@ -56,7 +57,8 @@ public class DeliveryStaffController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-    @PreAuthorize("hasRole('Manager')")
+
+    @PreAuthorize("hasAuthority('Manager')")
     @PutMapping("/enable/{id}")
     public ResponseEntity<?> enableDeliveryStaffById(@PathVariable Long id) {
         Optional<DeliveryStaff> deliveryStaff = deliveryStaffService.getDeliveryStaffById(id);
@@ -70,7 +72,7 @@ public class DeliveryStaffController {
 
     //Update Delivery Staff
     //PASSED
-    @PreAuthorize("hasRole('Manager')")
+    @PreAuthorize("hasAuthority('Manager')")
     @PutMapping("/updateDeliveryStaffById/{id}")
     public ResponseEntity<?> updateDeliveryStaff(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO request) {
         return ResponseEntity.ok(deliveryStaffService.updateDeliveryStaffById(id, request.getEmail(), request.getPhoneNumber(), request.getUsername()));
@@ -88,11 +90,13 @@ public class DeliveryStaffController {
     public ResponseEntity<?> updateDeliveryStaffLocation(@RequestBody DeliveryStaffLocationUpdateRequestDTO request) {
         return ResponseEntity.ok(deliveryStaffService.updateDeliveryStaffLocation(request));
     }
+
     @PreAuthorize("hasAuthority('DeliveryStaff')")
     @PutMapping("/updateDeliveryStaffProfile")
     public ResponseEntity<?> updateCustomerProfile(@RequestBody UserUpdateRequestDTO request) {
         return ResponseEntity.ok(deliveryStaffService.deliveryStaffUpdateProfile(request));
     }
+
     @PreAuthorize("hasAuthority('DeliveryStaff')")
     @PutMapping("/updateDeliveryStaffAvatar/{id}")
     public ResponseEntity<?> updateCustomerProfileAvatar(

@@ -25,15 +25,15 @@ public class StorageServiceImpl implements IStorageService {
         return newStorage;
     }
 
-    @Override
-    public Storage updateStorage(StorageRequestCreationDTO request, Long storageId) {
-        return null;
-    }
-
-    @Override
-    public boolean deleteStorage(StorageRequestCreationDTO request) {
-        return false;
-    }
+//    @Override
+//    public Storage updateStorage(StorageRequestCreationDTO request, Long storageId) {
+//        return null;
+//    }
+//
+//    @Override
+//    public boolean deleteStorage(StorageRequestCreationDTO request) {
+//        return false;
+//    }
 
     @Override
     public List<Storage> getAllStorages() {

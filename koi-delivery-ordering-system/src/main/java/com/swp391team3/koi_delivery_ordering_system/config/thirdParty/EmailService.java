@@ -64,6 +64,8 @@ public class EmailService {
                 template = templateEngine.process("receiver-notification-template", context);
             } else if (type == typeMail.RECEIVE_SALES_STAFF_TEMPLATE) {
                 template = templateEngine.process("receive-salesStaff-template", context);
+            } else if (type == typeMail.FORGOT_PASSWORD_TEMPLATE){
+                template = templateEngine.process("forgot-password-template", context);
             }
 
             //Creating a simple mail message
@@ -93,6 +95,4 @@ public class EmailService {
             System.out.println("ERROR SENT EMAIL!");
         }
     }
-
-
 }

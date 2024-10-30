@@ -18,20 +18,19 @@ import java.util.Date;
 @RestController
 @RequestMapping("api/payment")
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('Manager')")
 public class PaymentController {
     private final IPaymentService paymentService;
     private final IPaymentHistoryService paymentHistoryService;
     private final ITransactionService transactionService;
 
     //Create Payment
-    //SKIPPED
-    @PreAuthorize("hasAnyRole()")
+//    @PreAuthorize("hasAnyRole()")
     @GetMapping("/vn-pay/{customerId}")
     public ResponseEntity<?> pay(@PathVariable Long customerId, HttpServletRequest request) {
         return new ResponseEntity<>(paymentService.createVnPayPayment(request, customerId), HttpStatus.OK);
     }
-    @PreAuthorize("hasAnyRole()")
+
+//    @PreAuthorize("hasAnyRole()")
     @GetMapping("/vn-pay-callback/{id}")
     public RedirectView paymentCallback(
             @PathVariable(name = "id") Long id,

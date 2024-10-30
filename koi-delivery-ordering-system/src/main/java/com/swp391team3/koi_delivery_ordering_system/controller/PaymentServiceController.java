@@ -11,14 +11,16 @@ import java.util.List;
 @RestController
 @RequestMapping("api/payment-service")
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('Manager')")
 public class PaymentServiceController {
     private final IPaymentRateService paymentRateService;
+
+    @PreAuthorize("hasAuthority('Manager')")
     @GetMapping("/get-all-payment-info")
     public List<PaymentService> getALlPaymentRate() {
         return paymentRateService.getAllPaymentInfo();
     }
 
+    @PreAuthorize("hasAuthority('Manager')")
     @PutMapping("/update-payment-info")
     public boolean updatePaymentServiceRate(@RequestParam Long id, @RequestParam double rate) {
         return paymentRateService.updatePaymentServiceRate(id, rate);

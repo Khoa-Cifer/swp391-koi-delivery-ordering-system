@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface IStorageService {
     Storage createStorage(StorageRequestCreationDTO request);
-    Storage updateStorage(StorageRequestCreationDTO request, Long storageId);
-    boolean deleteStorage(StorageRequestCreationDTO request);
+//    Storage updateStorage(StorageRequestCreationDTO request, Long storageId);
+//    boolean deleteStorage(StorageRequestCreationDTO request);
     List<Storage> getAllStorages();
 
     Optional<Storage> getStorageById(Long id);

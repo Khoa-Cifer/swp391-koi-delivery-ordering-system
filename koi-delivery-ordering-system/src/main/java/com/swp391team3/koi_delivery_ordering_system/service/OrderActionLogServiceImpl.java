@@ -28,12 +28,12 @@ public class OrderActionLogServiceImpl implements IOrderActionLogService {
         return true;
     }
 
-    @Override
-    public DeliveryStaff getDeliveryStaff(int roleId, Long orderId, int actionType) {
-        Long deliveryStaffId = orderActionLogRepository.getUserId(roleId, orderId, actionType);
-        Optional<DeliveryStaff> result = deliveryStaffService.getDeliveryStaffById(deliveryStaffId);
-        return result.orElse(null);
-    }
+//    @Override
+//    public DeliveryStaff getDeliveryStaff(int roleId, Long orderId, int actionType) {
+//        Long deliveryStaffId = orderActionLogRepository.getUserId(roleId, orderId, actionType);
+//        Optional<DeliveryStaff> result = deliveryStaffService.getDeliveryStaffById(deliveryStaffId);
+//        return result.orElse(null);
+//    }
 
     @Override
     public SalesStaff getSalesStaff(int roleId, Long orderId, int actionType) {

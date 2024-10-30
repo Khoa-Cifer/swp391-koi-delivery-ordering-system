@@ -33,7 +33,19 @@ public class Filter extends OncePerRequestFilter {
             "/swagger-resources/**",
             "/api/auth/login",
             "/api/auth/register",
-            "/api/auth/register-confirmation"
+            "/api/auth/register-confirmation",
+            "/api/auth/forgot-password",
+            "/api/auth/reset-password",
+            "/api/images/**",
+            "/api/fishes/getFishByOrderId/**",
+            "/api/news/getAllNews",
+            "/api/news/getNewsById/**",
+            "/api/orders/getOrderById/**",
+            "/api/orders/getOrderByStatus/**",
+            "/api/orders/calculatePrice/**",
+            "/api/orders/searchOrderByTrackingId/**",
+            "/api/payment/**",
+            "/api/ratings/create-new-ratings"
     );
 
     @Autowired

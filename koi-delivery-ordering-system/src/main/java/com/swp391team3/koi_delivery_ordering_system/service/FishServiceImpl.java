@@ -102,26 +102,27 @@ public class FishServiceImpl implements IFishService {
             return null;
         }
     }
-    @Override
-    public Fish updateFish(Long fishId, String name, int age, double size, double weight, double price, MultipartFile file) {
 
-        Fish fish = fishRepository.findById(fishId)
-                .orElseThrow(() -> new RuntimeException("Fish not found"));
-        try {
-            if (file != null) {
-                fileService.updateFileInFileSystem(fish.getFile().getId(), file);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        fish.setName(name);
-        fish.setAge(age);
-        fish.setSize(size);
-        fish.setWeight(weight);
-        fish.setPrice(price);
-        return fishRepository.save(fish);
-    }
+//    @Override
+//    public Fish updateFish(Long fishId, String name, int age, double size, double weight, double price, MultipartFile file) {
+//
+//        Fish fish = fishRepository.findById(fishId)
+//                .orElseThrow(() -> new RuntimeException("Fish not found"));
+//        try {
+//            if (file != null) {
+//                fileService.updateFileInFileSystem(fish.getFile().getId(), file);
+//            }
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        fish.setName(name);
+//        fish.setAge(age);
+//        fish.setSize(size);
+//        fish.setWeight(weight);
+//        fish.setPrice(price);
+//        return fishRepository.save(fish);
+//    }
 
     @Override
     public boolean updateFishStatus(Long id, int status) {
