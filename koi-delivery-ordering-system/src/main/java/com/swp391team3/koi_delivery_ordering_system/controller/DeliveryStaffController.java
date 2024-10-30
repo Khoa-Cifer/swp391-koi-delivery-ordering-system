@@ -72,7 +72,7 @@ public class DeliveryStaffController {
 
     //Update Delivery Staff
     //PASSED
-    @PreAuthorize("hasAuthority('Manager') or hasAuthority('Manager')")
+    @PreAuthorize("hasAuthority('DeliveryStaff') or hasAuthority('Manager')")
     @PutMapping("/updateDeliveryStaffById/{id}")
     public ResponseEntity<?> updateDeliveryStaff(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO request) {
         return ResponseEntity.ok(deliveryStaffService.updateDeliveryStaffById(id, request.getEmail(), request.getPhoneNumber(), request.getUsername()));
