@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,15 +19,14 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/licenses")
 @RequiredArgsConstructor
-
 public class LicenseController {
     private final ILicenseService licenseService;
-
+    @PreAuthorize("hasAuthority('Customer')")
     @PostMapping("/insertLicenseByFishId")
     public ResponseEntity<?> createLicense(@RequestBody FishLicenseRequestDTO request) throws IOException {
         return ResponseEntity.ok(licenseService.createLicenseRelatedToFishId(request));
     }
-
+    @PreAuthorize("hasAuthority('Customer')")
     @PostMapping("/insertLicenseFiles")
     public ResponseEntity<?> createLicenseFile(
             @RequestParam("licenseId") Long licenseId,
@@ -39,23 +39,23 @@ public class LicenseController {
     }
 
     //Get All Licenses
-    //
+    @PreAuthorize("hasAuthority('Manager')")
     @GetMapping("/getAllLicenses")
     public ResponseEntity<?> getAllLicenses() {
         return ResponseEntity.ok(licenseService.getAllLicenses());
     }
-
+    @PreAuthorize("hasAuthority('Customer')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getLicenseById(@PathVariable Long id) {
         return ResponseEntity.ok(licenseService.getLicenseById(id));
     }
-
+    @PreAuthorize("hasAuthority('Customer')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteLicenseById(@PathVariable Long id) {
         licenseService.deleteLicenseById(id);
         return ResponseEntity.ok("License deleted successfully");
     }
-
+    @PreAuthorize("hasAuthority('Customer')")
     @PutMapping(value = "/update-license-by-id")
     public ResponseEntity<?> editLicense(
             @RequestParam(name = "licenseId") Long licenseId,
@@ -63,16 +63,16 @@ public class LicenseController {
             @RequestParam(name = "licenseDescription") String description,
             @RequestParam(name = "licenseDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateOfIssue) {
 
-            Optional<License> optionalLicense = licenseService.getLicenseById(licenseId);
+        Optional<License> optionalLicense = licenseService.getLicenseById(licenseId);
 
-            if (optionalLicense.isPresent()) {
-                License updatedLicense = licenseService.updateLicense(licenseId, name, description, dateOfIssue);
-                return ResponseEntity.ok(updatedLicense);
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The license does not exist");
-            }
+        if (optionalLicense.isPresent()) {
+            License updatedLicense = licenseService.updateLicense(licenseId, name, description, dateOfIssue);
+            return ResponseEntity.ok(updatedLicense);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The license does not exist");
+        }
     }
-
+    @PreAuthorize("hasAuthority('Customer')")
     @PutMapping("/update-license-files")
     public ResponseEntity<?> updateLicenseFile(
             @RequestParam("licenseId") Long licenseId,

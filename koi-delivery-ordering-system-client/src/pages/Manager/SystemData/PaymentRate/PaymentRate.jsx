@@ -64,20 +64,24 @@ function PaymentRate() {
             title: "Id",
             dataIndex: "id",
             key: "id",
+            width: 100
         },
         {
             title: "Description",
             dataIndex: "description",
             key: "description",
+            width: 500
         },
         {
             title: "Rate",
             dataIndex: "rate",
             key: "rate",
+            width: 300
         },
         {
             title: "Action",
             key: "action",
+            width: 400,
             render: (_, record) => (
                 <Dropdown
                     overlay={

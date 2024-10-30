@@ -4,7 +4,7 @@ import Paragraph from "antd/es/typography/Paragraph";
 import { getAllNews, deleteNewsById } from "../../../utils/axios/news"; // Import delete function
 import { getFileByFileId } from "../../../utils/axios/file";
 import { toast } from "react-toastify"; // Import toast for notifications
-import "./Allnews.scss";
+import "./AllNews.scss";
 import { jwtDecode } from "jwt-decode"; // Correct the import
 import Header from "../../Layout/SalesStaffLayout/components/Header/Header";
 import dateTimeConvert from "../../../components/utils";

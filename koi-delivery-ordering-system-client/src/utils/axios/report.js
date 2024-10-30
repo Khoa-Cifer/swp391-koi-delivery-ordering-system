@@ -9,7 +9,7 @@ export async function getTotalOrders() {
 }
 
 
-export async function getDeliverystaffReporById(deliveryId) {
+export async function getDeliveryStaffReporById(deliveryId) {
     try {
       const response = await axiosClient.get(`report/get-delivery-staff-report/${deliveryId}`);
       return response.data;

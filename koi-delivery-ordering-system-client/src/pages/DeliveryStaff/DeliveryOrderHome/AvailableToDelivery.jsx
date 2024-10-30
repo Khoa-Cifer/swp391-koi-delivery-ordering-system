@@ -7,18 +7,21 @@ function AvailableToDelivery() {
 
   useEffect(() => {
     const availableToDeliveryStatus = 5;
-    async function fetchPostedOrder() {
+    async function fetchOrder() {
       const response = await getOrdersByStatus(availableToDeliveryStatus);
       if (response) {
         setOrders(response);
       }
     }
 
-    fetchPostedOrder();
+    fetchOrder();
   }, []);
 
   return (
+    <div className="content-container">
+    <h1>Available To Delivery</h1>
     <OrderCard orders={orders}/>
+  </div>
   );
 }
 

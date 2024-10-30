@@ -3,11 +3,13 @@ package com.swp391team3.koi_delivery_ordering_system.controller;
 import com.swp391team3.koi_delivery_ordering_system.service.ITransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/transaction")
 @RequiredArgsConstructor
+@PreAuthorize("hasAuthority('Manager')")
 public class TransactionController {
     private final ITransactionService transactionService;
 
@@ -19,7 +21,7 @@ public class TransactionController {
     // ) {
     //     return ResponseEntity.ok(transactionService.createTransaction(id, createdDate, amount));
     // }
-
+    @PreAuthorize("hasAuthority('Customer')")
     @GetMapping("/get-transactions-by-customer-id/{customerId}")
     public ResponseEntity<?> getTransactionsByCustomer(@PathVariable Long customerId) {
         return ResponseEntity.ok(transactionService.getTransactionsByCustomerId(customerId));

@@ -11,6 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DeliveryStaffReportResponseDTO {
     private String deliveryStaffName;
-    private int totalOrderFailed;
-    private int totalOrderCompleted;
+    private int totalGettingOrders;
+    private int totalDeliveringOrders;
 }

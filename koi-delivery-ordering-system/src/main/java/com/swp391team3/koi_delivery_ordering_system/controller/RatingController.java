@@ -5,6 +5,7 @@ import com.swp391team3.koi_delivery_ordering_system.requestDto.CustomerFeedbackR
 import com.swp391team3.koi_delivery_ordering_system.service.IRatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,13 +15,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RatingController {
     private final IRatingService ratingService;
-
+    @PreAuthorize("hasAuthority('Customer')")
     @PostMapping("create-new-ratings")
     public ResponseEntity<?> createRating(@RequestBody CustomerFeedbackRequestDTO request) {
         CustomerFeedbackRequestDTO createdRating = ratingService.createRating(request);
         return ResponseEntity.ok(createdRating);
     }
-
+    @PreAuthorize("hasAuthority('Manager')")
     @GetMapping("get-all-ratings")
     public ResponseEntity<List<Rating>> getAllRatings() {
         List<Rating> ratings = ratingService.getAllRatings();
