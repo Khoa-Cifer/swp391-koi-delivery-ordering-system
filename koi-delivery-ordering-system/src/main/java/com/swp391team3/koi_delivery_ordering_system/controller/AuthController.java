@@ -115,10 +115,7 @@ public class AuthController {
         return ResponseEntity.ok(customerService.registrationConfirm(request));
     }
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestBody UserRequestLoginDTO request) {
-        String email = request.getEmail();
-        int userType = request.getUserType();
-        boolean emailSent = false;
+    public ResponseEntity<?> forgotPassword(@RequestParam String email, @RequestParam int userType) {
         EmailDetailDTO emailDetail = new EmailDetailDTO();
         if (userType == UserType.CUSTOMER_ROLE_ID) {
             Customer customer = customerService.getCustomerByEmail(email);
