@@ -188,7 +188,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid userType or email.");
         }
 
-        return ResponseEntity.ok("Password reset successful.");
+        return ResponseEntity.ok(passwordUpdated);
     }
 
 

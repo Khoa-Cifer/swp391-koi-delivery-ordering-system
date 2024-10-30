@@ -33,7 +33,9 @@ public class Filter extends OncePerRequestFilter {
             "/swagger-resources/**",
             "/api/auth/login",
             "/api/auth/register",
-            "/api/auth/register-confirmation"
+            "/api/auth/register-confirmation",
+            "/api/auth/forgot-password",
+            "/api/auth/reset-password"
     );
 
     @Autowired
