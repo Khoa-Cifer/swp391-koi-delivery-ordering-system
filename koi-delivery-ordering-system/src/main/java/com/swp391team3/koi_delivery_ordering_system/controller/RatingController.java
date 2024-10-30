@@ -15,12 +15,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RatingController {
     private final IRatingService ratingService;
-    @PreAuthorize("hasAuthority('Customer')")
+
+//    @PreAuthorize("hasAuthority('Customer')")
     @PostMapping("create-new-ratings")
     public ResponseEntity<?> createRating(@RequestBody CustomerFeedbackRequestDTO request) {
         CustomerFeedbackRequestDTO createdRating = ratingService.createRating(request);
         return ResponseEntity.ok(createdRating);
     }
+
     @PreAuthorize("hasAuthority('Manager')")
     @GetMapping("get-all-ratings")
     public ResponseEntity<List<Rating>> getAllRatings() {

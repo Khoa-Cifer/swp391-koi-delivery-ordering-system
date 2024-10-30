@@ -13,13 +13,13 @@ import { useEffect, useState } from "react";
 import default_avatar from "../../../assets/default-avatar.jpg";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { getCustomerById } from "../../../utils/axios/customer";
 import { toast } from "react-toastify";
 import { PhotoCamera } from "@mui/icons-material";
 import { useAuth } from "../../../authentication/AuthProvider";
 import { getFileByFileId } from "../../../utils/axios/file";
 import ToastUtil from "../../../components/toastContainer";
 import {
+  getSalesStaffById,
   salesStaffUpdateProfile,
   salesStaffUpdateProfileImage,
 } from "../../../utils/axios/salesStaff";
@@ -50,7 +50,7 @@ function SalesStaffEditProfile() {
     async function fetchUserData() {
       const userData = JSON.parse(localStorage.getItem("userData"));
       setUser(userData);
-      const customer = await getCustomerById(salestaffId);
+      const customer = await getSalesStaffById(salestaffId);
       if (customer.file) {
         const imageResponse = await getFileByFileId(customer.file.id);
         const imgUrl = URL.createObjectURL(imageResponse);

@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/manager")
-@PreAuthorize("hasAuthority('Manager')")
 public class ManagerController {
     private final IManagerService managerService;
+
     @PreAuthorize("hasAuthority('Manager')")
     @PostMapping("/create-manager")
     public ResponseEntity<?> createDeliveryStaff(@RequestBody StaffRequestCreationDTO request) {

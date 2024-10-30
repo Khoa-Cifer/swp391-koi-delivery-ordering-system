@@ -12,12 +12,12 @@ import java.util.Optional;
 
 public interface ILicenseService {
     List<License> getAllLicenses();
-    Optional<License> getLicenseById(Long id);
-    void deleteLicenseById(Long id);
+//    Optional<License> getLicenseById(Long id);
+//    void deleteLicenseById(Long id);
     Long createLicenseRelatedToFishId(FishLicenseRequestDTO request) throws IOException;
     boolean createFilesBasedOnLicenseId(LicenseFileRequestDTO request) throws IOException;
 
-    License updateLicense(Long licenseId, String name, String description, Date dateOfIssue);
-
-    boolean updateLicenseFile(Long licenceId, Long fileId, MultipartFile file) throws IOException;
+//    License updateLicense(Long licenseId, String name, String description, Date dateOfIssue);
+//
+//    boolean updateLicenseFile(Long licenceId, Long fileId, MultipartFile file) throws IOException;
 }

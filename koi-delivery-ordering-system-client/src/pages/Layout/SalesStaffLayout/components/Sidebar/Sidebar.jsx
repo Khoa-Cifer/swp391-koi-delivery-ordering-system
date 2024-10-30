@@ -28,9 +28,9 @@ function Sidebar( {pageHeaderSales}) {
 
   useEffect(() => {
     async function fetchUserData() {
-      const customer = await getSalesStaffById(salesStaffId);
-      if (customer.file) {
-        const imageResponse = await getFileByFileId(customer.file.id);;
+      const salesStaff = await getSalesStaffById(salesStaffId);
+      if (salesStaff.file) {
+        const imageResponse = await getFileByFileId(salesStaff.file.id);;
         const imgUrl = URL.createObjectURL(imageResponse);
         setImagePreview(imgUrl);
       }

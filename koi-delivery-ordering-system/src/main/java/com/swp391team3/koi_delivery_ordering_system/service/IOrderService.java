@@ -25,7 +25,7 @@ public interface IOrderService {
 
     double calculateOrderPrice(Long id);
 
-    List<Order> findOrdersForDelivery(Long id);
+//    List<Order> findOrdersForDelivery(Long id);
     List<Order> onGoingOrdersForDelivery(Long id, int deliveryProcessType, int orderStatus);
 
 //    boolean updateOrderSalesAction(Long orderId, Long salesId, int action);

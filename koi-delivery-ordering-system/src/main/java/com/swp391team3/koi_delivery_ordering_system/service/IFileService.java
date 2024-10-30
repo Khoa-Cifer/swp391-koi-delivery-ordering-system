@@ -11,7 +11,7 @@ public interface IFileService {
     File uploadFileToFileSystem(MultipartFile file) throws IOException;
     byte[] getFileFromFileSystem(Long id) throws IOException;
     String updateFileInFileSystem(Long id, MultipartFile newFile) throws IOException;
-    int getTotalFileInFileSystem();
-    List<String> getDuplicatedFileInFileSystem();
+//    int getTotalFileInFileSystem();
+//    List<String> getDuplicatedFileInFileSystem();
     boolean deleteFile(Long fileId);
 }

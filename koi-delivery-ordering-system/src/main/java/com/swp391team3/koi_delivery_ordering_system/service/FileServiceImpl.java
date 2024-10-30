@@ -82,15 +82,15 @@ public class FileServiceImpl implements IFileService {
         return null;
     }
 
-    @Override
-    public int getTotalFileInFileSystem() {
-        return fileRepository.getTotalImages();
-    }
-
-    @Override
-    public List<String> getDuplicatedFileInFileSystem() {
-        return fileRepository.getDuplicateImageName();
-    }
+//    @Override
+//    public int getTotalFileInFileSystem() {
+//        return fileRepository.getTotalImages();
+//    }
+//
+//    @Override
+//    public List<String> getDuplicatedFileInFileSystem() {
+//        return fileRepository.getDuplicateImageName();
+//    }
 
     @Override
     public boolean deleteFile(Long fileId) {

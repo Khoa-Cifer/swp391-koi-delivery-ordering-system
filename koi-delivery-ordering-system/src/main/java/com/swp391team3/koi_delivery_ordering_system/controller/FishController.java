@@ -23,7 +23,8 @@ public class FishController {
     public List<Fish> getAllFishes() {
         return fishService.getAllFishs();
     }
-    @PreAuthorize("hasAuthority('SalesStaff')")
+
+    @PreAuthorize("hasAuthority('Customer')")
     @PostMapping(value = "/createFishByOrderId", consumes = "multipart/form-data")
     public Long createFishOrder(
             @RequestParam("fishName") String fishName,
@@ -45,21 +46,25 @@ public class FishController {
         request.setOrderId(orderId);
         return fishService.createFishByOrderId(request);
     }
-    @PreAuthorize("hasAnyRole()")
+
+//    @PreAuthorize("hasAnyRole()")
     @GetMapping("/getFishByOrderId/{orderId}")
     public ResponseEntity<List<Fish>> getFishesByOrderId(@PathVariable("orderId") Long orderId) {
         return ResponseEntity.ok(fishService.getFishesByOrderId(orderId));
     }
-    @PreAuthorize("hasAuthority('DeliveryStaff' or hasAuthority('SalesStaff'))")
+
+    @PreAuthorize("hasAuthority('DeliveryStaff') or hasAuthority('SalesStaff'))")
     @PutMapping("/update-fish-status/{id}/{status}")
     public ResponseEntity<?> updateFishStatus(@PathVariable Long id, @PathVariable int status) {
         return ResponseEntity.ok(fishService.updateFishStatus(id, status));
     }
-    @PreAuthorize("hasAnyRole()")
-    @GetMapping("/getFishById")
-    public Fish getFishById(@RequestParam("id") Long id) {
-        return fishService.getFishById(id).get();
-    }
+
+//    @PreAuthorize("hasAnyRole()")
+//    @GetMapping("/getFishById")
+//    public Fish getFishById(@RequestParam("id") Long id) {
+//        return fishService.getFishById(id).get();
+//    }
+
     @PreAuthorize("hasAuthority('Customer')")
     @DeleteMapping("/delete-fish/{id}")
     public ResponseEntity<?> deleteFish(@PathVariable("id") Long id) {

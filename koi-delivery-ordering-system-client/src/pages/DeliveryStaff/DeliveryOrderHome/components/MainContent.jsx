@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {
   getOnGoingOrderForDeliveryStaff,
   getOrdersByStatus,
-  getOrdersRecommendedForDeliveryStaff,
+  // getOrdersRecommendedForDeliveryStaff,
 } from "../../../../utils/axios/order";
 import { Button } from "@mui/material";
 import dateTimeConvert from "../../../../components/utils";
@@ -18,7 +18,7 @@ const MainContent = () => {
   // State để lưu trữ dữ liệu lấy từ API
   const [acceptedOrders, setAcceptedOrders] = useState();
   const [confirmedOrders, setConfirmedOrders] = useState();
-  const [recommendedOrders, setRecommendedOrders] = useState();
+  // const [recommendedOrders, setRecommendedOrders] = useState();
   const [directions, setDirections] = useState(null);
   const [ongoingGettingOrders, setOngoingGettingOrders] = useState();
   const [onGoingDeliveringOrders, setOngoingDeliveringOrders] = useState();
@@ -91,8 +91,8 @@ const MainContent = () => {
       const confirmedOrderResponse = await getOrdersByStatus(
         confirmedOrderStatus
       );
-      const recommendedOrderResponse =
-        await getOrdersRecommendedForDeliveryStaff(deliveryStaffId);
+      // const recommendedOrderResponse =
+      //   await getOrdersRecommendedForDeliveryStaff(deliveryStaffId);
       const ongoingGettingOrderResponse = await getOnGoingOrderForDeliveryStaff(
         deliveryStaffId,
         0,
@@ -107,7 +107,7 @@ const MainContent = () => {
       setOngoingDeliveringOrders(ongoingDeliveringOrderResponse);
       setAcceptedOrders(acceptedOrderResponse);
       setConfirmedOrders(confirmedOrderResponse);
-      setRecommendedOrders(recommendedOrderResponse);
+      // setRecommendedOrders(recommendedOrderResponse);
       setOngoingGettingOrders(ongoingGettingOrderResponse);
     }
 

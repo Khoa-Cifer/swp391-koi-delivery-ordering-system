@@ -16,7 +16,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
 public class OrderController {
     private final IOrderService orderService;
     private final OrderStatus orderStatus;
@@ -29,7 +28,8 @@ public class OrderController {
         Long createdOrder = orderService.createGeneralInfoOrder(request);
         return ResponseEntity.ok(createdOrder);
     }
-    @PreAuthorize("hasAuthority('SalesStaff')")
+
+    @PreAuthorize("hasAuthority('Customer')")
     @PostMapping("/postOrder/{id}")
     public ResponseEntity<?> postOrder(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.postOrder(id));
@@ -43,18 +43,21 @@ public class OrderController {
         List<Order> orders = orderService.getAllOrders();
         return ResponseEntity.ok(orders);
     }
-    @PreAuthorize("hasAuthority('Manager') or hasAuthority('SalesStaff') or hasAuthority('DeliveryStaff')")
+
+//    @PreAuthorize("hasAuthority('Manager') or hasAuthority('SalesStaff') or hasAuthority('DeliveryStaff')")
     @GetMapping("/getOrderById/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
         Optional<Order> order = orderService.getOrderById(id);
         return order.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
     @PreAuthorize("hasAuthority('Customer')")
     @DeleteMapping("/deleteOrderById/{id}")
     public ResponseEntity<?> deleteOrderById(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.deleteOrderById(id));
     }
-    @PreAuthorize("hasAuthority('Manager') or hasAuthority('SalesStaff') or hasAuthority('DeliveryStaff')")
+
+//    @PreAuthorize("hasAuthority('Manager') or hasAuthority('SalesStaff') or hasAuthority('DeliveryStaff')")
     @GetMapping("/getOrderByStatus/{status}")
     public ResponseEntity<List<Order>> getOrdersByStatus(@PathVariable int status) {
         List<Order> orders = orderService.getOrderByStatus(status);
@@ -65,6 +68,7 @@ public class OrderController {
             return ResponseEntity.ok(orders);
         }
     }
+
     @PreAuthorize("hasAuthority('Customer')")
     @GetMapping("/get-orders-filtered")
     public ResponseEntity<?> getOrdersFilteredForCustomer(@RequestParam Long customerId,
@@ -75,7 +79,8 @@ public class OrderController {
         List<Order> orders = orderService.getOrderByStatusFilteredByCustomer(request);
         return ResponseEntity.ok(orders);
     }
-    @PreAuthorize("hasAnyRole()")
+
+//    @PreAuthorize("hasAnyRole()")
     @PostMapping("/calculatePrice/{id}")
     public ResponseEntity<?> calculateOrderPrice(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.calculateOrderPrice(id));
@@ -91,26 +96,30 @@ public class OrderController {
 //    public ResponseEntity<?> updateOrderSalesAction(@RequestBody OrderSalesStaffCheckingRequestDTO request) {
 //        return ResponseEntity.ok(orderService.updateOrderSalesAction(request.getOrderId(), request.getSalesId(), request.getActionStatus()));
 //    }
-    @PreAuthorize("hasAuthority('Manager') or hasAuthority('SalesStaff') or hasAuthority('DeliveryStaff')")
-    @GetMapping("/recommendOrdersForDelivery/{deliveryStaffId}")
-    public ResponseEntity<?> recommendOrdersForDelivery(@PathVariable Long deliveryStaffId) {
-        return ResponseEntity.ok(orderService.findOrdersForDelivery(deliveryStaffId));
-    }
+//    @PreAuthorize("hasAuthority('Manager') or hasAuthority('SalesStaff') or hasAuthority('DeliveryStaff')")
+//    @GetMapping("/recommendOrdersForDelivery/{deliveryStaffId}")
+//    public ResponseEntity<?> recommendOrdersForDelivery(@PathVariable Long deliveryStaffId) {
+//        return ResponseEntity.ok(orderService.findOrdersForDelivery(deliveryStaffId));
+//    }
+
     @PreAuthorize("hasAuthority('DeliveryStaff')")
     @GetMapping("/onGoingOrder/{deliveryStaffId}/{deliveryProcessType}/{orderStatus}")
     public ResponseEntity<?> onGoingOrdersForDelivery(@PathVariable Long deliveryStaffId, @PathVariable int deliveryProcessType, @PathVariable int orderStatus) {
         return ResponseEntity.ok(orderService.onGoingOrdersForDelivery(deliveryStaffId, deliveryProcessType, orderStatus));
     }
-    @PreAuthorize("hasAnyRole()")
+
+//    @PreAuthorize("hasAnyRole()")
     @GetMapping("/searchOrderByTrackingId/{trackingId}")
     public ResponseEntity<?> getOrderByTrackingId(@PathVariable String trackingId) {
         return ResponseEntity.ok(orderService.getOrderByTrackingId(trackingId));
     }
+
     @PreAuthorize("hasAuthority('DeliveryStaff')")
     @PutMapping("/finishOrder")
     public ResponseEntity<?> finishOrder(@RequestBody FinishOrderUpdateRequestDTO request) {
         return ResponseEntity.ok(orderService.finishOrder(request));
     }
+
     @PreAuthorize("hasAuthority('Customer')")
     @PutMapping(value = "/editOrder/{orderId}")
     public ResponseEntity<?> editOrder(@PathVariable Long orderId, @RequestBody OrderGeneralInfoRequestDTO request) {
@@ -141,18 +150,21 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The order does not exist");
         }
     }
+
     @PreAuthorize("hasAuthority('SalesStaff')")
     @PutMapping("/accept-order")
     public ResponseEntity<?> acceptOrder(@RequestBody SalesCheckOrderRequestDTO request) {
         boolean createOrderDelivering = orderService.acceptOrder(request.getOrderId(), request.getSalesId());
         return ResponseEntity.ok(createOrderDelivering);
     }
+
     @PreAuthorize("hasAuthority('SalesStaff')")
     @PutMapping("/confirm-order")
     public ResponseEntity<?> confirmOrder(@RequestBody SalesCheckOrderRequestDTO request) {
         boolean createOrderDelivering = orderService.confirmOrder(request.getOrderId(), request.getSalesId());
         return ResponseEntity.ok(createOrderDelivering);
     }
+
     @PreAuthorize("hasAuthority('SalesStaff') or hasAuthority('DeliveryStaff')")
     @PutMapping("/cancel-order")
     public ResponseEntity<?> cancelOrder(@RequestBody StaffCancelOrderRequestDTO request) throws Exception {

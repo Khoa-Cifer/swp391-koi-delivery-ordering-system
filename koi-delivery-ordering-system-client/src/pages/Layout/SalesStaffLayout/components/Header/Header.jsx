@@ -7,8 +7,8 @@ import logo from "../../../../../assets/logo.png";
 import default_avatar from "../../../../../assets/default-avatar.jpg";
 import { useAuth } from "../../../../../authentication/AuthProvider";
 import { jwtDecode } from 'jwt-decode';
-import { getCustomerById } from '../../../../../utils/axios/customer';
 import { getFileByFileId } from '../../../../../utils/axios/file';
+import { getSalesStaffById } from '../../../../../utils/axios/salesStaff';
 
 function Header() {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -26,9 +26,9 @@ function Header() {
 
     useEffect(() => {
         async function fetchUserData() {
-            const customer = await getCustomerById(customerId);
-            if (customer.file) {
-                const imageResponse = await getFileByFileId(customer.file.id);;
+            const salesStaff = await getSalesStaffById(customerId);
+            if (salesStaff.file) {
+                const imageResponse = await getFileByFileId(salesStaff.file.id);;
                 const imgUrl = URL.createObjectURL(imageResponse);
                 setImagePreview(imgUrl);
             }

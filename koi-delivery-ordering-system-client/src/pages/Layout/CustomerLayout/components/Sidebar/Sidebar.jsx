@@ -17,6 +17,7 @@ const InfoHeader = styled(Typography)(() => ({
   marginTop: "8px"
 }));
 
+// eslint-disable-next-line react/prop-types
 function Sidebar({ pageHeaderInfo }) {
   const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState(default_avatar);

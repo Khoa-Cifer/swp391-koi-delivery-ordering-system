@@ -14,26 +14,29 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/news")
-@PreAuthorize("hasAuthority('Manager')")
 @RequiredArgsConstructor
 public class NewsController {
     private final INewsService newsService;
-    @PreAuthorize("hasAnyRole()")
+
+//    @PreAuthorize("hasAnyRole()")
     @GetMapping("/getAllNews")
     public ResponseEntity<?> getAllNews() {
         List<News> newsList = newsService.getAllNews();
         return ResponseEntity.ok(newsList);
     }
-    @PreAuthorize("hasAnyRole()")
+
+//    @PreAuthorize("hasAnyRole()")
     @GetMapping("/getNewsById/{id}")
     public ResponseEntity<?> getNewsById(@PathVariable Long id) {
         return ResponseEntity.ok(newsService.getNewsById(id));
     }
+
     @PreAuthorize("hasAuthority('SalesStaff')")
     @DeleteMapping("/deleteNewsById/{id}")
     public void deleteNewsById(@PathVariable Long id) {
         newsService.deleteNewsById(id);
     }
+
     @PreAuthorize("hasAuthority('SalesStaff')")
     @PostMapping(value = "/createNews/{salesStaffId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createNews(@PathVariable(name = "salesStaffId") Long salesStaffId,
@@ -44,20 +47,22 @@ public class NewsController {
 
         return ResponseEntity.ok(news);
     }
-    @PreAuthorize("hasAuthority('SalesStaff')")
-    @PutMapping(value = "/update-news", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateNews(@RequestParam(name = "newsId") Long newsId,
-                                        @RequestParam(name = "salesStaffId") Long salesStaffId,
-                                        @RequestParam(name = "title") String title,
-                                        @RequestParam(name = "description") String description,
-                                        @RequestParam(name = "image") MultipartFile file) throws IOException {
-        boolean news = newsService.updateNews(newsId, salesStaffId, title, description, file);
 
-        return ResponseEntity.ok(news);
-    }
-    @PreAuthorize("hasAuthority('SalesStaff')")
-    @GetMapping("/get-news-by-sales-staff/{salesStaffId}")
-    public ResponseEntity<?> getNewsBySalesStaffId(@PathVariable Long salesStaffId) {
-        return ResponseEntity.ok(newsService.getNewsCreatedBySalesStaff(salesStaffId));
-    }
+//    @PreAuthorize("hasAuthority('SalesStaff')")
+//    @PutMapping(value = "/update-news", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity<?> updateNews(@RequestParam(name = "newsId") Long newsId,
+//                                        @RequestParam(name = "salesStaffId") Long salesStaffId,
+//                                        @RequestParam(name = "title") String title,
+//                                        @RequestParam(name = "description") String description,
+//                                        @RequestParam(name = "image") MultipartFile file) throws IOException {
+//        boolean news = newsService.updateNews(newsId, salesStaffId, title, description, file);
+//
+//        return ResponseEntity.ok(news);
+//    }
+//
+//    @PreAuthorize("hasAuthority('SalesStaff')")
+//    @GetMapping("/get-news-by-sales-staff/{salesStaffId}")
+//    public ResponseEntity<?> getNewsBySalesStaffId(@PathVariable Long salesStaffId) {
+//        return ResponseEntity.ok(newsService.getNewsCreatedBySalesStaff(salesStaffId));
+//    }
 }

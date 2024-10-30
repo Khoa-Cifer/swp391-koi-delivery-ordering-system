@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Input, Modal, Popconfirm, Space, Table, Typography } from "antd";
-import { disableCustomerById as disableCustomerById, enableCustomerById, getAllCustomers, managerEditCustomerProfile } from "../../../../utils/axios/customer";
+import { disableCustomerById, enableCustomerById, getAllCustomers, managerEditCustomerProfile } from "../../../../utils/axios/customer";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../../components/toastContainer";
 

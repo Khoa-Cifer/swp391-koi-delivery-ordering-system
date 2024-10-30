@@ -28,15 +28,15 @@ public class LicenseServiceImpl implements ILicenseService{
         return licenseRepository.findAll();
     }
 
-    @Override
-    public Optional<License> getLicenseById(Long id) {
-        return licenseRepository.findById(id);
-    }
-
-    @Override
-    public void deleteLicenseById(Long id) {
-        licenseRepository.deleteById(id);
-    }
+//    @Override
+//    public Optional<License> getLicenseById(Long id) {
+//        return licenseRepository.findById(id);
+//    }
+//
+//    @Override
+//    public void deleteLicenseById(Long id) {
+//        licenseRepository.deleteById(id);
+//    }
 
     @Override
     public Long createLicenseRelatedToFishId(FishLicenseRequestDTO request) throws IOException {
@@ -66,57 +66,58 @@ public class LicenseServiceImpl implements ILicenseService{
             return false;
         }
     }
-    @Override
-    public License updateLicense(Long licenseId, String name, String description, Date dateOfIssue) {
-        License license = licenseRepository.findById(licenseId)
-                .orElseThrow(() -> new RuntimeException("License not found"));
 
-        if (name != null) {
-            license.setName(name);
-
-        }
-
-        if (description != null) {
-            license.setDescription(description);
-
-        }
-
-        if (dateOfIssue != null) {
-            license.setDateOfIssue(dateOfIssue);
-        }
-
-        return licenseRepository.save(license);
-    }
-
-    @Override
-    public boolean updateLicenseFile(Long licenceId, Long fileId, MultipartFile file) throws IOException {
-        Optional<License> optionalLicense = licenseRepository.findById(licenceId);
-
-        boolean response = false;
-
-        if (optionalLicense.isPresent()) {
-
-            LicenseFile licenseFile = licenseFileRepository.findAll().stream()
-                    .filter(licenseFile1 -> licenseFile1.getLicense().getId().equals(licenceId)
-                            && licenseFile1.getFile().getId().equals(fileId))
-                    .findFirst().orElse(null);
-            if (licenseFile != null) {
-                String updatedFile = fileService.updateFileInFileSystem(fileId, file);
-                if (updatedFile != null) {
-                    response = true;
-                }
-
-                return response;
-            } else {
-                LicenseFileRequestDTO licenseFileRequestDTO = new LicenseFileRequestDTO();
-                licenseFileRequestDTO.setLicenseId(licenceId);
-                licenseFileRequestDTO.setFile(file);
-
-                response = createFilesBasedOnLicenseId(licenseFileRequestDTO);
-
-                return response;
-            }
-        }
-        return response;
-    }
+//    @Override
+//    public License updateLicense(Long licenseId, String name, String description, Date dateOfIssue) {
+//        License license = licenseRepository.findById(licenseId)
+//                .orElseThrow(() -> new RuntimeException("License not found"));
+//
+//        if (name != null) {
+//            license.setName(name);
+//
+//        }
+//
+//        if (description != null) {
+//            license.setDescription(description);
+//
+//        }
+//
+//        if (dateOfIssue != null) {
+//            license.setDateOfIssue(dateOfIssue);
+//        }
+//
+//        return licenseRepository.save(license);
+//    }
+//
+//    @Override
+//    public boolean updateLicenseFile(Long licenceId, Long fileId, MultipartFile file) throws IOException {
+//        Optional<License> optionalLicense = licenseRepository.findById(licenceId);
+//
+//        boolean response = false;
+//
+//        if (optionalLicense.isPresent()) {
+//
+//            LicenseFile licenseFile = licenseFileRepository.findAll().stream()
+//                    .filter(licenseFile1 -> licenseFile1.getLicense().getId().equals(licenceId)
+//                            && licenseFile1.getFile().getId().equals(fileId))
+//                    .findFirst().orElse(null);
+//            if (licenseFile != null) {
+//                String updatedFile = fileService.updateFileInFileSystem(fileId, file);
+//                if (updatedFile != null) {
+//                    response = true;
+//                }
+//
+//                return response;
+//            } else {
+//                LicenseFileRequestDTO licenseFileRequestDTO = new LicenseFileRequestDTO();
+//                licenseFileRequestDTO.setLicenseId(licenceId);
+//                licenseFileRequestDTO.setFile(file);
+//
+//                response = createFilesBasedOnLicenseId(licenseFileRequestDTO);
+//
+//                return response;
+//            }
+//        }
+//        return response;
+//    }
 }

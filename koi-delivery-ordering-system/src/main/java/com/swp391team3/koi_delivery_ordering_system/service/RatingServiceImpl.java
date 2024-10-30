@@ -40,13 +40,13 @@ public class RatingServiceImpl implements IRatingService {
         return ratingRepository.findAll();
     }
 
-    @Override
-    public Optional<Rating> getRatingById(Long id) {
-        return ratingRepository.findById(id);
-    }
-
-    @Override
-    public void deleteRatingById(Long id) {
-        ratingRepository.deleteById(id);
-    }
+//    @Override
+//    public Optional<Rating> getRatingById(Long id) {
+//        return ratingRepository.findById(id);
+//    }
+//
+//    @Override
+//    public void deleteRatingById(Long id) {
+//        ratingRepository.deleteById(id);
+//    }
 }

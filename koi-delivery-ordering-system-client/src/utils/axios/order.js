@@ -115,16 +115,16 @@ export async function updateOrderStatus(orderId, status) {
 //   }
 // }
 
-export async function getOrdersRecommendedForDeliveryStaff(deliveryStaffId) {
-  try {
-    const response = await axiosClient.get(
-      `orders/recommendOrdersForDelivery/${deliveryStaffId}`
-    );
-    return response.data;
-  } catch (error) {
-    console.log(error);
-  }
-}
+// export async function getOrdersRecommendedForDeliveryStaff(deliveryStaffId) {
+//   try {
+//     const response = await axiosClient.get(
+//       `orders/recommendOrdersForDelivery/${deliveryStaffId}`
+//     );
+//     return response.data;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
 export async function getOrderByTrackingId(trackingId) {
   try {

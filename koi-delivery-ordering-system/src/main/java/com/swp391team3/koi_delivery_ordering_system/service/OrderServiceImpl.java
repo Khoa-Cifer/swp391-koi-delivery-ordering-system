@@ -294,32 +294,32 @@ public class OrderServiceImpl implements IOrderService {
         return price;
     }
 
-    @Override
-    public List<Order> findOrdersForDelivery(Long id) {
-        Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(id);
-        if (optionalDeliveryStaff.isPresent()) {
-            DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
-
-            List<Order> orders = orderRepository.findByOrderStatus(2);
-
-            List<Order> result = orders.stream()
-                    .filter(order -> Utilities.calculateDistance(
-                            Double.parseDouble(deliveryStaff.getLatitude()),
-                            Double.parseDouble(deliveryStaff.getLongitude()),
-                            Double.parseDouble(order.getSenderLatitude()),
-                            Double.parseDouble(order.getSenderLongitude())) <= 40)
-                    .sorted(Comparator.comparingDouble(order -> Utilities.calculateDistance(
-                            Double.parseDouble(deliveryStaff.getLatitude()),
-                            Double.parseDouble(deliveryStaff.getLongitude()),
-                            Double.parseDouble(order.getSenderLatitude()),
-                            Double.parseDouble(order.getSenderLongitude()))))
-                    .limit(5)
-                    .collect(Collectors.toList());
-
-            return result;
-        }
-        return null;
-    }
+//    @Override
+//    public List<Order> findOrdersForDelivery(Long id) {
+//        Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(id);
+//        if (optionalDeliveryStaff.isPresent()) {
+//            DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
+//
+//            List<Order> orders = orderRepository.findByOrderStatus(2);
+//
+//            List<Order> result = orders.stream()
+//                    .filter(order -> Utilities.calculateDistance(
+//                            Double.parseDouble(deliveryStaff.getLatitude()),
+//                            Double.parseDouble(deliveryStaff.getLongitude()),
+//                            Double.parseDouble(order.getSenderLatitude()),
+//                            Double.parseDouble(order.getSenderLongitude())) <= 40)
+//                    .sorted(Comparator.comparingDouble(order -> Utilities.calculateDistance(
+//                            Double.parseDouble(deliveryStaff.getLatitude()),
+//                            Double.parseDouble(deliveryStaff.getLongitude()),
+//                            Double.parseDouble(order.getSenderLatitude()),
+//                            Double.parseDouble(order.getSenderLongitude()))))
+//                    .limit(5)
+//                    .collect(Collectors.toList());
+//
+//            return result;
+//        }
+//        return null;
+//    }
 
     @Override
     public List<Order> onGoingOrdersForDelivery(Long id, int deliveryProcessType, int orderStatus) {
