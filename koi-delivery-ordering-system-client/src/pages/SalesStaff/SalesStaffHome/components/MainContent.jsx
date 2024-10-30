@@ -192,11 +192,11 @@ function MainContent({pageHeaderSales}) {
                 ))}
               </div>
 
-              {visibleNewsCount < news.length && (
+              {/* {visibleNewsCount < news.length && (
                 <div className="card-view-more">
                   <Button onClick={handleViewMoreNews}>View more →</Button>
                 </div>
-              )}
+              )} */}
             </div>
           </>
         )}
@@ -255,9 +255,9 @@ function MainContent({pageHeaderSales}) {
               ))}
             </div>
 
-            <div className="view-more">
+            {/* <div className="view-more">
               <Button onClick={handleViewMorePostedOrders}>View more →</Button>
-            </div>
+            </div> */}
           </div>
         )}
 
@@ -293,11 +293,11 @@ function MainContent({pageHeaderSales}) {
               ))}
             </div>
 
-            <div className="view-more">
+            {/* <div className="view-more">
               <Button onClick={handleViewMoreReceivedOrders}>
                 View more →
               </Button>
-            </div>
+            </div> */}
           </div>
         )}
       </div>

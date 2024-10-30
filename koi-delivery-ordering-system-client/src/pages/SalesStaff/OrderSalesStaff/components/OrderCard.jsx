@@ -28,7 +28,7 @@ const OrderCard = ({ orders, titleHeader }) => {
   return (
     <div className="order-container-sale">
       {/* Dynamic Header */}
-      <Box display="flex" alignItems="center" mb={3} marginLeft={-4} color="blue">
+      <Box style={{ marginLeft: "10px"}} display="flex" alignItems="center" mb={3} marginLeft={-4} color="blue">
       <ListItemIcon sx={{ color: "blue", marginRight:"-2%"}}>
           <ListIcon />
         </ListItemIcon>

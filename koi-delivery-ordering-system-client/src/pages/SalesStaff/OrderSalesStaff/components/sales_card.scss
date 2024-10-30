@@ -1,5 +1,4 @@
 .order-container-sale {
-  margin-left: 3%;
   width: 100%;
 
   .order {
@@ -27,7 +26,7 @@
     background: #fff;
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     transition: transform 0.3s ease;
     flex: 1 1 calc(30% - 25px);
     max-width: calc(30% - 25px);
@@ -66,6 +65,7 @@
   }
 
   .order-title {
+    color: rgb(1, 97, 17);
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 10px;
