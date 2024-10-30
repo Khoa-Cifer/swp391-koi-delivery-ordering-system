@@ -10,6 +10,7 @@ import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepo
 import com.swp391team3.koi_delivery_ordering_system.repository.ManagerRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.SalesStaffRepository;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.EmailDetailDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.ForgotPasswordRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestLoginDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestRegisterDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.ICustomerService;
@@ -42,14 +43,10 @@ public class AuthController {
     EmailService emailService;
     @Autowired
     PasswordEncoder passwordEncoder;
-    @Autowired
-    private CustomerRepository customerRepository;
-    @Autowired
-    private SalesStaffRepository salesStaffRepository;
-    @Autowired
-    private DeliveryStaffRepository deliveryStaffRepository;
-    @Autowired
-    private ManagerRepository managerRepository;
+    private final CustomerRepository customerRepository;
+    private final SalesStaffRepository salesStaffRepository;
+    private final DeliveryStaffRepository deliveryStaffRepository;
+    private final ManagerRepository managerRepository;
 
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody UserRequestLoginDTO request) {
@@ -117,7 +114,10 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestParam String email, @RequestParam int userType) {
+    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequestDTO request) {
+        String email = request.getEmail();
+        int userType = request.getUserType();
+        
         EmailDetailDTO emailDetail = new EmailDetailDTO();
         if (userType == UserType.CUSTOMER_ROLE_ID) {
             Customer customer = customerService.getCustomerByEmail(email);
@@ -144,14 +144,13 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email not found or unable to send reset link.");
         }
         emailDetail.setSubject("You have request a new password");
-        emailDetail.setLink("");
+        emailDetail.setLink("http://localhost:5173/reset-password" + "?email=" + email + "&userType=" + userType);
         emailService.sendEmail(emailDetail, 12);
         return ResponseEntity.ok().build();
-
     }
+
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestParam String email
-            , @RequestParam int userType, @RequestParam String password) {
+    public ResponseEntity<?> resetPassword(@RequestParam String email, @RequestParam int userType, @RequestParam String password) {
         String newPassword = passwordEncoder.encode(password);
         boolean passwordUpdated = false;
 
