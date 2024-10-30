@@ -222,7 +222,7 @@ const MainContent = () => {
         {onGoingDeliveringOrders && onGoingDeliveringOrders.length > 0 && (
           <div>
             <div className="order">
-              <strong>Your Delivering Order</strong>
+              <h2>Your Delivering Order</h2>
             </div>
             <div className="order-row">
               {onGoingDeliveringOrders &&
@@ -264,7 +264,7 @@ const MainContent = () => {
         {ongoingGettingOrders && ongoingGettingOrders.length > 0 && (
           <div>
             <div className="order">
-              <strong>Your Getting Order</strong>
+              <h3>Your Getting Order</h3>
             </div>
             <div className="order-row">
               {ongoingGettingOrders &&
@@ -306,7 +306,7 @@ const MainContent = () => {
         {acceptedOrders && acceptedOrders.length > 0 && (
           <div>
             <div className="order">
-              <strong>Waiting For Getting Order</strong>
+              <h3>Waiting For Getting Order</h3>
             </div>
             <div className="order-row">
               {acceptedOrders &&
@@ -348,7 +348,7 @@ const MainContent = () => {
         {confirmedOrders && confirmedOrders.length > 0 && (
           <div>
             <div className="order">
-              <strong>Waiting For Delivered Order</strong>
+              <h3>Waiting For Delivered Order</h3>
             </div>
             <div className="order-row">
               {confirmedOrders &&
