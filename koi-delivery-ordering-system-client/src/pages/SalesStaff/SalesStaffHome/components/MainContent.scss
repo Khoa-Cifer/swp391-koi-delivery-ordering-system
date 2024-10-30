@@ -11,7 +11,7 @@
     }
 
 .order-container{
-  margin-left: 6px;
+  margin: 6px 6px 6px 0;
 }
 
     .New{
@@ -78,9 +78,9 @@
     margin-top: 3%;
 
     .order {
-      font-size: 1.2em;
+      font-size: 1.3em;
       color: rgb(5, 10, 176);
-      margin-left: 4%;
+      margin-left: 1%;
     }
 
     .order-card {
@@ -102,7 +102,7 @@
       background: #fff;
       border-radius: 15px;
       overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
       transition: transform 0.3s ease;
       max-width: 30%;
       flex: 1;
@@ -138,6 +138,7 @@
     }
 
     .order-title {
+      color: rgb(1, 97, 17);
       font-size: 18px;
       font-weight: bold;
       margin-bottom: 10px;
