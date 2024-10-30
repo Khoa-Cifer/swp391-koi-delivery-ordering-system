@@ -47,7 +47,7 @@ function Customer() {
         setCustomer(record);
         setUsername(record.username);
         setEmail(record.email);
-        setPhoneNumber(formatPhoneNumber(record.phoneNumber));
+        setPhoneNumber(record.phoneNumber);
         setEditModalOpen(true);
     }
 

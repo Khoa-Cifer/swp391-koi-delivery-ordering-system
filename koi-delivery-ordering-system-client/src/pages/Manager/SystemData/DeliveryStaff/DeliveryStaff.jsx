@@ -48,7 +48,11 @@ function DeliveryStaff() {
         if (editingStaff) {
             const rawPhoneNumber = phoneNumber.replace(/[^\d]/g, "");
             const message = await managerEditDeliveryStaffProfile(editingStaff.id, username, email, rawPhoneNumber);
-            toast(message);
+            if (message) {
+                toast("Edit delivery staff successfully");
+              } else {
+                toast("Unexpected error has occurred");
+              }
             fetchDeliveryStaffs();
         }
         handleClose();
