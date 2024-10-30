@@ -1,6 +1,21 @@
 import { useEffect, useState } from "react";
-import { Table, Modal, Button, Input, Typography, notification, Popconfirm, Space, } from "antd";
-import { getAllSalesStaff, createSalesStaff, managerEditSalesStaffProfile, disableSalesStaffById, enableSalesStaffById, } from "../../../../utils/axios/salesStaff";
+import {
+  Table,
+  Modal,
+  Button,
+  Input,
+  Typography,
+  notification,
+  Popconfirm,
+  Space,
+} from "antd";
+import {
+  getAllSalesStaff,
+  createSalesStaff,
+  managerEditSalesStaffProfile,
+  disableSalesStaffById,
+  enableSalesStaffById,
+} from "../../../../utils/axios/salesStaff";
 import "react-toastify/dist/ReactToastify.css";
 import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";
@@ -28,12 +43,12 @@ function SalesStaff() {
   }, []);
 
   const handleCreateSalesStaff = async () => {
-    const response = await createSalesStaff(email, username, phoneNumber);
+    const rawPhoneNumber = phoneNumber.replace(/[^\d]/g, ""); // Ensure to save raw number if needed
+    const response = await createSalesStaff(email, username, rawPhoneNumber);
     notification.info({ message: response });
     await fetchSalesStaffs();
     setIsCreateModalOpen(false);
   };
-
   const handleClose = () => {
     setIsCreateModalOpen(false);
     setIsEditModalOpen(false);
@@ -43,18 +58,34 @@ function SalesStaff() {
     setPhoneNumber("");
   };
 
+  const formatPhoneNumber = (value) => {
+    if (!value) return value;
+    const phoneNumber = value.replace(/[^\d]/g, "");
+    const phoneNumberLength = phoneNumber.length;
+
+    if (phoneNumberLength < 4) return phoneNumber;
+    if (phoneNumberLength < 7) {
+      return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3)}`;
+    }
+    return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(
+      3,
+      6
+    )}-${phoneNumber.slice(6, 10)}`;
+  };
+
   async function handleEditSalesStaff() {
     if (editingSalesStaff) {
+      const rawPhoneNumber = phoneNumber.replace(/[^\d]/g, ""); // Ensure to save raw number if needed
       const response = await managerEditSalesStaffProfile(
         editingSalesStaff.id,
         username,
         email,
-        phoneNumber
+        rawPhoneNumber
       );
       if (response) {
         toast("Edit sales staff successfully");
       } else {
-        toast("Unexpected error has been occurred");
+        toast("Unexpected error has occurred");
       }
       fetchSalesStaffs();
     }
@@ -63,6 +94,9 @@ function SalesStaff() {
 
   function handleEdit(record) {
     setSalesStaff(record);
+    setUsername(record.username);
+    setEmail(record.email);
+    setPhoneNumber(record.phoneNumber);
     setIsEditModalOpen(true);
   }
 
@@ -112,6 +146,7 @@ function SalesStaff() {
       title: "Phone Number",
       dataIndex: "phoneNumber",
       key: "phoneNumber",
+      render: (phoneNumber) => formatPhoneNumber(phoneNumber),
     },
     {
       title: "Action",

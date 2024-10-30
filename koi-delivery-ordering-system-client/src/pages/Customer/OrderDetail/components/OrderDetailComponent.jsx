@@ -417,7 +417,7 @@ function OrderDetailComponent({ orders }) {
                     </FormBox>
                 </OrderCard>
 
-                <Box style={{ width: "45%" }}>
+                <Box style={{ width: "48%" }}>
                     {(currentOrder.orderStatus === 0 || currentOrder.orderStatus === 1) && (
                         <Box style={{ display: "flex", justifyContent: "flex-end" }}>
                             {currentOrder.orderStatus === 0 ? (
@@ -495,7 +495,7 @@ function OrderDetailComponent({ orders }) {
             <Typography variant="h6" style={{ marginTop: "20px", marginBottom: "10px" }}>Fish Information</Typography>
 
             <Table
-                style={{ width: "95%" }}
+                style={{ width: "95%", boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)" }}
                 dataSource={currentOrder.fishes || []}
                 columns={columns}
                 rowKey="id"
