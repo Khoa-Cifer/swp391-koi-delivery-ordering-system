@@ -59,12 +59,13 @@ import DeliveringOrder from "./pages/DeliveryStaff/DeliveryOrderHome/DeliveringO
 import Allnews from "./pages/public/News/Allnews";
 import NewsDetail from "./pages/public/News/NewsDetail";
 import Manager from "./pages/Manager/SystemData/Manager/manager";
-import SupportPage from "./pages/public/SupportPage";
+import SupportPage from "./pages/public/Support/SupportPage";
 import DraftOrderDetail from "./pages/Customer/OrderDetail/DraftOrderDetail/DraftOrderDetail";
 import PostedOrderDetail from "./pages/Customer/OrderDetail/PostedOrderDetail/PostedOrderDetail";
 import GettingOrderDetail from "./pages/Customer/OrderDetail/GettingOrderDetail/GettingOrderDetail";
 import DeliveringOrderDetail from "./pages/Customer/OrderDetail/DeliveringOrderDetail/DeliveringOrderDetail";
 import CompletedOrderDetail from "./pages/Customer/OrderDetail/CompletedOrderDetail/CompletedOrderDetail";
+import ForgotPassword from "./pages/public/ForgotPassword/ForgotPassword";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -120,6 +121,8 @@ function App() {
             <Route path="/support-page" element={<SupportPage />} />
             <Route path="/news" element={<Allnews />} />
             <Route path="/news/:id" element={<NewsDetail />} />
+
+            <Route path="/forgot-password" element={<ForgotPassword />} />
 
             <Route element={<ManagerLayout />}>
               <Route path="/admin/report" element={<ManagerPrivateRoute element={<Report />} />} />

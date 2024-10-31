@@ -9,10 +9,7 @@ import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepositor
 import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.ManagerRepository;
 import com.swp391team3.koi_delivery_ordering_system.repository.SalesStaffRepository;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.EmailDetailDTO;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.ForgotPasswordRequestDTO;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestLoginDTO;
-import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestRegisterDTO;
+import com.swp391team3.koi_delivery_ordering_system.requestDto.*;
 import com.swp391team3.koi_delivery_ordering_system.service.ICustomerService;
 import com.swp391team3.koi_delivery_ordering_system.service.IDeliveryStaffService;
 import com.swp391team3.koi_delivery_ordering_system.service.IManagerService;
@@ -27,6 +24,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping("api/auth")
@@ -134,63 +136,54 @@ public class AuthController {
             if (deliveryStaff != null) {
                 emailDetail.setReceiver(deliveryStaff);
             }
-        } else if (userType == UserType.MANAGER_ROLE_ID) {
-            Manager manager = managerService.getManagerByEmail(email);
-            if (manager != null) {
-                emailDetail.setReceiver(manager);
-            }
         }
+
         if(emailDetail.getReceiver() == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email not found or unable to send reset link.");
+            return ResponseEntity.ok(false);
         }
         emailDetail.setSubject("You have request a new password");
-        emailDetail.setLink("http://localhost:5173/reset-password" + "?email=" + email + "&userType=" + userType);
+        String encodedEmail = URLEncoder.encode(email, StandardCharsets.UTF_8);
+        System.out.println("Encoded email is: " + encodedEmail);
+        emailDetail.setLink("http://localhost:5173/forgot-password" + "?email=" + encodedEmail + "&userType=" + userType);
         emailService.sendEmail(emailDetail, 12);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(true);
     }
 
-    @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestParam String email, @RequestParam int userType, @RequestParam String password) {
+    @PutMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequestDTO request) {
+        String email = request.getEmail();
+        int userType = request.getUserType();
+        String password = request.getPassword();
+
         String newPassword = passwordEncoder.encode(password);
         boolean passwordUpdated = false;
 
+        String decodedEmail = URLDecoder.decode(email, StandardCharsets.UTF_8);
+
         // Kiểm tra roleId và cập nhật mật khẩu tương ứng
         if (userType == UserType.CUSTOMER_ROLE_ID) {
-            Customer customer = customerService.getCustomerByEmail(email);
+            Customer customer = customerService.getCustomerByEmail(decodedEmail);
             if (customer != null) {
                 customer.setPassword(newPassword);
                 customerRepository.save(customer);
                 passwordUpdated = true;
             }
         } else if (userType == UserType.SALES_STAFF_ROLE_ID) {
-            SalesStaff salesStaff = salesStaffService.getSalesStaffByEmail(email);
+            SalesStaff salesStaff = salesStaffService.getSalesStaffByEmail(decodedEmail);
             if (salesStaff != null) {
                 salesStaff.setPassword(newPassword);
                 salesStaffRepository.save(salesStaff);
                 passwordUpdated = true;
             }
         } else if (userType == UserType.DELIVERY_STAFF_ROLE_ID) {
-            DeliveryStaff deliveryStaff = deliveryStaffService.getDeliveryStaffByEmail(email);
+            DeliveryStaff deliveryStaff = deliveryStaffService.getDeliveryStaffByEmail(decodedEmail);
             if (deliveryStaff != null) {
                 deliveryStaff.setPassword(newPassword);
                 deliveryStaffRepository.save(deliveryStaff);
                 passwordUpdated = true;
             }
-        } else if (userType == UserType.MANAGER_ROLE_ID) {
-            Manager manager = managerService.getManagerByEmail(email);
-            if (manager != null) {
-                manager.setPassword(newPassword);
-                managerRepository.save(manager);
-                passwordUpdated = true;
-            }
-        }
-
-        if (!passwordUpdated) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid userType or email.");
         }
 
         return ResponseEntity.ok(passwordUpdated);
     }
-
-
 }
