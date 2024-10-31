@@ -53,7 +53,7 @@ public class FishController {
         return ResponseEntity.ok(fishService.getFishesByOrderId(orderId));
     }
 
-    @PreAuthorize("hasAuthority('DeliveryStaff') or hasAuthority('SalesStaff'))")
+    @PreAuthorize("hasAuthority('DeliveryStaff') or hasAuthority('SalesStaff')")
     @PutMapping("/update-fish-status/{id}/{status}")
     public ResponseEntity<?> updateFishStatus(@PathVariable Long id, @PathVariable int status) {
         return ResponseEntity.ok(fishService.updateFishStatus(id, status));
