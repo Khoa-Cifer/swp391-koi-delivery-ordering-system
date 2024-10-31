@@ -17,7 +17,8 @@ import { toast } from "react-toastify";
 import Paragraph from "antd/es/typography/Paragraph";
 import dateTimeConvert from "../../../../components/utils";
 
-function MainContent({pageHeaderSales}) {
+// eslint-disable-next-line react/prop-types
+function MainContent({ pageHeaderSales }) {
   const [postedOrder, setPostedOrder] = useState([]);
   const [receivedOrder, setReceivedOrder] = useState([]);
   const [news, setNews] = useState([]);
@@ -111,11 +112,12 @@ function MainContent({pageHeaderSales}) {
   };
 
   const handleViewMorePostedOrders = () => {
-    const newTitle = "Pos Orders";
+    const newTitle = "Post Orders";
     pageHeaderSales(newTitle);
     localStorage.setItem("titleHeader", newTitle);
     navigate("/posted-order-sales-staff");
   };
+  
   const handleViewMoreReceivedOrders = () => {
     navigate("/received-order-sales-staff");
     pageHeaderSales("Received Orders");

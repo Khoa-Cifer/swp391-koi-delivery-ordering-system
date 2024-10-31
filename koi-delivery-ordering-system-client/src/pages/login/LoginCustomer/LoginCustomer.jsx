@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./LoginCustomer.scss";
-import { Box, Button, Modal, Typography } from "@mui/material";
+import { Box, Button, Input, Modal, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../authentication/AuthProvider";
 import { userLogin } from "../../../utils/axios/customer";
@@ -23,10 +23,16 @@ const modalStyle = {
 };
 
 function LoginCustomer() {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false)
+  const [staffSelectorModalOpen, setStaffSelectorModalOpen] = useState(false);
+  const [forgotPasswordModalOpen, setForgotPasswordModalOpen] = useState(false);
 
+  const handleForgotPasswordOpen = () => setForgotPasswordModalOpen(true);
+  const handleForgotPasswordClose = () => setForgotPasswordModalOpen(false);
+
+  const handleStaffSelectionOpen = () => setStaffSelectorModalOpen(true);
+  const handleStaffSelectionClose = () => setStaffSelectorModalOpen(false)
+
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -56,6 +62,18 @@ function LoginCustomer() {
     setPassword(e.target.value);
   }
 
+  async function handleForgotPasswordSend() {
+    const userType = 1;
+    const response = await userLogin(forgotPasswordEmail, userType);
+    if (response) {
+      toast("We have send you a form to reset password through your email");
+      setForgotPasswordEmail("");
+      setForgotPasswordModalOpen(false);
+    } else {
+      toast("Unexpected error has been occurred");
+    }
+  }
+
   async function handleLogin(roleId) {
     const data = await userLogin(email, password, roleId);
     if (data) {
@@ -69,9 +87,37 @@ function LoginCustomer() {
   return (
     <div className="login">
       <ToastUtil />
+
       <Modal
-        open={open}
-        onClose={handleClose}
+        open={forgotPasswordModalOpen}
+        onClose={handleForgotPasswordClose}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={modalStyle}
+          style={{ padding: "40px 70px" }}>
+          <TextField
+            fullWidth
+            type=""
+            label="Input your email"
+            onChange={(e) => setForgotPasswordEmail(e.target.value)}
+          />
+          {forgotPasswordEmail.length > 0 ? (
+            <Button variant="outlined" onClick={() => handleForgotPasswordSend()}>
+              <Typography>Confirm</Typography>
+            </Button>
+          ) : (
+            <Button variant="outlined" disabled>
+              <Typography>Confirm</Typography>
+            </Button>
+          )}
+        </Box>
+      </Modal>
+
+      <Modal
+        open={staffSelectorModalOpen}
+        onClose={handleStaffSelectionClose}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
@@ -103,6 +149,7 @@ function LoginCustomer() {
           </Button>
         </Box>
       </Modal>
+
       <div className="wraper">
         <div className="login__form">
           <h3 className="text-center">
@@ -127,6 +174,12 @@ function LoginCustomer() {
             </Button>
           </div>
 
+          <div className="text-end">
+            <a className="small-link" onClick={() => handleForgotPasswordOpen()}>
+              Forgot password?
+            </a>
+          </div>
+
           <div className="form__bottom">
             <Button
               variant="outlined"
@@ -138,7 +191,7 @@ function LoginCustomer() {
             <Button
               variant="outlined"
               style={{ backgroundColor: "#C3F4FD" }}
-              onClick={() => handleOpen()}
+              onClick={() => handleStaffSelectionOpen()}
             >
               <Typography style={{ fontSize: "12px" }}>Are you with us ?</Typography>
             </Button>
