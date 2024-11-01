@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Avatar, Divider, ListItem, ListItemText, styled, Typography } from "@mui/material";
 import { List } from "antd";
 import "./sales_sidebar.scss";
@@ -14,7 +15,7 @@ const InfoHeader = styled(Typography)(() => ({
   fontSize: "12px",
 }));
 
-function Sidebar( {pageHeaderSales}) {
+function Sidebar({ pageHeaderSales }) {
   const [imagePreview, setImagePreview] = useState(default_avatar);
   const navigate = useNavigate();
 
@@ -45,10 +46,19 @@ function Sidebar( {pageHeaderSales}) {
     pageHeaderSales("Posted Order");
   }
 
-
   const handleOpenReceived = () => {
     navigate('/received-order-sales-staff')
     pageHeaderSales("Received Order");
+  }
+
+  const handleOpenHome = () => {
+    navigate('/sales-staff-home');
+    pageHeaderSales("Home");
+  }
+
+  const handleOpenEditProfile = () => {
+    navigate("/sales-staff-edit-profile")
+    pageHeaderSales("Edit Profile");
   }
 
   return (
@@ -60,7 +70,7 @@ function Sidebar( {pageHeaderSales}) {
           style={{ width: "7vw", height: "14vh" }}
         />
       </div>
-      <Typography style={{textAlign: "center"}}>Sales Staff</Typography>
+      <Typography style={{ textAlign: "center" }}>Sales Staff</Typography>
       <div className="profile">
         <InfoHeader>Username</InfoHeader>
         <Typography>{salesStaffInfo.userData.username}</Typography>
@@ -73,22 +83,21 @@ function Sidebar( {pageHeaderSales}) {
           <ListItem className="button">
             <ListItemText
               primary="Home"
-              onClick={() => navigate('/sales-staff-home')}
+              onClick={() => handleOpenHome()}
             />
           </ListItem>
           <ListItem className="button">
             <ListItemText
               primary="Profile"
+              onClick={() => handleOpenEditProfile()}
             />
           </ListItem>
           <Divider style={{ marginBottom: "5%" }}>Orders</Divider>
-          
+
           <ListItem className="button">
             <ListItemText
               primary="Posted Order"
               onClick={handleOpenPosted}
-              
-
             />
           </ListItem>
           <ListItem className="button">

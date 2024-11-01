@@ -9,6 +9,7 @@ import { Box, FormControl, InputLabel, MenuItem, Modal, Select } from "@mui/mate
 import dateTimeConvert from "../../../../components/utils";
 import { updateFishStatusById } from "../../../../utils/axios/fish";
 import { toast } from "react-toastify";
+import ToastUtil from "../../../../components/toastContainer";
 
 const modalStyle = {
   position: 'absolute',
@@ -118,31 +119,34 @@ const MainContent = () => {
 
   return state && (
     <Box style={{ display: "flex" }}>
+      <ToastUtil />
       <div className="main-content-license-delivery">
         <div className="slider-container">
           <ImageSlider fishInfo={state.fishes} images={imagePreviews} onImageChange={e => handleSlider(e)} />
         </div>
 
-        <Box sx={{ maxWidth: 180, marginTop: "20px" }}>
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Fish Status</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={fishStatus}
-              label="Status"
-              onChange={(e) => handleStatusChange(e)}
-            >
-              <MenuItem value={1}>Good</MenuItem>
-              <MenuItem value={2}>Sick</MenuItem>
-              <MenuItem value={3}>Dead</MenuItem>
-            </Select>
-          </FormControl>
+        {state.orderStatus === 6 && (
+          <Box sx={{ maxWidth: 180, marginTop: "20px" }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Fish Status</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={fishStatus}
+                label="Status"
+                onChange={(e) => handleStatusChange(e)}
+              >
+                <MenuItem value={1}>Good</MenuItem>
+                <MenuItem value={2}>Sick</MenuItem>
+                <MenuItem value={3}>Dead</MenuItem>
+              </Select>
+            </FormControl>
 
-          <Button type="primary" style={{ marginTop: "20px" }} onClick={() => handleGoBack()}>
-            Go back
-          </Button>
-        </Box>
+            <Button type="primary" style={{ marginTop: "20px" }} onClick={() => handleGoBack()}>
+              Go back
+            </Button>
+          </Box>
+        )}
 
         <Modal
           open={open}

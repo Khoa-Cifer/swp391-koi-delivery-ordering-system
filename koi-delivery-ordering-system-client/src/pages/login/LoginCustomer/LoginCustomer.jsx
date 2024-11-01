@@ -1,11 +1,13 @@
 import { useState } from "react";
 import "./LoginCustomer.scss";
-import { Box, Button, Input, Modal, TextField, Typography } from "@mui/material";
+import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../authentication/AuthProvider";
 import { userLogin } from "../../../utils/axios/customer";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../components/toastContainer";
+import { forgotPassword } from "../../../utils/axios/user";
+import Spinner from "../../../components/SpinnerLoading";
 
 const modalStyle = {
   display: 'flex',
@@ -31,7 +33,8 @@ function LoginCustomer() {
 
   const handleStaffSelectionOpen = () => setStaffSelectorModalOpen(true);
   const handleStaffSelectionClose = () => setStaffSelectorModalOpen(false)
-
+  
+  const [isLoading, setIsLoading] = useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -63,8 +66,9 @@ function LoginCustomer() {
   }
 
   async function handleForgotPasswordSend() {
+    setIsLoading(true);
     const userType = 1;
-    const response = await userLogin(forgotPasswordEmail, userType);
+    const response = await forgotPassword(forgotPasswordEmail, userType);
     if (response) {
       toast("We have send you a form to reset password through your email");
       setForgotPasswordEmail("");
@@ -72,6 +76,7 @@ function LoginCustomer() {
     } else {
       toast("Unexpected error has been occurred");
     }
+    setIsLoading(false);
   }
 
   async function handleLogin(roleId) {
@@ -87,6 +92,7 @@ function LoginCustomer() {
   return (
     <div className="login">
       <ToastUtil />
+      {isLoading && <Spinner />}
 
       <Modal
         open={forgotPasswordModalOpen}
