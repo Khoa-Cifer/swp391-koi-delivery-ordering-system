@@ -4,14 +4,13 @@ import { useOutletContext } from "react-router-dom";
 import { getOrdersByStatus } from "../../../utils/axios/order";
 
 function PostedOrderSalesStaff() {
-  const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const { titleHeader } = useOutletContext();  
+  
   useEffect(() => {
     const fetchPostedOrders = async () => {
       const response = await getOrdersByStatus(1); // postedOrderStatus = 1
       if (response) {
-        setOrders(response);
         setFilteredOrders(response);
       }
     };

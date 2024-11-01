@@ -29,26 +29,19 @@ function DeliveryStaffLayout() {
         {/* Fixed Sidebar */}
         <Box
           sx={{
-            position: "fixed",
-            top: "10%",
-            left: "1%",
+            top: "14%",
+            left: 0,
             width: "20%",
             height: "90%",
-            zIndex: 1000,
           }}
         >
           <Sidebar />
         </Box>
 
         {/* Main Content */}
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            ml: "20%",
-            mt: -5
-          }}
-        >
+        <Box component="main" sx={{
+          flexGrow: 1,
+        }}>
           <Outlet />
         </Box>
       </Box>

@@ -3,7 +3,6 @@ import Header from "./components/Header/Header";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
-import MainContent from "../../SalesStaff/SalesStaffHome/components/MainContent";
 
 function SalesStaffLayout() {
   const [titleHeader, setTitleHeader] = useState("");
@@ -48,12 +47,10 @@ function SalesStaffLayout() {
         {/* Fixed Sidebar */}
         <Box
           sx={{
-            position: "fixed",
             top: "14%",
             left: 0,
             width: "20%",
             height: "90%",
-            zIndex: 1000,
           }}
         >
           <Sidebar pageHeaderSales={handlePageHeader} />
@@ -61,7 +58,7 @@ function SalesStaffLayout() {
         </Box>
 
         {/* Main Content */}
-        <Box component="main" sx={{ flexGrow: 1, ml: "20%" }}>
+        <Box component="main" sx={{ flexGrow: 1 }}>
           <Outlet context={{ titleHeader }} />
         </Box>
       </Box>

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { getOnGoingOrderForDeliveryStaff } from "../../../utils/axios/order";
 import OrderCard from "./OrderCard/OrderCard";
 import { jwtDecode } from "jwt-decode";
+import { Box, ListItemIcon, Typography } from "@mui/material";
+import ListIcon from "@mui/icons-material/List";
 
 function GettingOrderDeliveryStaff() {
   const [orders, setOrders] = useState();
@@ -31,7 +33,12 @@ function GettingOrderDeliveryStaff() {
 
   return (
     <div className="content-container">
-      <h1>Getting Orders</h1>
+      <Box style={{ marginLeft: "10px" }} display="flex" alignItems="center" mb={3} marginLeft={-4} color="blue">
+        <ListItemIcon sx={{ color: "blue", marginRight: "-2%" }}>
+          <ListIcon />
+        </ListItemIcon>
+        <Typography variant="h6">Getting Orders</Typography>
+      </Box>
       <OrderCard orders={orders} />
     </div>
   );

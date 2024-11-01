@@ -1,14 +1,17 @@
 import "./MainContent.scss";
 import { useEffect, useState } from "react";
 import { getOrdersByStatus } from "../../../../utils/axios/order";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  ListItemIcon,
+  Typography,
 } from "@mui/material";
 import { deleteNewsById, getAllNews } from "../../../../utils/axios/news";
 import { getFileByFileId } from "../../../../utils/axios/file";
@@ -16,9 +19,12 @@ import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";
 import Paragraph from "antd/es/typography/Paragraph";
 import dateTimeConvert from "../../../../components/utils";
+import ListIcon from "@mui/icons-material/List";
 
 // eslint-disable-next-line react/prop-types
-function MainContent({ pageHeaderSales }) {
+function MainContent() {
+  const { titleHeader } = useOutletContext();  
+
   const [postedOrder, setPostedOrder] = useState([]);
   const [receivedOrder, setReceivedOrder] = useState([]);
   const [news, setNews] = useState([]);
@@ -111,23 +117,6 @@ function MainContent({ pageHeaderSales }) {
     });
   };
 
-  const handleViewMorePostedOrders = () => {
-    const newTitle = "Post Orders";
-    pageHeaderSales(newTitle);
-    localStorage.setItem("titleHeader", newTitle);
-    navigate("/posted-order-sales-staff");
-  };
-  
-  const handleViewMoreReceivedOrders = () => {
-    navigate("/received-order-sales-staff");
-    pageHeaderSales("Received Orders");
-  };
-
-  const handleViewMoreNews = () => {
-    setVisibleNewsCount((prevCount) => prevCount + 4);
-    navigate("/news");
-  };
-
   const handleNewsClick = (newsItem) => {
     navigate(`/news/${newsItem.id}`, { state: newsItem });
   };
@@ -135,6 +124,12 @@ function MainContent({ pageHeaderSales }) {
   return (
     <div className="main-content-container">
       <ToastUtil />
+      <Box style={{ marginLeft: "10px" }} display="flex" alignItems="center" mb={3} marginLeft={-4} color="blue">
+        <ListItemIcon sx={{ color: "blue", marginRight: "-2%" }}>
+          <ListIcon />
+        </ListItemIcon>
+        <Typography variant="h6">{titleHeader}</Typography>
+      </Box>
       <div className="news-container-sale">
         {news.length > 0 && (
           <>
