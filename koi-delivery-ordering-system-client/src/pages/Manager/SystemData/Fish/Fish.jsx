@@ -38,7 +38,7 @@ function Fish() {
             title: 'Price',
             dataIndex: 'price',
             key: 'price',
-            render: (price) => `${price} VND`,
+            render: (price) => `${price.toLocaleString()} VND`,
         },
         {
             title: 'Size',

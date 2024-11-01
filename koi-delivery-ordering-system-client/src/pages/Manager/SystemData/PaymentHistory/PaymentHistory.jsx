@@ -27,6 +27,7 @@ function PaymentHistory() {
             title: "Amount",
             dataIndex: "amount",
             key: "amount",
+            render: (amount) => `${amount.toLocaleString()} VND`,
         },
         {
             title: "Customer Name",
