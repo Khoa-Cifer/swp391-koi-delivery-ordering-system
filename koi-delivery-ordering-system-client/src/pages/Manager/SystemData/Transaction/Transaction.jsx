@@ -31,6 +31,7 @@ function Transaction() {
             title: 'Amount',
             dataIndex: 'amount',
             key: 'amount',
+            render: (amount) => `${amount.toLocaleString()} VND`,
         },
         {
             title: 'Transaction Date',
