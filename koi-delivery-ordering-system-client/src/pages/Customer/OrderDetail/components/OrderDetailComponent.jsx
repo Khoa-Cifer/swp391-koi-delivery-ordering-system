@@ -12,7 +12,6 @@ import { deleteFishById } from "../../../../utils/axios/fish";
 import { deleteOrderById } from "../../../../utils/axios/order";
 import { Dropdown, Menu, Space, Table } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
-import "./order_detail_component.scss"
 
 const OrderCard = styled(Box)(() => ({
     backgroundColor: "#C3F4FD",
@@ -241,7 +240,7 @@ function OrderDetailComponent({ orders }) {
     ];
 
     return orders && orders.length > 0 && (
-        <Box className="order-detail-tbl">
+        <Box>
             <ToastUtil />
             <Modal
                 open={orderModalOpen}
