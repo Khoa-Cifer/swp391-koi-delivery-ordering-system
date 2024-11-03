@@ -29,7 +29,8 @@ import DeliveryStaff from "./pages/Manager/SystemData/DeliveryStaff/DeliveryStaf
 import SalesStaff from "./pages/Manager/SystemData/SalesStaff/SalesStaff";
 import Dashboard from "./pages/Manager/Report/Dashboard";
 import TrackingOrder from "./pages/public/TrackingOrder/TrackingOrder";
-import "./App.css"
+import "./App.css";
+import "./App.scss";
 import PaymentRate from "./pages/Manager/SystemData/PaymentRate/PaymentRate";
 import ReceivedOrderSalesStaff from "./pages/SalesStaff/OrderSalesStaff/ReceivedOrderSalesStaff";
 import CustomerEditOrder from "./pages/Customer/CustomerEditOrder/CustomerEditOrder";
