@@ -16,8 +16,13 @@ import {
 } from "@react-google-maps/api";
 import { getOrderByTrackingId } from "../../../utils/axios/order"; // Ensure this function is defined to fetch order data
 import { useNavigate } from "react-router-dom";
-import CurrentPosition from "../../../assets/delivery-current.svg"
+import CurrentPosition from "../../../assets/delivery-current.svg";
 import dateTimeConvert from "../../../components/utils";
+import { getFileByFileId } from "../../../utils/axios/file";
+import { Modal } from "antd";
+import Title from "antd/es/skeleton/Title";
+import ImageSlider from "../../../components/ImageSlider";
+import { getAllLicenses } from "../../../utils/axios/license";
 
 const containerStyle = {
   width: "100%",
@@ -39,6 +44,12 @@ const TrackingOrder = () => {
   const [isShowAll, setIsShowAll] = useState(false);
   const [currentDelivery, setCurrentDelivery] = useState();
   const navigate = useNavigate();
+  const [imagePreviews, setImagePreviews] = useState([]); 
+  const [selectedFish, setSelectedFish] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [licenseData, setLicenseData] = useState([]);
+  const [licenseImages, setLicenseImages] = useState([]);
+  const [selectedLicense, setSelectedLicense] = useState(null);
 
   const orderStatusLabels = {
     0: "Draft",
@@ -60,10 +71,13 @@ const TrackingOrder = () => {
     if (trackingId) {
       try {
         const order = await getOrderByTrackingId(trackingId);
-        console.log("Order data:", order);
 
         if (order) {
-          if (order.orderStatus === 0 || order.orderStatus === 8 || order.orderStatus === 9) {
+          if (
+            order.orderStatus === 0 ||
+            order.orderStatus === 8 ||
+            order.orderStatus === 9
+          ) {
             setOrderData(null);
             setCurrentDelivery(null);
             setOrigin("");
@@ -71,9 +85,11 @@ const TrackingOrder = () => {
           }
           setOrderData(order);
           if (order.orderDeliveringSet && order.orderDeliveringSet.length > 0) {
-            const availableOrderDelivering = order.orderDeliveringSet.reduce((prev, current) => {
-              return (prev.id > current.id) ? prev : current;
-            });
+            const availableOrderDelivering = order.orderDeliveringSet.reduce(
+              (prev, current) => {
+                return prev.id > current.id ? prev : current;
+              }
+            );
             setCurrentDelivery(availableOrderDelivering);
           }
 
@@ -90,6 +106,44 @@ const TrackingOrder = () => {
       }
     }
   };
+
+  
+
+
+
+
+
+
+async function handleFishClick (order){
+  setSelectedFish(order.fishes);
+    setIsModalOpen(true);
+  try {
+    if (Array.isArray(order.fishes) && order.fishes.length > 0) {
+      const imagePromises = order.fishes.map(async (fish) => {
+        const fileId = fish.file.id;
+        const imageResponse = await getFileByFileId(fileId);
+        return URL.createObjectURL(
+          new Blob([imageResponse], { type: "image/jpeg" })
+        );
+      });
+
+      const imageUrls = await Promise.all(imagePromises);
+      setImagePreviews(imageUrls); 
+      console.log("image", imagePreviews);
+    }
+  } catch (error) {
+    console.error("Error fetching fish images:", error);
+  }
+}
+
+const handleCloseModal = () => {
+  imagePreviews.forEach((url) => URL.revokeObjectURL(url)); 
+  setIsModalOpen(false);
+  setSelectedFish(null);
+  setImagePreviews([]);
+};
+
+  
 
   useEffect(() => {
     if (origin && destination) {
@@ -121,7 +175,7 @@ const TrackingOrder = () => {
 
   const handleHomeBack = () => {
     navigate("/");
-  }
+  };
 
   return (
     <div>
@@ -160,13 +214,13 @@ const TrackingOrder = () => {
               label="Search by Tracking ID"
               type=""
               value={trackingId}
-              onChange={(e) => setTrackingId(e.target.value)} // Update tracking ID state
-              sx={{ mr: 1 }} // Margin to the right
+              onChange={(e) => setTrackingId(e.target.value)} 
+              sx={{ mr: 1 }} 
             />
             <Button
               variant="contained"
               color="primary"
-              onClick={handleSearch} // Trigger the search function
+              onClick={handleSearch} 
             >
               Search
             </Button>
@@ -195,18 +249,17 @@ const TrackingOrder = () => {
             zoom={10}
             center={center}
           >
-            {currentDelivery &&
+            {currentDelivery && (
               <Marker
                 position={{
                   lat: parseFloat(currentDelivery.latitude),
-                  lng: parseFloat(currentDelivery.longitude)
+                  lng: parseFloat(currentDelivery.longitude),
                 }}
                 icon={{
                   url: CurrentPosition,
                 }}
-              >
-              </Marker>
-            }
+              ></Marker>
+            )}
             {directions && <DirectionsRenderer directions={directions} />}
           </GoogleMap>
 
@@ -224,7 +277,6 @@ const TrackingOrder = () => {
                 zIndex: 1,
                 maxWidth: "300px",
               }}
-
               onClick={() => setIsShowAll(!isShowAll)}
             >
               {isShowAll ? (
@@ -232,13 +284,16 @@ const TrackingOrder = () => {
                   {/* .toLocaleString() */}
                   <Typography variant="h6">Order Detail</Typography>
                   <Typography variant="body2">
-                    <strong>Expected finish date:</strong> {dateTimeConvert(orderData.expectedFinishDate)}
+                    <strong>Expected finish date:</strong>{" "}
+                    {dateTimeConvert(orderData.expectedFinishDate)}
                   </Typography>
                   <Typography variant="body2">
-                    <strong>Price:</strong> {`${Math.floor(orderData.price).toLocaleString()} VND`}
+                    <strong>Price:</strong>{" "}
+                    {`${Math.floor(orderData.price).toLocaleString()} VND`}
                   </Typography>
                   <Typography variant="body2">
-                    <strong>Order status:</strong> {orderStatusLabels[orderData.orderStatus]}
+                    <strong>Order status:</strong>{" "}
+                    {orderStatusLabels[orderData.orderStatus]}
                   </Typography>
                   <Typography variant="body2">
                     <strong>Sender:</strong> {orderData.senderAddress}
@@ -264,11 +319,63 @@ const TrackingOrder = () => {
                   </Typography>
                 </>
               )}
-
+              <Box
+                sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleFishClick(orderData)}
+                  sx={{
+                    padding: "6px 12px", 
+                    fontSize: "0.875rem", 
+                    backgroundColor: "#1976d2", 
+                    "&:hover": {
+                      backgroundColor: "#115293", 
+                    },
+                  }}
+                >
+                  View Fish
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => handleLicenseClick(orderData)}
+                  sx={{
+                    padding: "6px 12px", 
+                    fontSize: "0.875rem", 
+                    backgroundColor: "#f50057", 
+                    "&:hover": {
+                      backgroundColor: "#ab003c", 
+                    },
+                  }}
+                >
+                  View License
+                </Button>
+              </Box>    
             </Box>
           )}
         </Box>
       </Container>
+
+
+
+      <Modal
+        open={isModalOpen}
+        onCancel={handleCloseModal}
+        style={{ maxWidth: "80vw", top: 20 }}
+      >
+        {selectedFish && (
+          <div>
+            <Title level={4} style={{ color: "#01428E" }}>
+              {selectedFish.name}
+            </Title>
+            <div className="slider-container" style={{ marginTop: "16px" }}>
+              <ImageSlider images={imagePreviews} />
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };
