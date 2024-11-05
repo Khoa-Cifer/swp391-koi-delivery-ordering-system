@@ -95,7 +95,7 @@ function Header() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            marginRight: "20px",
+            margin: "1%",
             gap: "20px"
           }}
         >

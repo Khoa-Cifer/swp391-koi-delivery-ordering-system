@@ -186,7 +186,7 @@ function SalesStaff() {
     <div>
       <ToastUtil />
       <div className="dashboard-info">
-        <Title level={2} style={{ marginTop: 0 }}>
+        <Title level={2} style={{ marginTop: 0, color:"#01428E" }}>
           Sales Staff
         </Title>
       </div>

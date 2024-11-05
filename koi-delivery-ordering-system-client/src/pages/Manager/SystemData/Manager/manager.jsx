@@ -156,7 +156,7 @@ function Manager() {
     <div>
       <ToastUtil />
       <div className="dashboard-info">
-        <Title level={2} style={{ marginTop: 0 }}>
+        <Title level={2} style={{ marginTop: 0, color:"#01428E" }}>
           Manager
         </Title>
       </div>

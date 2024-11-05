@@ -44,7 +44,7 @@ function PaymentHistory() {
     return (
         <div>
             <div className="dashboard-info">
-                <Title level={2} style={{ marginTop: 0 }}>
+                <Title level={2} style={{marginTop: 0, color:"#01428E" }}>
                     Payment History
                 </Title>
             </div>

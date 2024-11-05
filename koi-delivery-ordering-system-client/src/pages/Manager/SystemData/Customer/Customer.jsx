@@ -1,3 +1,4 @@
+import "./Customer.scss"
 import { useEffect, useState } from "react";
 import { Button, Input, Modal, Popconfirm, Space, Table, Typography } from "antd";
 import { disableCustomerById, enableCustomerById, getAllCustomers, managerEditCustomerProfile } from "../../../../utils/axios/customer";
@@ -144,7 +145,7 @@ function Customer() {
     return (
         <div>
             <div className="dashboard-info">
-                <Title level={2} style={{ marginTop: 0 }}>Customer</Title>
+                <Title level={2} style={{ marginTop: 0, color:"#01428E" }}>Customer</Title>
             </div>
             <ToastUtil />
             <Table
@@ -153,6 +154,7 @@ function Customer() {
                 rowKey="id"
                 pagination={{ pageSize: 5 }}
                 style={{ marginTop: "25px" }}
+                className="customer-table"
             />
             <Modal
                 title={"Edit Customer"}

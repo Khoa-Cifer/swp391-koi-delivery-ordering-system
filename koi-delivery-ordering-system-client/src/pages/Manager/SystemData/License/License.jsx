@@ -45,7 +45,7 @@ function License() {
   return (
     <div>
       <div className="dashboard-info">
-        <Title level={2} style={{ marginTop: 0 }}>Licenses</Title>
+        <Title level={2} style={{ marginTop: 0, color:"#01428E"}}>Licenses</Title>
       </div>
       <Table
         columns={columns}

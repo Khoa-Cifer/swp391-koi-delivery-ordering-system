@@ -175,7 +175,7 @@ function DeliveryStaff() {
         <div>
             <ToastUtil />
             <div className="dashboard-info">
-                <Title level={2} style={{ marginTop: 0 }}>Delivery Staff</Title>
+                <Title level={2} style={{ marginTop: 0, color:"#01428E"}}>Delivery Staff</Title>
             </div>
             <div>
                 <Space style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>

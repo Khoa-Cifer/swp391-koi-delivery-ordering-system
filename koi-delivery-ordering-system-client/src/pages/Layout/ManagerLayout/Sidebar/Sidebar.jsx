@@ -1,3 +1,4 @@
+import "./Sidebar.scss"
 import { List, ListItem, ListItemText, styled } from "@mui/material";
 import { Image, Typography } from "antd";
 import { useState } from "react";
@@ -44,7 +45,7 @@ function Sidebar() {
 
     return (
         <div className="admin-container-left">
-            <div className="logo">
+            <div className="logo" >
                 <Image src={logo} />
             </div>
 
@@ -53,7 +54,7 @@ function Sidebar() {
             </div>
 
             <div className="admin-users">
-                <CustomTypo>DASHBOARD & REPORT</CustomTypo>
+                <CustomTypo><strong>DASHBOARD & REPORT</strong></CustomTypo>
                 <List>
                     {dashboardItemList && dashboardItemList.map && dashboardItemList.map((text) => (
                         <ListItem
@@ -77,7 +78,7 @@ function Sidebar() {
             </div>
 
             <div className="modules">
-                <CustomTypo>MODULES</CustomTypo>
+                <CustomTypo><strong>MODULES</strong></CustomTypo>
 
                 <div className="modules-information">
                     <List>

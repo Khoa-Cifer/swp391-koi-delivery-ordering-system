@@ -102,7 +102,7 @@ function PaymentRate() {
     return (
         <div>
             <div className="dashboard-info">
-                <Title level={2} style={{ marginTop: 0 }}>Payment Rate Board</Title>
+                <Title level={2} style={{ marginTop: 0, color:"#01428E" }}>Payment Rate Board</Title>
             </div>
 
             <Header>Price Base</Header>

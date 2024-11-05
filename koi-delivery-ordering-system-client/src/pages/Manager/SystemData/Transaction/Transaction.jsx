@@ -44,7 +44,7 @@ function Transaction() {
     return (
         <div>
             <div className="dashboard-info">
-                <Typography.Title level={2} style={{ marginTop: 0 }}>Transaction</Typography.Title>
+                <Typography.Title level={2} style={{ marginTop: 0, color:"#01428E" }}>Transaction</Typography.Title>
             </div>
 
             <Table 
