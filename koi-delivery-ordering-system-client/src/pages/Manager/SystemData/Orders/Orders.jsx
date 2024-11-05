@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Table, Typography, Input, Pagination, Row, Col, Select } from "antd";
+import { Table, Typography, Input, Row, Col, Select } from "antd";
 import { getAllOrders } from "../../../../utils/axios/order";
 import ToastUtil from "../../../../components/toastContainer";
 const { Option } = Select;
@@ -29,9 +29,6 @@ function Orders() {
   const handleSelectStatusChange = (e) => {
     setSelectedOrderStatus(e);
   }
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 15;
 
   const handleFilter = () => {
     let filtered = orders;
@@ -66,18 +63,6 @@ function Orders() {
   useEffect(() => {
     handleFilter();
   }, [searchTrackingId, searchOrderName, orders]); // Re-filter when search terms or orders change
-
-  // Handle page change
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  const indexOfLastOrder = currentPage * ordersPerPage;
-  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = filteredOrders.slice(
-    indexOfFirstOrder,
-    indexOfLastOrder
-  );
 
   const columns = [
     {
@@ -134,12 +119,12 @@ function Orders() {
     <div>
       <ToastUtil />
       <div className="dashboard-info">
-        <Title level={2} style={{ marginTop: 0, color:"#01428E" }}>
+        <Title level={2} style={{ marginTop: 0, color: "#01428E" }}>
           Orders
         </Title>
       </div>
 
-      <Row gutter={16} style={{ marginBottom: "16px", paddingLeft: "5%" }}>
+      <Row gutter={16} style={{ marginBottom: "16px", paddingLeft: "5%", marginRight: "0px" }}>
         <Col span={8}>
           <Search
             placeholder="Tracking ID"
@@ -159,36 +144,27 @@ function Orders() {
           />
         </Col>
         <Col span={8}>
-        <Select
-          placeholder="Filter by order's status"
-          value={selectedOrderStatus}
-          onChange={handleSelectStatusChange}
-          style={{ width: "50%" }}
-          allowClear
-        >
-          <Option value={-1}>Select</Option>
-          <Option value={1}>Option 1</Option>
-          <Option value={2}>Option 2</Option>
-          <Option value={3}>Option 3</Option>
-        </Select>
-      </Col>
+          <Select
+            placeholder="Filter by order's status"
+            value={selectedOrderStatus}
+            onChange={handleSelectStatusChange}
+            style={{ width: "50%" }}
+            allowClear
+          >
+            <Option value={-1}>Select</Option>
+            <Option value={1}>Option 1</Option>
+            <Option value={2}>Option 2</Option>
+            <Option value={3}>Option 3</Option>
+          </Select>
+        </Col>
       </Row>
 
       <Table
         columns={columns}
-        dataSource={currentOrders}
-        pagination={false}
+        dataSource={filteredOrders}
+        pagination={{ pageSize: 15 }}
         rowKey="id"
         style={{ marginTop: "25px" }}
-      />
-
-      {/* Pagination */}
-      <Pagination
-        current={currentPage}
-        pageSize={ordersPerPage}
-        total={filteredOrders.length}
-        onChange={handlePageChange}
-        style={{ marginTop: "20px", textAlign: "right" }}
       />
     </div>
   );

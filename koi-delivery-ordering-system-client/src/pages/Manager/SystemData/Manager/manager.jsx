@@ -176,7 +176,7 @@ function Manager() {
         dataSource={managerData}
         columns={columns}
         rowKey="id"
-        pagination={{ pageSize: 5 }} // Adjust as needed
+        pagination={{ pageSize: 15 }} // Adjust as needed
       />
 
       <Modal

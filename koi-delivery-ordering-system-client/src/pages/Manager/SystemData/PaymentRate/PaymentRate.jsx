@@ -102,10 +102,10 @@ function PaymentRate() {
     return (
         <div>
             <div className="dashboard-info">
-                <Title level={2} style={{ marginTop: 0, color:"#01428E" }}>Payment Rate Board</Title>
+                <Title level={2} style={{ marginTop: 0, color: "#01428E" }}>Payment Rate Board</Title>
             </div>
 
-            <Header>Price Base</Header>
+            <Header style={{ marginLeft: "20px" }}>Price Base</Header>
             <Table
                 dataSource={paymentServiceBaseData}
                 columns={columns}
@@ -113,7 +113,7 @@ function PaymentRate() {
                 style={{ marginTop: "25px" }}
             />
 
-            <Header>Price Rate</Header>
+            <Header style={{ marginLeft: "20px" }}>Price Rate</Header>
             <Table
                 dataSource={paymentServiceRateData}
                 columns={columns}

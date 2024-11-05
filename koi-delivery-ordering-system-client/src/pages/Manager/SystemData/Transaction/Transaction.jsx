@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Table, Typography } from "antd";
 import { getAllTransaction } from "../../../../utils/axios/transaction";
 
@@ -44,14 +44,14 @@ function Transaction() {
     return (
         <div>
             <div className="dashboard-info">
-                <Typography.Title level={2} style={{ marginTop: 0, color:"#01428E" }}>Transaction</Typography.Title>
+                <Typography.Title level={2} style={{ marginTop: 0, color: "#01428E" }}>Transaction</Typography.Title>
             </div>
 
-            <Table 
-                dataSource={transactionData} 
-                columns={columns} 
-                rowKey="id" 
-                pagination={{ pageSize: 5 }} // Adjust pagination as needed
+            <Table
+                dataSource={transactionData}
+                columns={columns}
+                rowKey="id"
+                pagination={{ pageSize: 15 }} // Adjust pagination as needed
                 style={{ marginTop: "25px" }}
             />
         </div>

@@ -1,4 +1,3 @@
-import "./Customer.scss"
 import { useEffect, useState } from "react";
 import { Button, Input, Modal, Popconfirm, Space, Table, Typography } from "antd";
 import { disableCustomerById, enableCustomerById, getAllCustomers, managerEditCustomerProfile } from "../../../../utils/axios/customer";
@@ -152,7 +151,7 @@ function Customer() {
                 columns={columns}
                 dataSource={customerData}
                 rowKey="id"
-                pagination={{ pageSize: 5 }}
+                pagination={{ pageSize: 15 }}
                 style={{ marginTop: "25px" }}
                 className="customer-table"
             />

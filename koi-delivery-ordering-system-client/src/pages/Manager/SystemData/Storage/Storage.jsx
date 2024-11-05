@@ -127,7 +127,7 @@ function Storage() {
       <Table
         dataSource={storageData}
         rowKey="id"
-        pagination={{ pageSize: 5 }} // Adjust as needed
+        pagination={{ pageSize: 15 }} // Adjust as needed
       >
         <Table.Column title="Id" dataIndex="id" key="id" />
         <Table.Column title="Name" dataIndex="name" key="name" />

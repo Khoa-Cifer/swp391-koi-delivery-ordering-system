@@ -53,7 +53,7 @@ function PaymentHistory() {
                 columns={columns}
                 dataSource={paymentHistoryData}
                 rowKey="id"
-                pagination={{ pageSize: 5 }} // Adjust page size as needed
+                pagination={{ pageSize: 15 }} // Adjust page size as needed
                 style={{ marginTop: "25px" }}
             />
         </div>

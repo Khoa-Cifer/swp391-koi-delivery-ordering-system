@@ -184,11 +184,12 @@ function DeliveryStaff() {
                     </Button>
                 </Space>
             </div>
+            
             <Table
                 dataSource={deliveryStaffData}
                 columns={columns}
                 rowKey="id"
-                pagination={{ pageSize: 5 }}
+                pagination={{ pageSize: 15 }}
             />
 
             <Modal
