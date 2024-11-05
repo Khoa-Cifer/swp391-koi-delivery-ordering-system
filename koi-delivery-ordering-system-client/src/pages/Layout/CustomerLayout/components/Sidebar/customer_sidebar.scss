@@ -42,9 +42,15 @@
       margin-bottom: 5%;
       background-color: rgb(255, 255, 255);
       color: #151f5f;
-      border-radius: 20px;
+      border-radius: 17px;
       width: 100%; /* Center the button and ensure it takes full width */
       text-align: center; /* Align text to center */
+    }
+    .button:hover {
+      cursor: pointer;
+      background-color: #01428e;
+      color: white;
+      border-radius: 17px;
     }
   }
 }

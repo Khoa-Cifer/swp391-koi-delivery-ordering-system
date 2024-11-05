@@ -247,7 +247,8 @@ function OrderInfo({ orderId, formStepData }) {
                         type="primary"
                         onClick={() => handleButtonClick(0)}
                         style={{
-                            backgroundColor: selectedButton === 0 ? 'blue' : '',
+                            backgroundColor: selectedButton === 0 ? '#1b3176' : '#C4F3FD',
+                            color: selectedButton === 1 ? 'black' : 'white'
                         }}
                     >
                         Select Address for Sender
@@ -255,11 +256,11 @@ function OrderInfo({ orderId, formStepData }) {
                     <Button
                         onClick={() => handleButtonClick(1)}
                         style={{
-                            backgroundColor: selectedButton === 1 ? 'aqua' : '#C4F3FD',
+                            backgroundColor: selectedButton === 1 ? '#1b3176' : '#C4F3FD',
                             color: selectedButton === 1 ? 'white' : 'black'
                         }}
                     >
-                        Select Address for Receiver
+                        Select Address for Destination
                     </Button>
                 </Flex>
                 <GoogleMap

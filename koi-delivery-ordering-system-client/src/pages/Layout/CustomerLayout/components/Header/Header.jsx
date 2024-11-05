@@ -66,13 +66,13 @@ function Header() {
                     onClick={() => handleHomeBack()}
                     src={logo}
                     alt="Logo"
-                    style={{ width: "180px" }}
+                    style={{ width: "16vw" }}
                 />
             </div>
 
             <div className="function">
-                <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }} onClick={() => navigate("/")}><strong>Home</strong></Button>
-                <Button style={{ backgroundColor: "white", color: "rgb(17, 17, 162)" }} onClick={() => navigate("/support-page")}><strong>Support</strong></Button>
+                <Button style={{ fontSize: "1.1em", height: "45px", backgroundColor: "white", color: "rgb(17, 17, 162)"}} onClick={() => navigate("/")}><strong>Home</strong></Button>
+                <Button style={{ fontSize: "1.1em", height: "45px", backgroundColor: "white", color: "rgb(17, 17, 162)"}} onClick={() => navigate("/support-page")}><strong>Support</strong></Button>
             </div>
 
             <div className="logo">

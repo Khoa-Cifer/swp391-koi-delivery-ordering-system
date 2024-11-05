@@ -100,7 +100,7 @@ function Sidebar({ pageHeaderInfo }) {
           style={{ width: "7vw", height: "14vh" }}
         />
       </div>
-      <Typography style={{textAlign: "center"}}>Customer</Typography>
+      <Typography style={{textAlign: "center", fontSize: "1.3em" }}>Customer</Typography>
       <div className="profile">
         <InfoHeader>Username</InfoHeader>
         <Typography variant="body1">{customerInfo.userData.username}</Typography>
@@ -123,7 +123,7 @@ function Sidebar({ pageHeaderInfo }) {
             />
           </ListItemButton>
 
-          <Divider style={{ margin: "16px 0" }}>Orders</Divider>
+          <Divider style={{ margin: "16px 0", fontSize: "1.1em" }}>Orders</Divider>
 
           <ListItemButton className="button" onClick={handleOpenCreateOrder}>
             <ListItemText primary="Create Order" />
@@ -131,7 +131,6 @@ function Sidebar({ pageHeaderInfo }) {
 
           <ListItemButton
             className="button"
-            style={{ backgroundColor: "#1e4fa9" }}
             sx={{ justifyContent: 'flex-start' }}
             onClick={handleToggleOrders}
           >
