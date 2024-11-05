@@ -45,6 +45,10 @@ function Orders() {
       );
     }
 
+    if (selectedOrderStatus !== -1) {
+      filtered = filtered.filter((order) => 
+        order.orderStatus == selectedOrderStatus);
+    }
     setFilteredOrders(filtered);
   };
 
@@ -62,7 +66,7 @@ function Orders() {
 
   useEffect(() => {
     handleFilter();
-  }, [searchTrackingId, searchOrderName, orders]); // Re-filter when search terms or orders change
+  }, [searchTrackingId, searchOrderName, orders, selectedOrderStatus]); // Re-filter when search terms or orders change
 
   const columns = [
     {
@@ -152,9 +156,9 @@ function Orders() {
             allowClear
           >
             <Option value={-1}>Select</Option>
-            <Option value={1}>Option 1</Option>
-            <Option value={2}>Option 2</Option>
-            <Option value={3}>Option 3</Option>
+            {Object.entries(statusMapping).map((status, index) => (
+              <Option key={index} value={status[0]}>{status[1]}</Option>
+            ))}
           </Select>
         </Col>
       </Row>
@@ -164,7 +168,7 @@ function Orders() {
         dataSource={filteredOrders}
         pagination={{ pageSize: 15 }}
         rowKey="id"
-        style={{ marginTop: "25px" }}
+        style={{ marginTop: "25px", marginRight: "10px", marginLeft: "10px" }}
       />
     </div>
   );

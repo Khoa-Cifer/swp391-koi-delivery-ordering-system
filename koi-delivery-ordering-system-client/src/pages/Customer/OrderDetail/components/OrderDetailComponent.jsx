@@ -218,7 +218,6 @@ function OrderDetailComponent({ orders }) {
             dataIndex: "id",
             render: (id, record) => (
                 <Space size="middle">
-
                     <Dropdown
                         overlay={
                             <Menu>
