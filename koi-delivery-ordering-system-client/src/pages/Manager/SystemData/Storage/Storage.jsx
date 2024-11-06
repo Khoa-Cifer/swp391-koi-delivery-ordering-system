@@ -108,7 +108,7 @@ function Storage() {
     <div>
       <ToastUtil />
       <div className="dashboard-info">
-        <Title level={2} style={{ marginTop: 0, color:"#01428E"}}>
+        <Title level={2} style={{ marginTop: 0, color: "#01428E" }}>
           Storage
         </Title>
       </div>
@@ -119,7 +119,7 @@ function Storage() {
           marginBottom: "20px",
         }}
       >
-        <Button type="primary" onClick={handleOpen}>
+        <Button type="primary" style={{ marginRight: "20px" }} onClick={handleOpen}>
           Create New Storage
         </Button>
       </div>

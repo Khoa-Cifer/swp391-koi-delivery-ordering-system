@@ -3,6 +3,7 @@ import { Table, Typography, Button, Modal } from "antd";
 import { getAllFishes } from "../../../../utils/axios/fish";
 import ImageSlider from "../../../../components/ImageSlider"; // Import your ImageSlider component
 import { getFileByFileId } from "../../../../utils/axios/file";
+import { useLocation } from "react-router-dom";
 
 const { Title } = Typography;
 
@@ -12,36 +13,43 @@ function Fish() {
   const [selectedFish, setSelectedFish] = useState(null);
   const [imagePreviews, setImagePreviews] = useState([]);
 
+  const location = useLocation();
+  const { state } = location;
+
   useEffect(() => {
     async function fetchFish() {
-      const fetchedData = await getAllFishes();
-      if (fetchedData) {
-        setFishData(fetchedData);
+      if (state) {
+        console.log(state);
+      } else {
+        const fetchedData = await getAllFishes();
+        if (fetchedData) {
+          setFishData(fetchedData);
+        }
       }
     }
     fetchFish();
   }, []);
-  console.log(imagePreviews);
+  
   const handleViewFish = async (fish) => {
     setSelectedFish(fish);
     setIsModalOpen(true);
-  
+
     try {
       // Log the fish files for debugging
-  
-        const fileId = fish.file.id; // Fetching the first image
-        const imageResponse = await getFileByFileId(fileId);
-  
-        const imageUrl = URL.createObjectURL(new Blob([imageResponse], { type: "image/jpeg" }));
-        
-        console.log("Image URL:", imageUrl);
-        
-        setImagePreviews([imageUrl]); 
-      
+
+      const fileId = fish.file.id; // Fetching the first image
+      const imageResponse = await getFileByFileId(fileId);
+
+      const imageUrl = URL.createObjectURL(new Blob([imageResponse], { type: "image/jpeg" }));
+
+      console.log("Image URL:", imageUrl);
+
+      setImagePreviews([imageUrl]);
+
     } catch (error) {
       console.error("Error fetching fish images:", error);
     }
-  };        
+  };
 
   const handleCloseModal = () => {
     imagePreviews.forEach((url) => URL.revokeObjectURL(url)); // Clean up object URLs

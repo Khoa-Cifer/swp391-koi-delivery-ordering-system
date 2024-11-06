@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import { Table, Typography, Input, Row, Col, Select } from "antd";
+import { Table, Typography, Input, Row, Col, Select, Space, Dropdown, Menu } from "antd";
 import { getAllOrders } from "../../../../utils/axios/order";
 import ToastUtil from "../../../../components/toastContainer";
+import { Button, Divider } from "@mui/material";
+import { MoreOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 const { Option } = Select;
 const { Title } = Typography;
 const { Search } = Input;
@@ -13,6 +16,8 @@ function Orders() {
   const [searchOrderName, setSearchOrderName] = useState(""); // For search by customer name
   const [selectedOrderStatus, setSelectedOrderStatus] = useState(-1);
 
+  const navigate = useNavigate();
+
   const statusMapping = {
     0: "Draft",
     1: "Posted",
@@ -23,7 +28,6 @@ function Orders() {
     6: "Delivering",
     7: "Complete",
     8: "Failed",
-    9: "Aborted by Customer",
   };
 
   const handleSelectStatusChange = (e) => {
@@ -46,7 +50,7 @@ function Orders() {
     }
 
     if (selectedOrderStatus !== -1) {
-      filtered = filtered.filter((order) => 
+      filtered = filtered.filter((order) =>
         order.orderStatus == selectedOrderStatus);
     }
     setFilteredOrders(filtered);
@@ -63,17 +67,18 @@ function Orders() {
 
     fetchGettingOrder();
   }, []);
-
   useEffect(() => {
     handleFilter();
   }, [searchTrackingId, searchOrderName, orders, selectedOrderStatus]); // Re-filter when search terms or orders change
 
+  const handleViewFishList = (fishes) => {
+    console.log(fishes);
+    navigate(`/admin/fish`, {
+      state: fishes,
+    });
+  }
+
   const columns = [
-    {
-      title: "Id",
-      dataIndex: "id",
-      key: "id",
-    },
     {
       title: "Name",
       dataIndex: "name",
@@ -110,12 +115,32 @@ function Orders() {
       title: "Price",
       dataIndex: "price",
       key: "price",
+      render: (price) => `${price.toLocaleString()} VND`,
     },
     {
       title: "Order status",
       dataIndex: "orderStatus",
       key: "orderStatus",
       render: (status) => statusMapping[status],
+    }, {
+      title: 'Action',
+      key: 'action',
+      dataIndex: "fishes",
+      render: (record) => (
+        <Space size="middle">
+          <Dropdown
+            overlay={
+              <Menu style={{ display: "flex", flexDirection: "column" }}>
+                <Divider />
+                <Button onClick={() => handleViewFishList(record)}>View Fishes</Button>
+              </Menu>
+            }
+            trigger={['click']}
+          >
+            <MoreOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
+          </Dropdown>
+        </Space>
+      ),
     },
   ];
 

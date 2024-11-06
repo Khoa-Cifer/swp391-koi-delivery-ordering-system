@@ -138,7 +138,7 @@ function App() {
               <Route path="/admin/payment-history" element={<ManagerPrivateRoute element={<PaymentHistory />} />} />
               <Route path="/admin/license" element={<ManagerPrivateRoute element={<License />} />} />
               <Route path="/admin/transaction" element={<ManagerPrivateRoute element={<Transaction />} />} />
-              <Route path="/admin/orders" element={<ManagerPrivateRoute element={<Orders />} />} />
+              <Route path="/admin/order" element={<ManagerPrivateRoute element={<Orders />} />} />
             </Route>
 
             <Route element={<CustomerLayout />}>

@@ -32,7 +32,7 @@ function Sidebar() {
         // "Fish",
         // "License",
         // "News",
-        "Orders",
+        "Order",
     ];
 
     const dashboardItemList = ["Dashboard", "Report"];

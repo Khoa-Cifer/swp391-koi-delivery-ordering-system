@@ -186,7 +186,7 @@ function SalesStaff() {
     <div>
       <ToastUtil />
       <div className="dashboard-info">
-        <Title level={2} style={{ marginTop: 0, color:"#01428E" }}>
+        <Title level={2} style={{ marginTop: 0, color: "#01428E" }}>
           Sales Staff
         </Title>
       </div>
@@ -197,7 +197,7 @@ function SalesStaff() {
           marginBottom: "20px",
         }}
       >
-        <Button type="primary" onClick={() => handleCreate(true)}>
+        <Button type="primary" style={{ marginRight: "20px" }} onClick={() => handleCreate(true)}>
           Create New Sales Staff
         </Button>
       </div>

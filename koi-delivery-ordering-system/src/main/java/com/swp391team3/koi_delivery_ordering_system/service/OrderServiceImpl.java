@@ -28,6 +28,11 @@ public class OrderServiceImpl implements IOrderService {
     private final IPaymentRateService paymentRateService;
     private final IOrderActionLogService orderActionLogService;
     private final OrderDeliveringRepository orderDeliveringRepository;
+    private final LicenseFileRepository licenseFileRepository;
+    private final IFileService fileService;
+    private final LicenseRepository licenseRepository;
+    private final FishRepository fishRepository;
+    private final FileRepository fileRepository;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
@@ -38,7 +43,9 @@ public class OrderServiceImpl implements IOrderService {
             @Lazy IOrderDeliveringService orderDeliveringService,
             IDeliveryStaffService deliveryStaffService, IPaymentRateService paymentRateService,
             IOrderActionLogService orderActionLogService,
-            OrderDeliveringRepository orderDeliveringRepository) {
+            OrderDeliveringRepository orderDeliveringRepository, LicenseFileRepository licenseFileRepository,
+            IFileService fileService, LicenseRepository licenseRepository, FishRepository fishRepository,
+            FileRepository fileRepository) {
         this.orderActionLogService = orderActionLogService;
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
@@ -52,6 +59,11 @@ public class OrderServiceImpl implements IOrderService {
         this.deliveryStaffService = deliveryStaffService;
         this.paymentRateService = paymentRateService;
         this.orderDeliveringRepository = orderDeliveringRepository;
+        this.licenseFileRepository = licenseFileRepository;
+        this.fileService = fileService;
+        this.licenseRepository = licenseRepository;
+        this.fishRepository = fishRepository;
+        this.fileRepository = fileRepository;
     }
 
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
@@ -109,43 +121,41 @@ public class OrderServiceImpl implements IOrderService {
         boolean result = false;
         Optional<Order> optionalOrder = getOrderById(id);
         if (optionalOrder.isPresent()) {
-            optionalOrder.get().setOrderStatus(orderStatus.ABORTED_BY_CUSTOMER);
-            orderRepository.save(optionalOrder.get());
-            result = true;
-            // Order order = optionalOrder.get();
-            // int currentStatus = order.getOrderStatus();
-            // if(currentStatus == orderStatus.DRAFT || currentStatus == orderStatus.POSTED)
-            // {
-            // Set<Fish> fishes = order.getFishes();
-            // if (fishes != null) {
-            // for (Fish fish : fishes) {
-            // Set<License> licenses = fish.getLicenses();
-            // if (licenses != null) {
-            // for (License license : licenses) {
-            // Set<LicenseFile> licenseFiles = licenseFileRepository.findAll().stream()
-            // .filter(licenseFile1 -> licenseFile1.getLicense().equals(license))
-            // .collect(Collectors.toSet());
-            // if (licenseFiles != null) {
-            // for (LicenseFile licenseFile : licenseFiles) {
-            // Long licenseFileId = licenseFile.getFile().getId();
-            // fileService.deleteFile(licenseFileId);
-            // }
-            // licenseFileRepository.deleteAll(licenseFiles);
-            // }
-            // licenseRepository.delete(license);
-            // }
-            // }
-            // fishRepository.delete(fish);
-            // if (fish.getFile() != null) {
-            // fileRepository.delete(fish.getFile());
-            // fileService.deleteFile(fish.getFile().getId());
-            // }
-            // }
-            // }
-            // orderRepository.deleteById(id);
-            // result = true;
-            // return result;
-            // } else return result;
+            Order order = optionalOrder.get();
+            int currentStatus = order.getOrderStatus();
+            if (currentStatus == orderStatus.DRAFT || currentStatus == orderStatus.POSTED) {
+                Set<Fish> fishes = order.getFishes();
+                if (fishes != null) {
+                    for (Fish fish : fishes) {
+                        Set<License> licenses = fish.getLicenses();
+                        if (licenses != null) {
+                            for (License license : licenses) {
+                                Set<LicenseFile> licenseFiles = licenseFileRepository.findAll().stream()
+                                        .filter(licenseFile1 -> licenseFile1.getLicense().equals(license))
+                                        .collect(Collectors.toSet());
+                                if (licenseFiles != null) {
+                                    for (LicenseFile licenseFile : licenseFiles) {
+                                        Long licenseFileId = licenseFile.getFile().getId();
+                                        fileService.deleteFile(licenseFileId);
+                                    }
+                                    licenseFileRepository.deleteAll(licenseFiles);
+                                }
+                                licenseRepository.delete(license);
+                            }
+                        }
+                        fishRepository.delete(fish);
+                        if (fish.getFile() != null) {
+                            fileRepository.delete(fish.getFile());
+                            fileService.deleteFile(fish.getFile().getId());
+                        }
+                    }
+                }
+                orderRepository.deleteById(id);
+                result = true;
+                return result;
+            } else {
+                return result;
+            }
         }
         return result;
     }
@@ -292,32 +302,33 @@ public class OrderServiceImpl implements IOrderService {
         return price;
     }
 
-//    @Override
-//    public List<Order> findOrdersForDelivery(Long id) {
-//        Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(id);
-//        if (optionalDeliveryStaff.isPresent()) {
-//            DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
-//
-//            List<Order> orders = orderRepository.findByOrderStatus(2);
-//
-//            List<Order> result = orders.stream()
-//                    .filter(order -> Utilities.calculateDistance(
-//                            Double.parseDouble(deliveryStaff.getLatitude()),
-//                            Double.parseDouble(deliveryStaff.getLongitude()),
-//                            Double.parseDouble(order.getSenderLatitude()),
-//                            Double.parseDouble(order.getSenderLongitude())) <= 40)
-//                    .sorted(Comparator.comparingDouble(order -> Utilities.calculateDistance(
-//                            Double.parseDouble(deliveryStaff.getLatitude()),
-//                            Double.parseDouble(deliveryStaff.getLongitude()),
-//                            Double.parseDouble(order.getSenderLatitude()),
-//                            Double.parseDouble(order.getSenderLongitude()))))
-//                    .limit(5)
-//                    .collect(Collectors.toList());
-//
-//            return result;
-//        }
-//        return null;
-//    }
+    // @Override
+    // public List<Order> findOrdersForDelivery(Long id) {
+    // Optional<DeliveryStaff> optionalDeliveryStaff =
+    // deliveryStaffRepository.findById(id);
+    // if (optionalDeliveryStaff.isPresent()) {
+    // DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
+    //
+    // List<Order> orders = orderRepository.findByOrderStatus(2);
+    //
+    // List<Order> result = orders.stream()
+    // .filter(order -> Utilities.calculateDistance(
+    // Double.parseDouble(deliveryStaff.getLatitude()),
+    // Double.parseDouble(deliveryStaff.getLongitude()),
+    // Double.parseDouble(order.getSenderLatitude()),
+    // Double.parseDouble(order.getSenderLongitude())) <= 40)
+    // .sorted(Comparator.comparingDouble(order -> Utilities.calculateDistance(
+    // Double.parseDouble(deliveryStaff.getLatitude()),
+    // Double.parseDouble(deliveryStaff.getLongitude()),
+    // Double.parseDouble(order.getSenderLatitude()),
+    // Double.parseDouble(order.getSenderLongitude()))))
+    // .limit(5)
+    // .collect(Collectors.toList());
+    //
+    // return result;
+    // }
+    // return null;
+    // }
 
     @Override
     public List<Order> onGoingOrdersForDelivery(Long id, int deliveryProcessType, int orderStatus) {
@@ -582,7 +593,8 @@ public class OrderServiceImpl implements IOrderService {
                     logResult = orderActionLogService.logOrderAction(UserType.SALES_STAFF_ROLE_ID, request.getUserId(),
                             ActionType.CANCEL, order);
                 } else if (request.getUserType() == UserType.DELIVERY_STAFF_ROLE_ID) {
-                    logResult = orderActionLogService.logOrderAction(UserType.DELIVERY_STAFF_ROLE_ID, request.getUserId(),
+                    logResult = orderActionLogService.logOrderAction(UserType.DELIVERY_STAFF_ROLE_ID,
+                            request.getUserId(),
                             ActionType.CANCEL, order);
                 } else {
                     throw new Exception("Undefined user type");
@@ -613,7 +625,8 @@ public class OrderServiceImpl implements IOrderService {
     public boolean abortOrder(Long orderId) {
         Optional<Order> foundOrder = orderRepository.findById(orderId);
         if (foundOrder.isPresent()) {
-            Optional<OrderDelivering> foundOrderDelivering = orderDeliveringRepository.findByOrderIdAndProcessType(orderId, ProcessType.GETTING);
+            Optional<OrderDelivering> foundOrderDelivering = orderDeliveringRepository
+                    .findByOrderIdAndProcessType(orderId, ProcessType.GETTING);
             if (foundOrderDelivering.isPresent()) {
                 orderDeliveringRepository.delete(foundOrderDelivering.get());
                 foundOrder.get().setOrderStatus(orderStatus.ORDER_ACCEPTED);

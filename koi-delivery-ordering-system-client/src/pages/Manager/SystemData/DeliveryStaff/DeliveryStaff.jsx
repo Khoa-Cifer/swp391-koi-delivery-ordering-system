@@ -50,9 +50,9 @@ function DeliveryStaff() {
             const message = await managerEditDeliveryStaffProfile(editingStaff.id, username, email, rawPhoneNumber);
             if (message) {
                 toast("Edit delivery staff successfully");
-              } else {
+            } else {
                 toast("Unexpected error has occurred");
-              }
+            }
             fetchDeliveryStaffs();
         }
         handleClose();
@@ -175,16 +175,16 @@ function DeliveryStaff() {
         <div>
             <ToastUtil />
             <div className="dashboard-info">
-                <Title level={2} style={{ marginTop: 0, color:"#01428E"}}>Delivery Staff</Title>
+                <Title level={2} style={{ marginTop: 0, color: "#01428E" }}>Delivery Staff</Title>
             </div>
             <div>
                 <Space style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
-                    <Button type="primary" onClick={handleOpen}>
+                    <Button type="primary" style={{ marginRight: "20px" }} onClick={handleOpen}>
                         Create New Delivery Staff
                     </Button>
                 </Space>
             </div>
-            
+
             <Table
                 dataSource={deliveryStaffData}
                 columns={columns}
