@@ -22,7 +22,8 @@ import { getFileByFileId } from "../../../utils/axios/file";
 import { Modal } from "antd";
 import Title from "antd/es/skeleton/Title";
 import ImageSlider from "../../../components/ImageSlider";
-import { getAllLicenses } from "../../../utils/axios/license";
+import { toast } from "react-toastify";
+import ToastUtil from "../../../components/toastContainer";
 
 const containerStyle = {
   width: "100%",
@@ -44,12 +45,12 @@ const TrackingOrder = () => {
   const [isShowAll, setIsShowAll] = useState(false);
   const [currentDelivery, setCurrentDelivery] = useState();
   const navigate = useNavigate();
-  const [imagePreviews, setImagePreviews] = useState([]); 
+  const [imagePreviews, setImagePreviews] = useState([]);
   const [selectedFish, setSelectedFish] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [licenseData, setLicenseData] = useState([]);
-  const [licenseImages, setLicenseImages] = useState([]);
+  const [isLicenseModalOpen, setIsLicenseModalOpen] = useState(false);
   const [selectedLicense, setSelectedLicense] = useState(null);
+  const [licenseImages, setLicenseImages] = useState([]);
 
   const orderStatusLabels = {
     0: "Draft",
@@ -82,6 +83,8 @@ const TrackingOrder = () => {
             setCurrentDelivery(null);
             setOrigin("");
             setDestination("");
+            toast("There is no order to track", { type: "warning" });
+            return;
           }
           setOrderData(order);
           if (order.orderDeliveringSet && order.orderDeliveringSet.length > 0) {
@@ -100,6 +103,7 @@ const TrackingOrder = () => {
           setCurrentDelivery(null);
           setOrigin("");
           setDestination("");
+          toast("Tracking ID not found", { type: "error" });
         }
       } catch (error) {
         console.error("Error fetching order:", error);
@@ -107,43 +111,72 @@ const TrackingOrder = () => {
     }
   };
 
-  
+  const handleLicenseClick = async (order) => {
+    setSelectedLicense(order.fishes[0].licenses[0]);
 
-
-
-
-
-
-async function handleFishClick (order){
-  setSelectedFish(order.fishes);
-    setIsModalOpen(true);
-  try {
-    if (Array.isArray(order.fishes) && order.fishes.length > 0) {
-      const imagePromises = order.fishes.map(async (fish) => {
-        const fileId = fish.file.id;
-        const imageResponse = await getFileByFileId(fileId);
-        return URL.createObjectURL(
-          new Blob([imageResponse], { type: "image/jpeg" })
+    try {
+      if (
+        Array.isArray(order.fishes[0].licenses[0].files) &&
+        order.fishes[0].licenses[0].files.length > 0
+      ) {
+        const imagePromises = order.fishes[0].licenses[0].files.map(
+          async (file) => {
+            const fileId = file.file.id;
+            const imageResponse = await getFileByFileId(fileId);
+            console.log(imageResponse);
+            return URL.createObjectURL(
+              new Blob([imageResponse], { type: "image/jpeg" })
+            );
+          }
         );
-      });
-
-      const imageUrls = await Promise.all(imagePromises);
-      setImagePreviews(imageUrls); 
-      console.log("image", imagePreviews);
+        const images = await Promise.all(imagePromises);
+        setLicenseImages(images);
+        setIsLicenseModalOpen(true);
+      }
+    } catch (error) {
+      console.error("Error fetching license image:", error);
     }
-  } catch (error) {
-    console.error("Error fetching fish images:", error);
+  };
+  console.log("license", licenseImages);
+
+  console.log("fis", imagePreviews);
+
+  // Close License Modal
+  const handleCloseLicenseModal = () => {
+    licenseImages.forEach((url) => URL.revokeObjectURL(url)); // Revoke URLs
+    setIsLicenseModalOpen(false);
+    setSelectedLicense(null);
+    setLicenseImages([]);
+  };
+
+  async function handleFishClick(order) {
+    setSelectedFish(order.fishes);
+    setIsModalOpen(true);
+
+    try {
+      if (Array.isArray(order.fishes) && order.fishes.length > 0) {
+        const imagePromises = order.fishes.map(async (fish) => {
+          const fileId = fish.file.id;
+          const imageResponse = await getFileByFileId(fileId);
+          return URL.createObjectURL(
+            new Blob([imageResponse], { type: "image/jpeg" })
+          );
+        });
+
+        const imageUrls = await Promise.all(imagePromises);
+        setImagePreviews(imageUrls);
+      }
+    } catch (error) {
+      console.error("Error fetching fish images:", error);
+    }
   }
-}
 
-const handleCloseModal = () => {
-  imagePreviews.forEach((url) => URL.revokeObjectURL(url)); 
-  setIsModalOpen(false);
-  setSelectedFish(null);
-  setImagePreviews([]);
-};
-
-  
+  const handleCloseModal = () => {
+    imagePreviews.forEach((url) => URL.revokeObjectURL(url));
+    setIsModalOpen(false);
+    setSelectedFish(null);
+    setImagePreviews([]);
+  };
 
   useEffect(() => {
     if (origin && destination) {
@@ -179,6 +212,7 @@ const handleCloseModal = () => {
 
   return (
     <div>
+      <ToastUtil />
       <AppBar position="static" color="default">
         <Toolbar
           sx={{
@@ -214,14 +248,10 @@ const handleCloseModal = () => {
               label="Search by Tracking ID"
               type=""
               value={trackingId}
-              onChange={(e) => setTrackingId(e.target.value)} 
-              sx={{ mr: 1 }} 
+              onChange={(e) => setTrackingId(e.target.value)}
+              sx={{ mr: 1 }}
             />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSearch} 
-            >
+            <Button variant="contained" color="primary" onClick={handleSearch}>
               Search
             </Button>
           </Box>
@@ -327,11 +357,11 @@ const handleCloseModal = () => {
                   color="primary"
                   onClick={() => handleFishClick(orderData)}
                   sx={{
-                    padding: "6px 12px", 
-                    fontSize: "0.875rem", 
-                    backgroundColor: "#1976d2", 
+                    padding: "6px 12px",
+                    fontSize: "0.875rem",
+                    backgroundColor: "#1976d2",
                     "&:hover": {
-                      backgroundColor: "#115293", 
+                      backgroundColor: "#115293",
                     },
                   }}
                 >
@@ -342,38 +372,79 @@ const handleCloseModal = () => {
                   color="secondary"
                   onClick={() => handleLicenseClick(orderData)}
                   sx={{
-                    padding: "6px 12px", 
-                    fontSize: "0.875rem", 
-                    backgroundColor: "#f50057", 
+                    padding: "6px 12px",
+                    fontSize: "0.875rem",
+                    backgroundColor: "#f50057",
                     "&:hover": {
-                      backgroundColor: "#ab003c", 
+                      backgroundColor: "#ab003c",
                     },
                   }}
                 >
                   View License
                 </Button>
-              </Box>    
+              </Box>
             </Box>
           )}
         </Box>
       </Container>
 
+      <Modal
+        open={isLicenseModalOpen}
+        onCancel={handleCloseLicenseModal}
+        style={{ maxWidth: "80vw", top: 20 }}
+      >
+        {selectedLicense ? (
+          <div>
+            <Title level={4} style={{ color: "#01428E" }}>
+              License Details
+            </Title>
 
+            <div className="slider-container" style={{ marginTop: "16px" }}>
+              {licenseImages.length === 1 ? (
+                // Show single image if there's only one license image
+                <img
+                  src={licenseImages[0]}
+                  alt="License"
+                  style={{ width: "100%", borderRadius: "8px" }}
+                />
+              ) : (
+                // Show ImageSlider if there are multiple license images
+                <ImageSlider images={licenseImages} />
+              )}
+            </div>
+          </div>
+        ) : (
+          "No licenses to show"
+        )}
+      </Modal>  
 
       <Modal
         open={isModalOpen}
         onCancel={handleCloseModal}
         style={{ maxWidth: "80vw", top: 20 }}
       >
-        {selectedFish && (
+        {selectedFish ? (
           <div>
             <Title level={4} style={{ color: "#01428E" }}>
-              {selectedFish.name}
+              {selectedFish?.name || "Unnamed Fish"}
             </Title>
+
             <div className="slider-container" style={{ marginTop: "16px" }}>
-              <ImageSlider images={imagePreviews} />
+              {imagePreviews.length === 1 ? (
+                // Show single image if there's only one
+                <img
+                  src={imagePreviews[0]}
+                  alt="Fish"
+                  style={{ width: "100%", borderRadius: "8px" }}
+                />
+              ) : (
+                // Show ImageSlider if there are multiple images
+                <ImageSlider images={imagePreviews} />
+              )}
             </div>
           </div>
+        ) : (
+          "No fish selected"
         )}
       </Modal>
     </div>
