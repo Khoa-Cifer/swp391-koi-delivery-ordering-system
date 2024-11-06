@@ -1,11 +1,20 @@
 import { Box, styled } from "@mui/material";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Calendar } from "react-date-range";
 import { GoogleMap } from "@react-google-maps/api";
 import { Button, Flex } from "antd";
 import { createGeneralOrderInfo } from "../../../../utils/axios/order";
 import ToastUtil from "../../../../components/toastContainer";
+import { usePlacesWidget } from "react-google-autocomplete";
+import { fromAddress, setDefaults } from "react-geocode";
+import { CONSTANT_GOOGLE_MAP_API_KEY } from "../../../../utils/constants";
+
+setDefaults({
+    key: CONSTANT_GOOGLE_MAP_API_KEY, // Your API key here.
+    language: "en", // Default language for responses.
+    region: "es", // Default region for responses.
+});
 
 const CustomBoxContainer = styled(Box)(() => ({
     display: "flex",
@@ -109,6 +118,16 @@ function OrderInfo({ orderId, formStepData }) {
         setReceiverPhoneNumber(formattedPhone.slice(0, 12));
     }
 
+    const { ref: senderRef } = usePlacesWidget({
+        apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
+        onPlaceSelected: (place) => console.log(place)
+    })
+
+    const { ref: receiverRef } = usePlacesWidget({
+        apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
+        onPlaceSelected: (place) => console.log(place)
+    })
+
     async function handleSubmit() {
         if (!orderName || !orderDescription || !receiverAddress || !senderAddress || !expectedFinishDate
             || !receiverEmail || !receiverPhoneNumber
@@ -157,6 +176,30 @@ function OrderInfo({ orderId, formStepData }) {
         }
     }
 
+    useEffect(() => {
+        if (receiverAddress && receiverAddress.length > 0) {
+            fromAddress(receiverAddress)
+                .then(({ results }) => {
+                    const lat = results[0].geometry.location.lat;
+                    const lng = results[0].geometry.location.lng;
+                    setReceiverCoordinates({ lat, lng });
+                })
+                .catch(console.log("Invalid address"));
+        }
+    }, [receiverAddress])
+
+    useEffect(() => {
+        if (senderAddress && senderAddress.length > 0) {
+            fromAddress(senderAddress)
+                .then(({ results }) => {
+                    const lat = results[0].geometry.location.lat;
+                    const lng = results[0].geometry.location.lng;
+                    setSenderCoordinates({ lat, lng });
+                })
+                .catch(console.log("Invalid address"));
+        }
+    }, [senderAddress])
+
     const handleDateChange = (e) => {
         setExpectedFinishDate(e);
     }
@@ -196,7 +239,7 @@ function OrderInfo({ orderId, formStepData }) {
                             className="form-input"
                             onChange={e => handleSenderAddressChange(e)}
                             value={senderAddress}
-                            readOnly
+                            ref={senderRef}
                         />
                     </div>
 
@@ -208,7 +251,7 @@ function OrderInfo({ orderId, formStepData }) {
                             className="form-input"
                             onChange={e => handleReceiverAddressChange(e)}
                             value={receiverAddress}
-                            readOnly
+                            ref={receiverRef}
                         />
                     </div>
 
