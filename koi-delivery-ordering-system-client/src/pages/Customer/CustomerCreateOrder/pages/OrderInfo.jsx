@@ -115,7 +115,6 @@ function OrderInfo({ orderId, formStepData }) {
     const { ref: senderRef } = usePlacesWidget({
         apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
         onPlaceSelected: (place) => {
-            console.log(place);
             setSenderAddress(place.formatted_address);
         }
     })
@@ -123,7 +122,6 @@ function OrderInfo({ orderId, formStepData }) {
     const { ref: receiverRef } = usePlacesWidget({
         apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
         onPlaceSelected: (place) => {
-            console.log(place);
             setReceiverAddress(place.formatted_address);
         }
     })
@@ -144,6 +142,11 @@ function OrderInfo({ orderId, formStepData }) {
         if (receiverPhoneNumber.length !== 12) { //contain 2 dash
             // Check if phone number has exactly 10 digits
             toast("Phone number must be exactly 10 digits");
+            return;
+        }
+
+        if (!senderCoordinates || !receiverCoordinates) {
+            toast("Invalid address");
             return;
         }
 
@@ -183,10 +186,11 @@ function OrderInfo({ orderId, formStepData }) {
                     const lat = results[0].geometry.location.lat;
                     const lng = results[0].geometry.location.lng;
                     setReceiverCoordinates({ lat, lng });
-                    console.log(lat);
-                    console.log(lng);
                 })
-                .catch(console.log("Invalid address"));
+                .catch(() => {
+                    console.log("Invalid address");
+                    setReceiverCoordinates(null);
+                });
         }
     }, [receiverAddress])
 
@@ -197,10 +201,11 @@ function OrderInfo({ orderId, formStepData }) {
                     const lat = results[0].geometry.location.lat;
                     const lng = results[0].geometry.location.lng;
                     setSenderCoordinates({ lat, lng });
-                    console.log(lat);
-                    console.log(lng);
                 })
-                .catch(console.log("Invalid address"));
+                .catch(() => {
+                    console.log("Invalid address");
+                    setSenderCoordinates(null);
+                });
         }
     }, [senderAddress])
 
