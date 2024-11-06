@@ -55,12 +55,6 @@ function OrderInfo({ orderId, formStepData }) {
             lng: e.latLng.lng()
         })
 
-        if (selectedButton === 0) {
-            setSenderCoordinates({ lat, lng })
-        } else {
-            setReceiverCoordinates({ lat, lng })
-        }
-
         // Initialize the Geocoder
         const geocoder = new window.google.maps.Geocoder();
 
@@ -120,12 +114,18 @@ function OrderInfo({ orderId, formStepData }) {
 
     const { ref: senderRef } = usePlacesWidget({
         apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
-        onPlaceSelected: (place) => console.log(place)
+        onPlaceSelected: (place) => {
+            console.log(place);
+            setSenderAddress(place.formatted_address);
+        }
     })
 
     const { ref: receiverRef } = usePlacesWidget({
         apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
-        onPlaceSelected: (place) => console.log(place)
+        onPlaceSelected: (place) => {
+            console.log(place);
+            setReceiverAddress(place.formatted_address);
+        }
     })
 
     async function handleSubmit() {
@@ -183,6 +183,8 @@ function OrderInfo({ orderId, formStepData }) {
                     const lat = results[0].geometry.location.lat;
                     const lng = results[0].geometry.location.lng;
                     setReceiverCoordinates({ lat, lng });
+                    console.log(lat);
+                    console.log(lng);
                 })
                 .catch(console.log("Invalid address"));
         }
@@ -195,6 +197,8 @@ function OrderInfo({ orderId, formStepData }) {
                     const lat = results[0].geometry.location.lat;
                     const lng = results[0].geometry.location.lng;
                     setSenderCoordinates({ lat, lng });
+                    console.log(lat);
+                    console.log(lng);
                 })
                 .catch(console.log("Invalid address"));
         }
