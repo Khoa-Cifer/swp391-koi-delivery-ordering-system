@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { Box, styled } from "@mui/material";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Calendar } from "react-date-range";
 import { GoogleMap } from "@react-google-maps/api";
@@ -9,6 +9,15 @@ import { Button, Flex } from "antd";
 import { updateGeneralOrderInfo } from "../../../../utils/axios/order";
 import ToastUtil from "../../../../components/toastContainer";
 import { useNavigate } from "react-router-dom";
+import { CONSTANT_GOOGLE_MAP_API_KEY } from "../../../../utils/constants";
+import { usePlacesWidget } from "react-google-autocomplete";
+import { fromAddress, setDefaults } from "react-geocode";
+
+setDefaults({
+    key: CONSTANT_GOOGLE_MAP_API_KEY, // Your API key here.
+    language: "en", // Default language for responses.
+    region: "es", // Default region for responses.
+});
 
 const CustomBoxContainer = styled(Box)(() => ({
     display: "flex",
@@ -48,12 +57,6 @@ function OrderInfo({ order }) {
             lat: e.latLng.lat(),
             lng: e.latLng.lng()
         })
-
-        if (selectedButton === 0) {
-            setSenderCoordinates({ lat, lng })
-        } else {
-            setReceiverCoordinates({ lat, lng })
-        }
 
         // Initialize the Geocoder
         const geocoder = new window.google.maps.Geocoder();
@@ -106,9 +109,57 @@ function OrderInfo({ order }) {
         navigate(`/customer-edit-order/${order.id}/order-conclusion-info`)
     }
 
+    const { ref: senderRef } = usePlacesWidget({
+        apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
+        onPlaceSelected: (place) => {
+            setSenderAddress(place.formatted_address);
+        }
+    })
+
+    const { ref: receiverRef } = usePlacesWidget({
+        apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
+        onPlaceSelected: (place) => {
+            setReceiverAddress(place.formatted_address);
+        }
+    })
+
+    useEffect(() => {
+        if (receiverAddress && receiverAddress.length > 0) {
+            fromAddress(receiverAddress)
+                .then(({ results }) => {
+                    const lat = results[0].geometry.location.lat;
+                    const lng = results[0].geometry.location.lng;
+                    setReceiverCoordinates({ lat, lng });
+                })
+                .catch(() => {
+                    console.log("Invalid address");
+                    setReceiverCoordinates(null);
+                });
+        }
+    }, [receiverAddress])
+
+    useEffect(() => {
+        if (senderAddress && senderAddress.length > 0) {
+            fromAddress(senderAddress)
+                .then(({ results }) => {
+                    const lat = results[0].geometry.location.lat;
+                    const lng = results[0].geometry.location.lng;
+                    setSenderCoordinates({ lat, lng });
+                })
+                .catch(() => {
+                    console.log("Invalid address");
+                    setSenderCoordinates(null);
+                });
+        }
+    }, [senderAddress])
+
     async function handleSubmit() {
         if (!orderName || !orderDescription || !receiverAddress) {
             toast("All fields are required");
+            return;
+        }
+        if (!senderCoordinates || !receiverCoordinates) {
+            toast("Invalid address");
             return;
         }
         try {
@@ -170,6 +221,7 @@ function OrderInfo({ order }) {
                             onChange={e => handleDescChange(e)}
                         />
                     </div>
+
                     <div className="form-group">
                         <input
                             placeholder="Sender Address"
@@ -178,7 +230,7 @@ function OrderInfo({ order }) {
                             className="form-input"
                             onChange={e => handleSenderAddressChange(e)}
                             value={senderAddress}
-                            readOnly
+                            ref={senderRef}
                         />
                     </div>
 
@@ -190,7 +242,7 @@ function OrderInfo({ order }) {
                             className="form-input"
                             onChange={e => handleReceiverAddressChange(e)}
                             value={receiverAddress}
-                            readOnly
+                            ref={receiverRef}
                         />
                     </div>
 

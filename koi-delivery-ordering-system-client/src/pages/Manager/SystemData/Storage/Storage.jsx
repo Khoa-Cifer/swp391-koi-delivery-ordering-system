@@ -6,8 +6,16 @@ import { GoogleMap } from "@react-google-maps/api";
 import "react-toastify/dist/ReactToastify.css";
 import ToastUtil from "../../../../components/toastContainer";
 import { toast } from "react-toastify";
+import { CONSTANT_GOOGLE_MAP_API_KEY } from "../../../../utils/constants";
+import { fromAddress, setDefaults } from "react-geocode";
 
 const { Title } = Typography;
+
+setDefaults({
+  key: CONSTANT_GOOGLE_MAP_API_KEY, // Your API key here.
+  language: "en", // Default language for responses.
+  region: "es", // Default region for responses.
+});
 
 function Storage() {
   const centerDefault = {
@@ -39,7 +47,6 @@ function Storage() {
     const lng = e.latLng.lng();
 
     setCenter({ lat, lng });
-    setCoordinates({ lat, lng });
 
     // Initialize the Geocoder
     const geocoder = new window.google.maps.Geocoder();
@@ -59,7 +66,7 @@ function Storage() {
   }, []);
 
   const handleCreateStorage = async () => {
-    if (coordinates.lat && coordinates.lng) {
+    try {
       const data = await createStorage(
         name,
         address,
@@ -70,12 +77,19 @@ function Storage() {
         await fetchStorageData();
         toast("Create Storage successfully");
       }
-    } else {
+    } catch (error) {
       toast("Unexpected error has been occurred");
     }
     handleClose();
   };
 
+  const { ref } = usePlacesWidget({
+    apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
+    onPlaceSelected: (place) => {
+      setAddress(place.formatted_address);
+    },
+  });
+  
   const handleOpen = () => setIsModalOpen(true);
   const handleClose = () => {
     setIsModalOpen(false);
@@ -98,11 +112,20 @@ function Storage() {
     setMap(null);
   }, []);
 
-  const { ref: storageAddress } = usePlacesWidget({
-    onPlaceSelected: (place) => {
-      setAddress(place.formatted_address);
-    },
-  });
+  useEffect(() => {
+    if (address && address.length > 0) {
+      fromAddress(address)
+        .then(({ results }) => {
+          const lat = results[0].geometry.location.lat;
+          const lng = results[0].geometry.location.lng;
+          setCoordinates({ lat, lng });
+        })
+        .catch(() => {
+          console.log("Invalid address");
+          setCoordinates(null);
+        });
+    }
+  }, [address])
 
   return (
     <div>
@@ -159,17 +182,30 @@ function Storage() {
           </Button>,
         ]}
       >
-        <Input
+        <input
           placeholder="Name"
-          value={name}
+          type="text"
+          name="text"
+          className="form-input"
           onChange={(e) => setName(e.target.value)}
           style={{ marginBottom: "10px" }}
+          value={name}
         />
-        <Input
+        {/* <Input
           placeholder="Address"
           value={address}
-          readOnly
+          onChange={(e) => setAddress(e.target.value)}
+          ref={storageAddress}
+        /> */}
+        <input
+          placeholder="Address"
+          type="text"
+          name="text"
+          className="form-input"
           style={{ marginBottom: "10px" }}
+          value={address}
+          ref={ref}
+          onChange={(e) => setAddress(e.target.value)} // Optionally, you can still have this to let users type manually
         />
         <GoogleMap
           mapContainerStyle={containerStyle}
