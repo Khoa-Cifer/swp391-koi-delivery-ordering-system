@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Table, Typography, Button, Modal } from "antd";
-import { getAllFishes } from "../../../../utils/axios/fish";
+import { getAllFishes, getFishesByOrderId } from "../../../../utils/axios/fish";
 import ImageSlider from "../../../../components/ImageSlider"; // Import your ImageSlider component
 import { getFileByFileId } from "../../../../utils/axios/file";
 import { useLocation } from "react-router-dom";
@@ -19,7 +19,10 @@ function Fish() {
   useEffect(() => {
     async function fetchFish() {
       if (state) {
-        console.log(state);
+        const fetchedData = await getFishesByOrderId(state);
+        if (fetchedData) {
+          setFishData(fetchedData);
+        }
       } else {
         const fetchedData = await getAllFishes();
         if (fetchedData) {

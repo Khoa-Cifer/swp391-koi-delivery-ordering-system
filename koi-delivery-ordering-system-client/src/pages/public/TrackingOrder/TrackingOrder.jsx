@@ -111,36 +111,33 @@ const TrackingOrder = () => {
     }
   };
 
-  const handleLicenseClick = async (order) => {
-    setSelectedLicense(order.fishes[0].licenses[0]);
+  // const handleLicenseClick = async (order) => {
+  //   setSelectedLicense(order.fishes[1].licenses[0]);
 
-    try {
-      if (
-        Array.isArray(order.fishes[0].licenses[0].files) &&
-        order.fishes[0].licenses[0].files.length > 0
-      ) {
-        const imagePromises = order.fishes[0].licenses[0].files.map(
-          async (file) => {
-            const fileId = file.file.id;
-            const imageResponse = await getFileByFileId(fileId);
-            console.log(imageResponse);
-            return URL.createObjectURL(
-              new Blob([imageResponse], { type: "image/jpeg" })
-            );
-          }
-        );
-        const images = await Promise.all(imagePromises);
-        setLicenseImages(images);
-        setIsLicenseModalOpen(true);
-      }
-    } catch (error) {
-      console.error("Error fetching license image:", error);
-    }
-  };
-  console.log("license", licenseImages);
-
-  console.log("fis", imagePreviews);
-
+  //   try {
+  //     if (
+  //       Array.isArray(order.fishes[0].licenses[0].files) &&
+  //       order.fishes[0].licenses[0].files.length > 0
+  //     ) {
+  //       const imagePromises = order.fishes[0].licenses[0].files.map(
+  //         async (file) => {
+  //           const fileId = file.file.id;
+  //           const imageResponse = await getFileByFileId(fileId);
+  //           console.log(imageResponse);
+  //           return URL.createObjectURL(
+  //             new Blob([imageResponse], { type: "image/jpeg" })
+  //           );
+  //         }
+  //       );
+  //       const images = await Promise.all(imagePromises);
+  //       setLicenseImages(images);
+  //       setIsLicenseModalOpen(true);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching license image:", error);
+  //   }
+  // };
+  
   // Close License Modal
   const handleCloseLicenseModal = () => {
     licenseImages.forEach((url) => URL.revokeObjectURL(url)); // Revoke URLs
@@ -366,21 +363,6 @@ const TrackingOrder = () => {
                   }}
                 >
                   View Fish
-                </Button>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={() => handleLicenseClick(orderData)}
-                  sx={{
-                    padding: "6px 12px",
-                    fontSize: "0.875rem",
-                    backgroundColor: "#f50057",
-                    "&:hover": {
-                      backgroundColor: "#ab003c",
-                    },
-                  }}
-                >
-                  View License
                 </Button>
               </Box>
             </Box>
