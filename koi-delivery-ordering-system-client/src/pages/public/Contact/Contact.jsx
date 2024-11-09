@@ -67,7 +67,7 @@ function ContactPage() {
       <Box
         sx={{
           minHeight: "100vh",
-          background: "linear-gradient(to bottom right, #2196f3, #00bcd4)",
+          background: "linear-gradient(to bottom right, #87ceeb, #87ceeb)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

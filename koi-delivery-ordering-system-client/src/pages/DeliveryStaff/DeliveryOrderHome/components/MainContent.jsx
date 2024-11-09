@@ -225,46 +225,40 @@ const MainContent = () => {
           </GoogleMap>
         </div>
 
-        <div className="order-container-delivery">
+        <div className="order-container-card">
           {onGoingDeliveringOrders && onGoingDeliveringOrders.length > 0 && (
             <div>
               <div className="order">
                 <strong>Your Delivering Order</strong>
               </div>
-              <div className="order-row">
-                {onGoingDeliveringOrders &&
-                  onGoingDeliveringOrders.map &&
-                  onGoingDeliveringOrders.map((order, index) => {
-                    // Show all orders if showAll is true, otherwise show only the first 3
+              <div className="order-container">
+                <div className="order-card">
+                  {onGoingDeliveringOrders.map((order, index) => {
                     if (index >= 3) return null;
                     return (
-                      <div className="order-card" key={order.id} onClick={() => handleMapDirectionShow(order)}>
-                        <h5 className="card-title">{order.name}</h5>
-                        <p className="card-text">
-                          Created Date: {dateTimeConvert(order.createdDate)}
-                        </p>
-                        <p className="card-text">
-                          Expected Finish Date:{" "}
-                          {dateTimeConvert(order.expectedFinishDate)}
-                        </p>
-                        <div className="button-container">
-                          <Button
-                            variant="contained"
-                            onClick={() => handleViewDetail(order)}
-                          >
-                            Detail
-                          </Button>
+                      <div key={order.id} className="order-item">
+                        <div className="order-content">
+                          <h3 className="order-title">{order.name}</h3>
+                          <p className="order-description">
+                            Created Date: {dateTimeConvert(order.createdDate)}
+                          </p>
+                          <p className="order-description">
+                            Expected Finish Date: {dateTimeConvert(order.expectedFinishDate)}
+                          </p>
+                          <div className="order-footer">
+                            <Button
+                              variant="contained"
+                              onClick={() => handleViewDetail(order)}
+                            >
+                              Detail
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                    );
+                    )
                   })}
+                </div>
               </div>
-
-              {/* {onGoingDeliveringOrders.length > 3 && (
-              <div className="view-more">
-                <a href="#">View more →</a>
-              </div>
-            )} */}
             </div>
           )}
 
@@ -273,40 +267,34 @@ const MainContent = () => {
               <div className="order">
                 <strong>Your Getting Order</strong>
               </div>
-              <div className="order-row">
-                {ongoingGettingOrders &&
-                  ongoingGettingOrders.map &&
-                  ongoingGettingOrders.map((order, index) => {
-                    // Show all orders if showAll is true, otherwise show only the first 3
+              <div className="order-container">
+                <div className="order-card">
+                  {ongoingGettingOrders.map((order, index) => {
                     if (index >= 3) return null;
                     return (
-                      <div className="order-card" key={order.id} onClick={() => handleMapDirectionShow(order)}>
-                        <h5 className="card-title">Order {order.name}</h5>
-                        <p className="card-text">
-                          Created Date: {dateTimeConvert(order.createdDate)}
-                        </p>
-                        <p className="card-text">
-                          Expected Finish Date:{" "}
-                          {dateTimeConvert(order.expectedFinishDate)}
-                        </p>
-                        <div className="button-container">
-                          <Button
-                            variant="contained"
-                            onClick={() => handleViewDetail(order)}
-                          >
-                            Detail
-                          </Button>
+                      <div key={order.id} className="order-item">
+                        <div className="order-content">
+                          <h3 className="order-title">{order.name}</h3>
+                          <p className="order-description">
+                            Created Date: {dateTimeConvert(order.createdDate)}
+                          </p>
+                          <p className="order-description">
+                            Expected Finish Date: {dateTimeConvert(order.expectedFinishDate)}
+                          </p>
+                          <div className="order-footer">
+                            <Button
+                              variant="contained"
+                              onClick={() => handleViewDetail(order)}
+                            >
+                              Detail
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                    );
+                    )
                   })}
+                </div>
               </div>
-
-              {/* {ongoingGettingOrders.length > 3 && (
-              <div className="view-more">
-                <a href="#">View more →</a>
-              </div>
-            )} */}
             </div>
           )}
 
@@ -315,40 +303,34 @@ const MainContent = () => {
               <div className="order">
                 <strong>Waiting For Getting Order</strong>
               </div>
-              <div className="order-row">
-                {acceptedOrders &&
-                  acceptedOrders.map &&
-                  acceptedOrders.map((order, index) => {
-                    // Show all orders if showAll is true, otherwise show only the first 3
+              <div className="order-container">
+                <div className="order-card">
+                  {acceptedOrders.map((order, index) => {
                     if (index >= 3) return null;
                     return (
-                      <div className="order-card" key={order.id} onClick={() => handleMapDirectionShow(order)}>
-                        <h5 className="card-title">Order {order.name}</h5>
-                        <p className="card-text">
-                          Created Date: {dateTimeConvert(order.createdDate)}
-                        </p>
-                        <p className="card-text">
-                          Expected Finish Date:{" "}
-                          {dateTimeConvert(order.expectedFinishDate)}
-                        </p>
-                        <div className="button-container">
-                          <Button
-                            variant="contained"
-                            onClick={() => handleViewDetail(order)}
-                          >
-                            Detail
-                          </Button>
+                      <div key={order.id} className="order-item">
+                        <div className="order-content">
+                          <h3 className="order-title">{order.name}</h3>
+                          <p className="order-description">
+                            Created Date: {dateTimeConvert(order.createdDate)}
+                          </p>
+                          <p className="order-description">
+                            Expected Finish Date: {dateTimeConvert(order.expectedFinishDate)}
+                          </p>
+                          <div className="order-footer">
+                            <Button
+                              variant="contained"
+                              onClick={() => handleViewDetail(order)}
+                            >
+                              Detail
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                    );
+                    )
                   })}
+                </div>
               </div>
-
-              {/* {acceptedOrders.length > 3 && (
-              <div className="view-more">
-                <a href="#">View more →</a>
-              </div>
-            )} */}
             </div>
           )}
 
@@ -357,40 +339,34 @@ const MainContent = () => {
               <div className="order">
                 <strong>Waiting For Delivered Order</strong>
               </div>
-              <div className="order-row">
-                {confirmedOrders &&
-                  confirmedOrders.map &&
-                  confirmedOrders.map((order, index) => {
-                    // Show all orders if showAll is true, otherwise show only the first 3
+              <div className="order-container">
+                <div className="order-card">
+                  {confirmedOrders.map((order, index) => {
                     if (index >= 3) return null;
                     return (
-                      <div className="order-card" key={order.id} onClick={() => handleMapDirectionShow(order)}>
-                        <h5 className="card-title">Order {order.name}</h5>
-                        <p className="card-text">
-                          Created Date: {dateTimeConvert(order.createdDate)}
-                        </p>
-                        <p className="card-text">
-                          Expected Finish Date:{" "}
-                          {dateTimeConvert(order.expectedFinishDate)}
-                        </p>
-                        <div className="button-container">
-                          <Button
-                            variant="contained"
-                            onClick={() => handleViewDetail(order)}
-                          >
-                            Detail
-                          </Button>
+                      <div key={order.id} className="order-item">
+                        <div className="order-content">
+                          <h3 className="order-title">{order.name}</h3>
+                          <p className="order-description">
+                            Created Date: {dateTimeConvert(order.createdDate)}
+                          </p>
+                          <p className="order-description">
+                            Expected Finish Date: {dateTimeConvert(order.expectedFinishDate)}
+                          </p>
+                          <div className="order-footer">
+                            <Button
+                              variant="contained"
+                              onClick={() => handleViewDetail(order)}
+                            >
+                              Detail
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                    );
+                    )
                   })}
+                </div>
               </div>
-
-              {/* {confirmedOrderStatus.length > 3 && (
-              <div className="view-more">
-                <a href="#">View more →</a>
-              </div>
-            )} */}
             </div>
           )}
         </div>

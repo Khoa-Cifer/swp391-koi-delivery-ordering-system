@@ -1,11 +1,21 @@
+import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const PaymentSuccess = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const handleGoHome = () => {
-        navigate('/'); // Navigate to the homepage
+    useEffect(() => {
+        // Attempt to close the page after 2 seconds
+        const timer = setTimeout(() => {
+            window.close();
+        }, 2000);
+
+        return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
+    }, []);
+
+    const handleClose = () => {
+        window.close();
     };
 
     const useQuery = () => {
@@ -33,8 +43,8 @@ const PaymentSuccess = () => {
                 <p><strong>Date:</strong> {year}/{month}/{day}</p>
             </div>
 
-            <button style={styles.button} onClick={handleGoHome}>
-                Return to Homepage
+            <button style={styles.button} onClick={handleClose}>
+                Close
             </button>
         </div>
     );

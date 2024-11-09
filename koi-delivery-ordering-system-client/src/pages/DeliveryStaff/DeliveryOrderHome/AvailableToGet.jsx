@@ -27,8 +27,8 @@ function AvailableToGet() {
         </ListItemIcon>
         <Typography variant="h6">Available to Get</Typography>
       </Box>
-    <OrderCard orders={orders}/>
-  </div>
+      <OrderCard orders={orders} />
+    </div>
   );
 }
 
