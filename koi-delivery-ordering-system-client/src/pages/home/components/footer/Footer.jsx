@@ -68,7 +68,7 @@ function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <p>Ezbuy Japan 2023 - Premium eCommerce Solutions</p>
+          <p>Deliery KIN 2023 - Premium eCommerce Solutions</p>
         </div>
       </div>
     </footer>

@@ -136,19 +136,19 @@ function HomeContent() {
             </p>
             <div className="banner-stats">
               <div className="stat-item">
-                <h2>45.000+</h2>
+                <h2>4.000+</h2>
                 <p>New Users</p>
               </div>
               <div className="stat-item">
-                <h2>19.000+</h2>
+                <h2>1.900+</h2>
                 <p>Customers order</p>
               </div>
               <div className="stat-item">
-                <h2>417.000+</h2>
+                <h2>4.000+</h2>
                 <p>Orders</p>
               </div>
               <div className="stat-item">
-                <h2>300+</h2>
+                <h2>30+</h2>
                 <p>Tons of goods</p>
               </div>
             </div>
@@ -195,9 +195,7 @@ function HomeContent() {
                   we are committed to delivering them healthy, happy, and
                   stress-free, right to your doorstep.
                 </p>
-                <a href="#" className="learn-more">
-                  Learn more →
-                </a>
+               
               </div>
               <div className="service-image">
                 <img
@@ -224,9 +222,7 @@ function HomeContent() {
                   methods and optional services to ensure your packages arrive
                   safely and efficiently.
                 </p>
-                <a href="#" className="learn-more">
-                  Learn more →
-                </a>
+               
               </div>
             </div>
 
@@ -243,9 +239,7 @@ function HomeContent() {
                   geographical barriers and unlock a world of potential markets
                   through our comprehensive international delivery solution.
                 </p>
-                <a href="#" className="learn-more">
-                  Learn more →
-                </a>
+                
               </div>
               <div className="service-image">
                 <img
@@ -272,9 +266,7 @@ function HomeContent() {
                   methods and optional services to ensure your packages arrive
                   safely and efficiently.
                 </p>
-                <a href="#" className="learn-more">
-                  Learn more →
-                </a>
+                
               </div>
             </div>
           </div>
