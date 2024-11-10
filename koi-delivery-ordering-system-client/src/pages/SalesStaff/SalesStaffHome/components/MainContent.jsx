@@ -5,33 +5,33 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import {
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
+  // Dialog,
+  // DialogActions,
+  // DialogContent,
+  // DialogContentText,
+  // DialogTitle,
   ListItemIcon,
   Typography,
 } from "@mui/material";
-import { deleteNewsById, getAllNews } from "../../../../utils/axios/news";
+import { getAllNews } from "../../../../utils/axios/news";
 import { getFileByFileId } from "../../../../utils/axios/file";
 import ToastUtil from "../../../../components/toastContainer";
-import { toast } from "react-toastify";
-import Paragraph from "antd/es/typography/Paragraph";
+// import { toast } from "react-toastify";
+// import Paragraph from "antd/es/typography/Paragraph";
 import dateTimeConvert from "../../../../components/utils";
 import ListIcon from "@mui/icons-material/List";
 
 // eslint-disable-next-line react/prop-types
 function MainContent() {
-  const { titleHeader } = useOutletContext();  
+  const { titleHeader } = useOutletContext();
 
   const [postedOrder, setPostedOrder] = useState([]);
   const [receivedOrder, setReceivedOrder] = useState([]);
   const [news, setNews] = useState([]);
-  const [visibleNewsCount, setVisibleNewsCount] = useState(4);
+  // const [visibleNewsCount, setVisibleNewsCount] = useState(4);
 
-  const [openDialog, setOpenDialog] = useState(false); // State to control dialog visibility
-  const [selectedNewsId, setSelectedNewsId] = useState(null); // State to track which news to delete
+  // const [openDialog, setOpenDialog] = useState(false);
+  // const [selectedNewsId, setSelectedNewsId] = useState(null);
 
   const navigate = useNavigate();
 
@@ -89,27 +89,6 @@ function MainContent() {
   }, []);
 
   // Handle the opening of the delete confirmation dialog
-  const handleOpenDialog = (newsId) => {
-    setSelectedNewsId(newsId);
-    setOpenDialog(true);
-  };
-
-  // Handle the closing of the dialog without deleting
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-  };
-
-  // Handle delete confirmation and refresh news
-  const handleConfirmDelete = async () => {
-    try {
-      await deleteNewsById(selectedNewsId);
-      setOpenDialog(false);
-      await fetchNews();
-      toast.success("Delete successfully!");
-    } catch (error) {
-      console.error("Error deleting news:", error);
-    }
-  };
 
   const handleViewDetail = (order) => {
     navigate(`/sales-order-detail/${order.id}`, {
@@ -117,109 +96,22 @@ function MainContent() {
     });
   };
 
-  const handleNewsClick = (newsItem) => {
-    navigate(`/news/${newsItem.id}`, { state: newsItem });
-  };
-
   return (
     <div className="main-content-container">
       <ToastUtil />
-      <Box style={{ marginLeft: "10px" }} display="flex" alignItems="center" mb={3} marginLeft={-4} color="blue">
+      <Box
+        style={{ marginLeft: "10px" }}
+        display="flex"
+        alignItems="center"
+        mb={3}
+        marginLeft={-4}
+        color="blue"
+      >
         <ListItemIcon sx={{ color: "blue", marginRight: "-2%" }}>
           <ListIcon />
         </ListItemIcon>
         <Typography variant="h6">{titleHeader}</Typography>
       </Box>
-      <div className="news-container-sale">
-        {news.length > 0 && (
-          <>
-            <div className="New">
-              <h2>
-                <strong>News</strong>
-              </h2>
-            </div>
-
-            <div className="news-container">
-              <div className="news-grid">
-                {news.slice(0, visibleNewsCount).map((newsItem, index) => (
-                  <div key={index} className="news-item">
-                    <img
-                      src={newsItem.imageUrl}
-                      alt={newsItem.title}
-                      className="news-image"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => handleNewsClick(newsItem)}
-                    />
-                    <div className="news-content">
-                      <h3 className="news-title">{newsItem.title}</h3>
-
-                      <Paragraph
-                        ellipsis={{
-                          rows: 3,
-                          expandable: false,
-                          symbol: "...",
-                        }}
-                      >
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: newsItem.description,
-                          }}
-                        />
-                      </Paragraph>
-
-                      <div className="news-footer">
-                        <span className="news-date">
-                          {dateTimeConvert(newsItem.createdDate)}
-                        </span>
-
-                        <div className="card-actions">
-                          <Button
-                            variant="outlined"
-                            color="secondary"
-                            size="small"
-                            onClick={() => handleOpenDialog(newsItem.id)}
-                            className="delete-btn"
-                          >
-                            Delete
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* {visibleNewsCount < news.length && (
-                <div className="card-view-more">
-                  <Button onClick={handleViewMoreNews}>View more →</Button>
-                </div>
-              )} */}
-            </div>
-          </>
-        )}
-      </div>
-
-      <Dialog
-        open={openDialog}
-        onClose={handleCloseDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Confirm Deletion"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete this news item?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleConfirmDelete} color="secondary" autoFocus>
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
 
       <div className="order-container-sale">
         {postedOrder.length > 0 && (

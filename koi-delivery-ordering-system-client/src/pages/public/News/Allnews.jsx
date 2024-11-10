@@ -126,7 +126,7 @@ function AllNews() {
                           Delete
                         </button>
                       )}
-                    </div>
+                    </div>zz
                   </div>
                 </div>
               </div>

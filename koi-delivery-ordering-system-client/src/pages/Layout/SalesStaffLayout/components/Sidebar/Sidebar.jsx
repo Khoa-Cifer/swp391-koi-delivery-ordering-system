@@ -112,6 +112,12 @@ function Sidebar({ pageHeaderSales }) {
               onClick={() => navigate("/news-sales-staff")}
             />
           </ListItem>
+          <ListItem className="button">
+            <ListItemText
+              primary="News"
+              onClick={() => navigate("/news")}
+            />
+          </ListItem>
           {/* <ListItem className="button">
             <ListItemText primary="Navigate To Wallet Page" />
           </ListItem>
