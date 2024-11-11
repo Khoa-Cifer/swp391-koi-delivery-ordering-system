@@ -2,9 +2,12 @@ import "./content.scss";
 import { useEffect, useState } from "react";
 import { getAllNews } from "../../../../utils/axios/news";
 import { getFileByFileId } from "../../../../utils/axios/file";
-import dateTimeConvert from "../../../../components/utils";
 import Paragraph from "antd/es/typography/Paragraph";
 import { useNavigate } from "react-router-dom";
+import img1 from "../../../../assets/img1.jpg";
+import img2 from "../../../../assets/img2.jpg";
+import img3 from "../../../../assets/img3.jpg";
+import img4 from "../../../../assets/img4.jpg";
 
 function HomeContent() {
   const navigate = useNavigate();
@@ -156,7 +159,7 @@ function HomeContent() {
           </div>
           <div className="banner-image">
             <img
-              src="https://img2.thuthuatphanmem.vn/uploads/2019/03/07/hinh-anh-ho-ca-koi-dep_111108115.jpg "
+              src={img1}
               alt="delivery"
             />
           </div>
@@ -195,11 +198,11 @@ function HomeContent() {
                   we are committed to delivering them healthy, happy, and
                   stress-free, right to your doorstep.
                 </p>
-               
+
               </div>
               <div className="service-image">
                 <img
-                  src="https://img5.thuthuatphanmem.vn/uploads/2021/11/20/hinh-ca-koi-dep_090134493.jpg"
+                  src={img1}
                   alt="Service"
                 />
               </div>
@@ -209,7 +212,7 @@ function HomeContent() {
             <div className="service-item reverse-layout">
               <div className="service-image">
                 <img
-                  src="https://i.ytimg.com/vi/iySSjcjwq9w/maxresdefault.jpg"
+                  src={img2}
                   alt="Service 2"
                 />
               </div>
@@ -222,12 +225,11 @@ function HomeContent() {
                   methods and optional services to ensure your packages arrive
                   safely and efficiently.
                 </p>
-               
+
               </div>
             </div>
 
             {/* Khung 3: Ảnh bên phải, chữ bên trái */}
-
             <div className="service-item">
               <div className="service-content">
                 <div className="service-number">03</div>
@@ -239,11 +241,11 @@ function HomeContent() {
                   geographical barriers and unlock a world of potential markets
                   through our comprehensive international delivery solution.
                 </p>
-                
+
               </div>
               <div className="service-image">
                 <img
-                  src="https://denanphuoc.vn/wp-content/uploads/2020/11/Ca-Koi-la-bieu-tuong-may-man-thinh-vuong-scaled.jpg"
+                  src={img3}
                   alt="Service"
                 />
               </div>
@@ -253,7 +255,7 @@ function HomeContent() {
             <div className="service-item reverse-layout">
               <div className="service-image">
                 <img
-                  src="https://dhouse-vn.com/wp-content/uploads/2022/08/Ban-ve-thiet-ke-ho-ca-koi-1.jpeg"
+                  src={img4}
                   alt="Service 2"
                 />
               </div>
@@ -266,7 +268,7 @@ function HomeContent() {
                   methods and optional services to ensure your packages arrive
                   safely and efficiently.
                 </p>
-                
+
               </div>
             </div>
           </div>
