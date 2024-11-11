@@ -37,8 +37,6 @@ const center = {
 };
 
 const TrackingOrder = () => {
-  const [origin, setOrigin] = useState("");
-  const [destination, setDestination] = useState("");
   const [trackingId, setTrackingId] = useState("");
   const [orderData, setOrderData] = useState(null);
   const [isShowAll, setIsShowAll] = useState(false);
@@ -50,6 +48,7 @@ const TrackingOrder = () => {
   const [isLicenseModalOpen, setIsLicenseModalOpen] = useState(false);
   const [selectedLicense, setSelectedLicense] = useState(null);
   const [licenseImages, setLicenseImages] = useState([]);
+  const [map, setMap] = useState();
 
   const orderStatusLabels = {
     0: "Draft",
@@ -80,8 +79,6 @@ const TrackingOrder = () => {
           ) {
             setOrderData(null);
             setCurrentDelivery(null);
-            setOrigin("");
-            setDestination("");
             toast("There is no order to track", { type: "warning" });
             return;
           }
@@ -94,14 +91,9 @@ const TrackingOrder = () => {
             );
             setCurrentDelivery(availableOrderDelivering);
           }
-
-          setOrigin(order.senderAddress);
-          setDestination(order.destinationAddress);
         } else {
           setOrderData(null);
           setCurrentDelivery(null);
-          setOrigin("");
-          setDestination("");
           toast("Tracking ID not found", { type: "error" });
         }
       } catch (error) {
@@ -199,13 +191,42 @@ const TrackingOrder = () => {
   //   }
   // }, [origin, destination]);
 
+  
+  useEffect(() => {
+    fetchMapBounds();
+  }, [orderData])
+  
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading Maps</div>;
 
   const handleHomeBack = () => {
     navigate("/");
   };
-console.log(orderData);
+
+  const handleMapLoad = (map) => {
+    setMap(map);
+    fetchMapBounds();
+  };
+
+  function fetchMapBounds() {
+    if (map) {
+      if (!orderData) {
+        return;
+      }
+      // eslint-disable-next-line no-undef
+      const bounds = new google.maps.LatLngBounds();
+
+      if (orderData) {
+        // eslint-disable-next-line no-undef
+        bounds.extend(new google.maps.LatLng(parseFloat(orderData.destinationLatitude), parseFloat(orderData.destinationLongitude)));
+        // eslint-disable-next-line no-undef
+        bounds.extend(new google.maps.LatLng(parseFloat(orderData.senderLatitude), parseFloat(orderData.senderLongitude)));
+      }
+
+      map.fitBounds(bounds);
+    }
+  }
+
   return (
     <div>
       <ToastUtil />
@@ -271,6 +292,7 @@ console.log(orderData);
             mapContainerStyle={containerStyle}
             zoom={10}
             center={center}
+            onLoad={handleMapLoad}
           >
             {currentDelivery && (
               <>
@@ -410,6 +432,7 @@ console.log(orderData);
       <Modal
         open={isLicenseModalOpen}
         onCancel={handleCloseLicenseModal}
+        onOk={handleCloseLicenseModal}
         style={{ maxWidth: "80vw", top: 20 }}
       >
         {selectedLicense ? (
@@ -440,6 +463,7 @@ console.log(orderData);
       <Modal
         open={isModalOpen}
         onCancel={handleCloseModal}
+        onOk={handleCloseModal}
         style={{ maxWidth: "80vw", top: 20 }}
       >
         {selectedFish ? (
