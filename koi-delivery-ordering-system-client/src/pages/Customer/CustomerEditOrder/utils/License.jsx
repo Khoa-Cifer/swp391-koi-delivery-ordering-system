@@ -8,6 +8,7 @@ import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import "./license.scss";
 import { getFileByFileId } from "../../../../utils/axios/file";
+import { getOneDayBeforeToday } from "../../../../components/utils";
 
 const LicenseCustomBoxContainer = styled(Box)(() => ({
   display: "flex",
@@ -145,7 +146,8 @@ const License = ({
               onChange={(e) => handleDescriptionChange(e)}
             />
           </div>
-          <Calendar onChange={(e) => handleDateChange(e)} date={date} />
+
+          <Calendar onChange={(e) => handleDateChange(e)} date={date} maxDate={getOneDayBeforeToday()}/>
 
           {fileInputs &&
             fileInputs.map &&

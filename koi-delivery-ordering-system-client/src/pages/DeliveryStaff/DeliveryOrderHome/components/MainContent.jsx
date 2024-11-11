@@ -9,7 +9,7 @@ import { Box, Button, ListItemIcon, Typography } from "@mui/material";
 import dateTimeConvert from "../../../../components/utils";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { DirectionsRenderer, GoogleMap, Marker, Polyline } from "@react-google-maps/api";
+import { GoogleMap, Marker, Polyline } from "@react-google-maps/api";
 import GreenMarker from "../../../../assets/succeeded.svg"
 import BlueMarker from "../../../../assets/inTransit.svg"
 import RedMarker from "../../../../assets/failed.svg"
@@ -20,7 +20,6 @@ const MainContent = () => {
   const [acceptedOrders, setAcceptedOrders] = useState();
   const [confirmedOrders, setConfirmedOrders] = useState();
   // const [recommendedOrders, setRecommendedOrders] = useState();
-  const [directions, setDirections] = useState(null);
   const [ongoingGettingOrders, setOngoingGettingOrders] = useState();
   const [onGoingDeliveringOrders, setOngoingDeliveringOrders] = useState();
   const [selectedOrder, setSelecterOrder] = useState();
@@ -53,7 +52,6 @@ const MainContent = () => {
 
   const handleMapDirectionShow = (order) => {
     setSelecterOrder(order);
-    console.log(order);
   }
 
   useEffect(() => {
@@ -120,6 +118,7 @@ const MainContent = () => {
       state: order,
     });
   };
+
   return (
     <div>
       <Box style={{ marginLeft: "10px" }} display="flex" alignItems="center" mb={3} marginLeft={-4} color="blue">
@@ -137,8 +136,6 @@ const MainContent = () => {
             center={center}
             onLoad={handleMapLoad}
           >
-            {directions && <DirectionsRenderer directions={directions} />}
-
             {selectedOrder && (
               <>
 
@@ -236,7 +233,7 @@ const MainContent = () => {
                   {onGoingDeliveringOrders.map((order, index) => {
                     if (index >= 3) return null;
                     return (
-                      <div key={order.id} className="order-item">
+                      <div key={order.id} className="order-item" onClick={() => handleMapDirectionShow(order)}>
                         <div className="order-content">
                           <h3 className="order-title">{order.name}</h3>
                           <p className="order-description">
@@ -272,7 +269,7 @@ const MainContent = () => {
                   {ongoingGettingOrders.map((order, index) => {
                     if (index >= 3) return null;
                     return (
-                      <div key={order.id} className="order-item">
+                      <div key={order.id} className="order-item" onClick={() => handleMapDirectionShow(order)}>
                         <div className="order-content">
                           <h3 className="order-title">{order.name}</h3>
                           <p className="order-description">
@@ -308,7 +305,7 @@ const MainContent = () => {
                   {acceptedOrders.map((order, index) => {
                     if (index >= 3) return null;
                     return (
-                      <div key={order.id} className="order-item">
+                      <div key={order.id} className="order-item" onClick={() => handleMapDirectionShow(order)}>
                         <div className="order-content">
                           <h3 className="order-title">{order.name}</h3>
                           <p className="order-description">
@@ -344,7 +341,7 @@ const MainContent = () => {
                   {confirmedOrders.map((order, index) => {
                     if (index >= 3) return null;
                     return (
-                      <div key={order.id} className="order-item">
+                      <div key={order.id} className="order-item" onClick={() => handleMapDirectionShow(order)}>
                         <div className="order-content">
                           <h3 className="order-title">{order.name}</h3>
                           <p className="order-description">

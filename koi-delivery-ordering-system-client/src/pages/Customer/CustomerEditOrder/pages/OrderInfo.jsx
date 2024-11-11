@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { CONSTANT_GOOGLE_MAP_API_KEY } from "../../../../utils/constants";
 import { usePlacesWidget } from "react-google-autocomplete";
 import { fromAddress, setDefaults } from "react-geocode";
+import { getOneWeekFromToday } from "../../../../components/utils";
 
 setDefaults({
     key: CONSTANT_GOOGLE_MAP_API_KEY, // Your API key here.
@@ -246,7 +247,7 @@ function OrderInfo({ order }) {
                         />
                     </div>
 
-                    <Calendar onChange={e => handleDateChange(e)} date={expectedFinishDate} />
+                    <Calendar onChange={e => handleDateChange(e)} date={expectedFinishDate} minDate={getOneWeekFromToday()}/>
 
                     {updated ? (
                         <button onClick={() => handleConclusion()} className="form-button">

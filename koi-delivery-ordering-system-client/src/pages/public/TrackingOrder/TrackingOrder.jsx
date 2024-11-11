@@ -3,27 +3,28 @@ import {
   AppBar,
   Toolbar,
   Box,
-  Container,
   TextField,
   Button,
   Typography,
 } from "@mui/material";
 import {
   GoogleMap,
-  DirectionsRenderer,
   useJsApiLoader,
   Marker,
+  Polyline,
 } from "@react-google-maps/api";
 import { getOrderByTrackingId } from "../../../utils/axios/order"; // Ensure this function is defined to fetch order data
 import { useNavigate } from "react-router-dom";
 import CurrentPosition from "../../../assets/delivery-current.svg";
-import dateTimeConvert from "../../../components/utils";
+import dateTimeConvert, { calculateDistance } from "../../../components/utils";
 import { getFileByFileId } from "../../../utils/axios/file";
 import { Modal } from "antd";
 import Title from "antd/es/skeleton/Title";
 import ImageSlider from "../../../components/ImageSlider";
 import { toast } from "react-toastify";
 import ToastUtil from "../../../components/toastContainer";
+import BlueMarker from "../../../assets/inTransit.svg"
+import GreenMarker from "../../../assets/succeeded.svg"
 
 const containerStyle = {
   width: "100%",
@@ -36,12 +37,10 @@ const center = {
 };
 
 const TrackingOrder = () => {
-  const [directions, setDirections] = useState(null);
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
   const [trackingId, setTrackingId] = useState("");
   const [orderData, setOrderData] = useState(null);
-  const [distance, setDistance] = useState("");
   const [isShowAll, setIsShowAll] = useState(false);
   const [currentDelivery, setCurrentDelivery] = useState();
   const navigate = useNavigate();
@@ -137,7 +136,7 @@ const TrackingOrder = () => {
   //     console.error("Error fetching license image:", error);
   //   }
   // };
-  
+
   // Close License Modal
   const handleCloseLicenseModal = () => {
     licenseImages.forEach((url) => URL.revokeObjectURL(url)); // Revoke URLs
@@ -175,30 +174,30 @@ const TrackingOrder = () => {
     setImagePreviews([]);
   };
 
-  useEffect(() => {
-    if (origin && destination) {
-      const directionsService = new window.google.maps.DirectionsService();
-      directionsService.route(
-        {
-          origin: origin,
-          destination: destination,
-          travelMode: window.google.maps.TravelMode.DRIVING,
-        },
-        (result, status) => {
-          if (status === "OK" && result) {
-            setDirections(result);
-            const route = result.routes[0];
-            const totalDistance = route.legs[0].distance.text;
-            setDistance(totalDistance);
-          } else {
-            console.error(`Error fetching directions ${status}`);
-          }
-        }
-      );
-    } else {
-      setDirections(null);
-    }
-  }, [origin, destination]);
+  // useEffect(() => {
+  //   if (origin && destination) {
+  //     const directionsService = new window.google.maps.DirectionsService();
+  //     directionsService.route(
+  //       {
+  //         origin: origin,
+  //         destination: destination,
+  //         travelMode: window.google.maps.TravelMode.DRIVING,
+  //       },
+  //       (result, status) => {
+  //         if (status === "OK" && result) {
+  //           setDirections(result);
+  //           const route = result.routes[0];
+  //           const totalDistance = route.legs[0].distance.text;
+  //           setDistance(totalDistance);
+  //         } else {
+  //           console.error(`Error fetching directions ${status}`);
+  //         }
+  //       }
+  //     );
+  //   } else {
+  //     setDirections(null);
+  //   }
+  // }, [origin, destination]);
 
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading Maps</div>;
@@ -206,7 +205,7 @@ const TrackingOrder = () => {
   const handleHomeBack = () => {
     navigate("/");
   };
-
+console.log(orderData);
   return (
     <div>
       <ToastUtil />
@@ -274,17 +273,68 @@ const TrackingOrder = () => {
             center={center}
           >
             {currentDelivery && (
-              <Marker
-                position={{
-                  lat: parseFloat(currentDelivery.latitude),
-                  lng: parseFloat(currentDelivery.longitude),
-                }}
-                icon={{
-                  url: CurrentPosition,
-                }}
-              ></Marker>
+              <>
+                <Marker
+                  position={{
+                    lat: parseFloat(currentDelivery.latitude),
+                    lng: parseFloat(currentDelivery.longitude),
+                  }}
+                  icon={{
+                    url: CurrentPosition,
+                  }}
+                ></Marker>
+              </>
             )}
-            {directions && <DirectionsRenderer directions={directions} />}
+
+            {orderData && (
+              <>
+                <Marker
+                  position={{
+                    lat: parseFloat(orderData.senderLatitude),
+                    lng: parseFloat(orderData.senderLongitude),
+                  }}
+                  icon={{
+                    url: GreenMarker,
+                  }}
+                >
+                </Marker>
+                <Marker
+                  position={{
+                    lat: parseFloat(orderData.destinationLatitude),
+                    lng: parseFloat(orderData.destinationLongitude),
+                  }}
+                  icon={{
+                    url: BlueMarker,
+                  }}
+                >
+                </Marker>
+
+                <Polyline
+                  path={[
+                    {
+                      lat: parseFloat(orderData.senderLatitude),
+                      lng: parseFloat(orderData.senderLongitude),
+                    },
+                    {
+                      lat: parseFloat(orderData.destinationLatitude),
+                      lng: parseFloat(orderData.destinationLongitude),
+                    },
+                  ]}
+                  options={{
+                    strokeColor: "#041967",
+                    //strokeOpacity: 0.5,
+                    strokeWeight: 2,
+                    geodesic: true,
+                    icons: [{
+                      // eslint-disable-next-line no-undef
+                      icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW },
+                      offset: '50%'
+                    }]
+                  }}
+                />
+              </>
+            )}
+            {/* {directions && <DirectionsRenderer directions={directions} />} */}
           </GoogleMap>
 
           {/* Display order data and distance if available */}
@@ -303,31 +353,36 @@ const TrackingOrder = () => {
               }}
               onClick={() => setIsShowAll(!isShowAll)}
             >
-                <>
-                  {/* .toLocaleString() */}
-                  <Typography variant="h6">Order Detail</Typography>
-                  <Typography variant="body2">
-                    <strong>Expected finish date:</strong>{" "}
-                    {dateTimeConvert(orderData.expectedFinishDate)}
-                  </Typography>
-                  <Typography variant="body2">
-                    <strong>Price:</strong>{" "}
-                    {`${Math.floor(orderData.price).toLocaleString()} VND`}
-                  </Typography>
-                  <Typography variant="body2">
-                    <strong>Order status:</strong>{" "}
-                    {orderStatusLabels[orderData.orderStatus]}
-                  </Typography>
-                  <Typography variant="body2">
-                    <strong>Sender:</strong> {orderData.senderAddress}
-                  </Typography>
-                  <Typography variant="body2">
-                    <strong>Receiver:</strong> {orderData.destinationAddress}
-                  </Typography>
-                  <Typography variant="body2">
-                    <strong>Distance:</strong> {distance}
-                  </Typography>
-                </>
+              <>
+                {/* .toLocaleString() */}
+                <Typography variant="h6">Order Detail</Typography>
+                <Typography variant="body2">
+                  <strong>Expected finish date:</strong>{" "}
+                  {dateTimeConvert(orderData.expectedFinishDate)}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Price:</strong>{" "}
+                  {`${Math.floor(orderData.price).toLocaleString()} VND`}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Order status:</strong>{" "}
+                  {orderStatusLabels[orderData.orderStatus]}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Sender:</strong> {orderData.senderAddress}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Receiver:</strong> {orderData.destinationAddress}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Distance:</strong> {calculateDistance(
+                    parseFloat(orderData.senderLatitude),
+                    parseFloat(orderData.senderLongitude),
+                    parseFloat(orderData.destinationLatitude),
+                    parseFloat(orderData.destinationLongitude)
+                  )}
+                </Typography>
+              </>
               <Box
                 sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
               >
@@ -380,7 +435,7 @@ const TrackingOrder = () => {
         ) : (
           "No licenses to show"
         )}
-      </Modal>  
+      </Modal>
 
       <Modal
         open={isModalOpen}
