@@ -377,6 +377,12 @@ function MainContent() {
             <Grid item xs={6} sx={{ height: '100px' }}>
               <Item>Destination Address: {state.destinationAddress}</Item>
             </Grid>
+            <Grid item xs={6}>
+              <Item>Receiver Email: {state.receiverEmail}</Item>
+            </Grid>
+            <Grid item xs={6} sx={{ height: "100px" }}>
+              <Item>Receiver Phone Number: {state.receiverPhoneNumber}</Item>
+            </Grid>
           </Grid>
 
         </div>

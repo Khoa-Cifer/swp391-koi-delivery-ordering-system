@@ -216,7 +216,7 @@ const MainContent = () => {
       </div>
 
       {fish && (
-        <div>
+        <div style={{marginTop: "20px"}}>
           <div className="form-container">
             <div className="form">
               <Typography>Name</Typography>
