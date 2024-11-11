@@ -255,14 +255,11 @@ const TrackingOrder = () => {
         </Toolbar>
       </AppBar>
 
-      <Container
+      <Box
         sx={{
-          marginTop: "20px",
-          padding: "20px",
           backgroundColor: "#fff",
-          borderRadius: "20px",
           boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-          height: "83vh",
+          height: "90vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -306,7 +303,6 @@ const TrackingOrder = () => {
               }}
               onClick={() => setIsShowAll(!isShowAll)}
             >
-              {isShowAll ? (
                 <>
                   {/* .toLocaleString() */}
                   <Typography variant="h6">Order Detail</Typography>
@@ -332,20 +328,6 @@ const TrackingOrder = () => {
                     <strong>Distance:</strong> {distance}
                   </Typography>
                 </>
-              ) : (
-                <>
-                  <Typography variant="h6">Order Detail</Typography>
-                  <Typography variant="body2">
-                    <strong>Sender:</strong> {orderData.senderAddress}
-                  </Typography>
-                  <Typography variant="body2">
-                    <strong>Receiver:</strong> {orderData.destinationAddress}
-                  </Typography>
-                  <Typography variant="body2">
-                    <strong>Distance:</strong> {distance}
-                  </Typography>
-                </>
-              )}
               <Box
                 sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
               >
@@ -368,7 +350,7 @@ const TrackingOrder = () => {
             </Box>
           )}
         </Box>
-      </Container>
+      </Box>
 
       <Modal
         open={isLicenseModalOpen}

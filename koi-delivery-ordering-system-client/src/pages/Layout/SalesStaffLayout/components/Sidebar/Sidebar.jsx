@@ -96,13 +96,13 @@ function Sidebar({ pageHeaderSales }) {
 
           <ListItem className="button">
             <ListItemText
-              primary="Posted Order"
+              primary="Posted Orders"
               onClick={handleOpenPosted}
             />
           </ListItem>
           <ListItem className="button">
             <ListItemText
-              primary="Received Order"
+              primary="Received Orders"
               onClick={handleOpenReceived}
             />
           </ListItem>

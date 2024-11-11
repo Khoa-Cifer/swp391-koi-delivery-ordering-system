@@ -27,10 +27,6 @@ function NewsDetail() {
   return (
     <>
       <Header />
-      <div className="back-button">
-        <button onClick={handleBackClick}>← Quay lại</button>
-      </div>
-
       <div className="news-detail-container">
         <div className="news-detail-content">
           <img
@@ -44,10 +40,13 @@ function NewsDetail() {
             dangerouslySetInnerHTML={{ __html: newsDetail.description }}
           />
 
-            <span>Author: {newsDetail.createdBy.username}</span>{" "}
+          <span>Author: {newsDetail.createdBy.username}</span>{" "}
           <p className="news-detail-date">
             <strong>Created date:</strong> {dateTimeConvert(newsDetail.createdDate)}
           </p>
+          <div className="back-button">
+            <button onClick={handleBackClick}>← Go back</button>
+          </div>
         </div>
       </div>
     </>

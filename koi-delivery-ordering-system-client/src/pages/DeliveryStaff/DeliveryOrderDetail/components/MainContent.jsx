@@ -483,14 +483,20 @@ function MainContent() {
                   {state.orderStatus === 3 && (
                     state.orderDeliveringSet && state.orderDeliveringSet.length > 0 && (
                       <>
-                        <SubmitButton
+                        {/* <SubmitButton
                           variant="contained"
                           style={{ backgroundColor: "#f44336" }}
                           onClick={() => handleAbortOrder()}
                         >
                           Abort
+                        </SubmitButton> */}
+                        <SubmitButton
+                          variant="contained"
+                          style={{ backgroundColor: "#f44336" }}
+                          onClick={() => handleCancelOrder()}
+                        >
+                          Cancel
                         </SubmitButton>
-
                         <SubmitButton variant="contained" style={{ backgroundColor: "#01428E" }} onClick={() => handleFinishOrderStep(0)}>
                           Getting Complete
                         </SubmitButton>

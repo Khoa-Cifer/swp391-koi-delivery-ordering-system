@@ -1,3 +1,3 @@
 export const CONSTANT_GOOGLE_MAP_API_KEY = "AIzaSyAXVVX57lXbBHX8KWqqCPpo5HOQXhzx3kc";
 
-export const CONSTANT_TINY_MCE_API_KEY = "5zbr8e3gmlbjvk5hcan94t6h2gsbro3fqtkhqelh6x6rz28u";
+export const CONSTANT_TINY_MCE_API_KEY = "jt8opfgfvqs25yk4q7r8nnqpeuj7prvou373th8uq1nvdf56";

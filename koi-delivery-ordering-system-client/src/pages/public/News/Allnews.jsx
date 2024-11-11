@@ -87,31 +87,30 @@ function AllNews() {
   return (
     <>
       <Header />
+      <div>
+        <div className="all-news-container">
+          <h1>All News</h1>
+          <div className="news-grid">
+            {news.map((newsItem, index) => (
+              <div key={index} className="news-item">
+                <img
+                  src={newsItem.imageUrl}
+                  alt={newsItem.title}
+                  className="news-image"
+                />
+                <div className="news-content">
+                  <h3 className="news-title">{newsItem.title}</h3>
+                  <Paragraph ellipsis={{ rows: 3 }}>
+                    <div
+                      dangerouslySetInnerHTML={{ __html: newsItem.description }}
+                    />
+                  </Paragraph>
+                  <div>
+                    <span className="news-date">
+                      {dateTimeConvert(newsItem.createdDate)}
+                    </span>
 
-      <div className="back-button">
-        <button onClick={handleBackClick}>← Quay lại</button>
-      </div>
-      <div className="all-news-container">
-        <h1>All News</h1>
-        <div className="news-grid">
-          {news.map((newsItem, index) => (
-            <div key={index} className="news-item">
-              <img
-                src={newsItem.imageUrl}
-                alt={newsItem.title}
-                className="news-image"
-              />
-              <div className="news-content">
-                <h3 className="news-title">{newsItem.title}</h3>
-                <Paragraph ellipsis={{ rows: 3 }}>
-                  <div
-                    dangerouslySetInnerHTML={{ __html: newsItem.description }}
-                  />
-                </Paragraph>
-                <div className="news-footer">
-                  <span className="news-date">
-                  {dateTimeConvert(newsItem.createdDate)}
-                  </span>
+                  </div>
                   <div className="card-actions">
                     <div className="detail-button">
                       <button onClick={() => handleViewDetail(newsItem)}>
@@ -126,12 +125,15 @@ function AllNews() {
                           Delete
                         </button>
                       )}
-                    </div>zz
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <div className="back-button">
+            <button onClick={handleBackClick}>← Go back</button>
+          </div>
         </div>
       </div>
     </>

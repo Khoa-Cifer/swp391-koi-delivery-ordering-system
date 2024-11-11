@@ -131,7 +131,7 @@ public class OrderDeliveringServiceImpl implements IOrderDeliveringService {
 
                 //send mail for customer
                 emailDetail.setReceiver((Object) customer);
-                emailDetail.setSubject("Order " + order.getId() + " is being delivered to you");
+                emailDetail.setSubject("Order " + order.getName() + " is being delivered");
                 emailDetail.setLink("http://localhost:5173");
                 emailService.sendEmail(emailDetail, 5);
                 return true;

@@ -75,25 +75,25 @@ function Sidebar() {
 
           <ListItem className="button">
             <ListItemText
-              primary="Getting Order"
+              primary="Getting Orders"
               onClick={() => navigate('/getting-order-delivery-staff')}
             />
           </ListItem>
           <ListItem className="button">
             <ListItemText
-              primary="Delivering Order"
+              primary="Delivering Orders"
               onClick={() => navigate('/delivering-order-delivery-staff')}
             />
           </ListItem>
           <ListItem className="button">
             <ListItemText
-              primary="Available to Get"
+              primary="Accepted Orders"
               onClick={() => navigate('/available-to-get-delivery-staff')}
             />
           </ListItem>
           <ListItem className="button">
             <ListItemText
-              primary="Available to Delivery"
+              primary="Confirmed Orders"
               onClick={() => navigate('/available-to-delivery-staff')}
             />
           </ListItem>

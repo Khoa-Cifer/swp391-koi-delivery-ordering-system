@@ -1,7 +1,7 @@
 import "./MainContent.scss";
 import { useEffect, useState } from "react";
 import { getOrdersByStatus } from "../../../../utils/axios/order";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -13,21 +13,15 @@ import {
   ListItemIcon,
   Typography,
 } from "@mui/material";
-import { getAllNews } from "../../../../utils/axios/news";
-import { getFileByFileId } from "../../../../utils/axios/file";
 import ToastUtil from "../../../../components/toastContainer";
 // import { toast } from "react-toastify";
 // import Paragraph from "antd/es/typography/Paragraph";
 import dateTimeConvert from "../../../../components/utils";
 import ListIcon from "@mui/icons-material/List";
 
-// eslint-disable-next-line react/prop-types
 function MainContent() {
-  const { titleHeader } = useOutletContext();
-
   const [postedOrder, setPostedOrder] = useState([]);
   const [receivedOrder, setReceivedOrder] = useState([]);
-  const [news, setNews] = useState([]);
   // const [visibleNewsCount, setVisibleNewsCount] = useState(4);
 
   // const [openDialog, setOpenDialog] = useState(false);
@@ -37,41 +31,6 @@ function MainContent() {
 
   const postedStatus = 1; // Status for posted orders
   const receivedStatus = 4; // Status for received orders
-
-  // Fetch news data with image
-  const fetchNews = async () => {
-    try {
-      const response = await getAllNews();
-
-      if (response && response.length > 0) {
-        const fileIds = response.map((newsItem) => newsItem.file.id);
-
-        if (fileIds.length > 0) {
-          const filePromises = fileIds.map(async (fileId) => {
-            const fileResponse = await getFileByFileId(fileId);
-            return URL.createObjectURL(fileResponse);
-          });
-
-          const imageUrls = await Promise.all(filePromises);
-
-          const newsWithImages = response.map((newsItem, index) => ({
-            ...newsItem,
-            imageUrl: imageUrls[index],
-          }));
-
-          setNews(newsWithImages);
-        }
-      } else {
-        setNews([]);
-      }
-    } catch (error) {
-      console.error("Error fetching news data:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchNews();
-  }, []);
 
   useEffect(() => {
     const fetchOrderData = async () => {
@@ -110,14 +69,14 @@ function MainContent() {
         <ListItemIcon sx={{ color: "blue", marginRight: "-2%" }}>
           <ListIcon />
         </ListItemIcon>
-        <Typography variant="h6">{titleHeader}</Typography>
+        <Typography variant="h6">Home</Typography>
       </Box>
 
       <div className="order-container-sale">
         {postedOrder.length > 0 && (
           <div className="order-container">
             <div className="order">
-              <strong>Waiting For Accepted Order</strong>
+              <strong>Posted Orders</strong>
             </div>
             <div className="order-card">
               {postedOrder.slice(0, 3).map((order) => (
@@ -155,7 +114,7 @@ function MainContent() {
         {receivedOrder.length > 0 && (
           <div className="order-container">
             <div className="order">
-              <strong>Waiting For Confirm Order</strong>
+              <strong>Received Orders</strong>
             </div>
             <div className="order-card">
               {receivedOrder.slice(0, 3).map((order) => (
