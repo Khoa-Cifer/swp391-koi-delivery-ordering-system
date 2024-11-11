@@ -113,7 +113,6 @@ function OrderInfo({ order }) {
     const { ref: senderRef } = usePlacesWidget({
         apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
         onPlaceSelected: (place) => {
-            console.log(place.formatted_address);
             setSenderAddress(place.formatted_address);
         }
     })

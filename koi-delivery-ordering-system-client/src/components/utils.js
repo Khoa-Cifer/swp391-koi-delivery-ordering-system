@@ -25,7 +25,6 @@ export function getToday() {
 }
 
 export function getOneWeekFromToday() {
-    console.log(new Date(getToday().setDate(getToday().getDate() + 7)));
     return new Date(getToday().setDate(getToday().getDate() + 7));
 }
 
