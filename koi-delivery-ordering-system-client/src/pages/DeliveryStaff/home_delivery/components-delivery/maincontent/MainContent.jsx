@@ -84,7 +84,7 @@ function MainContent() {
 
       <div className="order-data">
         <div className="orders-accepted">
-          <h2>Order Accepted</h2>
+          <h2>Accepted Orders</h2>
           <Table
             dataSource={ordersAccepted}
             columns={columns}
@@ -94,7 +94,7 @@ function MainContent() {
         </div>
 
         <div className="orders-confirmed">
-          <h2>Order Confirmed</h2>
+          <h2>Confirmed Orders</h2>
           <Table
             dataSource={ordersConfirmed}
             columns={columns}
