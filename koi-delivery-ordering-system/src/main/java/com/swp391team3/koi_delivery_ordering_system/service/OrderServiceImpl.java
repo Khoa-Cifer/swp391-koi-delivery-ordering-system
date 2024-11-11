@@ -386,7 +386,6 @@ public class OrderServiceImpl implements IOrderService {
 
             if (request.getProcessType() == 0) {
                 updatedOrder = updateOrderStatus(foundOrder.get().getId(), orderStatus.ORDER_RECEIVED);
-                ;
             } else if (request.getProcessType() == 1) {
                 updatedOrder = updateOrderStatus(foundOrder.get().getId(), orderStatus.COMPLETE);
             }

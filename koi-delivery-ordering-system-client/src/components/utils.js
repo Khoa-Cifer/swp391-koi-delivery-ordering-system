@@ -25,6 +25,7 @@ export function getToday() {
 }
 
 export function getOneWeekFromToday() {
+    console.log(new Date(getToday().setDate(getToday().getDate() + 7)));
     return new Date(getToday().setDate(getToday().getDate() + 7));
 }
 
@@ -33,26 +34,28 @@ export function getOneDayBeforeToday() {
 }
 
 export function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371.0;
+    const R = 6371; // Radius of the Earth in kilometers
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
 
-    function toRadians(degrees) {
-        return degrees * (Math.PI / 180);
-    }
-
-    const lat1Rad = toRadians(lat1);
-    const lon1Rad = toRadians(lon1);
-    const lat2Rad = toRadians(lat2);
-    const lon2Rad = toRadians(lon2);
-
-    const dlat = lat2Rad - lat1Rad;
-    const dlon = lon2Rad - lon1Rad;
-
-    const a = Math.sin(dlat / 2) * Math.sin(dlat / 2) +
-              Math.cos(lat1Rad) * Math.cos(lat2Rad) *
-              Math.sin(dlon / 2) * Math.sin(dlon / 2);
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const result = R * c;
+    const distance = R * c;
 
-    return result;
+    return distance;
+}
+
+export function calculateDateByDistance(distance) {
+    // Divide distance by 100 to get the number of days to add
+    const daysToAdd = Math.floor(distance / 100);
+
+    // Create a new date and add the days
+    const newDate = getOneWeekFromToday();
+    newDate.setDate(newDate.getDate() + daysToAdd);
+
+    return newDate;
 }

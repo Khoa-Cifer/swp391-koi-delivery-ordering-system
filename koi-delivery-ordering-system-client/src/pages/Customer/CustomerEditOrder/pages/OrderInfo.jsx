@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { CONSTANT_GOOGLE_MAP_API_KEY } from "../../../../utils/constants";
 import { usePlacesWidget } from "react-google-autocomplete";
 import { fromAddress, setDefaults } from "react-geocode";
-import { getOneWeekFromToday } from "../../../../components/utils";
+import { calculateDateByDistance, calculateDistance, getOneWeekFromToday } from "../../../../components/utils";
 
 setDefaults({
     key: CONSTANT_GOOGLE_MAP_API_KEY, // Your API key here.
@@ -113,6 +113,7 @@ function OrderInfo({ order }) {
     const { ref: senderRef } = usePlacesWidget({
         apiKey: CONSTANT_GOOGLE_MAP_API_KEY,
         onPlaceSelected: (place) => {
+            console.log(place.formatted_address);
             setSenderAddress(place.formatted_address);
         }
     })
@@ -189,6 +190,18 @@ function OrderInfo({ order }) {
         }
     }
 
+    useEffect(() => {
+        if (senderCoordinates && receiverCoordinates && senderCoordinates.lat && senderCoordinates.lng && receiverCoordinates.lat && receiverCoordinates.lng) {
+            const distance = calculateDistance(
+                parseFloat(senderCoordinates.lat),
+                parseFloat(senderCoordinates.lng),
+                parseFloat(receiverCoordinates.lat),
+                parseFloat(receiverCoordinates.lng));
+            const expectedDate = calculateDateByDistance(distance);
+            setExpectedFinishDate(expectedDate);
+        }
+    }, [senderAddress, receiverAddress]);
+
     const handleDateChange = (e) => {
         setExpectedFinishDate(e);
     }
@@ -247,7 +260,7 @@ function OrderInfo({ order }) {
                         />
                     </div>
 
-                    <Calendar onChange={e => handleDateChange(e)} date={expectedFinishDate} minDate={getOneWeekFromToday()}/>
+                    <Calendar date={expectedFinishDate} />
 
                     {updated ? (
                         <button onClick={() => handleConclusion()} className="form-button">
