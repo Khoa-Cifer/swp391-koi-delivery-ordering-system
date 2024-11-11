@@ -43,12 +43,12 @@ function Sidebar({ pageHeaderSales }) {
 
   const handleOpenPosted = () => {
     navigate('/posted-order-sales-staff')
-    pageHeaderSales("Posted Order");
+    pageHeaderSales("Posted Orders");
   }
 
   const handleOpenReceived = () => {
     navigate('/received-order-sales-staff')
-    pageHeaderSales("Received Order");
+    pageHeaderSales("Received Orders");
   }
 
   const handleOpenHome = () => {
