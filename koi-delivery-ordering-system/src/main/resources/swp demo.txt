@@ -1,12 +1,15 @@
 Customer Account:
 nam.vu@email.com
 12345678
+
 Sales Staff Account:
 mai.nguyen@examplemail.com
 123
+
 Delivery Staff Account:
 hai.nam.phan@examplemail.com
 123
+
 Manager Account:
 admin@koiapp.com
 12345678
