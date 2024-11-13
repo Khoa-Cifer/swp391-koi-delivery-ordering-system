@@ -19,9 +19,9 @@ public class StorageController {
         return ResponseEntity.ok(storageService.createStorage(request));
     }
 
-    @PreAuthorize("hasAuthority('Manager')")
+//    @PreAuthorize("hasAuthority('Manager')")
     @GetMapping("/getAllStorages")
     public ResponseEntity<?> getAllStorages() {
-        return ResponseEntity.ok(storageService.getAllStorages());
+        return ResponseEntity.ok(storageService.getAllStoragesWithOrderQuantity());
     }
 }
