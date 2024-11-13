@@ -140,6 +140,15 @@ public class CustomerServiceImpl implements ICustomerService {
 
         boolean emailDuplicatedCheck = customerRepository.existsByEmail(request.getEmail());
         if (emailDuplicatedCheck) {
+            boolean check = customerRepository.existsByEmailAlrRegister(request.getEmail());
+            if(check){
+                EmailDetailDTO emailDetail = new EmailDetailDTO();
+                emailDetail.setReceiver((Object) newCustomer);
+                emailDetail.setSubject("Welcome to KOI DELIVERY SYSTEM! We're glad you're here");
+                emailDetail.setLink("http://localhost:8080/api/auth/register?email=" + newCustomer.getEmail());
+                emailService.sendEmail(emailDetail, 1);
+                return true;
+            }
             return false;
         }
 
