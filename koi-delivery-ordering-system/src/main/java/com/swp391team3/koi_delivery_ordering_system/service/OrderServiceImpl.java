@@ -38,6 +38,7 @@ public class OrderServiceImpl implements IOrderService {
     private final SalesStaffRepository salesStaffRepository;
     private final StorageRepository storageRepository;
     private final DeliveryStaffRepository deliveryStaffRepository;
+    private final ValidationService validationService;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
@@ -50,7 +51,7 @@ public class OrderServiceImpl implements IOrderService {
                             IOrderActionLogService orderActionLogService,
                             OrderDeliveringRepository orderDeliveringRepository, LicenseFileRepository licenseFileRepository,
                             IFileService fileService, LicenseRepository licenseRepository, FishRepository fishRepository,
-                            FileRepository fileRepository, OrderActionLogRepository orderActionLogRepository, SalesStaffRepository salesStaffRepository, StorageRepository storageRepository, DeliveryStaffRepository deliveryStaffRepository) {
+                            FileRepository fileRepository, OrderActionLogRepository orderActionLogRepository, SalesStaffRepository salesStaffRepository, StorageRepository storageRepository, DeliveryStaffRepository deliveryStaffRepository, ValidationService validationService) {
         this.orderActionLogService = orderActionLogService;
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
@@ -73,6 +74,7 @@ public class OrderServiceImpl implements IOrderService {
         this.salesStaffRepository = salesStaffRepository;
         this.storageRepository = storageRepository;
         this.deliveryStaffRepository = deliveryStaffRepository;
+        this.validationService = validationService;
     }
 
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
@@ -85,10 +87,13 @@ public class OrderServiceImpl implements IOrderService {
 
             newOrder.setName(dto.getName());
             newOrder.setDescription(dto.getDescription());
+            validationService.validateEmail(dto.getReceiverEmail());
             newOrder.setReceiverEmail(dto.getReceiverEmail());
-
+            validationService.validatePhoneNumber(dto.getReceiverPhoneNumber());
             newOrder.setReceiverPhoneNumber(dto.getReceiverPhoneNumber());
 
+            validationService.validateDuplicateAddress(dto.getSenderAddress(), dto.getSenderLatitude(), dto.getSenderLongitude()
+            ,dto.getDestinationAddress(), dto.getDestinationLatitude(), dto.getDestinationLongitude());
             newOrder.setDestinationAddress(dto.getDestinationAddress());
             newOrder.setDestinationLatitude(dto.getDestinationLatitude());
             newOrder.setDestinationLongitude(dto.getDestinationLongitude());
@@ -388,6 +393,7 @@ public class OrderServiceImpl implements IOrderService {
             responseDTO.setCreatedDate(order.getCreatedDate());
             responseDTO.setFinishDate(order.getFinishDate());
             responseDTO.setExpectedFinishDate(order.getExpectedFinishDate());
+            responseDTO.setFish(order.getFishes());
 
             int currentStatus = order.getOrderStatus();
 

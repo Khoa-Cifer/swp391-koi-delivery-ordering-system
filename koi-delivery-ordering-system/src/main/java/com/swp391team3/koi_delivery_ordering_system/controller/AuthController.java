@@ -1,6 +1,8 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
 import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailService;
+import com.swp391team3.koi_delivery_ordering_system.exception.AuthException;
+import com.swp391team3.koi_delivery_ordering_system.exception.ValidationException;
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
 import com.swp391team3.koi_delivery_ordering_system.model.Manager;
@@ -112,7 +114,12 @@ public class AuthController {
 
     @PostMapping("/register-confirmation")
     public ResponseEntity<?> registerConfirmation(@RequestBody UserRequestRegisterDTO request) {
-        return ResponseEntity.ok(customerService.registrationConfirm(request));
+        try {
+            customerService.registrationConfirm(request);
+            return ResponseEntity.ok("Registration successful. Please check your email for confirmation.");
+        } catch (ValidationException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/forgot-password")
