@@ -1,6 +1,7 @@
 package com.swp391team3.koi_delivery_ordering_system.service;
 
 import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailService;
+import com.swp391team3.koi_delivery_ordering_system.exception.AuthException;
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.model.File;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestRegisterDTO;
@@ -25,6 +26,7 @@ public class CustomerServiceImpl implements ICustomerService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final IFileService fileService;
+    private final ValidationService validationService;
 
     @Override
     public boolean customerConfirm(String email) {
@@ -138,26 +140,33 @@ public class CustomerServiceImpl implements ICustomerService {
         Customer newCustomer = new Customer();
         newCustomer.setEmail(request.getEmail());
 
-        boolean emailDuplicatedCheck = customerRepository.existsByEmail(request.getEmail());
-        if (emailDuplicatedCheck) {
-            return false;
+        validationService.validatePhoneNumber(request.getPhoneNumber());
+        validationService.validatePhoneNumberRegisteredActive(request.getPhoneNumber());
+        validationService.validateEmailRegisteredActive(request.getEmail());
+        if(validationService.validateEmailRegisteredNotActive(request.getEmail())){
+            EmailDetailDTO emailDetail = new EmailDetailDTO();
+            emailDetail.setReceiver((Object) newCustomer);
+            emailDetail.setSubject("Welcome to KOI DELIVERY SYSTEM! We're glad you're here");
+            emailDetail.setLink("http://localhost:8080/api/auth/register?email=" + newCustomer.getEmail());
+            emailService.sendEmail(emailDetail, 1);
+            return true;
         }
 
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         newCustomer.setPassword(encodedPassword);
-
         newCustomer.setUsername(request.getUsername());
         newCustomer.setPhoneNumber(request.getPhoneNumber());
         newCustomer.setActiveStatus(false);
-//        http://localhost:5173" + "/payment-success" + "?amount=" + modifiedAmount + "&date=" + payDate + "&
 
         customerRepository.save(newCustomer);
 
         EmailDetailDTO emailDetail = new EmailDetailDTO();
-        emailDetail.setReceiver((Object) newCustomer);
+        emailDetail.setReceiver(newCustomer.getEmail());
         emailDetail.setSubject("Welcome to KOI DELIVERY SYSTEM! We're glad you're here");
-        emailDetail.setLink("http://localhost:8080/api/auth/register?email=" + newCustomer.getEmail());
+        emailDetail.setLink("http://localhost:8080/api/auth/confirm-registration?email=" + newCustomer.getEmail());
         emailService.sendEmail(emailDetail, 1);
+
         return true;
     }
+
 }

@@ -1,5 +1,6 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
+import com.swp391team3.koi_delivery_ordering_system.exception.ValidationException;
 import com.swp391team3.koi_delivery_ordering_system.model.Order;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.*;
 import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
@@ -25,8 +26,12 @@ public class OrderController {
     @PreAuthorize("hasAuthority('Customer')")
     @PostMapping("/createOrderGeneralData")
     public ResponseEntity<?> createOrderGeneralInfo(@RequestBody OrderGeneralInfoRequestDTO request) {
-        Long createdOrder = orderService.createGeneralInfoOrder(request);
-        return ResponseEntity.ok(createdOrder);
+        try{
+            Long createdOrder = orderService.createGeneralInfoOrder(request);
+            return ResponseEntity.ok(createdOrder);
+        } catch (ValidationException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PreAuthorize("hasAuthority('Customer')")
