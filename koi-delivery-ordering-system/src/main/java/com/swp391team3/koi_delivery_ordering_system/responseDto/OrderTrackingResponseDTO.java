@@ -1,9 +1,11 @@
 package com.swp391team3.koi_delivery_ordering_system.responseDto;
 
+import com.swp391team3.koi_delivery_ordering_system.model.Fish;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -21,4 +23,5 @@ public class OrderTrackingResponseDTO {
     private String staffNumber;
     private String proccessType;
     private String orderLocation;
+    private Set<Fish> fish;
 }
