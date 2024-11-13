@@ -4,6 +4,7 @@ import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailServi
 import com.swp391team3.koi_delivery_ordering_system.model.*;
 import com.swp391team3.koi_delivery_ordering_system.repository.*;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.*;
+import com.swp391team3.koi_delivery_ordering_system.responseDto.OrderTrackingResponseDTO;
 import com.swp391team3.koi_delivery_ordering_system.utils.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,19 +34,23 @@ public class OrderServiceImpl implements IOrderService {
     private final LicenseRepository licenseRepository;
     private final FishRepository fishRepository;
     private final FileRepository fileRepository;
+    private final OrderActionLogRepository orderActionLogRepository;
+    private final SalesStaffRepository salesStaffRepository;
+    private final StorageRepository storageRepository;
+    private final DeliveryStaffRepository deliveryStaffRepository;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
-            CustomerRepository customerRepository,
-            OrderStatus orderStatus, IStorageService storageService,
-            IFishService fishService, PriceBoard priceBoard,
-            ISalesStaffService salesStaffService, EmailService emailService,
-            @Lazy IOrderDeliveringService orderDeliveringService,
-            IDeliveryStaffService deliveryStaffService, IPaymentRateService paymentRateService,
-            IOrderActionLogService orderActionLogService,
-            OrderDeliveringRepository orderDeliveringRepository, LicenseFileRepository licenseFileRepository,
-            IFileService fileService, LicenseRepository licenseRepository, FishRepository fishRepository,
-            FileRepository fileRepository) {
+                            CustomerRepository customerRepository,
+                            OrderStatus orderStatus, IStorageService storageService,
+                            IFishService fishService, PriceBoard priceBoard,
+                            ISalesStaffService salesStaffService, EmailService emailService,
+                            @Lazy IOrderDeliveringService orderDeliveringService,
+                            IDeliveryStaffService deliveryStaffService, IPaymentRateService paymentRateService,
+                            IOrderActionLogService orderActionLogService,
+                            OrderDeliveringRepository orderDeliveringRepository, LicenseFileRepository licenseFileRepository,
+                            IFileService fileService, LicenseRepository licenseRepository, FishRepository fishRepository,
+                            FileRepository fileRepository, OrderActionLogRepository orderActionLogRepository, SalesStaffRepository salesStaffRepository, StorageRepository storageRepository, DeliveryStaffRepository deliveryStaffRepository) {
         this.orderActionLogService = orderActionLogService;
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
@@ -64,6 +69,10 @@ public class OrderServiceImpl implements IOrderService {
         this.licenseRepository = licenseRepository;
         this.fishRepository = fishRepository;
         this.fileRepository = fileRepository;
+        this.orderActionLogRepository = orderActionLogRepository;
+        this.salesStaffRepository = salesStaffRepository;
+        this.storageRepository = storageRepository;
+        this.deliveryStaffRepository = deliveryStaffRepository;
     }
 
     public Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto) {
@@ -366,9 +375,141 @@ public class OrderServiceImpl implements IOrderService {
     // }
 
     @Override
-    public Optional<Order> getOrderByTrackingId(String trackingId) {
-        return orderRepository.findByTrackingId(trackingId);
+    public Optional<OrderTrackingResponseDTO> getOrderByTrackingId(String trackingId) {
+        Optional<Order> orderOpt = orderRepository.findByTrackingId(trackingId);
+
+        if (orderOpt.isPresent()) {
+            Order order = orderOpt.get();
+            OrderTrackingResponseDTO responseDTO = new OrderTrackingResponseDTO();
+            responseDTO.setTrackingId(order.getTrackingId());
+            responseDTO.setNameSender(order.getCustomer().getUsername());
+            responseDTO.setNameReceiver(order.getName());
+            responseDTO.setOrderStatus(order.getOrderStatus());
+            responseDTO.setCreatedDate(order.getCreatedDate());
+            responseDTO.setFinishDate(order.getFinishDate());
+            responseDTO.setExpectedFinishDate(order.getExpectedFinishDate());
+
+            int currentStatus = order.getOrderStatus();
+
+            switch (currentStatus) {
+                case 1:
+                    responseDTO.setProccessType("Order has been posted");
+                    responseDTO.setStaffName("The order has not been approved by anyone");
+                    responseDTO.setStaffNumber("0794744324");
+                    responseDTO.setStaffType("None");
+                    break;
+
+                case 2:
+                    responseDTO.setProccessType("Order has been accepted");
+                    Long newestActionId = orderActionLogRepository.findNewestAction(order.getId());
+                    if (newestActionId != null) {
+                        orderActionLogRepository.findById(newestActionId).ifPresent(actionLog -> {
+                            responseDTO.setStaffType("Sales Staff");
+                            responseDTO.setStaffId(actionLog.getUserId());
+
+                            salesStaffRepository.findById(actionLog.getUserId()).ifPresent(staff -> {
+                                responseDTO.setStaffName(staff.getUsername());
+                                responseDTO.setStaffNumber(staff.getPhoneNumber());
+                            });
+
+                            storageRepository.findById(order.getStorage().getId()).ifPresent(storage -> {
+                                responseDTO.setOrderLocation(storage.getAddress());
+                            });
+                        });
+                    }
+                    break;
+
+                case 3:
+                    responseDTO.setProccessType("Order is being prepared for pickup");
+                    orderDeliveringRepository.findByOrderIdAndProcessType(order.getId(), 0).ifPresent(orderDelivering -> {
+                        responseDTO.setStaffType("Delivery Staff");
+                        responseDTO.setStaffId(orderDelivering.getDriver().getId());
+
+                        deliveryStaffRepository.findById(orderDelivering.getDriver().getId()).ifPresent(driver -> {
+                            responseDTO.setStaffName(driver.getUsername());
+                            responseDTO.setStaffNumber(driver.getPhoneNumber());
+                            responseDTO.setOrderLocation(driver.getAddress());
+                        });
+                    });
+                    break;
+
+                case 4:
+                    responseDTO.setProccessType("Order has been received at storage");
+                    storageRepository.findById(order.getStorage().getId()).ifPresent(storage -> {
+                        responseDTO.setOrderLocation(storage.getAddress());
+                    });
+                    responseDTO.setStaffType("None");
+                    responseDTO.setStaffName("No staff involved");
+                    responseDTO.setStaffNumber("N/A");
+                    break;
+
+                case 5:
+                    responseDTO.setProccessType("Order confirmed, now delivering");
+                    Long newestActionIdConfirm = orderActionLogRepository.findNewestAction(order.getId());
+                    if (newestActionIdConfirm != null) {
+                        orderActionLogRepository.findById(newestActionIdConfirm).ifPresent(actionLog -> {
+                            responseDTO.setStaffType("Sales Staff");
+                            responseDTO.setStaffId(actionLog.getUserId());
+
+                            salesStaffRepository.findById(actionLog.getUserId()).ifPresent(staff -> {
+                                responseDTO.setStaffName(staff.getUsername());
+                                responseDTO.setStaffNumber(staff.getPhoneNumber());
+                            });
+                        });
+                    }
+                    break;
+
+                case 6:
+                    responseDTO.setProccessType("Order is being delivered");
+                    orderDeliveringRepository.findByOrderIdAndProcessType(order.getId(), 1).ifPresent(orderDelivering -> {
+                        responseDTO.setStaffType("Delivery Staff");
+                        responseDTO.setStaffId(orderDelivering.getDriver().getId());
+
+                        deliveryStaffRepository.findById(orderDelivering.getDriver().getId()).ifPresent(driver -> {
+                                responseDTO.setStaffName(driver.getUsername());
+                                responseDTO.setStaffNumber(driver.getPhoneNumber());
+                                responseDTO.setOrderLocation(driver.getAddress());
+                            });
+                        });
+                    break;
+                case 7:
+                    responseDTO.setProccessType("Order is delivered successfully");
+                    orderDeliveringRepository.findByOrderIdAndProcessType(order.getId(), 1).ifPresent(orderDelivering -> {
+                        responseDTO.setStaffType("Delivery Staff");
+                        responseDTO.setStaffId(orderDelivering.getDriver().getId());
+                        responseDTO.setFinishDate(orderDelivering.getFinishDate());
+
+                        deliveryStaffRepository.findById(orderDelivering.getDriver().getId()).ifPresent(driver -> {
+                            responseDTO.setStaffName(driver.getUsername());
+                            responseDTO.setStaffNumber(driver.getPhoneNumber());
+                            responseDTO.setOrderLocation(order.getDestinationAddress());
+                        });
+                    });
+                    break;
+
+                case 8:
+                    responseDTO.setProccessType("Order has failed");
+                    break;
+
+                case 9:
+                    responseDTO.setProccessType("Order has been aborted by the customer");
+                    break;
+
+                default:
+                    responseDTO.setProccessType("Unknown status");
+                    responseDTO.setStaffType("Unknown");
+                    responseDTO.setStaffName("N/A");
+                    responseDTO.setStaffNumber("N/A");
+                    break;
+            }
+
+            return Optional.of(responseDTO);
+        }
+
+        return Optional.empty();
     }
+
+
 
     @Override
     public boolean finishOrder(FinishOrderUpdateRequestDTO request) {

@@ -7,4 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 public interface OrderActionLogRepository extends JpaRepository<OrderActionLog, Long> {
     @Query("SELECT oal.userId FROM OrderActionLog oal WHERE oal.order.id = :orderId AND oal.roleId = :roleId AND oal.actionType = :actionType")
     Long getUserId(int roleId, Long orderId, int actionType);
+
+    @Query("SELECT MAX(oal.id) FROM OrderActionLog oal WHERE oal.order.id = :orderId")
+    Long findNewestAction(Long orderId);
+
 }

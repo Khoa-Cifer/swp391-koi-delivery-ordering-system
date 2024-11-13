@@ -13,6 +13,10 @@ public interface OrderDeliveringRepository extends JpaRepository<OrderDelivering
     @Query("SELECT od FROM OrderDelivering od WHERE od.driver.id = :deliveryStaffId")
     List<OrderDelivering> getOrderDeliveringByDeliveryStaffId(Long deliveryStaffId);
 
-    @Query("SELECT od FROM OrderDelivering od WHERE od.order.id = :orderId AND deliveryProcessType = :getting")
-    Optional<OrderDelivering> findByOrderIdAndProcessType(Long orderId, int getting);
+
+    @Query("SELECT od FROM OrderDelivering od WHERE od.order.id = :orderId")
+    Optional<OrderDelivering> findByOrderId(Long orderId);
+
+    @Query("SELECT od FROM OrderDelivering od WHERE od.order.id = :orderId AND deliveryProcessType = :processType")
+    Optional<OrderDelivering> findByOrderIdAndProcessType(Long orderId, int processType);
 }

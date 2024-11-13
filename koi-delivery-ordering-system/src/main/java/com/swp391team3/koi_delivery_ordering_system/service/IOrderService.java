@@ -5,6 +5,7 @@ import com.swp391team3.koi_delivery_ordering_system.requestDto.FinishOrderUpdate
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderListFilteredRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffCancelOrderRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.responseDto.OrderTrackingResponseDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -29,7 +30,7 @@ public interface IOrderService {
     List<Order> onGoingOrdersForDelivery(Long id, int deliveryProcessType, int orderStatus);
 
 //    boolean updateOrderSalesAction(Long orderId, Long salesId, int action);
-    Optional<Order> getOrderByTrackingId(String trackingId);
+    Optional<OrderTrackingResponseDTO> getOrderByTrackingId(String trackingId);
 
     boolean finishOrder(FinishOrderUpdateRequestDTO request);
 
