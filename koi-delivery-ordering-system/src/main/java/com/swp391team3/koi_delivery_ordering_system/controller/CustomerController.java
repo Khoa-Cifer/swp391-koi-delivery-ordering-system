@@ -1,5 +1,6 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
+import com.swp391team3.koi_delivery_ordering_system.exception.ValidationException;
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestUpdateDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserUpdateRequestDTO;
@@ -54,16 +55,16 @@ public class CustomerController {
 
     // Update customer by ID
     //PASSED
-    @PreAuthorize("hasAuthority('Manager')")
-    @PutMapping("/updateCustomerById/{id}")
-    public ResponseEntity<Customer> updateCustomerById(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO request) {
-        Customer updated = customerService.updateCustomerById(id, request.getUsername(), request.getEmail(), request.getPhoneNumber());
-        if (updated != null) {
-            return ResponseEntity.ok(updated);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+//    @PreAuthorize("hasAuthority('Manager')")
+//    @PutMapping("/updateCustomerById/{id}")
+//    public ResponseEntity<Customer> updateCustomerById(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO request) {
+//        Customer updated = customerService.updateCustomerById(id, request.getUsername(), request.getEmail(), request.getPhoneNumber());
+//        if (updated != null) {
+//            return ResponseEntity.ok(updated);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
     @PreAuthorize("hasAuthority('Manager')")
     @PutMapping("/disable/{id}")
@@ -92,7 +93,12 @@ public class CustomerController {
     @PreAuthorize("hasAuthority('Customer')")
     @PutMapping("/updateCustomerProfile")
     public ResponseEntity<?> updateCustomerProfile(@RequestBody UserUpdateRequestDTO request) {
-        return ResponseEntity.ok(customerService.customerUpdateProfile(request));
+        try {
+            String result = customerService.customerUpdateProfile(request);
+            return ResponseEntity.ok(result);
+        }catch (ValidationException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @PreAuthorize("hasAuthority('Customer')")
