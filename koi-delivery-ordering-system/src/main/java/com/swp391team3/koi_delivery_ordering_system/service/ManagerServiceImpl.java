@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class ManagerServiceImpl implements IManagerService{
     private final ManagerRepository managerRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ValidationService validationService;
 
     @Override
     public List<Manager> getAllManager() {
@@ -31,6 +32,13 @@ public class ManagerServiceImpl implements IManagerService{
     @Override
     public Manager updateManager(Long id, String email, String username, String phoneNumber) {
         Optional<Manager> existingManager = managerRepository.findById(id);
+        if(!existingManager.get().getEmail().equals(email)) {
+            validationService.validateEmail(email);
+            validationService.validateEmailManagerRegistered(email);
+        } else if(!existingManager.get().getPhoneNumber().equals(phoneNumber)){
+            validationService.validatePhoneNumber(phoneNumber);
+            validationService.validatePhoneNumberManagerRegistered(phoneNumber);
+        }
         if (existingManager.isPresent()) {
             Manager updatedManager = existingManager.get();
             updatedManager.setEmail(email);
@@ -63,11 +71,11 @@ public class ManagerServiceImpl implements IManagerService{
     @Override
     public String createNewManager(StaffRequestCreationDTO request) {
         Manager newManager = new Manager();
-        boolean emailDuplicatedCheck = managerRepository.existsByEmail(request.getEmail());
 
-        if (emailDuplicatedCheck) {
-            return "This email already exists";
-        }
+        validationService.validateEmail(request.getEmail());
+        validationService.validatePhoneNumber(request.getPhoneNumber());
+        validationService.validateEmailManagerRegistered(request.getEmail());
+        validationService.validatePhoneNumberManagerRegistered(request.getPhoneNumber());
 
         newManager.setEmail(request.getEmail());
         newManager.setPhoneNumber(request.getPhoneNumber());
@@ -87,6 +95,13 @@ public class ManagerServiceImpl implements IManagerService{
     @Override
     public boolean editProfile(Long id, String email, String username, String phoneNumber, String password) {
         Optional<Manager> existingManager = managerRepository.findById(id);
+        if(!existingManager.get().getEmail().equals(email)) {
+            validationService.validateEmail(email);
+            validationService.validateEmailManagerRegistered(email);
+        } else if(!existingManager.get().getPhoneNumber().equals(phoneNumber)){
+            validationService.validatePhoneNumber(phoneNumber);
+            validationService.validatePhoneNumberManagerRegistered(phoneNumber);
+        }
         if (existingManager.isPresent()) {
             Manager updatedManager = existingManager.get();
             updatedManager.setEmail(email);

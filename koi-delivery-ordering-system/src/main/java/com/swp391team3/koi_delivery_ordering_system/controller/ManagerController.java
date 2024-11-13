@@ -1,5 +1,7 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
+import com.swp391team3.koi_delivery_ordering_system.exception.ValidationException;
+import com.swp391team3.koi_delivery_ordering_system.model.Manager;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.ManagerEditProfileRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestCreationDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestUpdateDTO;
@@ -18,8 +20,12 @@ public class ManagerController {
     @PreAuthorize("hasAuthority('Manager')")
     @PostMapping("/create-manager")
     public ResponseEntity<?> createDeliveryStaff(@RequestBody StaffRequestCreationDTO request) {
-        String result = managerService.createNewManager(request);
-        return ResponseEntity.ok(result);
+        try {
+            String result = managerService.createNewManager(request);
+            return ResponseEntity.ok(result);
+        } catch (ValidationException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     //Get All Managers
@@ -50,13 +56,23 @@ public class ManagerController {
     @PreAuthorize("hasAuthority('Manager')")
     @PutMapping("/update-manager-by-id/{id}")
     public ResponseEntity<?> updateManager(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO request) {
-        return ResponseEntity.ok(managerService.updateManager(id, request.getEmail(), request.getUsername(), request.getPhoneNumber()));
+        try {
+            Manager manager = managerService.updateManager(id, request.getEmail(), request.getUsername(), request.getPhoneNumber());
+            return ResponseEntity.ok(manager);
+        } catch (ValidationException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PreAuthorize("hasAuthority('Manager')")
     @PutMapping("/manager-edit-profile")
     public ResponseEntity<?> editProfile(@RequestBody ManagerEditProfileRequestDTO request) {
-        return ResponseEntity.ok(managerService.editProfile(request.getId(),
-                request.getEmail(), request.getUsername(), request.getPhoneNumber(), request.getPassword()));
+        try {
+            Manager manager = managerService.updateManager(request.getId(),
+                    request.getEmail(), request.getUsername(), request.getPhoneNumber());
+            return ResponseEntity.ok(manager);
+        } catch (ValidationException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
