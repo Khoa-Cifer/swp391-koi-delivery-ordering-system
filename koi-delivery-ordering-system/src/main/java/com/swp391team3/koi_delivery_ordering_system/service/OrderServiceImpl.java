@@ -395,6 +395,7 @@ public class OrderServiceImpl implements IOrderService {
             responseDTO.setFinishDate(order.getFinishDate());
             responseDTO.setExpectedFinishDate(order.getExpectedFinishDate());
             responseDTO.setFish(order.getFishes());
+            responseDTO.setOrderLocation(order.getSenderAddress());
 
             int currentStatus = order.getOrderStatus();
 
@@ -418,10 +419,6 @@ public class OrderServiceImpl implements IOrderService {
                                 responseDTO.setStaffName(staff.getUsername());
                                 responseDTO.setStaffNumber(staff.getPhoneNumber());
                             });
-
-                            storageRepository.findById(order.getStorage().getId()).ifPresent(storage -> {
-                                responseDTO.setOrderLocation(storage.getAddress());
-                            });
                         });
                     }
                     break;
@@ -443,7 +440,7 @@ public class OrderServiceImpl implements IOrderService {
                 case 4:
                     responseDTO.setProccessType("Order has been received at storage");
                     storageRepository.findById(order.getStorage().getId()).ifPresent(storage -> {
-                        responseDTO.setOrderLocation(storage.getAddress());
+                        responseDTO.setOrderLocation(storage.getName()+": "+storage.getAddress());
                     });
                     responseDTO.setStaffType("None");
                     responseDTO.setStaffName("No staff involved");
@@ -454,6 +451,9 @@ public class OrderServiceImpl implements IOrderService {
                     responseDTO.setProccessType("Order confirmed, now delivering");
                     Long newestActionIdConfirm = orderActionLogRepository.findNewestAction(order.getId());
                     if (newestActionIdConfirm != null) {
+                        storageRepository.findById(order.getStorage().getId()).ifPresent(storage -> {
+                            responseDTO.setOrderLocation(storage.getName()+": "+storage.getAddress());
+                        });
                         orderActionLogRepository.findById(newestActionIdConfirm).ifPresent(actionLog -> {
                             responseDTO.setStaffType("Sales Staff");
                             responseDTO.setStaffId(actionLog.getUserId());
@@ -496,6 +496,30 @@ public class OrderServiceImpl implements IOrderService {
 
                 case 8:
                     responseDTO.setProccessType("Order has failed");
+                    responseDTO.setCancelReason(order.getCancelReason());
+                    newestActionIdConfirm = orderActionLogRepository.findNewestAction(order.getId());
+                    orderActionLogRepository.findById(newestActionIdConfirm).ifPresent(actionLog -> {
+                        if(actionLog.getActionType()==ActionType.CANCEL){
+                            responseDTO.setStaffType("Sales Staff");
+                            responseDTO.setStaffId(actionLog.getUserId());
+
+                            salesStaffRepository.findById(actionLog.getUserId()).ifPresent(staff -> {
+                                responseDTO.setStaffName(staff.getUsername());
+                                responseDTO.setStaffNumber(staff.getPhoneNumber());
+                        });
+                        } else {
+                            orderDeliveringRepository.findTopByOrderIdOrderByIdDesc(order.getId()).ifPresent(orderDelivering -> {
+                                responseDTO.setStaffType("Delivery Staff");
+                                responseDTO.setStaffId(orderDelivering.getDriver().getId());
+
+                                deliveryStaffRepository.findById(orderDelivering.getDriver().getId()).ifPresent(driver -> {
+                                    responseDTO.setStaffName(driver.getUsername());
+                                    responseDTO.setStaffNumber(driver.getPhoneNumber());
+                                    responseDTO.setOrderLocation(order.getDestinationAddress());
+                                });
+                            });
+                        }
+                    });
                     break;
 
                 case 9:
