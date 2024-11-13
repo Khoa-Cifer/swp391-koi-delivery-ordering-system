@@ -1,6 +1,7 @@
 package com.swp391team3.koi_delivery_ordering_system.service;
 
 import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailService;
+import com.swp391team3.koi_delivery_ordering_system.exception.ValidationException;
 import com.swp391team3.koi_delivery_ordering_system.model.*;
 import com.swp391team3.koi_delivery_ordering_system.repository.*;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.*;
@@ -203,9 +204,9 @@ public class OrderServiceImpl implements IOrderService {
 
         if (nearestStorage != null) {
             return nearestStorage;
-        }
+        } else
 
-        return null;
+        throw new ValidationException("The Order Is Not In Our Support Area");
     }
 
     @Override
