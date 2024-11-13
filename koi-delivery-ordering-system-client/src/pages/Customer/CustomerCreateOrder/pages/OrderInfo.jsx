@@ -9,7 +9,7 @@ import ToastUtil from "../../../../components/toastContainer";
 import { usePlacesWidget } from "react-google-autocomplete";
 import { fromAddress, setDefaults } from "react-geocode";
 import { CONSTANT_GOOGLE_MAP_API_KEY } from "../../../../utils/constants";
-import { getOneWeekFromToday } from "../../../../components/utils";
+import { calculateDateByDistance, calculateDistance, getOneWeekFromToday } from "../../../../components/utils";
 
 setDefaults({
     key: CONSTANT_GOOGLE_MAP_API_KEY, // Your API key here.
@@ -42,7 +42,7 @@ function OrderInfo({ orderId, formStepData }) {
     const [senderCoordinates, setSenderCoordinates] = useState({ lat: null, lng: null });
     const [receiverAddress, setReceiverAddress] = useState("");
     const [receiverCoordinates, setReceiverCoordinates] = useState({ lat: null, lng: null });
-    const [expectedFinishDate, setExpectedFinishDate] = useState(null);
+    const [expectedFinishDate, setExpectedFinishDate] = useState(getOneWeekFromToday());
     const [selectedButton, setSelectedButton] = useState(0);
     const [receiverEmail, setReceiverEmail] = useState();
     const [receiverPhoneNumber, setReceiverPhoneNumber] = useState();
@@ -210,9 +210,18 @@ function OrderInfo({ orderId, formStepData }) {
         }
     }, [senderAddress])
 
-    const handleDateChange = (e) => {
-        setExpectedFinishDate(e);
-    }
+    useEffect(() => {
+        if (senderCoordinates && receiverCoordinates && senderCoordinates.lat && senderCoordinates.lng && receiverCoordinates.lat && receiverCoordinates.lng) {
+            const distance = calculateDistance(
+                parseFloat(senderCoordinates.lat),
+                parseFloat(senderCoordinates.lng),
+                parseFloat(receiverCoordinates.lat),
+                parseFloat(receiverCoordinates.lng));
+            const expectedDate = calculateDateByDistance(distance);
+            setExpectedFinishDate(expectedDate);
+        }
+    }, [senderAddress, receiverAddress]);
+
 
     const handleButtonClick = (buttonType) => {
         setSelectedButton(buttonType);
@@ -287,7 +296,7 @@ function OrderInfo({ orderId, formStepData }) {
                         />
                     </div>
 
-                    <Calendar onChange={e => handleDateChange(e)} date={expectedFinishDate} minDate={getOneWeekFromToday()} />
+                    <Calendar date={expectedFinishDate} />
 
                     <button onClick={() => handleSubmit()} className="form-button">
                         Submit & Next Step

@@ -394,9 +394,9 @@ public class OrderServiceImpl implements IOrderService {
             switch (currentStatus) {
                 case 1:
                     responseDTO.setProccessType("Order has been posted");
-                    responseDTO.setStaffName("The order has not been approved by anyone");
-                    responseDTO.setStaffNumber("0794744324");
                     responseDTO.setStaffType("None");
+                    responseDTO.setStaffName("No staff involved");
+                    responseDTO.setStaffNumber("N/A");
                     break;
 
                 case 2:
@@ -527,7 +527,6 @@ public class OrderServiceImpl implements IOrderService {
 
             if (request.getProcessType() == 0) {
                 updatedOrder = updateOrderStatus(foundOrder.get().getId(), orderStatus.ORDER_RECEIVED);
-                ;
             } else if (request.getProcessType() == 1) {
                 updatedOrder = updateOrderStatus(foundOrder.get().getId(), orderStatus.COMPLETE);
             }

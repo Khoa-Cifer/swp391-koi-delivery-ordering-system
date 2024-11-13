@@ -41,7 +41,6 @@ const SalesFishDetail = () => {
 
   async function handleLicenseImages(license) {
     handleOpen();
-    console.log(license.files)
     if (Array.isArray(license.files) && license.files.length > 0) {
       const imagePromises = license.files.map(async (file) => {
         const fileId = file.file.id;
@@ -181,7 +180,7 @@ const SalesFishDetail = () => {
       </div>
 
       {fish && (
-        <div>
+        <div style={{ marginTop: "20px" }}>
           <div className="form-container">
             <div className="form">
               <Typography>Name</Typography>

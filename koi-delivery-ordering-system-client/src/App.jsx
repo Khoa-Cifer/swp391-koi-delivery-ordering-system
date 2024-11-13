@@ -174,8 +174,6 @@ function App() {
               <Route path="/received-order-sales-staff" element={<SalesStaffPrivateRoute element={<ReceivedOrderSalesStaff />} />} />
               <Route path="/sales-staff-edit-profile" element={<SalesStaffPrivateRoute element={<SalesStaffEditProfile />} />} />
               <Route path="/sales-staff-home" element={<SalesStaffPrivateRoute element={<SalesStaffHome />} />} />
-              <Route path="/sales-order-detail/:id" element={<AllowedRoute element={<SalesOrderDetail />} />} />
-              <Route path="/sales-order-detail/:id/sales-fish-detail" element={<AllowedRoute element={<SalesFishDetail />} />} />
               <Route path="/sales-order-detail/:id" element={<SalesStaffPrivateRoute element={<SalesOrderDetail />} />} />
               <Route path="/sales-order-detail/:id/sales-fish-detail" element={<SalesStaffPrivateRoute element={<SalesFishDetail />} />} />
               <Route path="/news-sales-staff" element={<SalesStaffPrivateRoute element={<SalesStaffNews />} />} />
