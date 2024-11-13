@@ -1,100 +1,101 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
-  AppBar,
-  Toolbar,
-  Box,
-  TextField,
-  Button,
+  Card,
   Typography,
-} from "@mui/material";
-import {
-  GoogleMap,
-  useJsApiLoader,
-  Marker,
-  Polyline,
-} from "@react-google-maps/api";
-import { getOrderByTrackingId } from "../../../utils/axios/order"; // Ensure this function is defined to fetch order data
-import { useNavigate } from "react-router-dom";
-import CurrentPosition from "../../../assets/delivery-current.svg";
-import dateTimeConvert, { calculateDistance } from "../../../components/utils";
-import { getFileByFileId } from "../../../utils/axios/file";
-import { Modal } from "antd";
-import Title from "antd/es/skeleton/Title";
-import ImageSlider from "../../../components/ImageSlider";
+  Divider,
+  Input,
+  Steps,
+  Descriptions,
+  Tag,
+  Col,
+  Row,
+} from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { Package2, Truck, CheckCircle2 } from "lucide-react";
 import { toast } from "react-toastify";
-import ToastUtil from "../../../components/toastContainer";
-import BlueMarker from "../../../assets/inTransit.svg"
-import GreenMarker from "../../../assets/succeeded.svg"
+import "react-toastify/dist/ReactToastify.css";
+import { getOrderByTrackingId } from "../../../utils/axios/order";
 
-const containerStyle = {
-  width: "100%",
-  height: "100%",
+const { Title } = Typography;
+
+// Constants for order statuses
+const orderStatusLabels = {
+  0: "Draft",
+  1: "Order Placed",
+  2: "Accepted",
+  3: "In Transit",
+  4: "Received",
+  5: "Confirmed",
+  6: "Delivering",
+  7: "Completed",
+  8: "Failed",
 };
 
-const center = {
-  lat: 40.7128,
-  lng: -74.006,
+// Function to determine the current step based on order status
+const getCurrentStep = (status) => {
+  switch (status) {
+    case 0:
+      return 0; // Draft, show the initial step (e.g., "Order Draft")
+    case 1:
+      return 1;
+    case 2:
+      return 2;
+    case 3:
+      return 3;
+    case 4:
+      return 4;
+    case 5:
+      return 5;
+    case 6:
+      return 6;
+    case 7:
+      return 7;
+    case 8:
+      return 7; // Failed, show as completed or a custom message
+    default:
+      return 0;
+  }
 };
 
+// Function to get the appropriate color for each status
+const getStatusColor = (status) => {
+  switch (status) {
+    case 1:
+      return "orange";
+    case 2:
+      return "blue";
+    case 3:
+      return "purple";
+    case 4:
+      return "cyan";
+    case 5:
+      return "geekblue";
+    case 6:
+      return "gold";
+    case 7:
+      return "green";
+    case 8:
+      return "red"; // Failed status, typically red
+    default:
+      return "gray";
+  }
+};
+
+// Main TrackingOrder Component
 const TrackingOrder = () => {
-  const [trackingId, setTrackingId] = useState("");
+  const [searchValue, setSearchValue] = useState("");
   const [orderData, setOrderData] = useState(null);
-  const [isShowAll, setIsShowAll] = useState(false);
-  const [currentDelivery, setCurrentDelivery] = useState();
-  const navigate = useNavigate();
-  const [imagePreviews, setImagePreviews] = useState([]);
-  const [selectedFish, setSelectedFish] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLicenseModalOpen, setIsLicenseModalOpen] = useState(false);
-  const [selectedLicense, setSelectedLicense] = useState(null);
-  const [licenseImages, setLicenseImages] = useState([]);
-  const [map, setMap] = useState();
-
-  const orderStatusLabels = {
-    0: "Draft",
-    1: "Posted",
-    2: "Accepted",
-    3: "Getting",
-    4: "Received",
-    5: "Confirmed",
-    6: "Delivering",
-    7: "Completed",
-    8: "Failed",
-  };
-
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-  });
 
   const handleSearch = async () => {
-    if (trackingId) {
+    if (searchValue) {
       try {
-        const order = await getOrderByTrackingId(trackingId);
+        const order = await getOrderByTrackingId(searchValue);
 
         if (order) {
-          if (
-            order.orderStatus === 0 ||
-            order.orderStatus === 8 ||
-            order.orderStatus === 9
-          ) {
-            setOrderData(null);
-            setCurrentDelivery(null);
-            toast("There is no order to track", { type: "warning" });
-            return;
-          }
           setOrderData(order);
-          if (order.orderDeliveringSet && order.orderDeliveringSet.length > 0) {
-            const availableOrderDelivering = order.orderDeliveringSet.reduce(
-              (prev, current) => {
-                return prev.id > current.id ? prev : current;
-              }
-            );
-            setCurrentDelivery(availableOrderDelivering);
-          }
         } else {
           setOrderData(null);
-          setCurrentDelivery(null);
-          toast("Tracking ID not found", { type: "error" });
+          toast.error("Tracking ID not found");
         }
       } catch (error) {
         console.error("Error fetching order:", error);
@@ -102,394 +103,219 @@ const TrackingOrder = () => {
     }
   };
 
-  // const handleLicenseClick = async (order) => {
-  //   setSelectedLicense(order.fishes[1].licenses[0]);
+  const renderOrderProgress = () => {
+    const currentStep = getCurrentStep(orderData.orderStatus);
 
-  //   try {
-  //     if (
-  //       Array.isArray(order.fishes[0].licenses[0].files) &&
-  //       order.fishes[0].licenses[0].files.length > 0
-  //     ) {
-  //       const imagePromises = order.fishes[0].licenses[0].files.map(
-  //         async (file) => {
-  //           const fileId = file.file.id;
-  //           const imageResponse = await getFileByFileId(fileId);
-  //           console.log(imageResponse);
-  //           return URL.createObjectURL(
-  //             new Blob([imageResponse], { type: "image/jpeg" })
-  //           );
-  //         }
-  //       );
-  //       const images = await Promise.all(imagePromises);
-  //       setLicenseImages(images);
-  //       setIsLicenseModalOpen(true);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching license image:", error);
-  //   }
-  // };
+    const stepsData = [
+      { title: "Draft", icon: <Package2 className="w-5 h-5" /> },
+      { title: "Order Placed", icon: <Package2 className="w-5 h-5" /> },
+      {
+        title: "Accepted",
+        icon: <CheckCircle2 className="w-5 h-5" />,
+        description:
+          currentStep === 2 ? (
+            <span
+              style={{ opacity: 0.5 }}
+            >{` Staff: ${orderData.staffName}`}</span>
+          ) : null,
+      },
+      {
+        title: "In Transit",
+        icon: <Truck className="w-5 h-5" />,
+        description:
+          currentStep === 3 ? (
+            <span
+              style={{ opacity: 0.85 }}
+            >{` Staff: ${orderData.staffName}`}</span>
+          ) : null,
+      },
+      {
+        title: "Received",
+        icon: <CheckCircle2 className="w-5 h-5" />,
+        description:
+          currentStep === 4 ? (
+            <span
+              style={{ opacity: 0.85 }}
+            >{` Staff: ${orderData.staffName}`}</span>
+          ) : null,
+      },
+      {
+        title: "Confirmed",
+        icon: <CheckCircle2 className="w-5 h-5" />,
+        description:
+          currentStep === 5 ? (
+            <span
+              style={{ opacity: 0.85 }}
+            >{` Staff: ${orderData.staffName}`}</span>
+          ) : null,
+      },
+      {
+        title: "Delivering",
+        icon: <Truck className="w-5 h-5" />,
+        description:
+          currentStep === 6 ? (
+            <span
+              style={{ opacity: 0.85 }}
+            >{` Staff: ${orderData.staffName}`}</span>
+          ) : null,
+      },
+      {
+        title: "Completed",
+        icon: <CheckCircle2 className="w-5 h-5" />,
+        description:
+          currentStep === 7 ? (
+            <span
+              style={{ opacity: 0.85 }}
+            >{` Staff: ${orderData.staffName}`}</span>
+          ) : null,
+      },
+    ];
 
-  // Close License Modal
-  const handleCloseLicenseModal = () => {
-    licenseImages.forEach((url) => URL.revokeObjectURL(url)); // Revoke URLs
-    setIsLicenseModalOpen(false);
-    setSelectedLicense(null);
-    setLicenseImages([]);
-  };
-
-  async function handleFishClick(order) {
-    setSelectedFish(order.fishes);
-    setIsModalOpen(true);
-
-    try {
-      if (Array.isArray(order.fishes) && order.fishes.length > 0) {
-        const imagePromises = order.fishes.map(async (fish) => {
-          const fileId = fish.file.id;
-          const imageResponse = await getFileByFileId(fileId);
-          return URL.createObjectURL(
-            new Blob([imageResponse], { type: "image/jpeg" })
-          );
-        });
-
-        const imageUrls = await Promise.all(imagePromises);
-        setImagePreviews(imageUrls);
-      }
-    } catch (error) {
-      console.error("Error fetching fish images:", error);
-    }
-  }
-
-  const handleCloseModal = () => {
-    imagePreviews.forEach((url) => URL.revokeObjectURL(url));
-    setIsModalOpen(false);
-    setSelectedFish(null);
-    setImagePreviews([]);
-  };
-
-  // useEffect(() => {
-  //   if (origin && destination) {
-  //     const directionsService = new window.google.maps.DirectionsService();
-  //     directionsService.route(
-  //       {
-  //         origin: origin,
-  //         destination: destination,
-  //         travelMode: window.google.maps.TravelMode.DRIVING,
-  //       },
-  //       (result, status) => {
-  //         if (status === "OK" && result) {
-  //           setDirections(result);
-  //           const route = result.routes[0];
-  //           const totalDistance = route.legs[0].distance.text;
-  //           setDistance(totalDistance);
-  //         } else {
-  //           console.error(`Error fetching directions ${status}`);
-  //         }
-  //       }
-  //     );
-  //   } else {
-  //     setDirections(null);
-  //   }
-  // }, [origin, destination]);
-
-  
-  useEffect(() => {
-    fetchMapBounds();
-  }, [orderData])
-  
-  if (loadError) return <div>Error loading maps</div>;
-  if (!isLoaded) return <div>Loading Maps</div>;
-
-  const handleHomeBack = () => {
-    navigate("/");
-  };
-
-  const handleMapLoad = (map) => {
-    setMap(map);
-    fetchMapBounds();
-  };
-
-  function fetchMapBounds() {
-    if (map) {
-      if (!orderData) {
-        return;
-      }
-      // eslint-disable-next-line no-undef
-      const bounds = new google.maps.LatLngBounds();
-
-      if (orderData) {
-        // eslint-disable-next-line no-undef
-        bounds.extend(new google.maps.LatLng(parseFloat(orderData.destinationLatitude), parseFloat(orderData.destinationLongitude)));
-        // eslint-disable-next-line no-undef
-        bounds.extend(new google.maps.LatLng(parseFloat(orderData.senderLatitude), parseFloat(orderData.senderLongitude)));
-      }
-
-      map.fitBounds(bounds);
-    }
-  }
-
-  return (
-    <div>
-      <ToastUtil />
-      <AppBar position="static" color="default">
-        <Toolbar
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-start",
-            }}
+    return (
+      <Steps
+        current={currentStep}
+        items={stepsData.map((step, index) => ({
+          ...step,
+          status:
+            index < currentStep
+              ? "finish"
+              : index === currentStep
+              ? "process"
+              : "wait",
+        }))}
+        progressDot={(dot, { status }) => (
+          <span
+            className={`w-8 h-8 flex items-center justify-center rounded-full
+              ${
+                status === "finish" || status === "process"
+                  ? `bg-${getStatusColor(orderData.orderStatus)}-500`
+                  : "bg-gray-200"
+              }`}
           >
-            <img
-              onClick={() => handleHomeBack()}
-              src="./src/assets/logo.png"
-              alt="Logo"
-              style={{ height: "40px", width: "auto" }}
-            />
-          </Box>
-          {/* Search Input */}
-          <Box
-            sx={{
-              mb: 2,
-              display: "flex",
-              justifyContent: "center",
-              width: "100%",
-            }}
-          >
-            <TextField
-              variant="outlined"
-              label="Search by Tracking ID"
-              type=""
-              value={trackingId}
-              onChange={(e) => setTrackingId(e.target.value)}
-              sx={{ mr: 1 }}
-            />
-            <Button variant="contained" color="primary" onClick={handleSearch}>
-              Search
-            </Button>
-          </Box>
-        </Toolbar>
-      </AppBar>
+            {dot}
+          </span>
+        )}
+      />
+    );
+  };
 
-      <Box
-        sx={{
-          backgroundColor: "#fff",
-          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-          height: "90vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
+  const renderOrderDetails = () => (
+    <Card className="bg-gray-50">
+      <Descriptions
+        title={
+          <div className="flex justify-between items-center">
+            <span>Order Information {"   "}</span>
+            <Tag color={getStatusColor(orderData.orderStatus)}>
+              {orderStatusLabels[orderData.orderStatus]}
+            </Tag>
+          </div>
+        }
+        bordered
+        column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2 }} // Two items per row
+      >
+        <Descriptions.Item label="Sender">
+          {orderData.nameSender}
+        </Descriptions.Item>
+        <Descriptions.Item label="Receiver">
+          {orderData.nameReceiver}
+        </Descriptions.Item>
+        <Descriptions.Item label="Created Date">
+          {new Date(orderData.createdDate).toLocaleDateString()}
+        </Descriptions.Item>
+        <Descriptions.Item label="Expected Delivery">
+          {new Date(orderData.expectedFinishDate).toLocaleDateString()}
+        </Descriptions.Item>
+
+        <Descriptions.Item label="Status">
+          {orderData.proccessType}
+        </Descriptions.Item>
+
+        <Descriptions.Item label="Order Location">
+          {orderData.orderLocation}
+        </Descriptions.Item>
+      </Descriptions>
+
+      {/* Staff Information Section */}
+      <Divider />
+
+      {/* Staff Information Title Row */}
+      <span
+        style={{
+          fontSize: "16px",
+          fontWeight: "600",
+          marginBottom: "10px",
+          display: "block",
         }}
       >
-        {/* Google Map with Order Details */}
-        <Box sx={{ height: "100%", width: "100%", position: "relative" }}>
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            zoom={10}
-            center={center}
-            onLoad={handleMapLoad}
-          >
-            {currentDelivery && (
-              <>
-                <Marker
-                  position={{
-                    lat: parseFloat(currentDelivery.latitude),
-                    lng: parseFloat(currentDelivery.longitude),
-                  }}
-                  icon={{
-                    url: CurrentPosition,
-                  }}
-                ></Marker>
-              </>
-            )}
+        Staff Information
+      </span>
 
-            {orderData && (
-              <>
-                <Marker
-                  position={{
-                    lat: parseFloat(orderData.senderLatitude),
-                    lng: parseFloat(orderData.senderLongitude),
-                  }}
-                  icon={{
-                    url: GreenMarker,
-                  }}
-                >
-                </Marker>
-                <Marker
-                  position={{
-                    lat: parseFloat(orderData.destinationLatitude),
-                    lng: parseFloat(orderData.destinationLongitude),
-                  }}
-                  icon={{
-                    url: BlueMarker,
-                  }}
-                >
-                </Marker>
+      <div
+        style={{
+          border: "1px solid #e8e8e8",
+          padding: "20px",
+          borderRadius: "8px",
+          backgroundColor: "#fafafa",
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        {/* Staff Information Header Row */}
+        <Row gutter={16} style={{ marginBottom: "10px" }}>
+          <Col span={8}>
+            <strong>Staff Name</strong>
+          </Col>
+          <Col span={8}>
+            <strong>Staff Contact</strong>
+          </Col>
+          <Col span={8}>
+            <strong>Staff Role</strong>
+          </Col>
+        </Row>
 
-                <Polyline
-                  path={[
-                    {
-                      lat: parseFloat(orderData.senderLatitude),
-                      lng: parseFloat(orderData.senderLongitude),
-                    },
-                    {
-                      lat: parseFloat(orderData.destinationLatitude),
-                      lng: parseFloat(orderData.destinationLongitude),
-                    },
-                  ]}
-                  options={{
-                    strokeColor: "#041967",
-                    //strokeOpacity: 0.5,
-                    strokeWeight: 2,
-                    geodesic: true,
-                    icons: [{
-                      // eslint-disable-next-line no-undef
-                      icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW },
-                      offset: '50%'
-                    }]
-                  }}
-                />
-              </>
-            )}
-            {/* {directions && <DirectionsRenderer directions={directions} />} */}
-          </GoogleMap>
+        {/* Staff Information Data Row */}
+        <Row gutter={16}>
+          <Col span={8}>{orderData.staffName || "Not Available"}</Col>
+          <Col span={8}>{orderData.staffNumber || "Not Available"}</Col>
+          <Col span={8}>{orderData.staffType || "Not Available"}</Col>
+        </Row>
+      </div>
+    </Card>
+  );
 
-          {/* Display order data and distance if available */}
-          {orderData && (
-            <Box
-              sx={{
-                position: "absolute",
-                bottom: 20,
-                left: 20,
-                backgroundColor: "rgba(255, 255, 255, 0.9)",
-                padding: 2,
-                borderRadius: "8px",
-                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-                zIndex: 1,
-                maxWidth: "300px",
-              }}
-              onClick={() => setIsShowAll(!isShowAll)}
-            >
+  return (
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-4xl mx-auto">
+        <Card className="shadow-lg">
+          <div className="mb-8 text-center">
+            <Title level={2}>Order Tracking</Title>
+            <Input.Search
+              size="middle"
+              placeholder="Enter tracking number"
+              prefix={<SearchOutlined className="text-gray-400" />}
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              onSearch={handleSearch}
+              className="max-w-sm mx-auto block"
+              enterButton="Search"
+            />
+          </div>
+
+          <Divider />
+
+          {orderData ? (
+            <>
               <>
-                {/* .toLocaleString() */}
-                <Typography variant="h6">Order Detail</Typography>
-                <Typography variant="body2">
-                  <strong>Expected finish date:</strong>{" "}
-                  {dateTimeConvert(orderData.expectedFinishDate)}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>Price:</strong>{" "}
-                  {`${Math.floor(orderData.price).toLocaleString()} VND`}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>Order status:</strong>{" "}
-                  {orderStatusLabels[orderData.orderStatus]}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>Sender:</strong> {orderData.senderAddress}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>Receiver:</strong> {orderData.destinationAddress}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>Distance:</strong> {calculateDistance(
-                    parseFloat(orderData.senderLatitude),
-                    parseFloat(orderData.senderLongitude),
-                    parseFloat(orderData.destinationLatitude),
-                    parseFloat(orderData.destinationLongitude)
-                  )}
-                </Typography>
+                <div className="mb-8">{renderOrderProgress()}</div>
+                {renderOrderDetails()}
               </>
-              <Box
-                sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
-              >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleFishClick(orderData)}
-                  sx={{
-                    padding: "6px 12px",
-                    fontSize: "0.875rem",
-                    backgroundColor: "#1976d2",
-                    "&:hover": {
-                      backgroundColor: "#115293",
-                    },
-                  }}
-                >
-                  View Fish
-                </Button>
-              </Box>
-            </Box>
+            </>
+          ) : (
+            <div className="text-center text-gray-500">
+              No order found. Please enter a valid tracking number.
+            </div>
           )}
-        </Box>
-      </Box>
-
-      <Modal
-        open={isLicenseModalOpen}
-        onCancel={handleCloseLicenseModal}
-        onOk={handleCloseLicenseModal}
-        style={{ maxWidth: "80vw", top: 20 }}
-      >
-        {selectedLicense ? (
-          <div>
-            <Title level={4} style={{ color: "#01428E" }}>
-              License Details
-            </Title>
-
-            <div className="slider-container" style={{ marginTop: "16px" }}>
-              {licenseImages.length === 1 ? (
-                // Show single image if there's only one license image
-                <img
-                  src={licenseImages[0]}
-                  alt="License"
-                  style={{ width: "100%", borderRadius: "8px" }}
-                />
-              ) : (
-                // Show ImageSlider if there are multiple license images
-                <ImageSlider images={licenseImages} />
-              )}
-            </div>
-          </div>
-        ) : (
-          "No licenses to show"
-        )}
-      </Modal>
-
-      <Modal
-        open={isModalOpen}
-        onCancel={handleCloseModal}
-        onOk={handleCloseModal}
-        style={{ maxWidth: "80vw", top: 20 }}
-      >
-        {selectedFish ? (
-          <div>
-            <Title level={4} style={{ color: "#01428E" }}>
-              {selectedFish?.name || "Unnamed Fish"}
-            </Title>
-
-            <div className="slider-container" style={{ marginTop: "16px" }}>
-              {imagePreviews.length === 1 ? (
-                // Show single image if there's only one
-                <img
-                  src={imagePreviews[0]}
-                  alt="Fish"
-                  style={{ width: "100%", borderRadius: "8px" }}
-                />
-              ) : (
-                // Show ImageSlider if there are multiple images
-                <ImageSlider images={imagePreviews} />
-              )}
-            </div>
-          </div>
-        ) : (
-          "No fish selected"
-        )}
-      </Modal>
+        </Card>
+      </div>
     </div>
   );
 };
