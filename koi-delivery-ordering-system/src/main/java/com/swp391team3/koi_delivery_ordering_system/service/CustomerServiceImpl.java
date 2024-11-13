@@ -138,6 +138,15 @@ public class CustomerServiceImpl implements ICustomerService {
         Customer newCustomer = new Customer();
         newCustomer.setEmail(request.getEmail());
 
+        if (request.getPhoneNumber() != null && !isValidPhoneNumber(request.getPhoneNumber())) {
+            return false;
+        }
+
+        boolean phoneDuplicatedCheck = customerRepository.existsByPhoneNumber(request.getPhoneNumber());
+        if (phoneDuplicatedCheck) {
+            return false;
+        }
+
         boolean emailDuplicatedCheck = customerRepository.existsByEmail(request.getEmail());
         if (emailDuplicatedCheck) {
             boolean check = customerRepository.existsByEmailAlrRegister(request.getEmail());
@@ -168,5 +177,8 @@ public class CustomerServiceImpl implements ICustomerService {
         emailDetail.setLink("http://localhost:8080/api/auth/register?email=" + newCustomer.getEmail());
         emailService.sendEmail(emailDetail, 1);
         return true;
+    }
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        return phoneNumber != null && phoneNumber.matches("^(\\+84|0)[3-9]\\d{8}$");
     }
 }
