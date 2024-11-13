@@ -78,6 +78,14 @@ public class SalesStaffServiceImpl implements ISalesStaffService {
     public SalesStaff updateSalesStaff(Long id, String username, String email, String phoneNumber) {
         SalesStaff salesStaff = salesStaffRepository.findById(id).get();
         if(salesStaff != null) {
+            if(!salesStaff.getEmail().equals(email)) {
+                validationService.validateEmail(email);
+                validationService.validateEmailSalesStaffRegistered(email);
+            } else if(!salesStaff.getPhoneNumber().equals(phoneNumber)){
+                validationService.validatePhoneNumber(phoneNumber);
+                validationService.validatePhoneNumberSalesStaffRegistered(phoneNumber);
+            }
+
             salesStaff.setEmail(email);
             salesStaff.setPhoneNumber(phoneNumber);
             salesStaff.setUsername(username);
@@ -106,6 +114,13 @@ public class SalesStaffServiceImpl implements ISalesStaffService {
         Optional<SalesStaff> optionalSalesStaff = salesStaffRepository.findById(request.getId());
 
         SalesStaff salesStaffCheck = salesStaffRepository.findSalesStaffByEmail(request.getEmail());
+        if(!salesStaffCheck.getEmail().equals(request.getEmail())) {
+            validationService.validateEmail(request.getEmail());
+            validationService.validateEmailSalesStaffRegistered(request.getEmail());
+        } else if(!salesStaffCheck.getPhoneNumber().equals(request.getPhoneNumber())){
+            validationService.validatePhoneNumber(request.getPhoneNumber());
+            validationService.validatePhoneNumberSalesStaffRegistered(request.getPhoneNumber());
+        }
         if (salesStaffCheck != null) {
             if ((!Objects.equals(salesStaffCheck.getId(), optionalSalesStaff.get().getId()))
                     && (Objects.equals(salesStaffCheck.getEmail(), optionalSalesStaff.get().getEmail()))) {

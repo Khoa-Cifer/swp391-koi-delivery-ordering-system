@@ -57,13 +57,23 @@ public class SalesStaffController {
     @PreAuthorize("hasAuthority('SalesStaff') or hasAuthority('Manager')")
     @PutMapping("/updateSalesStaffById/{id}")
     public ResponseEntity<?> updateSalesStaff(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO salesStaff) {
-        return ResponseEntity.ok(salesStaffService.updateSalesStaff(id, salesStaff.getUsername(), salesStaff.getEmail(), salesStaff.getPhoneNumber())) ;
+        try {
+            SalesStaff salesStaff1 = salesStaffService.updateSalesStaff(id, salesStaff.getUsername(), salesStaff.getEmail(), salesStaff.getPhoneNumber());
+            return ResponseEntity.ok(salesStaff1);
+        }catch (ValidationException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PreAuthorize("hasAuthority('SalesStaff')or hasAuthority('Manager')")
     @PutMapping("/updateSalesStaffProfile")
     public ResponseEntity<?> updateSalesStaffProfile(@RequestBody UserUpdateRequestDTO request) {
-        return ResponseEntity.ok(salesStaffService.salesStaffUpdateProfile(request));
+        try {
+            String result = salesStaffService.salesStaffUpdateProfile(request);
+            return ResponseEntity.ok(result);
+        }catch (ValidationException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PreAuthorize("hasAuthority('SalesStaff')")
