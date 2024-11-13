@@ -26,6 +26,7 @@ public class CustomerServiceImpl implements ICustomerService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final IFileService fileService;
+    private final ValidationService validationService;
 
     @Override
     public boolean customerConfirm(String email) {
@@ -139,30 +140,18 @@ public class CustomerServiceImpl implements ICustomerService {
         Customer newCustomer = new Customer();
         newCustomer.setEmail(request.getEmail());
 
-        if (request.getPhoneNumber() != null && !isValidPhoneNumber(request.getPhoneNumber())) {
-            throw new AuthException("Invalid phone number");
+        validationService.validatePhoneNumber(request.getPhoneNumber());
+        validationService.validatePhoneNumberRegisteredActive(request.getPhoneNumber());
+        validationService.validateEmailRegisteredActive(request.getEmail());
+        if(validationService.validateEmailRegisteredNotActive(request.getEmail())){
+            EmailDetailDTO emailDetail = new EmailDetailDTO();
+            emailDetail.setReceiver((Object) newCustomer);
+            emailDetail.setSubject("Welcome to KOI DELIVERY SYSTEM! We're glad you're here");
+            emailDetail.setLink("http://localhost:8080/api/auth/register?email=" + newCustomer.getEmail());
+            emailService.sendEmail(emailDetail, 1);
+            return true;
         }
 
-        boolean phoneDuplicatedCheck = customerRepository.existsByPhoneNumber(request.getPhoneNumber());
-        if (phoneDuplicatedCheck) {
-            throw new AuthException("Phone number already registered");
-        }
-
-        boolean emailDuplicatedCheck = customerRepository.existsByEmail(request.getEmail());
-        if (emailDuplicatedCheck) {
-            boolean alreadyRegistered = customerRepository.existsByEmailAlrRegister(request.getEmail());
-            if (alreadyRegistered) {
-                EmailDetailDTO emailDetail = new EmailDetailDTO();
-                emailDetail.setReceiver((Object) newCustomer);
-                emailDetail.setSubject("Welcome to KOI DELIVERY SYSTEM! We're glad you're here");
-                emailDetail.setLink("http://localhost:8080/api/auth/register?email=" + newCustomer.getEmail());
-                emailService.sendEmail(emailDetail, 1);
-                return true;
-            }
-            throw new AuthException("Email already registered and activated");
-        }
-
-        // Mã hóa mật khẩu và lưu khách hàng mới
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         newCustomer.setPassword(encodedPassword);
         newCustomer.setUsername(request.getUsername());
@@ -171,7 +160,6 @@ public class CustomerServiceImpl implements ICustomerService {
 
         customerRepository.save(newCustomer);
 
-        // Gửi email xác nhận
         EmailDetailDTO emailDetail = new EmailDetailDTO();
         emailDetail.setReceiver(newCustomer.getEmail());
         emailDetail.setSubject("Welcome to KOI DELIVERY SYSTEM! We're glad you're here");
@@ -181,7 +169,4 @@ public class CustomerServiceImpl implements ICustomerService {
         return true;
     }
 
-    private boolean isValidPhoneNumber(String phoneNumber) {
-        return phoneNumber != null && phoneNumber.matches("^(\\+84|0)[3-9]\\d{8}$");
-    }
 }

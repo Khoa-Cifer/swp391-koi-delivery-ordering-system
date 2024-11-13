@@ -85,6 +85,7 @@ public class OrderServiceImpl implements IOrderService {
 
             newOrder.setName(dto.getName());
             newOrder.setDescription(dto.getDescription());
+
             newOrder.setReceiverEmail(dto.getReceiverEmail());
 
             newOrder.setReceiverPhoneNumber(dto.getReceiverPhoneNumber());
