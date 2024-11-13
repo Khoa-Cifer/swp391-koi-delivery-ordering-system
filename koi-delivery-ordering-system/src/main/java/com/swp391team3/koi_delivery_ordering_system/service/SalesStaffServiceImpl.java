@@ -22,15 +22,16 @@ public class SalesStaffServiceImpl implements ISalesStaffService {
     private final SalesStaffRepository salesStaffRepository;
     private final PasswordEncoder passwordEncoder;
     private final IFileService fileService;
+    private final ValidationService validationService;
 
     @Override
     public String createSalesStaff(String email, String username, String phoneNumber) {
         SalesStaff newSalesStaff = new SalesStaff();
 
-        boolean emailDuplicatedCheck = salesStaffRepository.existsByEmail(email);
-        if (emailDuplicatedCheck) {
-            return "This email already exists";
-        }
+        validationService.validatePhoneNumber(phoneNumber);
+        validationService.validateEmail(email);
+        validationService.validatePhoneNumberSalesStaffRegistered(phoneNumber);
+        validationService.validateEmailSalesStaffRegistered(email);
 
         newSalesStaff.setEmail(email);
 

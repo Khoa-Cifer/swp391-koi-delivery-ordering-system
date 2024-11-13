@@ -22,15 +22,17 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
     private final DeliveryStaffRepository deliveryStaffRepository;
     private final PasswordEncoder passwordEncoder;
     private final IFileService fileService;
+    private final ValidationService validationService;
 
     @Override
     public String createDeliveryStaff(String email, String username, String phoneNumber) {
         DeliveryStaff newDeliveryStaff = new DeliveryStaff();
 
-        boolean emailDuplicatedCheck = deliveryStaffRepository.existsByEmail(email);
-        if (emailDuplicatedCheck) {
-            return "This email already exists";
-        }
+        validationService.validateEmail(email);
+        validationService.validatePhoneNumber(phoneNumber);
+        validationService.validateEmailDeliveryStaffRegistered(email);
+        validationService.validatePhoneNumberDeliveryStaffRegistered(phoneNumber);
+
         newDeliveryStaff.setEmail(email);
 
         //Default password when create staffs

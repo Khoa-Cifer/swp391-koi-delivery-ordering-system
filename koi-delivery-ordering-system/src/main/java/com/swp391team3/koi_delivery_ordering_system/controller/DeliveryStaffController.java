@@ -1,5 +1,6 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
+import com.swp391team3.koi_delivery_ordering_system.exception.ValidationException;
 import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.DeliveryStaffLocationUpdateRequestDTO;
@@ -26,8 +27,12 @@ public class DeliveryStaffController {
     @PreAuthorize("hasAuthority('Manager')")
     @PostMapping("/createDeliveryStaff")
     public ResponseEntity<?> createDeliveryStaff(@RequestBody StaffRequestCreationDTO request) {
-        String result = deliveryStaffService.createDeliveryStaff(request.getEmail(), request.getUsername(), request.getPhoneNumber());
-        return ResponseEntity.ok(result);
+        try {
+            String result = deliveryStaffService.createDeliveryStaff(request.getEmail(), request.getUsername(), request.getPhoneNumber());
+            return ResponseEntity.ok(result);
+        }catch (ValidationException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     //Get All Delivery Staff

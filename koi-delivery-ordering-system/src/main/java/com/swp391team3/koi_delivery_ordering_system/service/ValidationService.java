@@ -2,6 +2,8 @@ package com.swp391team3.koi_delivery_ordering_system.service;
 
 import com.swp391team3.koi_delivery_ordering_system.exception.ValidationException;
 import com.swp391team3.koi_delivery_ordering_system.repository.CustomerRepository;
+import com.swp391team3.koi_delivery_ordering_system.repository.DeliveryStaffRepository;
+import com.swp391team3.koi_delivery_ordering_system.repository.SalesStaffRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,9 +12,13 @@ public class ValidationService {
     private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
     private static final String PHONE_REGEX = "^(\\+84|0)[3-9]\\d{8}$";
     private final CustomerRepository customerRepository;
+    private final DeliveryStaffRepository deliveryStaffRepository;
+    private final SalesStaffRepository salesStaffRepository;
 
-    public ValidationService(CustomerRepository customerRepository) {
+    public ValidationService(CustomerRepository customerRepository, DeliveryStaffRepository deliveryStaffRepository, SalesStaffRepository salesStaffRepository) {
         this.customerRepository = customerRepository;
+        this.deliveryStaffRepository = deliveryStaffRepository;
+        this.salesStaffRepository = salesStaffRepository;
     }
 
     public void validateEmail(String email) {
@@ -29,6 +35,26 @@ public class ValidationService {
     public void validateEmailRegisteredActive(String email) {
         if(customerRepository.existsByEmailRegisteredActive(email)) {
             throw new ValidationException("Email already registered");
+        }
+    }
+    public void validateEmailDeliveryStaffRegistered(String email) {
+        if(deliveryStaffRepository.existsByEmail(email)) {
+            throw new ValidationException("Email already registered in delivery staff list");
+        }
+    }
+    public void validatePhoneNumberDeliveryStaffRegistered(String phoneNumber) {
+        if(deliveryStaffRepository.existsByPhoneNumber(phoneNumber)) {
+            throw new ValidationException("Phone number already registered in delivery staff list");
+        }
+    }
+    public void validateEmailSalesStaffRegistered(String email) {
+        if(salesStaffRepository.existsByEmail(email)) {
+            throw new ValidationException("Email already registered in sales staff list");
+        }
+    }
+    public void validatePhoneNumberSalesStaffRegistered(String phoneNumber) {
+        if(deliveryStaffRepository.existsByPhoneNumber(phoneNumber)) {
+            throw new ValidationException("Phone number already registered in sales staff list");
         }
     }
     public boolean validateEmailRegisteredNotActive(String email) {
