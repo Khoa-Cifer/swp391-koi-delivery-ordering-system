@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface CustomerRepository extends JpaRepository<Customer, Long>{
     @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Customer c WHERE c.email = :email AND c.activeStatus = false")
     boolean existsByEmailAlrRegister(String email);
-    @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Customer c WHERE c.email = :email AND c.activeStatus = false")
+    @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Customer c WHERE c.email = :email AND c.activeStatus = true")
     boolean existsByEmail(String email);
     @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Customer c WHERE c.phoneNumber = :phoneNumber AND c.activeStatus = true")
     boolean existsByPhoneNumber(String phoneNumber);

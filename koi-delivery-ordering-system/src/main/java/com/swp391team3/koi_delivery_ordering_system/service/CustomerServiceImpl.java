@@ -1,6 +1,7 @@
 package com.swp391team3.koi_delivery_ordering_system.service;
 
 import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailService;
+import com.swp391team3.koi_delivery_ordering_system.exception.AuthException;
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.model.File;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestRegisterDTO;
@@ -139,45 +140,47 @@ public class CustomerServiceImpl implements ICustomerService {
         newCustomer.setEmail(request.getEmail());
 
         if (request.getPhoneNumber() != null && !isValidPhoneNumber(request.getPhoneNumber())) {
-            return false;
+            throw new AuthException("Invalid phone number");
         }
 
         boolean phoneDuplicatedCheck = customerRepository.existsByPhoneNumber(request.getPhoneNumber());
         if (phoneDuplicatedCheck) {
-            return false;
+            throw new AuthException("Phone number already registered");
         }
 
         boolean emailDuplicatedCheck = customerRepository.existsByEmail(request.getEmail());
         if (emailDuplicatedCheck) {
-            boolean check = customerRepository.existsByEmailAlrRegister(request.getEmail());
-            if(check){
+            boolean alreadyRegistered = customerRepository.existsByEmailAlrRegister(request.getEmail());
+            if (alreadyRegistered) {
                 EmailDetailDTO emailDetail = new EmailDetailDTO();
-                emailDetail.setReceiver((Object) newCustomer);
+                emailDetail.setReceiver(newCustomer.getEmail());
                 emailDetail.setSubject("Welcome to KOI DELIVERY SYSTEM! We're glad you're here");
                 emailDetail.setLink("http://localhost:8080/api/auth/register?email=" + newCustomer.getEmail());
                 emailService.sendEmail(emailDetail, 1);
                 return true;
             }
-            return false;
+            throw new AuthException("Email already registered and activated");
         }
 
+        // Mã hóa mật khẩu và lưu khách hàng mới
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         newCustomer.setPassword(encodedPassword);
-
         newCustomer.setUsername(request.getUsername());
         newCustomer.setPhoneNumber(request.getPhoneNumber());
         newCustomer.setActiveStatus(false);
-//        http://localhost:5173" + "/payment-success" + "?amount=" + modifiedAmount + "&date=" + payDate + "&
 
         customerRepository.save(newCustomer);
 
+        // Gửi email xác nhận
         EmailDetailDTO emailDetail = new EmailDetailDTO();
-        emailDetail.setReceiver((Object) newCustomer);
+        emailDetail.setReceiver(newCustomer.getEmail());
         emailDetail.setSubject("Welcome to KOI DELIVERY SYSTEM! We're glad you're here");
-        emailDetail.setLink("http://localhost:8080/api/auth/register?email=" + newCustomer.getEmail());
+        emailDetail.setLink("http://localhost:8080/api/auth/confirm-registration?email=" + newCustomer.getEmail());
         emailService.sendEmail(emailDetail, 1);
+
         return true;
     }
+
     private boolean isValidPhoneNumber(String phoneNumber) {
         return phoneNumber != null && phoneNumber.matches("^(\\+84|0)[3-9]\\d{8}$");
     }
