@@ -35,15 +35,20 @@ function Customer() {
 
     async function handleEditCustomers() {
         if (editingCustomer) {
+            try {
             const rawPhoneNumber = phoneNumber.replace(/[^\d]/g, "");
             const message = await managerEditCustomerProfile(editingCustomer, username, email, rawPhoneNumber);
             toast(message);
             fetchCustomers();
+        } catch (error) {
+            toast.error(error);
+          } 
         }
         handleClose();
     }
 
     function handleEdit(record) {
+        
         setCustomer(record);
         setUsername(record.username);
         setEmail(record.email);

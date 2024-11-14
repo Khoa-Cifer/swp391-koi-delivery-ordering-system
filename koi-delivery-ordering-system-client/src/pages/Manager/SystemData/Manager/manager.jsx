@@ -32,11 +32,15 @@ function Manager() {
   }, []);
 
   const handleCreateManagers = async () => {
+    try {
     const rawPhoneNumber = phoneNumber.replace(/[^\d]/g, ""); // Clean the phone number
     const response = await createManagers(email, username, rawPhoneNumber);
     notification.info({ message: response });
     await fetchManagers();
     setIsCreateModalOpen(false);
+  } catch (error) {
+    toast.error(error);
+  } 
   };
 
   const handleClose = () => {
@@ -50,6 +54,7 @@ function Manager() {
 
   async function handleEditManagers() {
     if (editingManager) {
+      try {
       const rawPhoneNumber = phoneNumber.replace(/[^\d]/g, ""); // Clean the phone number
       const response = await editManagerProfile(
         editingManager.id,
@@ -63,6 +68,9 @@ function Manager() {
         toast("Unexpected error has occurred");
       }
       fetchManagers();
+    } catch (error) {
+      toast.error(error);
+    } 
     }
     handleClose();
   }
