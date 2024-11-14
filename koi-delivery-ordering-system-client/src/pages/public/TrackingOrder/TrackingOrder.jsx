@@ -1,7 +1,5 @@
-import { useState } from "react";
 import {
   Card,
-  Typography,
   Divider,
   Input,
   Steps,
@@ -9,18 +7,25 @@ import {
   Tag,
   Col,
   Row,
+  Layout,
+  Space,
+  Button,
+  Modal,
 } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { Package2, Truck, CheckCircle2 } from "lucide-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getOrderByTrackingId } from "../../../utils/axios/order";
-
-const { Title } = Typography;
+import { Header } from "antd/es/layout/layout";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { getFileByFileId } from "../../../utils/axios/file";
+import ImageSlider from "../../../components/ImageSlider";
+import dateTimeConvert from "../../../components/utils";
 
 // Constants for order statuses
 const orderStatusLabels = {
-  0: "Draft",
   1: "Order Placed",
   2: "Accepted",
   3: "In Transit",
@@ -34,8 +39,6 @@ const orderStatusLabels = {
 // Function to determine the current step based on order status
 const getCurrentStep = (status) => {
   switch (status) {
-    case 0:
-      return 0; // Draft, show the initial step (e.g., "Order Draft")
     case 1:
       return 1;
     case 2:
@@ -51,7 +54,7 @@ const getCurrentStep = (status) => {
     case 7:
       return 7;
     case 8:
-      return 7; // Failed, show as completed or a custom message
+      return 8;
     default:
       return 0;
   }
@@ -85,9 +88,17 @@ const getStatusColor = (status) => {
 const TrackingOrder = () => {
   const [searchValue, setSearchValue] = useState("");
   const [orderData, setOrderData] = useState(null);
-
+  const navigate = useNavigate();
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const [selectedFish, setSelectedFish] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
+  const handleHomeBack = () => {
+    navigate("/");
+  };
   const handleSearch = async () => {
     if (searchValue) {
+      setHasSearched(true); // Set to true once a search is performed
       try {
         const order = await getOrderByTrackingId(searchValue);
 
@@ -116,7 +127,7 @@ const TrackingOrder = () => {
           currentStep === 2 ? (
             <span
               style={{ opacity: 0.5 }}
-            >{` Staff: ${orderData.staffName}`}</span>
+            >{` ${orderData.staffType}: ${orderData.staffName}`}</span>
           ) : null,
       },
       {
@@ -126,7 +137,7 @@ const TrackingOrder = () => {
           currentStep === 3 ? (
             <span
               style={{ opacity: 0.85 }}
-            >{` Staff: ${orderData.staffName}`}</span>
+            >{` ${orderData.staffType}: ${orderData.staffName}`}</span>
           ) : null,
       },
       {
@@ -136,7 +147,7 @@ const TrackingOrder = () => {
           currentStep === 4 ? (
             <span
               style={{ opacity: 0.85 }}
-            >{` Staff: ${orderData.staffName}`}</span>
+            >{` ${orderData.staffType}: ${orderData.staffName}`}</span>
           ) : null,
       },
       {
@@ -146,7 +157,7 @@ const TrackingOrder = () => {
           currentStep === 5 ? (
             <span
               style={{ opacity: 0.85 }}
-            >{` Staff: ${orderData.staffName}`}</span>
+            >{` ${orderData.staffType}: ${orderData.staffName}`}</span>
           ) : null,
       },
       {
@@ -156,7 +167,7 @@ const TrackingOrder = () => {
           currentStep === 6 ? (
             <span
               style={{ opacity: 0.85 }}
-            >{` Staff: ${orderData.staffName}`}</span>
+            >{` ${orderData.staffType}: ${orderData.staffName}`}</span>
           ) : null,
       },
       {
@@ -166,7 +177,7 @@ const TrackingOrder = () => {
           currentStep === 7 ? (
             <span
               style={{ opacity: 0.85 }}
-            >{` Staff: ${orderData.staffName}`}</span>
+            >{` ${orderData.staffType}: ${orderData.staffName}`}</span>
           ) : null,
       },
     ];
@@ -199,124 +210,233 @@ const TrackingOrder = () => {
     );
   };
 
-  const renderOrderDetails = () => (
-    <Card className="bg-gray-50">
-      <Descriptions
-        title={
-          <div className="flex justify-between items-center">
-            <span>Order Information {"   "}</span>
-            <Tag color={getStatusColor(orderData.orderStatus)}>
-              {orderStatusLabels[orderData.orderStatus]}
-            </Tag>
-          </div>
-        }
-        bordered
-        column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2 }} // Two items per row
-      >
-        <Descriptions.Item label="Sender">
-          {orderData.nameSender}
-        </Descriptions.Item>
-        <Descriptions.Item label="Receiver">
-          {orderData.nameReceiver}
-        </Descriptions.Item>
-        <Descriptions.Item label="Created Date">
-          {new Date(orderData.createdDate).toLocaleDateString()}
-        </Descriptions.Item>
-        <Descriptions.Item label="Expected Delivery">
-          {new Date(orderData.expectedFinishDate).toLocaleDateString()}
-        </Descriptions.Item>
+  async function handleFishClick(order) {
+    setSelectedFish(order.fish);
+    setIsModalOpen(true);
 
-        <Descriptions.Item label="Status">
-          {orderData.proccessType}
-        </Descriptions.Item>
+    try {
+      if (Array.isArray(order.fish) && order.fish.length > 0) {
+        const imagePromises = order.fish.map(async (fish) => {
+          const fileId = fish.file.id;
+          const imageResponse = await getFileByFileId(fileId);
+          return URL.createObjectURL(
+            new Blob([imageResponse], { type: "image/jpeg" })
+          );
+        });
 
-        <Descriptions.Item label="Order Location">
-          {orderData.orderLocation}
-        </Descriptions.Item>
-      </Descriptions>
+        const imageUrls = await Promise.all(imagePromises);
+        setImagePreviews(imageUrls);
+      }
+    } catch (error) {
+      console.error("Error fetching fish images:", error);
+    }
+  }
+  console.log(selectedFish);
 
-      {/* Staff Information Section */}
-      <Divider />
+  const handleCloseModal = () => {
+    imagePreviews.forEach((url) => URL.revokeObjectURL(url));
+    setIsModalOpen(false);
+    setSelectedFish(null);
+    setImagePreviews([]);
+  };
+  const formatPhoneNumber = (phoneNumber) => {
+    if (!phoneNumber) return "Not Available";
 
-      {/* Staff Information Title Row */}
-      <span
-        style={{
-          fontSize: "16px",
-          fontWeight: "600",
-          marginBottom: "10px",
-          display: "block",
-        }}
-      >
-        Staff Information
-      </span>
+    const cleaned = ("" + phoneNumber).replace(/\D/g, "");
 
-      <div
-        style={{
-          border: "1px solid #e8e8e8",
-          padding: "20px",
-          borderRadius: "8px",
-          backgroundColor: "#fafafa",
-          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        {/* Staff Information Header Row */}
-        <Row gutter={16} style={{ marginBottom: "10px" }}>
-          <Col span={8}>
-            <strong>Staff Name</strong>
-          </Col>
-          <Col span={8}>
-            <strong>Staff Contact</strong>
-          </Col>
-          <Col span={8}>
-            <strong>Staff Role</strong>
-          </Col>
-        </Row>
+    if (cleaned.length === 10) {
+      const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+      return match ? `${match[1]}-${match[2]}-${match[3]}` : phoneNumber;
+    }
 
-        {/* Staff Information Data Row */}
-        <Row gutter={16}>
-          <Col span={8}>{orderData.staffName || "Not Available"}</Col>
-          <Col span={8}>{orderData.staffNumber || "Not Available"}</Col>
-          <Col span={8}>{orderData.staffType || "Not Available"}</Col>
-        </Row>
-      </div>
-    </Card>
-  );
+    return phoneNumber;
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-4xl mx-auto">
-        <Card className="shadow-lg">
-          <div className="mb-8 text-center">
-            <Title level={2}>Order Tracking</Title>
-            <Input.Search
-              size="middle"
-              placeholder="Enter tracking number"
-              prefix={<SearchOutlined className="text-gray-400" />}
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              onSearch={handleSearch}
-              className="max-w-sm mx-auto block"
-              enterButton="Search"
-            />
-          </div>
+    <>
+      <Layout>
+        <Header style={{ padding: 0, background: "#fff" }}>
+          <Row justify="space-between" align="middle">
+            {/* Left Side: Logo */}
+            <Col>
+              <img
+                onClick={handleHomeBack}
+                src="./src/assets/logo.png"
+                alt="Logo"
+                style={{
+                  height: "40px",
+                  width: "auto",
+                  cursor: "pointer",
+                  marginLeft: "2%",
+                  marginTop: "2%",
+                }}
+              />
+            </Col>
 
-          <Divider />
+            {/* Center: Search bar */}
+            <Col flex="auto">
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <Input.Search
+                  size="middle"
+                  placeholder="Enter tracking number"
+                  prefix={<SearchOutlined className="text-gray-400" />}
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  onSearch={handleSearch}
+                  style={{ width: "35%" }}
+                  enterButton="Search"
+                />
+              </div>
+            </Col>
+          </Row>
+        </Header>
+      </Layout>
 
-          {orderData ? (
-            <>
+      <div className="min-h-screen bg-gray-50 p-6">
+        <div className="max-w-4xl mx-auto">
+          <Card className="shadow-lg">
+            {orderData ? (
               <>
-                <div className="mb-8">{renderOrderProgress()}</div>
-                {renderOrderDetails()}
+                <>
+                  <div style={{ marginBottom: "25px", marginTop: "25px" }}>
+                    {renderOrderProgress()}
+                  </div>
+
+                  <Card className="bg-gray-50">
+                    <Descriptions
+                      title={
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            width: "100%",
+                          }}
+                        >
+                          <Space>
+                            <span>Order Information</span>
+                            <Tag color={getStatusColor(orderData.orderStatus)}>
+                              {orderStatusLabels[orderData.orderStatus]}
+                            </Tag>
+                          </Space>
+
+                          <Button
+                            type="primary"
+                            onClick={() => handleFishClick(orderData)}
+                          >
+                            View Fish
+                          </Button>
+                        </div>
+                      }
+                      bordered
+                      column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2 }} // Two items per row
+                    >
+                      <Descriptions.Item label="Sender">
+                        {orderData.nameSender}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Receiver">
+                        {orderData.nameReceiver}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Created Date">
+                        {dateTimeConvert(orderData.createdDate)}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Expected Delivery">
+                        {dateTimeConvert(orderData.expectedFinishDate)}
+                      </Descriptions.Item>
+
+                      <Descriptions.Item label="Status">
+                        {orderData.proccessType}
+                      </Descriptions.Item>
+
+                      <Descriptions.Item label="Order Location">
+                        {orderData.orderLocation}
+                      </Descriptions.Item>
+                    </Descriptions>
+
+                    {/* Staff Information Section */}
+                    <Divider />
+
+                    {/* Staff Information Title Row */}
+                    <span
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: "600",
+                        marginBottom: "10px",
+                        display: "block",
+                      }}
+                    >
+                      Staff Information
+                    </span>
+
+                    <div
+                      style={{
+                        border: "1px solid #e8e8e8",
+                        padding: "20px",
+                        borderRadius: "8px",
+                        backgroundColor: "#fafafa",
+                        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+                      }}
+                    >
+                      {/* Staff Information Header Row */}
+                      <Row gutter={16} style={{ marginBottom: "10px" }}>
+                        <Col span={8}>
+                          <strong>Staff Name</strong>
+                        </Col>
+                        <Col span={8}>
+                          <strong>Staff Contact</strong>
+                        </Col>
+                        <Col span={8}>
+                          <strong>Staff Role</strong>
+                        </Col>
+                      </Row>
+
+                      {/* Staff Information Data Row */}
+                      <Row gutter={16}>
+                        <Col span={8}>
+                          {orderData.staffName || "Not Available"}
+                        </Col>
+                        <Col span={8}>
+                          {formatPhoneNumber(orderData.staffNumber) ||
+                            "Not Available"}
+                        </Col>
+                        <Col span={8}>
+                          {orderData.staffType || "Not Available"}
+                        </Col>
+                      </Row>
+                    </div>
+                  </Card>
+                </>
               </>
-            </>
-          ) : (
-            <div className="text-center text-gray-500">
-              No order found. Please enter a valid tracking number.
-            </div>
-          )}
-        </Card>
+            ) : hasSearched ? (
+              <div className="text-center" style={{ color: "#ff4d4f" }}>
+                No order found. Please enter a valid tracking number.
+              </div>
+            ) : (
+              <div className="text-center">
+                Enter tracking number to view order details.
+              </div>
+            )}
+          </Card>
+        </div>
       </div>
-    </div>
+
+      <Modal
+        open={isModalOpen}
+        onCancel={handleCloseModal}
+        onOk={handleCloseModal}
+        style={{ maxWidth: "80vw", top: 20 }}
+      >
+        {selectedFish ? (
+          <div>
+            <div className="slider-container" style={{ marginTop: "16px" }}>
+              {<ImageSlider fishInfo={selectedFish} images={imagePreviews} />}
+            </div>
+          </div>
+        ) : (
+          "No fish selected"
+        )}
+      </Modal>
+    </>
   );
 };
 
