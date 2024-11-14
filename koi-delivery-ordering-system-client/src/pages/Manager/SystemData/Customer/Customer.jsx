@@ -47,14 +47,7 @@ function Customer() {
         handleClose();
     }
 
-    function handleEdit(record) {
         
-        setCustomer(record);
-        setUsername(record.username);
-        setEmail(record.email);
-        setPhoneNumber(record.phoneNumber);
-        setEditModalOpen(true);
-    }
 
     const formatPhoneNumber = (value) => {
         if (!value) return value;
@@ -118,9 +111,7 @@ function Customer() {
             key: "id",
             render: (id, record) => (
                 <Space size="middle">
-                    <Button type="link" onClick={() => handleEdit(record)}>
-                        Edit
-                    </Button>
+                  
                     <Popconfirm
                         title={
                             record.activeStatus

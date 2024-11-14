@@ -46,7 +46,7 @@ export async function userUpdateProfile(id, email, username, phoneNumber, passwo
         );
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -62,7 +62,7 @@ export async function userUpdateProfileImage(id, file) {
         });
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -71,7 +71,7 @@ export async function getCustomerById(id) {
         const response = await axiosClient.get(`customer/getCustomerById/${id}`);
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -80,7 +80,7 @@ export async function getAllCustomers() {
         const response = await axiosClient.get("customer/getAllCustomers");
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -96,6 +96,8 @@ export async function managerEditCustomerProfile(id, username, email, phoneNumbe
         return response.data;
     } catch (error) {
         console.log(error);
+        
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -104,7 +106,7 @@ export async function disableCustomerById(id) {
         const response = await axiosClient.put(`customer/disable/${id}`);
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -113,6 +115,6 @@ export async function enableCustomerById(id) {
         const response = await axiosClient.put(`customer/enable/${id}`);
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }

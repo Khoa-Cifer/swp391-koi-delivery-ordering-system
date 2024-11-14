@@ -7,7 +7,7 @@ export async function getAllManagers() {
         const response = await axiosClient.get(prefixManager + "get-all-managers");
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -22,7 +22,7 @@ export async function createManagers(email, username, phoneNumber) {
         );
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -37,7 +37,7 @@ export async function editManagerProfile(id, username, email, phoneNumber) {
         );
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -54,7 +54,7 @@ export async function managerUpdateProfile(id, email, username, phoneNumber, pas
         );
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -63,7 +63,7 @@ export async function getManagerById(id) {
         const response = await axiosClient.get(`manager/get-manager-by-id/${id}`);
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -72,6 +72,6 @@ export async function deleteManagerById(id) {
         const response = await axiosClient.delete(`manager/delete-manager-by-id/${id}`);
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
