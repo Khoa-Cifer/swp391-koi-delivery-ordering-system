@@ -113,7 +113,7 @@ public class SalesStaffServiceImpl implements ISalesStaffService {
     public String salesStaffUpdateProfile(UserUpdateRequestDTO request) {
         Optional<SalesStaff> optionalSalesStaff = salesStaffRepository.findById(request.getId());
 
-        SalesStaff salesStaffCheck = salesStaffRepository.findSalesStaffByEmail(request.getEmail());
+        SalesStaff salesStaffCheck = salesStaffRepository.findSalesStaffByEmail(optionalSalesStaff.get().getEmail());
         if(!salesStaffCheck.getEmail().equals(request.getEmail())) {
             validationService.validateEmail(request.getEmail());
             validationService.validateEmailSalesStaffRegistered(request.getEmail());

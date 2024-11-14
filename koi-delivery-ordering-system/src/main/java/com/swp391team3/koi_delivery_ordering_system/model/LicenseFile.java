@@ -18,7 +18,7 @@ public class LicenseFile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JsonIgnore
     @JoinColumn(name = "license_id", referencedColumnName = "id")
     private License license;

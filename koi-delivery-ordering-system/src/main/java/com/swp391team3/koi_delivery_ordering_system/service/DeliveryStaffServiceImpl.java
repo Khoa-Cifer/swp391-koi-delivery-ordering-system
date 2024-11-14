@@ -115,10 +115,11 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
     public String deliveryStaffUpdateProfile(UserUpdateRequestDTO request) {
         Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(request.getId());
 
-        if(!optionalDeliveryStaff.get().getEmail().equals(request.getEmail())) {
+        DeliveryStaff deliveryStaff = deliveryStaffRepository.findDeliveryStaffByEmail(optionalDeliveryStaff.get().getEmail());
+        if(!deliveryStaff.getEmail().equals(request.getEmail())) {
             validationService.validateEmail(request.getEmail());
             validationService.validateEmailDeliveryStaffRegistered(request.getEmail());
-        } else if(!optionalDeliveryStaff.get().getPhoneNumber().equals(request.getPhoneNumber())) {
+        } else if(!deliveryStaff.getPhoneNumber().equals(request.getPhoneNumber())) {
             validationService.validatePhoneNumber(request.getPhoneNumber());
             validationService.validatePhoneNumberDeliveryStaffRegistered(request.getPhoneNumber());
         }
@@ -131,7 +132,6 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
             }
         }
 
-        DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
         if (!request.getPassword().isEmpty()) {
             String encodedPassword = passwordEncoder.encode(request.getPassword());
             deliveryStaff.setPassword(encodedPassword);
