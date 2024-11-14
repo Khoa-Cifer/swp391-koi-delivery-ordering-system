@@ -68,9 +68,9 @@ public class ManagerController {
     @PutMapping("/manager-edit-profile")
     public ResponseEntity<?> editProfile(@RequestBody ManagerEditProfileRequestDTO request) {
         try {
-            Manager manager = managerService.updateManager(request.getId(),
-                    request.getEmail(), request.getUsername(), request.getPhoneNumber());
-            return ResponseEntity.ok(manager);
+            boolean result = managerService.editProfile(request.getId(),
+                    request.getEmail(), request.getUsername(), request.getPhoneNumber(), request.getPassword());
+            return ResponseEntity.ok(result);
         } catch (ValidationException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
