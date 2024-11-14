@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface StorageRepository extends JpaRepository<Storage, Long> {
-    @Query("SELECT COUNT(o) FROM Order o WHERE o.storage.id = :storageId")
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.storage.id = :storageId AND o.orderStatus IN (4, 5)")
     int countByStorageId(Long storageId);
 }

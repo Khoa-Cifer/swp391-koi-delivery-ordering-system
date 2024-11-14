@@ -22,15 +22,17 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
     private final DeliveryStaffRepository deliveryStaffRepository;
     private final PasswordEncoder passwordEncoder;
     private final IFileService fileService;
+    private final ValidationService validationService;
 
     @Override
     public String createDeliveryStaff(String email, String username, String phoneNumber) {
         DeliveryStaff newDeliveryStaff = new DeliveryStaff();
 
-        boolean emailDuplicatedCheck = deliveryStaffRepository.existsByEmail(email);
-        if (emailDuplicatedCheck) {
-            return "This email already exists";
-        }
+        validationService.validateEmail(email);
+        validationService.validatePhoneNumber(phoneNumber);
+        validationService.validateEmailDeliveryStaffRegistered(email);
+        validationService.validatePhoneNumberDeliveryStaffRegistered(phoneNumber);
+
         newDeliveryStaff.setEmail(email);
 
         //Default password when create staffs
@@ -77,6 +79,14 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
     public DeliveryStaff updateDeliveryStaffById(Long id, String email, String phoneNumber, String username) {
         Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(id);
         if (optionalDeliveryStaff.isPresent()) {
+            if(!optionalDeliveryStaff.get().getEmail().equals(email)) {
+                validationService.validateEmail(email);
+                validationService.validateEmailDeliveryStaffRegistered(email);
+            } else if(!optionalDeliveryStaff.get().getPhoneNumber().equals(phoneNumber)) {
+                validationService.validatePhoneNumber(phoneNumber);
+                validationService.validatePhoneNumberDeliveryStaffRegistered(phoneNumber);
+            }
+
             DeliveryStaff deliveryStaff = optionalDeliveryStaff.get();
             deliveryStaff.setEmail(email);
             deliveryStaff.setPhoneNumber(phoneNumber);
@@ -104,6 +114,14 @@ public class DeliveryStaffServiceImpl implements IDeliveryStaffService {
     @Override
     public String deliveryStaffUpdateProfile(UserUpdateRequestDTO request) {
         Optional<DeliveryStaff> optionalDeliveryStaff = deliveryStaffRepository.findById(request.getId());
+
+        if(!optionalDeliveryStaff.get().getEmail().equals(request.getEmail())) {
+            validationService.validateEmail(request.getEmail());
+            validationService.validateEmailDeliveryStaffRegistered(request.getEmail());
+        } else if(!optionalDeliveryStaff.get().getPhoneNumber().equals(request.getPhoneNumber())) {
+            validationService.validatePhoneNumber(request.getPhoneNumber());
+            validationService.validatePhoneNumberDeliveryStaffRegistered(request.getPhoneNumber());
+        }
 
         DeliveryStaff deliveryStaffCheck = deliveryStaffRepository.findDeliveryStaffByEmail(request.getEmail());
         if (deliveryStaffCheck != null) {

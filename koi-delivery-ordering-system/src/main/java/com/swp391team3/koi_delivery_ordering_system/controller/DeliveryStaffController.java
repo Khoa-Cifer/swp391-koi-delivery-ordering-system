@@ -1,5 +1,6 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
+import com.swp391team3.koi_delivery_ordering_system.exception.ValidationException;
 import com.swp391team3.koi_delivery_ordering_system.model.DeliveryStaff;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserUpdateRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.DeliveryStaffLocationUpdateRequestDTO;
@@ -26,8 +27,12 @@ public class DeliveryStaffController {
     @PreAuthorize("hasAuthority('Manager')")
     @PostMapping("/createDeliveryStaff")
     public ResponseEntity<?> createDeliveryStaff(@RequestBody StaffRequestCreationDTO request) {
-        String result = deliveryStaffService.createDeliveryStaff(request.getEmail(), request.getUsername(), request.getPhoneNumber());
-        return ResponseEntity.ok(result);
+        try {
+            String result = deliveryStaffService.createDeliveryStaff(request.getEmail(), request.getUsername(), request.getPhoneNumber());
+            return ResponseEntity.ok(result);
+        }catch (ValidationException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     //Get All Delivery Staff
@@ -75,7 +80,12 @@ public class DeliveryStaffController {
     @PreAuthorize("hasAuthority('Manager')")
     @PutMapping("/updateDeliveryStaffById/{id}")
     public ResponseEntity<?> updateDeliveryStaff(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO request) {
-        return ResponseEntity.ok(deliveryStaffService.updateDeliveryStaffById(id, request.getEmail(), request.getPhoneNumber(), request.getUsername()));
+        try {
+            DeliveryStaff deliveryStaff = deliveryStaffService.updateDeliveryStaffById(id, request.getEmail(), request.getPhoneNumber(), request.getUsername());
+            return ResponseEntity.ok(deliveryStaff);
+        }catch (ValidationException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
     //    @PostMapping("/startDelivery/{id}")
 //    public ResponseEntity<?> startDelivery(@PathVariable Long id, @RequestBody Long driverId) {
@@ -94,7 +104,12 @@ public class DeliveryStaffController {
     @PreAuthorize("hasAuthority('DeliveryStaff')")
     @PutMapping("/updateDeliveryStaffProfile")
     public ResponseEntity<?> updateCustomerProfile(@RequestBody UserUpdateRequestDTO request) {
-        return ResponseEntity.ok(deliveryStaffService.deliveryStaffUpdateProfile(request));
+        try {
+            String result = deliveryStaffService.deliveryStaffUpdateProfile(request);
+            return ResponseEntity.ok(result);
+        }catch (ValidationException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PreAuthorize("hasAuthority('DeliveryStaff')")

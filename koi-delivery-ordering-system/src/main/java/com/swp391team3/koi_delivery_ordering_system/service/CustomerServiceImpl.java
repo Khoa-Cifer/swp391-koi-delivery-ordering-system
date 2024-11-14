@@ -1,7 +1,6 @@
 package com.swp391team3.koi_delivery_ordering_system.service;
 
 import com.swp391team3.koi_delivery_ordering_system.config.thirdParty.EmailService;
-import com.swp391team3.koi_delivery_ordering_system.exception.AuthException;
 import com.swp391team3.koi_delivery_ordering_system.model.Customer;
 import com.swp391team3.koi_delivery_ordering_system.model.File;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.UserRequestRegisterDTO;
@@ -97,7 +96,13 @@ public class CustomerServiceImpl implements ICustomerService {
     @Override
     public String customerUpdateProfile(UserUpdateRequestDTO request) {
         Optional<Customer> optionalCustomer = customerRepository.findById(request.getId());
-
+        if(!optionalCustomer.get().getEmail().equals(request.getEmail())) {
+            validationService.validateEmail(request.getEmail());
+            validationService.validateEmailRegisteredActive(request.getEmail());
+        } else if(!optionalCustomer.get().getPhoneNumber().equals(request.getPhoneNumber())){
+            validationService.validatePhoneNumber(request.getPhoneNumber());
+            validationService.validatePhoneNumberRegisteredActive(request.getPhoneNumber());
+        }
         Customer customerCheck = customerRepository.findCustomerByEmail(request.getEmail());
         if (customerCheck != null) {
             if ((!Objects.equals(customerCheck.getId(), optionalCustomer.get().getId()))

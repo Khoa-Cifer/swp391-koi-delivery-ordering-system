@@ -1,5 +1,6 @@
 package com.swp391team3.koi_delivery_ordering_system.controller;
 
+import com.swp391team3.koi_delivery_ordering_system.exception.ValidationException;
 import com.swp391team3.koi_delivery_ordering_system.model.SalesStaff;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestCreationDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffRequestUpdateDTO;
@@ -27,9 +28,12 @@ public class SalesStaffController {
     @PreAuthorize("hasAuthority('Manager')")
     @PostMapping("/createSalesStaff")
     public ResponseEntity<?> createSalesStaff(@RequestBody StaffRequestCreationDTO request) {
-        System.out.println("Result: " + request.getPhoneNumber());
-        String result = salesStaffService.createSalesStaff(request.getEmail(), request.getUsername(), request.getPhoneNumber());
-        return ResponseEntity.ok(result);
+        try {
+            String result = salesStaffService.createSalesStaff(request.getEmail(), request.getUsername(), request.getPhoneNumber());
+            return ResponseEntity.ok(result);
+        } catch (ValidationException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     //Get All Sales Staff
@@ -53,13 +57,23 @@ public class SalesStaffController {
     @PreAuthorize("hasAuthority('SalesStaff') or hasAuthority('Manager')")
     @PutMapping("/updateSalesStaffById/{id}")
     public ResponseEntity<?> updateSalesStaff(@PathVariable Long id, @RequestBody StaffRequestUpdateDTO salesStaff) {
-        return ResponseEntity.ok(salesStaffService.updateSalesStaff(id, salesStaff.getUsername(), salesStaff.getEmail(), salesStaff.getPhoneNumber())) ;
+        try {
+            SalesStaff salesStaff1 = salesStaffService.updateSalesStaff(id, salesStaff.getUsername(), salesStaff.getEmail(), salesStaff.getPhoneNumber());
+            return ResponseEntity.ok(salesStaff1);
+        }catch (ValidationException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PreAuthorize("hasAuthority('SalesStaff')or hasAuthority('Manager')")
     @PutMapping("/updateSalesStaffProfile")
     public ResponseEntity<?> updateSalesStaffProfile(@RequestBody UserUpdateRequestDTO request) {
-        return ResponseEntity.ok(salesStaffService.salesStaffUpdateProfile(request));
+        try {
+            String result = salesStaffService.salesStaffUpdateProfile(request);
+            return ResponseEntity.ok(result);
+        }catch (ValidationException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PreAuthorize("hasAuthority('SalesStaff')")

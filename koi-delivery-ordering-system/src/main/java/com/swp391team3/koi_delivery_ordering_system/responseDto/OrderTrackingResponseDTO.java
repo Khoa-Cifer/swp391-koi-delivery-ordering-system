@@ -24,4 +24,5 @@ public class OrderTrackingResponseDTO {
     private String proccessType;
     private String orderLocation;
     private Set<Fish> fish;
+    private String cancelReason;
 }
