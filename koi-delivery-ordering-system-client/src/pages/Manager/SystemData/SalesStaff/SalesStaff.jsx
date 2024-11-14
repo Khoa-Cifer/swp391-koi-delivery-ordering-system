@@ -5,7 +5,6 @@ import {
   Button,
   Input,
   Typography,
-  notification,
   Popconfirm,
   Space,
 } from "antd";
@@ -30,7 +29,6 @@ function SalesStaff() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-
   const fetchSalesStaffs = async () => {
     const fetchedData = await getAllSalesStaff();
     if (fetchedData) {
@@ -43,11 +41,14 @@ function SalesStaff() {
   }, []);
 
   const handleCreateSalesStaff = async () => {
-    const rawPhoneNumber = phoneNumber.replace(/[^\d]/g, ""); // Ensure to save raw number if needed
-    const response = await createSalesStaff(email, username, rawPhoneNumber);
-    notification.info({ message: response });
-    await fetchSalesStaffs();
-    setIsCreateModalOpen(false);
+    try {
+      const rawPhoneNumber = phoneNumber.replace(/[^\d]/g, "");
+      await createSalesStaff(email, username, rawPhoneNumber);
+      await fetchSalesStaffs();
+      setIsCreateModalOpen(false);
+    } catch (error) {
+      toast.error(error);
+    }
   };
   const handleClose = () => {
     setIsCreateModalOpen(false);
@@ -73,24 +74,30 @@ function SalesStaff() {
     )}-${phoneNumber.slice(6, 10)}`;
   };
 
-  async function handleEditSalesStaff() {
+  const handleEditSalesStaff = async () => {
+
     if (editingSalesStaff) {
-      const rawPhoneNumber = phoneNumber.replace(/[^\d]/g, ""); // Ensure to save raw number if needed
-      const response = await managerEditSalesStaffProfile(
-        editingSalesStaff.id,
-        username,
-        email,
-        rawPhoneNumber
-      );
-      if (response) {
-        toast("Edit sales staff successfully");
-      } else {
-        toast("Unexpected error has occurred");
-      }
-      fetchSalesStaffs();
+      try {
+        const rawPhoneNumber = phoneNumber.replace(/[^\d]/g, "");
+
+        const response = await managerEditSalesStaffProfile(
+          editingSalesStaff.id,
+          username,
+          email,
+          rawPhoneNumber
+        );
+        if (response) {
+          toast.success("Edit sales staff successfully");
+        } else {
+          toast.error("Unexpected error has occurred");
+        }
+        await fetchSalesStaffs();
+      } catch (error) {
+        toast.error(error);
+      } 
     }
     handleClose();
-  }
+  };
 
   function handleEdit(record) {
     setSalesStaff(record);
@@ -197,7 +204,11 @@ function SalesStaff() {
           marginBottom: "20px",
         }}
       >
-        <Button type="primary" style={{ marginRight: "20px" }} onClick={() => handleCreate(true)}>
+        <Button
+          type="primary"
+          style={{ marginRight: "20px" }}
+          onClick={() => handleCreate(true)}
+        >
           Create New Sales Staff
         </Button>
       </div>
