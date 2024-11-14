@@ -67,6 +67,7 @@ import GettingOrderDetail from "./pages/Customer/OrderDetail/GettingOrderDetail/
 import DeliveringOrderDetail from "./pages/Customer/OrderDetail/DeliveringOrderDetail/DeliveringOrderDetail";
 import CompletedOrderDetail from "./pages/Customer/OrderDetail/CompletedOrderDetail/CompletedOrderDetail";
 import ForgotPassword from "./pages/public/ForgotPassword/ForgotPassword";
+import Rating from "./pages/Manager/SystemData/Rating/Rating";
 
 function App() {
   // eslint-disable-next-line react/prop-types
@@ -137,6 +138,7 @@ function App() {
               <Route path="/admin/fish" element={<ManagerPrivateRoute element={<Fish />} />} />
               <Route path="/admin/payment-history" element={<ManagerPrivateRoute element={<PaymentHistory />} />} />
               <Route path="/admin/license" element={<ManagerPrivateRoute element={<License />} />} />
+              <Route path="/admin/rating" element={<ManagerPrivateRoute element={<Rating/>} />} />
               <Route path="/admin/transaction" element={<ManagerPrivateRoute element={<Transaction />} />} />
               <Route path="/admin/order" element={<ManagerPrivateRoute element={<Orders />} />} />
             </Route>
