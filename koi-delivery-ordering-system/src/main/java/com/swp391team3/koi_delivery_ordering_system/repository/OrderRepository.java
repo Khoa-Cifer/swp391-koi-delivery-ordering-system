@@ -1,5 +1,6 @@
 package com.swp391team3.koi_delivery_ordering_system.repository;
 
+import com.swp391team3.koi_delivery_ordering_system.model.Fish;
 import com.swp391team3.koi_delivery_ordering_system.model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,4 +28,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>{
 
     @Query("SELECT o FROM Order o WHERE o.customer.id = :customerId AND o.orderStatus = :status")
     List<Order> findByOrderStatusAndCustomerId(Long customerId, int status);
+
+    @Query("SELECT o FROM Order o WHERE o.storage.id = :storageId")
+    List<Order> findByStorageId(Long storageId);
 }

@@ -183,4 +183,10 @@ public class OrderController {
     public ResponseEntity<?> abortOrder(@PathVariable Long orderId) {
         return ResponseEntity.ok(orderService.abortOrder(orderId));
     }
+
+    @PreAuthorize("hasAuthority('Manager')")
+    @GetMapping("/get-orders-by-storage-id/{storageId}")
+    public ResponseEntity<?> getOrderByStorageId(@PathVariable Long storageId) {
+        return ResponseEntity.ok(orderService.getOrderByStorage(storageId));
+    }
 }

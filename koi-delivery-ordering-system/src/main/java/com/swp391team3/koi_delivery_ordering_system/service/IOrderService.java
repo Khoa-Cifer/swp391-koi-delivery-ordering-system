@@ -45,4 +45,6 @@ public interface IOrderService {
 
     boolean cancelOrder(StaffCancelOrderRequestDTO request) throws Exception;
     boolean abortOrder(Long orderId);
+
+    List<Order> getOrderByStorage(Long id);
 }

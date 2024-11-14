@@ -132,14 +132,22 @@ public class OrderServiceImpl implements IOrderService {
                 order.getCreatedDate(),
                 order.getExpectedFinishDate(),
                 order.getFinishDate(),
-                order.getSenderAddress(),
-                order.getDestinationAddress(),
+                shortenAddress(order.getSenderAddress()),    // Rút gọn địa chỉ gửi
+                shortenAddress(order.getDestinationAddress()), // Rút gọn địa chỉ nhận
                 order.getPrice(),
                 order.getOrderStatus(),
                 order.getCancelReason(),
                 order.getReceiverPhoneNumber(),
                 order.getFishes()
         )).collect(Collectors.toList());
+    }
+
+    private String shortenAddress(String address) {
+        String[] parts = address.split(",");
+        if (parts.length >= 2) {
+            return parts[parts.length - 3].trim() + ", " + parts[parts.length - 2].trim() + ", " + parts[parts.length - 1].trim();
+        }
+        return address;
     }
 
     @Override
@@ -822,5 +830,11 @@ public class OrderServiceImpl implements IOrderService {
             }
         }
         return false;
+    }
+
+    @Override
+    public List<Order> getOrderByStorage(Long id) {
+        List<Order> orderList = orderRepository.findByStorageId(id);
+        return orderList;
     }
 }
