@@ -197,11 +197,11 @@ const TrackingOrder = () => {
         progressDot={(dot, { status }) => (
           <span
             className={`w-8 h-8 flex items-center justify-center rounded-full
-              ${
-                status === "finish" || status === "process"
-                  ? `bg-${getStatusColor(orderData.orderStatus)}-500`
-                  : "bg-gray-200"
-              }`}
+                ${
+                  status === "finish" || status === "process"
+                    ? `bg-${getStatusColor(orderData.orderStatus)}-500`
+                    : "bg-gray-200"
+                }`}
           >
             {dot}
           </span>
@@ -301,8 +301,8 @@ const TrackingOrder = () => {
                   <div style={{ marginBottom: "25px", marginTop: "25px" }}>
                     {orderData.orderStatus === 8 ? (
                       <div className="text-center" style={{ color: "#ff4d4f" }}>
-                        Order failed.  <br />
-                        Reason:{" "} {orderData.cancelReason || "Unknown"}.
+                        Order failed. <br />
+                        Reason: {orderData.cancelReason || "Unknown"}.
                       </div>
                     ) : (
                       renderOrderProgress()
@@ -350,6 +350,12 @@ const TrackingOrder = () => {
                       <Descriptions.Item label="Expected Delivery">
                         {dateTimeConvert(orderData.expectedFinishDate)}
                       </Descriptions.Item>
+
+                      {orderData.orderStatus === 7 && (
+                        <Descriptions.Item label="Finish Date">
+                          {dateTimeConvert(orderData.finishDate)}
+                        </Descriptions.Item>
+                      )}
 
                       <Descriptions.Item label="Status">
                         {orderData.proccessType}
