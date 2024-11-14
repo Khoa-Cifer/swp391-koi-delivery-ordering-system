@@ -299,7 +299,14 @@ const TrackingOrder = () => {
               <>
                 <>
                   <div style={{ marginBottom: "25px", marginTop: "25px" }}>
-                    {renderOrderProgress()}
+                    {orderData.orderStatus === 8 ? (
+                      <div className="text-center" style={{ color: "#ff4d4f" }}>
+                        Order failed.  <br />
+                        Reason:{" "} {orderData.cancelReason || "Unknown"}.
+                      </div>
+                    ) : (
+                      renderOrderProgress()
+                    )}
                   </div>
 
                   <Card className="bg-gray-50">
