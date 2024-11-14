@@ -7,7 +7,7 @@ export async function getAllDeliveryStaff() {
         const response = await axiosClient.get(prefixAdminDeliveryStaff + "getAllDeliveryStaff");
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -22,7 +22,7 @@ export async function createDeliveryStaff(email, username, phoneNumber) {
         );
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -37,7 +37,7 @@ export async function updateDeliveryStaffCurrentLocation(
         });
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -52,7 +52,7 @@ export async function managerEditDeliveryStaffProfile(id, username, email, phone
         );
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -69,7 +69,7 @@ export async function deliveryStaffUpdateProfile(id, email, username, phoneNumbe
         );
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -85,7 +85,7 @@ export async function deliveryStaffUpdateProfileImage(id, file) {
         });
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -94,7 +94,7 @@ export async function getDeliveryStaffById(id) {
         const response = await axiosClient.get(`deliveryStaff/getDeliveryStaffById/${id}`);
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -112,7 +112,7 @@ export async function disableDeliveryStaffById(id) {
         const response = await axiosClient.put(`deliveryStaff/disable/${id}`);
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -121,6 +121,6 @@ export async function enableDeliveryStaffById(id) {
         const response = await axiosClient.put(`deliveryStaff/enable/${id}`);
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }

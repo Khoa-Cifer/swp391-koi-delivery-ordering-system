@@ -109,42 +109,46 @@ function DeliveryStaffEditProfile() {
   }
 
   async function handleSubmit() {
-    let response = null;
-    const formattedPhoneNumber = delivery_staff.phoneNumber.replace(/-/g, "");
-    if (updatePassword === false) {
-      response = await deliveryStaffUpdateProfile(
-        deliveryStaffId,
-        delivery_staff.email,
-        delivery_staff.username,
-        formattedPhoneNumber,
-        "" //If do not update password, set to empty string
-      );
-    } else {
-      response = await deliveryStaffUpdateProfile(
-        deliveryStaffId,
-        delivery_staff.email,
-        delivery_staff.username,
-        formattedPhoneNumber,
-        delivery_staff.password
-      );
-    }
-
-    if (selectedImage) {
-      const imageResponse = await deliveryStaffUpdateProfileImage(
-        deliveryStaffId,
-        selectedImage
-      );
-      if (imageResponse) {
-        toast(imageResponse);
+    try {
+      let response = null;
+      const formattedPhoneNumber = delivery_staff.phoneNumber.replace(/-/g, "");
+      if (updatePassword === false) {
+        response = await deliveryStaffUpdateProfile(
+          deliveryStaffId,
+          delivery_staff.email,
+          delivery_staff.username,
+          formattedPhoneNumber,
+          "" //If do not update password, set to empty string
+        );
+      } else {
+        response = await deliveryStaffUpdateProfile(
+          deliveryStaffId,
+          delivery_staff.email,
+          delivery_staff.username,
+          formattedPhoneNumber,
+          delivery_staff.password
+        );
       }
-    }
 
-    if (response) {
-      toast(response);
-      auth.handleLogout();
-      navigate("/");
-    } else {
-      toast("Unexpected error has been occurred");
+      if (selectedImage) {
+        const imageResponse = await deliveryStaffUpdateProfileImage(
+          deliveryStaffId,
+          selectedImage
+        );
+        if (imageResponse) {
+          toast(imageResponse);
+        }
+      }
+
+      if (response) {
+        toast(response);
+        auth.handleLogout();
+        navigate("/");
+      } else {
+        toast("Unexpected error has been occurred");
+      }
+    } catch (error) {
+      toast.error(error);
     }
   }
 
@@ -155,7 +159,14 @@ function DeliveryStaffEditProfile() {
   return (
     delivery_staff && (
       <Box>
-        <Box style={{ marginLeft: "10px" }} display="flex" alignItems="center" mb={3} marginLeft={-4} color="blue">
+        <Box
+          style={{ marginLeft: "10px" }}
+          display="flex"
+          alignItems="center"
+          mb={3}
+          marginLeft={-4}
+          color="blue"
+        >
           <ListItemIcon sx={{ color: "blue", marginRight: "-2%" }}>
             <ListIcon />
           </ListItemIcon>
@@ -269,11 +280,11 @@ function DeliveryStaffEditProfile() {
                       Cancel
                     </Button>
                     {delivery_staff.email &&
-                      delivery_staff.username &&
-                      delivery_staff.phoneNumber &&
-                      (updatePassword
-                        ? confirmPassword === delivery_staff.password
-                        : true) ? (
+                    delivery_staff.username &&
+                    delivery_staff.phoneNumber &&
+                    (updatePassword
+                      ? confirmPassword === delivery_staff.password
+                      : true) ? (
                       <Button
                         variant="contained"
                         onClick={handleSubmit}

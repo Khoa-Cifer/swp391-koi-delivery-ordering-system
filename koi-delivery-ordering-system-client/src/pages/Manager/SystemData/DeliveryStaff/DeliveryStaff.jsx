@@ -37,15 +37,21 @@ function DeliveryStaff() {
     }, []);
 
     const handleCreateDeliveryStaff = async () => {
+
+        try {
         const rawPhoneNumber = phoneNumber.replace(/[^\d]/g, "");
         const response = await createDeliveryStaff(email, username, rawPhoneNumber);
         notification.info({ message: response });
         await fetchDeliveryStaffs();
         setCreateModalOpen(false);
+    } catch (error) {
+        toast.error(error); 
+      } 
     };
 
     async function handleEditDeliveryStaff() {
-        if (editingStaff) {
+        if (editingStaff) {try {
+
             const rawPhoneNumber = phoneNumber.replace(/[^\d]/g, "");
             const message = await managerEditDeliveryStaffProfile(editingStaff.id, username, email, rawPhoneNumber);
             if (message) {
@@ -54,6 +60,9 @@ function DeliveryStaff() {
                 toast("Unexpected error has occurred");
             }
             fetchDeliveryStaffs();
+        } catch (error) {
+            toast.error(error);
+          } 
         }
         handleClose();
     }
