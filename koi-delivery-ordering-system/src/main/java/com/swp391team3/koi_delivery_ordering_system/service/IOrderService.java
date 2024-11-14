@@ -5,6 +5,7 @@ import com.swp391team3.koi_delivery_ordering_system.requestDto.FinishOrderUpdate
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderGeneralInfoRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.OrderListFilteredRequestDTO;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.StaffCancelOrderRequestDTO;
+import com.swp391team3.koi_delivery_ordering_system.responseDto.OrderResponseDTO;
 import com.swp391team3.koi_delivery_ordering_system.responseDto.OrderTrackingResponseDTO;
 
 import java.util.Date;
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 public interface IOrderService {
     Long createGeneralInfoOrder(OrderGeneralInfoRequestDTO dto);
-    List<Order> getAllOrders();
+    List<OrderResponseDTO> getAllOrders();
     Optional<Order> getOrderById(Long id);
     boolean deleteOrderById(Long id);
     Storage filterOrderToStorage(String senderLatitude, String senderLongitude, String senderAddress);

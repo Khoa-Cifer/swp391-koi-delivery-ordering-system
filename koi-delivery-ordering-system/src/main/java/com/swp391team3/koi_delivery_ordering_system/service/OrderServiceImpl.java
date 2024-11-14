@@ -5,6 +5,7 @@ import com.swp391team3.koi_delivery_ordering_system.exception.ValidationExceptio
 import com.swp391team3.koi_delivery_ordering_system.model.*;
 import com.swp391team3.koi_delivery_ordering_system.repository.*;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.*;
+import com.swp391team3.koi_delivery_ordering_system.responseDto.OrderResponseDTO;
 import com.swp391team3.koi_delivery_ordering_system.responseDto.OrderTrackingResponseDTO;
 import com.swp391team3.koi_delivery_ordering_system.utils.*;
 
@@ -122,8 +123,23 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public List<OrderResponseDTO> getAllOrders() {
+        List<Order> orders = orderRepository.findAll();
+
+        return orders.stream().map(order -> new OrderResponseDTO(
+                order.getTrackingId(),
+                order.getName(),
+                order.getCreatedDate(),
+                order.getExpectedFinishDate(),
+                order.getFinishDate(),
+                order.getSenderAddress(),
+                order.getDestinationAddress(),
+                order.getPrice(),
+                order.getOrderStatus(),
+                order.getCancelReason(),
+                order.getReceiverPhoneNumber(),
+                order.getFishes()
+        )).collect(Collectors.toList());
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.swp391team3.koi_delivery_ordering_system.controller;
 import com.swp391team3.koi_delivery_ordering_system.exception.ValidationException;
 import com.swp391team3.koi_delivery_ordering_system.model.Order;
 import com.swp391team3.koi_delivery_ordering_system.requestDto.*;
+import com.swp391team3.koi_delivery_ordering_system.responseDto.OrderResponseDTO;
 import com.swp391team3.koi_delivery_ordering_system.service.IOrderService;
 import com.swp391team3.koi_delivery_ordering_system.utils.OrderStatus;
 import lombok.RequiredArgsConstructor;
@@ -44,8 +45,8 @@ public class OrderController {
     //PASSED
     @PreAuthorize("hasAuthority('Manager')")
     @GetMapping("/getAllOrders")
-    public ResponseEntity<List<Order>> getAllOrders() {
-        List<Order> orders = orderService.getAllOrders();
+    public ResponseEntity<List<OrderResponseDTO>> getAllOrders() {
+        List<OrderResponseDTO> orders = orderService.getAllOrders();
         return ResponseEntity.ok(orders);
     }
 
