@@ -13,8 +13,8 @@ function LoginManager() {
   const auth = useAuth();
 
   const handleGoBack = () => {
-    navigate("/login-customer")
-  }
+    navigate("/login-customer");
+  };
 
   function handleEmailChange(e) {
     setEmail(e.target.value);
@@ -25,13 +25,17 @@ function LoginManager() {
   }
 
   async function handleLogin(roleId) {
-    const data = await userLogin(email, password, roleId);
-    if (data) {
-      auth.handleLogin(data);
-      navigate("/admin/dashboard");
-      toast("Login successfully");
-    } else {
-      toast("Wrong email or password");
+    try {
+      const data = await userLogin(email, password, roleId);
+      if (data) {
+        auth.handleLogin(data);
+        navigate("/admin/dashboard");
+        toast("Login successfully");
+      } else {
+        toast("Wrong email or password");
+      }
+    } catch (error) {
+      toast.error(error);
     }
   }
 
@@ -63,10 +67,14 @@ function LoginManager() {
         </div>
 
         <div className="btn">
-          <button type="submit" onClick={() => handleLogin(4)}>Login</button>
+          <button type="submit" onClick={() => handleLogin(4)}>
+            Login
+          </button>
         </div>
 
-        <button className="back-button" onClick={() => handleGoBack()}>&#8592; Back to customer login</button>
+        <button className="back-button" onClick={() => handleGoBack()}>
+          &#8592; Back to customer login
+        </button>
       </div>
     </div>
   );

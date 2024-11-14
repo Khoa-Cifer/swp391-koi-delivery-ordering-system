@@ -9,15 +9,15 @@ import { forgotPassword } from "../../../utils/axios/user";
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 
 const modalStyle = {
-  display: 'flex',
-  flexDirection: 'column',
+  display: "flex",
+  flexDirection: "column",
   gap: "40px",
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 250,
-  bgcolor: 'background.paper',
+  bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
   borderRadius: 2,
@@ -56,19 +56,21 @@ function LoginDelivery() {
   }
 
   async function handleLogin(roleId) {
-    const data = await userLogin(email, password, roleId);
-    if (data) {
-      auth.handleLogin(data);
-      navigate("/delivery-staff-home");
-      toast("Login successfully");
-    } else {
-      toast("Wrong email or password");
+    try {
+      const data = await userLogin(email, password, roleId);
+      if (data) {
+        auth.handleLogin(data);
+        navigate("/delivery-staff-home");
+        toast("Login successfully");
+      }
+    } catch (error) {
+      toast.error(error);
     }
   }
 
   const handleGoBack = () => {
-    navigate("/login-customer")
-  }
+    navigate("/login-customer");
+  };
 
   return (
     <div className="login-delivery-container">
@@ -80,9 +82,7 @@ function LoginDelivery() {
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
-        <Box
-          sx={modalStyle}
-          style={{ padding: "40px 70px" }}>
+        <Box sx={modalStyle} style={{ padding: "40px 70px" }}>
           <TextField
             fullWidth
             type=""
@@ -90,7 +90,10 @@ function LoginDelivery() {
             onChange={(e) => setForgotPasswordEmail(e.target.value)}
           />
           {forgotPasswordEmail.length > 0 ? (
-            <Button variant="outlined" onClick={() => handleForgotPasswordSend()}>
+            <Button
+              variant="outlined"
+              onClick={() => handleForgotPasswordSend()}
+            >
               <Typography>Confirm</Typography>
             </Button>
           ) : (
@@ -109,7 +112,7 @@ function LoginDelivery() {
             type="text"
             id="email"
             placeholder="Type your email"
-            onChange={e => handleEmailChange(e)}
+            onChange={(e) => handleEmailChange(e)}
           />
         </div>
 
@@ -119,7 +122,7 @@ function LoginDelivery() {
             type="password"
             id="password"
             placeholder="Type your password"
-            onChange={e => handlePasswordChange(e)}
+            onChange={(e) => handlePasswordChange(e)}
           />
         </div>
 
@@ -130,12 +133,12 @@ function LoginDelivery() {
         </div>
 
         <div className="btn">
-          <button onClick={() => handleLogin(3)}>
-            Login
-          </button>
+          <button onClick={() => handleLogin(3)}>Login</button>
         </div>
 
-        <button className="back-button" onClick={() => handleGoBack()}>&#8592; Back to customer login</button>
+        <button className="back-button" onClick={() => handleGoBack()}>
+          &#8592; Back to customer login
+        </button>
       </div>
     </div>
   );

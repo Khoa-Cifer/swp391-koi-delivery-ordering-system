@@ -25,16 +25,20 @@ const SignUp = () => {
   };
 
   async function handleSubmit() {
-    setIsLoading(true);
-    try {
+    try { 
       const email = formData.email;
       const username = formData.username;
       const password = formData.password;
       const phoneNumber = formData.phoneNumber;
-
+      if (!email || !username || !password || !phoneNumber) {
+        toast.error("All fields are required.");
+        setIsLoading(false); // Stop loading if required fields are missing
+        return; // Stop the form submission process
+      }
+  
       const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       if (!emailPattern.test(email)) {
-        toast("Please enter a valid email address.");
+        toast.error("Please enter a valid email address.");
         setIsLoading(false); // Stop loading spinner if validation fails
         return; // Stop the form submission process
       }
@@ -44,15 +48,14 @@ const SignUp = () => {
         toast("Registration successfully");
         setTimeout(() => {
           navigate("/waiting-for-confirmation");  // Replace with your desired route
-        }, 2000);
+        }, 1000);
       } else {
         toast("This email already exists");
+        setIsLoading(false);
       }
     } catch (error) {
-      console.error("Error while receiving the order:", error);
-      toast("An error occurred while processing request.");
-    } finally {
-      setIsLoading(false); // Hide loading spinner after processing
+      toast.error(error);
+      setIsLoading(false);
     }
   }
 
@@ -114,7 +117,7 @@ const SignUp = () => {
         <p className="login-link">
           Already have an account? <Link to={"/login-customer"}>Login here</Link>
         </p>
-      </div>
+      </div>    
     </div>
   );
 };

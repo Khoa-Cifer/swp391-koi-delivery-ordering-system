@@ -37,7 +37,7 @@ export async function createGeneralOrderInfo(
     });
     return response.data;
   } catch (error) {
-    console.log(error);
+    throw error.response ? error.response.data : new Error('An unexpected error occurred');
   }
 }
 

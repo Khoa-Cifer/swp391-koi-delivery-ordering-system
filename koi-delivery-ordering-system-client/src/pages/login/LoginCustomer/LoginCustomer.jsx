@@ -10,15 +10,15 @@ import { forgotPassword } from "../../../utils/axios/user";
 import Spinner from "../../../components/SpinnerLoading";
 
 const modalStyle = {
-  display: 'flex',
-  flexDirection: 'column',
+  display: "flex",
+  flexDirection: "column",
   gap: "40px",
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 250,
-  bgcolor: 'background.paper',
+  bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
   borderRadius: 2,
@@ -32,8 +32,8 @@ function LoginCustomer() {
   const handleForgotPasswordClose = () => setForgotPasswordModalOpen(false);
 
   const handleStaffSelectionOpen = () => setStaffSelectorModalOpen(true);
-  const handleStaffSelectionClose = () => setStaffSelectorModalOpen(false)
-  
+  const handleStaffSelectionClose = () => setStaffSelectorModalOpen(false);
+
   const [isLoading, setIsLoading] = useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
   const [email, setEmail] = useState("");
@@ -43,19 +43,19 @@ function LoginCustomer() {
 
   const handleSignUp = () => {
     navigate("/register");
-  }
+  };
 
   const handleSalesStaffNavigate = () => {
     navigate("/login-sales-staff");
-  }
+  };
 
   const handleDeliveryStaffNavigate = () => {
     navigate("/login-delivery-staff");
-  }
+  };
 
   const handleManagerNavigate = () => {
-    navigate("/login-manager")
-  }
+    navigate("/login-manager");
+  };
 
   function handleEmailChange(e) {
     setEmail(e.target.value);
@@ -80,12 +80,14 @@ function LoginCustomer() {
   }
 
   async function handleLogin(roleId) {
-    const data = await userLogin(email, password, roleId);
-    if (data) {
-      auth.handleLogin(data);
-      navigate("/");
-    } else {
-      toast("Invalid username or password");
+    try {
+      const data = await userLogin(email, password, roleId);
+      if (data) {
+        auth.handleLogin(data);
+        navigate("/");
+      }
+    } catch (error) {
+      toast.error(error);
     }
   }
 
@@ -100,9 +102,7 @@ function LoginCustomer() {
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
-        <Box
-          sx={modalStyle}
-          style={{ padding: "40px 70px" }}>
+        <Box sx={modalStyle} style={{ padding: "40px 70px" }}>
           <TextField
             fullWidth
             type=""
@@ -110,7 +110,10 @@ function LoginCustomer() {
             onChange={(e) => setForgotPasswordEmail(e.target.value)}
           />
           {forgotPasswordEmail.length > 0 ? (
-            <Button variant="outlined" onClick={() => handleForgotPasswordSend()}>
+            <Button
+              variant="outlined"
+              onClick={() => handleForgotPasswordSend()}
+            >
               <Typography>Confirm</Typography>
             </Button>
           ) : (
@@ -127,9 +130,7 @@ function LoginCustomer() {
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
-        <Box
-          sx={modalStyle}
-          style={{ padding: "40px 70px" }}>
+        <Box sx={modalStyle} style={{ padding: "40px 70px" }}>
           <Button
             variant="outlined"
             style={{ backgroundColor: "#C3F4FD" }}
@@ -175,13 +176,21 @@ function LoginCustomer() {
           />
 
           <div className="role__form">
-            <Button className="customer-login-btn" onClick={() => handleLogin(1)} variant="contained" style={{ maxWidth: "100%", margin: "auto" }}>
+            <Button
+              className="customer-login-btn"
+              onClick={() => handleLogin(1)}
+              variant="contained"
+              style={{ maxWidth: "100%", margin: "auto" }}
+            >
               Login
             </Button>
           </div>
 
           <div className="text-end">
-            <a className="small-link" onClick={() => handleForgotPasswordOpen()}>
+            <a
+              className="small-link"
+              onClick={() => handleForgotPasswordOpen()}
+            >
               Forgot password?
             </a>
           </div>
@@ -199,7 +208,9 @@ function LoginCustomer() {
               style={{ backgroundColor: "#C3F4FD" }}
               onClick={() => handleStaffSelectionOpen()}
             >
-              <Typography style={{ fontSize: "12px" }}>Are you with us ?</Typography>
+              <Typography style={{ fontSize: "12px" }}>
+                Are you with us ?
+              </Typography>
             </Button>
           </div>
         </div>

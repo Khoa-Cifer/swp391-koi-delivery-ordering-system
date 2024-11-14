@@ -11,7 +11,7 @@ export async function userLogin(email, password, userType) {
         );
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
 }
 
@@ -27,7 +27,9 @@ export async function userRegister(email, username, password, phoneNumber) {
         );
         return response.data;
     } catch (error) {
-        console.log(error);
+        throw error.response ? error.response.data : new Error('An unexpected error occurred');
+        
+        
     }
 }
 
