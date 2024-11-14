@@ -105,11 +105,7 @@ const SignUp = () => {
           />
         </div>
 
-        {formData.email === "" || formData.password === "" || formData.phoneNumber === "" || formData.username === "" ? (
-          <button disabled className="signup-btn">
-            Sign Up
-          </button>
-        ) : (
+        {formData&& (
           <button onClick={handleSubmit} className="signup-btn">
             Sign Up
           </button>
