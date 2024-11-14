@@ -131,23 +131,19 @@ function OrderInfo({ orderId, formStepData }) {
         if (!orderName || !orderDescription || !receiverAddress || !senderAddress || !expectedFinishDate
             || !receiverEmail || !receiverPhoneNumber
         ) {
-            toast("All fields are required");
+            toast.error("All fields are required");
             return;
         }
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailPattern.test(receiverEmail)) {
-            toast("Invalid email format");
+            toast.error("Invalid email format");
             return;
         }
 
-        if (receiverPhoneNumber.length !== 12) { //contain 2 dash
-            // Check if phone number has exactly 10 digits
-            toast("Phone number must be exactly 10 digits");
-            return;
-        }
+        
 
         if (!senderCoordinates || !receiverCoordinates) {
-            toast("Invalid address");
+            toast.error("Invalid address");
             return;
         }
 
@@ -171,12 +167,11 @@ function OrderInfo({ orderId, formStepData }) {
                 orderId(response);
                 formStepData(1);
             } else {
-                toast("Unsupported Area");
+                toast.error("Unsupported Area");
             }
 
-            // eslint-disable-next-line no-unused-vars
-        } catch (e) {
-            toast("unexpected error has been occurred")
+        } catch (error) {
+            toast.error(error)
         }
     }
 
